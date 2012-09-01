@@ -105,10 +105,10 @@
       category="Benthic Terrain Modeler (BTM)"
       class="calculateAspect"
       id="calculateAspect.button"
-      image="Images\rugosity-16x16.png"
+      image="Images\color-wheel_16x16.png"
       message="Compute Aspect"
-      tip="Compute aspect">
-      <Help heading="Compute Slope" />
+      tip="Compute Aspect">
+      <Help heading="Compute Aspect" />
     </Button>
 
     <Button
@@ -193,12 +193,6 @@
         <Menu refID="bpi.menu" />
         <Menu refID="geomorphometry.menu" />
         <Button refID="runBTMSteps.button" />
-        <!--
-        <Button refID="caculateBroadBPI.button" />
-        <Button refID="caculateFineBPI.button" />
-        <Button refID="standarizeBPI.button" />
-        <Button refID="calculateRugosity.button" />
-        -->
         <Button refID="classifyBenthicTerrain.button" />
       </Items>
     </Menu>
