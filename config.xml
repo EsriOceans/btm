@@ -18,44 +18,161 @@
 <ArcMap>
 
   <Commands>
-    <Button caption="Benthic Terrain Classification Wizard" category="Benthic Terrain Modeler (BTM)" class="ButtonRunBTMSteps" id="runBTMSteps.button" image="Images\lundblad-header_qps_crop_16x16.png" message="Run all steps of the Benthic Terrain Modeler." tip="BTM Wizard">
-      <Help heading="BTM Wizard">Run all steps of the Benthic Terrain Modeler.</Help>
+
+    <!-- top-level BTM tools -->
+    <Button
+      caption="Benthic Terrain Classification Wizard"
+      category="Benthic Terrain Modeler (BTM)"
+      class="ButtonRunBTMSteps"
+      id="runBTMSteps.button"
+      image="Images\lundblad-header_qps_crop_16x16.png"
+      message="Run all steps of the Benthic Terrain Modeler."
+      tip="BTM Wizard">
+      <Help
+        heading="BTM Wizard"
+        >Run all steps of the Benthic Terrain Modeler.</Help>
     </Button>
 
-    <Button caption="Broad Scale BPI" category="Benthic Terrain Modeler (BTM)" class="calculateBroadBPI" id="caculateBroadBPI.button" image="Images\bpi-box-16x16-coarse.png" message="Build a broad-scale bathymetric position index grid." tip="Calculate Broad Scale BPI">
-      <Help heading="Calculate Broad Scale BPI">Build a broad-scale bathymetric position index grid.</Help>
+    <Button
+      caption="Classify Benthic Terrain"
+      category="Benthic Terrain Modeler (BTM)"
+      class="classifyBenthicTerrain"
+      id="classifyBenthicTerrain.button"
+      image="Images\map_23_erosion hazard_colored_16x16.png"
+      message="Use the generated classifications and models to produce a single classified map."
+      tip="Run the Benthic Terrain Classification">
+      <Help
+        heading="Run the Benthic Terrain Classification"
+        >Use the generated classifications and models to produce a single classified map.</Help>
     </Button>
 
-    <Button caption="Fine Scale BPI" category="Benthic Terrain Modeler (BTM)" class="calculateFineBPI" id="caculateFineBPI.button" image="Images\bpi-box-16x16-fine.png" message="Build a fine-scale bathymetric position index grid." tip="Calculate Fine Scale BPI">
-      <Help heading="Calculate Fine Scale BPI">Build a fine-scale bathymetric position index grid.</Help>
+    <!-- Bathymetric Position Index (BPI) -->
+    <Button
+      caption="Broad Scale BPI"
+      category="Benthic Terrain Modeler (BTM)"
+      class="calculateBroadBPI"
+      id="caculateBroadBPI.button" 
+      image="Images\bpi-box-16x16-coarse.png"
+      message="Build a broad-scale bathymetric position index grid."
+      tip="Calculate Broad Scale BPI">
+      <Help
+        heading="Calculate Broad Scale BPI"
+        >Build a broad-scale bathymetric position index grid.</Help>
     </Button>
 
-    <Button caption="Standardize BPI Grids" category="Benthic Terrain Modeler (BTM)" class="standarizeBPI" id="standarizeBPI.button" image="Images\standardize-cropped-one-sided-with-z.png" message="Standardize the two BPI grids so their units are comparible." tip="Calculate Standarized BPI Grids">
-      <Help heading="Calculate Standarized BPI Grids">Standardize the two BPI grids so their units are comparible.</Help>
+    <Button
+      caption="Fine Scale BPI"
+      category="Benthic Terrain Modeler (BTM)"
+      class="calculateFineBPI"
+      id="caculateFineBPI.button"
+      image="Images\bpi-box-16x16-fine.png"
+      message="Build a fine-scale bathymetric position index grid."
+      tip="Calculate Fine Scale BPI">
+      <Help
+        heading="Calculate Fine Scale BPI"
+        >Build a fine-scale bathymetric position index grid.</Help>
     </Button>
 
-    <Button caption="Rugosity" category="Benthic Terrain Modeler (BTM)" class="calculateRugosity" id="calculateRugosity.button" image="Images\rugosity-16x16.png" message="Rugosity measures the surface roughness by comparing planar area to surface area. " tip="Calculate Rugosity">
-      <Help heading="Calculate Rugosity">Rugosity measures the surface roughness by comparing planar area to surface area.</Help>
+    <Button
+      caption="Standardize BPI Grids"
+      category="Benthic Terrain Modeler (BTM)"
+      class="standarizeBPI"
+      id="standarizeBPI.button"
+      image="Images\standardize-cropped-one-sided-with-z.png"
+      message="Standardize the two BPI grids so their units are comparible."
+      tip="Calculate Standarized BPI Grids">
+      <Help
+        heading="Calculate Standarized BPI Grids"
+        >Standardize the two BPI grids so their units are comparible.</Help>
     </Button>
 
-    <Button caption="Classify Benthic Terrain" category="Benthic Terrain Modeler (BTM)" class="classifyBenthicTerrain" id="classifyBenthicTerrain.button" image="Images\map_23_erosion hazard_colored_16x16.png" message="Use the generated classifications and models to produce a single classified map." tip="Run the Benthic Terrain Classification">
-      <Help heading="Run the Benthic Terrain Classification">Use the generated classifications and models to produce a single classified map.</Help>
+    <!-- Geomorphological Parameters -->
+    <Button
+      caption="Rugosity"
+      category="Benthic Terrain Modeler (BTM)"
+      class="calculateRugosity"
+      id="calculateRugosity.button"
+      image="Images\rugosity-16x16.png"
+      message="Rugosity measures the surface roughness by comparing planar area to surface area."
+      tip="Calculate Rugosity">
+      <Help
+        heading="Calculate Rugosity"
+        >Rugosity measures the surface roughness by comparing planar area to surface area.</Help>
     </Button>
-        
-    <Button caption="Button" category="Benthic Terrain Modeler (BTM)" class="ButtonClass19" id="btm_addin.button" image="" message="" tip="">
-      <Help heading="" />
+
+    <Button
+      caption="Aspect"
+      category="Benthic Terrain Modeler (BTM)"
+      class="calculateAspect"
+      id="calculateAspect.button"
+      image="Images\rugosity-16x16.png"
+      message="Compute Aspect"
+      tip="Compute aspect">
+      <Help heading="Compute Slope" />
     </Button>
-        
-    <Tool caption="Wizard" category="Benthic Terrain Modeler (BTM)" class="RunBTMSteps" id="RunBTMSteps.tool" image="Images\lundblad-header_qps_crop_16x16.png" message="Run all steps of the Benthic Terrain Modeler" tip="BTM Wizard">
-      <Help heading="BTM Wizard">Run all steps of the Benthic Terrain Modeler</Help>
+
+    <Button
+      caption="Slope"
+      category="Benthic Terrain Modeler (BTM)"
+      class="calculateSlope"
+      id="calculateSlope.button"
+      image=""
+      message="Compute Slope"
+      tip="">
+      <Help heading="Compute Slope" />
+    </Button>
+
+    <Button
+      caption="Curvature (Slope of Slope)"
+      category="Benthic Terrain Modeler (BTM)"
+      class="calculateCurvature"
+      id="calculateCurvature.button"
+      image=""
+      message="Compute Curvature (Slope of Slope) and optionally: Plan Curvature and Profile Curvature."
+      tip="Calculate Curvature (AKA Slope of Slope)">
+      <Help
+        heading="Compute Curvature"
+        >Compute Curvature (Slope of Slope) and optionally: Plan Curvature and Profile Curvature.</Help>
+    </Button>
+
+    <Button
+      caption="Depth Statistics"
+      category="Benthic Terrain Modeler (BTM)"
+      class="calculateDepthStatistics"
+      id="calculateDepthStatistics.button"
+      image=""
+      message="Depth statistics include mean water depth and the standard deviation of depth."
+      tip="Compute Depth Statistics">
+      <Help
+        heading="Compute Depth Statistics"
+        >Depth statistics include mean water depth and the standard deviation of depth.</Help>
+    </Button>
+
+
+    <Tool
+      caption="Wizard"
+      category="Benthic Terrain Modeler (BTM)"
+      class="RunBTMSteps"
+      id="RunBTMSteps.tool"
+      image="Images\lundblad-header_qps_crop_16x16.png"
+      message="Run all steps of the Benthic Terrain Modeler"
+      tip="BTM Wizard">
+      <Help
+        heading="BTM Wizard"
+        >Run all steps of the Benthic Terrain Modeler</Help>
     </Tool>
 
   </Commands>
 
   <Extensions></Extensions>
 
+  <!-- TOOLBAR: the overall container for all objects -->
   <Toolbars>
-    <Toolbar caption="Benthic Terrain Modeler" category="Benthic Terrain Modeler (BTM)" id="btm.toolbar" showInitially="true">
+    <Toolbar
+      caption="Benthic Terrain Modeler"
+      category="Benthic Terrain Modeler (BTM)"
+      id="btm.toolbar"
+      showInitially="true">
       <Items>
         <Menu refID="btm_addin.menu" />
         <Tool refID="RunBTMSteps.tool" />
@@ -64,24 +181,60 @@
   </Toolbars>
 
   <Menus>
-    <Menu caption="Geomorphometry" category="Benthic Terrain Modeler (BTM)" id="geomorphometry.menu" isRootMenu="false" isShortcutMenu="false" separator="true">
+    <!-- menu: TOP-LEVEL dropdown menu for project. -->
+    <Menu
+      caption="Benthic Terrain Modeler"
+      category="Benthic Terrain Modeler (BTM)"
+      id="btm_addin.menu"
+      isRootMenu="false"
+      isShortcutMenu="false"
+      separator="true">
       <Items>
-        <Button refID="btm_addin.button" />
-      </Items>
-    </Menu>
-
-    <Menu caption="Benthic Terrain Modeler" category="Benthic Terrain Modeler (BTM)" id="btm_addin.menu" isRootMenu="false" isShortcutMenu="false" separator="true">
-      <Items>
+        <Menu refID="bpi.menu" />
+        <Menu refID="geomorphometry.menu" />
         <Button refID="runBTMSteps.button" />
+        <!--
         <Button refID="caculateBroadBPI.button" />
         <Button refID="caculateFineBPI.button" />
         <Button refID="standarizeBPI.button" />
         <Button refID="calculateRugosity.button" />
+        -->
         <Button refID="classifyBenthicTerrain.button" />
-        <Menu refID="geomorphometry.menu" />
       </Items>
     </Menu>
-  </Menus>
+
+    <!-- menu: general-purpose Geomorphometry tools. -->
+    <Menu
+      caption="Geomorphometry"
+      category="Benthic Terrain Modeler (BTM)"
+      id="geomorphometry.menu"
+      isRootMenu="false"
+      isShortcutMenu="false"
+      separator="true">
+      <Items>
+        <Button refID="calculateAspect.button" />
+        <Button refID="calculateSlope.button" />
+        <Button refID="calculateCurvature.button" />
+        <Button refID="calculateRugosity.button" />
+        <Button refID="calculateDepthStatistics.button" />"
+      </Items>
+    </Menu>
+
+    <!-- menu: BPI specific tools. -->
+    <Menu
+      caption="Bathymetric Position Index (BPI)"
+      category="Benthic Terrain Modeler (BTM)"
+      id="bpi.menu"
+      isRootMenu="false"
+      isShortcutMenu="false"
+      separator="true">
+      <Items>
+        <Button refID="caculateBroadBPI.button" />
+        <Button refID="caculateFineBPI.button" />
+        <Button refID="standarizeBPI.button" />
+      </Items>
+    </Menu>
+ </Menus>
 
 </ArcMap>
 </AddIn>
