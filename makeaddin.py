@@ -23,7 +23,7 @@ def looks_like_a_backup(filename):
 zip_file = zipfile.ZipFile(out_zip_name, 'w')
 for filename in ('config.xml', 'README.md', 'makeaddin.py'):
     zip_file.write(os.path.join(current_path, filename), filename)
-dirs_to_add = ['Images', 'Install', 'toolbox']
+dirs_to_add = ['Images', 'Install']
 for directory in dirs_to_add:
     for (path, dirs, files) in os.walk(os.path.join(current_path, directory)):
         archive_path = os.path.relpath(path, current_path)
