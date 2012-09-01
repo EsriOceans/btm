@@ -5,13 +5,15 @@ import sys
 import arcpy
 import arcpy.sa as sa
 import pythonaddins
+from pythonaddins import GPToolDialog as gptd
 
 # enable local imports
 local_path = os.path.dirname(__file__)
-sys.path.insert(0, local_path)
+#sys.path.insert(0, local_path)
 
 # FIXME: check if this is the best approach; alt is to look up system install dir and load that TBX.
-custom_toolbox = os.path.join(local_path, "toolboxes", "custom.tbx")
+custom_toolbox = os.path.join(local_path, "toolbox", "custom.tbx")
+btm_toolbox = os.path.join(local_path, "toolbox", "btm.pyt")
 
 # FIXME: add in checks for spatial analyst license.
 # a wrapper around:
@@ -67,7 +69,7 @@ class classifyBenthicTerrain(object):
         self.enabled = True
         self.checked = False
     def onClick(self):
-        pass
+        gptd(btm_toolbox, 'structureclassification')
 
 
 """ BPI specific functions """
@@ -77,7 +79,7 @@ class calculateBroadBPI(object):
         self.enabled = True
         self.checked = False
     def onClick(self):
-        pass
+        gptd(btm_toolbox, 'broadscalebpi')
 
 class calculateFineBPI(object):
     """Implementation for caculateFineBPI.button (Button)"""
@@ -85,7 +87,7 @@ class calculateFineBPI(object):
         self.enabled = True
         self.checked = False
     def onClick(self):
-        pass
+        gptd(btm_toolbox, 'finescalebpi')
 
 class standarizeBPI(object):
     """Implementation for standarizeBPI.button (Button)"""
@@ -93,7 +95,7 @@ class standarizeBPI(object):
         self.enabled = True
         self.checked = False
     def onClick(self):
-        pass
+        gptd(btm_toolbox, 'standardizebpi')
 
 """ Geomorphometry Functions """
 
@@ -102,15 +104,6 @@ class standarizeBPI(object):
 #
 
 
-class calculateSlope(object):
-    """Implementation for calculateSlope.button (Button)"""
-    def __init__(self):
-        self.enabled = True
-        self.checked = False
-    def onClick(self):
-        sa.Slope()
-        pass
-
 # arcpy.sa.Curvature() [can produce plan AND profile curvature through this one tool].
 class calculateCurvature(object):
     """Implementation for calculateCurvature.button (Button)"""
@@ -118,7 +111,7 @@ class calculateCurvature(object):
         self.enabled = True
         self.checked = False
     def onClick(self):
-        pass
+        gptd(custom_toolbox, 'Curvature')
 
 # arcpy.sa.Aspect()
 class calculateAspect(object):
@@ -127,7 +120,12 @@ class calculateAspect(object):
         self.enabled = True
         self.checked = False
     def onClick(self):
-        pass
+        try:
+            # FIXME: even with trying to swallow the error, still get:
+            # TypeError: GPToolDialog() takes at most 1 argument (2 given)
+            result = gptd(custom_toolbox, 'Aspect')
+        except:
+            print "got a type error, gulp it down."
 
 #- mean water depth 
 #    + [sum(depth) / n cells] 
@@ -141,7 +139,9 @@ class calculateDepthStatistics(object):
         self.enabled = True
         self.checked = False
     def onClick(self):
-        pythonaddins.MessageBox("This method is not yet implemented. should compute focal statistics [mean, stddev] on raster.", "Unable to calculate Depth Statistics")
+        msg = "this method is not yet implemented."
+        title = "Unable to calculate Depth Statistics"
+        pythonaddins.MessageBox(msg, title)
 
 #
 # New geomorphometry functions
@@ -152,4 +152,13 @@ class calculateRugosity(object):
         self.enabled = True
         self.checked = False
     def onClick(self):
-        pass
+        gptd(btm_toolbox, 'terrainruggedness')
+
+# wrapped with parameters set
+class calculateSlope(object):
+    """Implementation for calculateSlope.button (Button)"""
+    def __init__(self):
+        self.enabled = True
+        self.checked = False
+    def onClick(self):
+        gptd(btm_toolbox, 'slope')
