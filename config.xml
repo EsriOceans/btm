@@ -14,7 +14,7 @@
   <Target name="Desktop" version="10.1" />
 </Targets>
 
-<AddIn language="PYTHON" library="addins_addin.py" namespace="addins_addin">
+<AddIn language="PYTHON" library="btm_addin.py" namespace="btm_addin">
 <ArcMap>
     
 <Commands>
@@ -49,7 +49,7 @@
 </Help>
 </Button>
         
-<Button caption="Button" category="Benthic Terrain Modeler (BTM)" class="ButtonClass19" id="addins_addin.button" image="" message="" tip="">
+<Button caption="Button" category="Benthic Terrain Modeler (BTM)" class="ButtonClass19" id="btm_addin.button" image="" message="" tip="">
 <Help heading="" />
 </Button>
         
@@ -79,7 +79,7 @@
         
 <Menu caption="Geomorphometry" category="Benthic Terrain Modeler (BTM)" id="geomorphometry.menu" isRootMenu="false" isShortcutMenu="false" separator="true">
 <Items>
-<Button refID="addins_addin.button" />
+<Button refID="btm_addin.button" />
 </Items>
 </Menu>
         
