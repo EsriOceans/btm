@@ -1,2 +1,41 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<metadata xml:lang="en"><Esri><CreaDate>20120901</CreaDate><CreaTime>02190400</CreaTime><ArcGISFormat>1.0</ArcGISFormat><SyncOnce>TRUE</SyncOnce><ModDate>20120901</ModDate><ModTime>021904</ModTime></Esri><dataIdInfo><idCitation><resTitle>7. Terrain Ruggedness (VRM)</resTitle></idCitation></dataIdInfo><distInfo><distributor><distorFormat><formatName>ArcToolbox Tool</formatName></distorFormat></distributor></distInfo><tool name="Tool24f1d370" displayname="7. Terrain Ruggedness (VRM)" toolboxalias=""><parameters><param name="Elevation_Raster" displayname="Elevation Raster" type="Required" direction="Input" datatype="String" expression="Elevation_Raster"/><param name="Neighborhood_Size" displayname="Neighborhood Size" type="Required" direction="Input" datatype="String" expression="Neighborhood_Size"/><param name="Output_Workspace" displayname="Output Workspace" type="Required" direction="Input" datatype="String" expression="Output_Workspace"/><param name="Output_Raster" displayname="Output Raster" type="Required" direction="Output" datatype="String" expression="Output_Raster"/></parameters></tool></metadata>
+<?xml version="1.0" encoding="utf-8"?>
+<metadata xml:lang="en">
+  <Esri>
+    <CreaDate>20120901</CreaDate>
+    <CreaTime>02190400</CreaTime>
+    <ArcGISFormat>1.0</ArcGISFormat>
+    <SyncOnce>TRUE</SyncOnce>
+    <ModDate>20120904</ModDate>
+    <ModTime>220033</ModTime>
+  </Esri>
+  <dataIdInfo>
+    <idCitation>
+      <resTitle>7. Terrain Ruggedness (VRM)</resTitle>
+    </idCitation>
+  </dataIdInfo>
+  <distInfo>
+    <distributor>
+      <distorFormat>
+        <formatName>ArcToolbox Tool</formatName>
+      </distorFormat>
+    </distributor>
+  </distInfo>
+  <tool name="terrainruggedness"
+  displayname="7. Terrain Ruggedness (VRM)" toolboxalias="">
+    <parameters>
+      <param name="Elevation_Raster" displayname="Elevation Raster"
+      type="Required" direction="Input" datatype="String"
+      expression="Elevation_Raster" />
+      <param name="Neighborhood_Size"
+      displayname="Neighborhood Size" type="Required"
+      direction="Input" datatype="String"
+      expression="Neighborhood_Size" />
+      <param name="Output_Workspace" displayname="Output Workspace"
+      type="Required" direction="Input" datatype="String"
+      expression="Output_Workspace" />
+      <param name="Output_Raster" displayname="Output Raster"
+      type="Required" direction="Output" datatype="String"
+      expression="Output_Raster" />
+    </parameters>
+  </tool>
+</metadata>

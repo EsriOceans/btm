@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <metadata xml:lang="en">
   <Esri>
-    <CreaDate>20120901</CreaDate>
-    <CreaTime>02190400</CreaTime>
+    <CreaDate>20120904</CreaDate>
+    <CreaTime>22003300</CreaTime>
     <ArcGISFormat>1.0</ArcGISFormat>
     <SyncOnce>TRUE</SyncOnce>
-    <ModDate>20120901</ModDate>
-    <ModTime>021904</ModTime>
+    <ModDate>20120904</ModDate>
+    <ModTime>220033</ModTime>
   </Esri>
   <dataIdInfo>
     <idCitation>
@@ -20,7 +20,7 @@
       </distorFormat>
     </distributor>
   </distInfo>
-  <tool name="slope" displayname="4. Calculate Slope"
+  <tool name="btmslope" displayname="4. Calculate Slope"
   toolboxalias="">
     <parameters>
       <param name="Input_bathymetric_raster"
