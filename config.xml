@@ -140,7 +140,7 @@
       category="Benthic Terrain Modeler (BTM)"
       class="calculateDepthStatistics"
       id="calculateDepthStatistics.button"
-      image=""
+      image="Images\depth-statistics_16x16.png"
       message="Depth statistics include mean water depth and the standard deviation of depth."
       tip="Compute Depth Statistics">
       <Help
