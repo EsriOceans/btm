@@ -5,7 +5,6 @@ import sys
 import arcpy
 import arcpy.sa as sa
 import pythonaddins
-from pythonaddins import GPToolDialog as gptd
 
 # enable local imports
 local_path = os.path.dirname(__file__)
@@ -21,6 +20,21 @@ btm_toolbox = os.path.join(local_path, "toolbox", "btm.pyt")
 # which should get initialized, throw an error if it isn't available notifying them
 # that MOST functions [e.g. slope] won't work without it.
 
+def tool_dialog(toolbox, tool):
+    result = None
+    """Error-handling wrapper around pythonaddins.GPToolDialog."""
+    try:
+        result = pythonaddins.GPToolDialog(toolbox, tool)
+        # FIXME: this is a hack to prevent:
+        # TypeError: GPToolDialog() takes at most 1 argument (2 given)
+        print '', 
+    except TypeError:
+        print "recieved TypeError when trying to run GPToolDialog(" + \
+            "{toolbox}, {tool}))".format(toolbox=toolbox, tool=tool)
+    # don't return anything. this prevents:
+    #   TypeError: GPToolDialog() takes at most 1 argument (2 given)
+    return result
+
 """ Run all steps (wizard) """
 class ButtonRunBTMSteps(object):
     """Implementation for runBTMSteps.button (Button)"""
@@ -35,32 +49,6 @@ class RunBTMSteps(object):
     def __init__(self):
         self.enabled = True
         self.shape = "NONE" # Can set to "Line", "Circle" or "Rectangle" for interactive shape drawing
-    def onMouseDown(self, x, y, button, shift):
-        pass
-    def onMouseDownMap(self, x, y, button, shift):
-        pass
-    def onMouseUp(self, x, y, button, shift):
-        pass
-    def onMouseUpMap(self, x, y, button, shift):
-        pass
-    def onMouseMove(self, x, y, button, shift):
-        pass
-    def onMouseMoveMap(self, x, y, button, shift):
-        pass
-    def onDblClick(self):
-        pass
-    def onKeyDown(self, keycode, shift):
-        pass
-    def onKeyUp(self, keycode, shift):
-        pass
-    def deactivate(self):
-        pass
-    def onCircle(self, circle_geometry):
-        pass
-    def onLine(self, line_geometry):
-        pass
-    def onRectangle(self, rectangle_geometry):
-        pass
 
 """ classification functions"""
 class classifyBenthicTerrain(object):
@@ -69,7 +57,7 @@ class classifyBenthicTerrain(object):
         self.enabled = True
         self.checked = False
     def onClick(self):
-        gptd(btm_toolbox, 'structureclassification')
+        tool_dialog(btm_toolbox, 'structureclassification')
 
 
 """ BPI specific functions """
@@ -79,7 +67,7 @@ class calculateBroadBPI(object):
         self.enabled = True
         self.checked = False
     def onClick(self):
-        gptd(btm_toolbox, 'broadscalebpi')
+        tool_dialog(btm_toolbox, 'broadscalebpi')
 
 class calculateFineBPI(object):
     """Implementation for caculateFineBPI.button (Button)"""
@@ -87,7 +75,7 @@ class calculateFineBPI(object):
         self.enabled = True
         self.checked = False
     def onClick(self):
-        gptd(btm_toolbox, 'finescalebpi')
+        tool_dialog(btm_toolbox, 'finescalebpi')
 
 class standarizeBPI(object):
     """Implementation for standarizeBPI.button (Button)"""
@@ -95,7 +83,7 @@ class standarizeBPI(object):
         self.enabled = True
         self.checked = False
     def onClick(self):
-        gptd(btm_toolbox, 'standardizebpi')
+        tool_dialog(btm_toolbox, 'standardizebpi')
 
 """ Geomorphometry Functions """
 
@@ -111,7 +99,7 @@ class calculateCurvature(object):
         self.enabled = True
         self.checked = False
     def onClick(self):
-        gptd(custom_toolbox, 'Curvature')
+        tool_dialog(custom_toolbox, 'Curvature')
 
 # arcpy.sa.Aspect()
 class calculateAspect(object):
@@ -120,12 +108,7 @@ class calculateAspect(object):
         self.enabled = True
         self.checked = False
     def onClick(self):
-        try:
-            # FIXME: even with trying to swallow the error, still get:
-            # TypeError: GPToolDialog() takes at most 1 argument (2 given)
-            result = gptd(custom_toolbox, 'Aspect')
-        except:
-            print "got a type error, gulp it down."
+        tool_dialog(custom_toolbox, 'Aspect')
 
 #- mean water depth 
 #    + [sum(depth) / n cells] 
@@ -152,7 +135,7 @@ class calculateRugosity(object):
         self.enabled = True
         self.checked = False
     def onClick(self):
-        gptd(btm_toolbox, 'terrainruggedness')
+        tool_dialog(btm_toolbox, 'terrainruggedness')
 
 # wrapped with parameters set
 class calculateSlope(object):
@@ -161,4 +144,4 @@ class calculateSlope(object):
         self.enabled = True
         self.checked = False
     def onClick(self):
-        gptd(btm_toolbox, 'slope')
+        tool_dialog(btm_toolbox, 'btmslope')
