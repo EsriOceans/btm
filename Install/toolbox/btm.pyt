@@ -45,7 +45,7 @@ class Toolbox(object):
     def __init__(self):
         self.label = u'Benthic Terrain Modeler'
         self.alias = ''
-        self.tools = [broadscalebpi, finescalebpi, standardizebpi, slope, zoneclassification, structureclassification, terrainruggedness]
+        self.tools = [broadscalebpi, finescalebpi, standardizebpi, btmslope, zoneclassification, structureclassification, terrainruggedness]
 
 # Tool implementation code
 
@@ -342,7 +342,7 @@ class standardizebpi(object):
             # Print error message if an error occurs
                 arcpy.GetMessages()
 
-class slope(object):
+class btmslope(object):
     """c:\data\arcgis\addins\btm\toolbox\noaa\BTM.tbx\slope"""
     def __init__(self):
         self.label = u'4. Calculate Slope'
