@@ -116,7 +116,7 @@
       category="Benthic Terrain Modeler (BTM)"
       class="calculateSlope"
       id="calculateSlope.button"
-      image="Images\"
+      image="Images\slope_16x16.png"
       message="Compute Slope"
       tip="">
       <Help heading="Compute Slope" />
@@ -127,7 +127,7 @@
       category="Benthic Terrain Modeler (BTM)"
       class="calculateCurvature"
       id="calculateCurvature.button"
-      image=""
+      image="Images\curvature_16x16.png"
       message="Compute Curvature (Slope of Slope) and optionally: Plan Curvature and Profile Curvature."
       tip="Calculate Curvature (AKA Slope of Slope)">
       <Help
