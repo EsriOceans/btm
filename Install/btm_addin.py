@@ -21,8 +21,8 @@ btm_toolbox = os.path.join(local_path, "toolbox", "btm.pyt")
 # that MOST functions [e.g. slope] won't work without it.
 
 def tool_dialog(toolbox, tool):
-    result = None
     """Error-handling wrapper around pythonaddins.GPToolDialog."""
+    result = None
     try:
         result = pythonaddins.GPToolDialog(toolbox, tool)
         # FIXME: this is a hack to prevent:
