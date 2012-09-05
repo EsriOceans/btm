@@ -45,7 +45,7 @@ class Toolbox(object):
     def __init__(self):
         self.label = u'Benthic Terrain Modeler'
         self.alias = ''
-        self.tools = [broadscalebpi, finescalebpi, standardizebpi, btmslope, zoneclassification, structureclassification, terrainruggedness]
+        self.tools = [broadscalebpi, finescalebpi, standardizebpi, btmslope, zoneclassification, structureclassification, terrainruggedness, depthstatistics]
 
 # Tool implementation code
 
@@ -840,3 +840,136 @@ class terrainruggedness(object):
             except:
             # Print error message if an error occurs
                 arcpy.GetMessages()
+
+class depthstatistics(object):
+    """ Depth Statistics computes a suite of summary statistics. This initial
+        version works on a fixed window size, but user feedback has indicated 
+        a more general version which supported multiple window sizes, 
+        including vector-based ones, would be preferable.
+
+        Also, this current version uses focal tools, but could be computed in
+        one pass using numpy instead, but memory considerations would need
+        to be taken into account, or the algorithm would need to operate on
+        blocks within the data. see 'rugosity.py' script an example of this 
+        approach, can use NumPyArrayToRaster and vice versa.
+    """
+       
+
+    class ToolValidator:
+      """Class for validating a tool's parameter values and controlling
+      the behavior of the tool's dialog."""
+
+      def __init__(self, parameters):
+        """Setup arcpy and the list of tool parameters."""
+        self.params = parameters
+
+      def initializeParameters(self):
+        """Refine the properties of a tool's parameters.  This method is
+        called when the tool is opened."""
+        return
+
+      def updateParameters(self):
+        """Modify the values and properties of parameters before internal
+        validation is performed.  This method is called whenever a parmater
+        has been changed."""
+        return
+
+      def updateMessages(self):
+        """Modify the messages created by internal validation for each tool
+        parameter.  This method is called after internal validation."""
+        return
+
+    def __init__(self):
+        self.label = u'Depth Statistics'
+        self.canRunInBackground = False
+
+    def getParameterInfo(self):
+        # Elevation_Raster
+        param_1 = arcpy.Parameter()
+        param_1.name = u'Elevation_Raster'
+        param_1.displayName = u'Elevation Raster'
+        param_1.parameterType = 'Required'
+        param_1.direction = 'Input'
+        param_1.datatype = 'Raster Layer'
+
+        # Neighborhood_Size
+        param_2 = arcpy.Parameter()
+        param_2.name = u'Neighborhood_Size'
+        param_2.displayName = u'Neighborhood Size'
+        param_2.parameterType = 'Required'
+        param_2.direction = 'Input'
+        param_2.datatype = 'Long'
+
+        # Output_Workspace
+        param_3 = arcpy.Parameter()
+        param_3.name = u'Output_Workspace'
+        param_3.displayName = u'Output Workspace'
+        param_3.parameterType = 'Required'
+        param_3.direction = 'Input'
+        param_3.datatype = 'Workspace'
+
+       # Statistics to Compute
+        param_4 = arcpy.Parameter()
+        param_4.name = u'Statistics_Computed'
+        param_4.displayName = u'Statistics to Compute'
+        param_4.parameterType = 'Required'
+        param_4.direction = 'Input'
+        param_4.datatype = 'String'
+        param_4.multiValue = True
+        param_4.filter.list = ['Mean Depth', 'Variance', 'Standard Deviation']
+
+        return [param_1, param_2, param_3, param_4]
+
+    def isLicensed(self):
+        return True
+
+    def updateParameters(self, parameters):
+        validator = getattr(self, 'ToolValidator', None)
+        if validator:
+             return validator(parameters).updateParameters()
+
+    def updateMessages(self, parameters):
+        validator = getattr(self, 'ToolValidator', None)
+        if validator:
+             return validator(parameters).updateMessages()
+
+    def execute(self, parameters, messages):
+        print "executing depth statistics"
+        # depth statistics
+        # Requirements: Spatial Analyst 
+        # Author: Shaun Walbridge
+        # Date: 9/1/2012
+           
+        # Script arguments
+        InRaster = parameters[0]
+        # FIXME: this should be a selectable list (multi-scale analysis)
+        Neighborhood_Size = parameters[1]
+        OutWorkspace = parameters[2]
+        OutStats = parameters[3]
+      
+        print OutStats
+        # initialize our neighborhood
+        neighborhood = NbrRectangle(Neighborhood_Size, 
+            Neighborhood_Size, "CELL")
+
+        try:
+            if 'Mean Depth' in OutStats:
+                messages.AddMessage("Calculating mean depth...")
+                MeanDepth = FocalStats(InRaster, neighborhood, "NODATA")
+                MeanDepth.save(OutWorkspace + "\\meandepth")
+           
+            # compute stdev in eiher of these cases
+            if 'Standard Deviation' in OutStats or 'Variance' in OutStats:
+                messages.AddMessage("Calculating depth standard deviation...")
+                StdevDepth = FocalStats(InRaster, neighborhood, "NODATA")
+                StdevDepth.save(OutWorkspace + "\\stdevdepth")
+            
+                # no direct variance focal stat, have to stdev^2
+                if 'Variance' in OutStats:
+                    messages.AddMessage("Calculating depth variance...")
+                    VarDepth = Power(StdevDepth, 2)
+                    VarDepth.save(OutWorkspace + "\\vardepth")
+          
+        except:
+            # Print error message if an error occurs
+            arcpy.GetMessages()
