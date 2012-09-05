@@ -5,7 +5,7 @@
   <AddInID>{2dac2ae8-b5f3-4263-9f5d-aaed6b47316b}</AddInID>
   <Description>Tools for modeling and classifying benthic terrain.</Description>
   <Version>0.1</Version>
-  <Image>Images\lundblad-header_qps_crop_64x64.png</Image>
+  <Image>Images\btm-steps_64x64.png</Image>
   <Author>Shaun Walbridge</Author>
   <Company>Esri</Company>
   <Date>08/31/2012</Date>
@@ -25,7 +25,7 @@
       category="Benthic Terrain Modeler (BTM)"
       class="ButtonRunBTMSteps"
       id="runBTMSteps.button"
-      image="Images\lundblad-header_qps_crop_16x16.png"
+      image="Images\btm-steps_16x16.png"
       message="Run all steps of the Benthic Terrain Modeler."
       tip="BTM Wizard">
       <Help
@@ -38,7 +38,7 @@
       category="Benthic Terrain Modeler (BTM)"
       class="classifyBenthicTerrain"
       id="classifyBenthicTerrain.button"
-      image="Images\map_23_erosion hazard_colored_16x16.png"
+      image="Images\classify-terrain_16x16.png"
       message="Use the generated classifications and models to produce a single classified map."
       tip="Run the Benthic Terrain Classification">
       <Help
@@ -52,7 +52,7 @@
       category="Benthic Terrain Modeler (BTM)"
       class="calculateBroadBPI"
       id="caculateBroadBPI.button" 
-      image="Images\bpi-box-16x16-coarse.png"
+      image="Images\bpi-coarse_16x16.png"
       message="Build a broad-scale bathymetric position index grid."
       tip="Calculate Broad Scale BPI">
       <Help
@@ -65,7 +65,7 @@
       category="Benthic Terrain Modeler (BTM)"
       class="calculateFineBPI"
       id="caculateFineBPI.button"
-      image="Images\bpi-box-16x16-fine.png"
+      image="Images\bpi-fine_16x16.png"
       message="Build a fine-scale bathymetric position index grid."
       tip="Calculate Fine Scale BPI">
       <Help
@@ -78,7 +78,7 @@
       category="Benthic Terrain Modeler (BTM)"
       class="standarizeBPI"
       id="standarizeBPI.button"
-      image="Images\standardize-cropped-one-sided-with-z.png"
+      image="Images\standardize-with-z_16x16.png"
       message="Standardize the two BPI grids so their units are comparible."
       tip="Calculate Standarized BPI Grids">
       <Help
@@ -92,7 +92,7 @@
       category="Benthic Terrain Modeler (BTM)"
       class="calculateRugosity"
       id="calculateRugosity.button"
-      image="Images\rugosity-16x16.png"
+      image="Images\rugosity_16x16.png"
       message="Rugosity measures the surface roughness by comparing planar area to surface area."
       tip="Calculate Rugosity">
       <Help
@@ -105,7 +105,7 @@
       category="Benthic Terrain Modeler (BTM)"
       class="calculateAspect"
       id="calculateAspect.button"
-      image="Images\color-wheel_16x16.png"
+      image="Images\aspect_16x16.png"
       message="Compute Aspect"
       tip="Compute Aspect">
       <Help heading="Compute Aspect" />
@@ -116,7 +116,7 @@
       category="Benthic Terrain Modeler (BTM)"
       class="calculateSlope"
       id="calculateSlope.button"
-      image=""
+      image="Images\"
       message="Compute Slope"
       tip="">
       <Help heading="Compute Slope" />
@@ -154,7 +154,7 @@
       category="Benthic Terrain Modeler (BTM)"
       class="RunBTMSteps"
       id="RunBTMSteps.tool"
-      image="Images\lundblad-header_qps_crop_16x16.png"
+      image="Images\btm-steps_16x16.png"
       message="Run all steps of the Benthic Terrain Modeler"
       tip="BTM Wizard">
       <Help
