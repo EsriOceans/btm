@@ -8,6 +8,10 @@ import sys
 import arcpy
 from arcpy.sa import *
 
+# import our local directory so we can import internal modules
+local_path = os.path.dirname(__file__)
+sys.path.insert(0, local_path)
+
 # Check out any necessary licenses
 arcpy.CheckOutExtension("Spatial")
 
@@ -39,7 +43,7 @@ def set_parameter_as_text(params, index, val):
     else:
         params[index].value = val
 
-# Export of toolbox c:\data\arcgis\addins\btm\toolbox\noaa\BTM.tbx
+# Export of toolbox c:\data\arcgis\addins\btm\toolbox\BTM.tbx
 
 class Toolbox(object):
     def __init__(self):
@@ -50,7 +54,7 @@ class Toolbox(object):
 # Tool implementation code
 
 class broadscalebpi(object):
-    """c:\data\arcgis\addins\btm\toolbox\noaa\BTM.tbx\broadscalebpi"""
+    """c:\data\arcgis\addins\btm\toolbox\BTM.tbx\broadscalebpi"""
     class ToolValidator:
       """Class for validating a tool's parameter values and controlling
       the behavior of the tool's dialog."""
@@ -86,7 +90,7 @@ class broadscalebpi(object):
         param_1.displayName = u'Input bathymetric raster'
         param_1.parameterType = 'Required'
         param_1.direction = 'Input'
-        param_1.dataType = u'Raster Layer'
+        param_1.datatype = u'Raster Layer'
 
         # Inner_radius
         param_2 = arcpy.Parameter()
@@ -94,7 +98,7 @@ class broadscalebpi(object):
         param_2.displayName = u'Inner radius'
         param_2.parameterType = 'Required'
         param_2.direction = 'Input'
-        param_2.dataType = u'Long'
+        param_2.datatype = u'Long'
 
         # Outer_radius
         param_3 = arcpy.Parameter()
@@ -102,7 +106,7 @@ class broadscalebpi(object):
         param_3.displayName = u'Outer radius'
         param_3.parameterType = 'Required'
         param_3.direction = 'Input'
-        param_3.dataType = u'Long'
+        param_3.datatype = u'Long'
 
         # Output_raster
         param_4 = arcpy.Parameter()
@@ -110,7 +114,7 @@ class broadscalebpi(object):
         param_4.displayName = u'Output raster'
         param_4.parameterType = 'Required'
         param_4.direction = 'Output'
-        param_4.dataType = u'Raster Dataset'
+        param_4.datatype = u'Raster Dataset'
 
         return [param_1, param_2, param_3, param_4]
     def isLicensed(self):
@@ -124,43 +128,18 @@ class broadscalebpi(object):
         if validator:
              return validator(parameters).updateMessages()
     def execute(self, parameters, messages):
-        with script_run_as(u'c:\\data\\arcgis\\addins\\btm\\toolbox\\noaa\\broad_scale_bpi.py'):
-            # broad_scale_bpi.py
-            # Description: The Benthic Terrain Modeler (BTM) functions as a toolbox within ArcMap, and relies
-            #              on a methodology to analyze benthic terrain from input multibeam bathymetry in ESRI's
-            #              GRID (raster) format. The BTM toolbox contains a set of tools that allow users to
-            #              create grids of slope, bathymetric position index and rugosity from an input data set.
-            #              An integrated XML-based terrain classification dictionary gives users the freedom to
-            #              create their own classifications and define the relationships that characterize them.
-            # Requirements: Spatial Analyst 
-            # Author: Dawn J. Wright, Emily R. Lundblad, Emily M. Larkin, Ronald W. Rinehart
-            # Date: 2005
-            # Converted 11/5/2010 by Emily C. Huntley of the Massachusetts Office of Coastal Zone Management
-            # to a Python Script that runs in ArcGIS 10.
-            
-            # Check out any necessary licenses
-            arcpy.CheckOutExtension("Spatial")
-            
-            # Script arguments
-            Bathy = sys.argv[1]
-            BroadInnerRadius = sys.argv[2]
-            BroadOuterRadius = sys.argv[3]
-            BroadOutRaster = sys.argv[4]
-            
-            try:
-                # Create the broad-scale Bathymetric Position Index (BPI) raster
-                messages.AddMessage("Generating the broad-scale Bathymetric Position Index (BPI) raster...")
-                outFocalStatistics = FocalStatistics(Bathy, NbrAnnulus(BroadInnerRadius, BroadOuterRadius, "CELL"), "MEAN")
-                outRaster = Int(Plus(Minus(Bathy, outFocalStatistics), 0.5))
-                outRaster.save(BroadOutRaster)
-            
-            except:
-                # Print error message if an error occurs
-                arcpy.GetMessages()
-            
+        # run related python script with selected input parameters
+        from scripts import broad_scale_bpi
+        print "calling scripts broad_scale_bpi..."
+        broad_scale_bpi.main(
+            Bathy=parameters[0],
+            BroadInnerRadius=parameters[1],
+            BroadOuterRadius=parameters[2],
+            BroadOutRaster=parameters[3])
+           
 
 class finescalebpi(object):
-    """c:\data\arcgis\addins\btm\toolbox\noaa\BTM.tbx\finescalebpi"""
+    """c:\data\arcgis\addins\btm\toolbox\BTM.tbx\finescalebpi"""
     class ToolValidator:
       """Class for validating a tool's parameter values and controlling
       the behavior of the tool's dialog."""
@@ -195,7 +174,7 @@ class finescalebpi(object):
         param_1.displayName = u'Input bathymetric raster'
         param_1.parameterType = 'Required'
         param_1.direction = 'Input'
-        param_1.dataType = u'Raster Layer'
+        param_1.datatype = u'Raster Layer'
 
         # Inner_radius
         param_2 = arcpy.Parameter()
@@ -203,7 +182,7 @@ class finescalebpi(object):
         param_2.displayName = u'Inner radius'
         param_2.parameterType = 'Required'
         param_2.direction = 'Input'
-        param_2.dataType = u'Long'
+        param_2.datatype = u'Long'
 
         # Outer_radius
         param_3 = arcpy.Parameter()
@@ -211,7 +190,7 @@ class finescalebpi(object):
         param_3.displayName = u'Outer radius'
         param_3.parameterType = 'Required'
         param_3.direction = 'Input'
-        param_3.dataType = u'Long'
+        param_3.datatype = u'Long'
 
         # Output_raster
         param_4 = arcpy.Parameter()
@@ -219,7 +198,7 @@ class finescalebpi(object):
         param_4.displayName = u'Output raster'
         param_4.parameterType = 'Required'
         param_4.direction = 'Output'
-        param_4.dataType = u'Raster Dataset'
+        param_4.datatype = u'Raster Dataset'
 
         return [param_1, param_2, param_3, param_4]
     def isLicensed(self):
@@ -233,7 +212,7 @@ class finescalebpi(object):
         if validator:
              return validator(parameters).updateMessages()
     def execute(self, parameters, messages):
-        with script_run_as(u'c:\\data\\arcgis\\addins\\btm\\toolbox\\noaa\\fine_scale_bpi.py'):
+        with script_run_as(u'c:\\data\\arcgis\\addins\\btm\\toolbox\\fine_scale_bpi.py'):
             # fine_scale_bpi.py
             # Description: The Benthic Terrain Modeler (BTM) functions as a toolbox within ArcMap, and relies
             #              on a methodology to analyze benthic terrain from input multibeam bathymetry in ESRI's
@@ -269,7 +248,7 @@ class finescalebpi(object):
             
 
 class standardizebpi(object):
-    """c:\data\arcgis\addins\btm\toolbox\noaa\BTM.tbx\standardizebpi"""
+    """c:\data\arcgis\addins\btm\toolbox\BTM.tbx\standardizebpi"""
     def __init__(self):
         self.label = u'3. Standardize BPIs'
         self.canRunInBackground = False
@@ -280,7 +259,7 @@ class standardizebpi(object):
         param_1.displayName = u'Input BPI raster'
         param_1.parameterType = 'Required'
         param_1.direction = 'Input'
-        param_1.dataType = u'Raster Layer'
+        param_1.datatype = u'Raster Layer'
 
         # Output_raster
         param_2 = arcpy.Parameter()
@@ -288,7 +267,7 @@ class standardizebpi(object):
         param_2.displayName = u'Output raster'
         param_2.parameterType = 'Required'
         param_2.direction = 'Output'
-        param_2.dataType = u'Raster Dataset'
+        param_2.datatype = u'Raster Dataset'
 
         return [param_1, param_2]
     def isLicensed(self):
@@ -302,7 +281,7 @@ class standardizebpi(object):
         if validator:
              return validator(parameters).updateMessages()
     def execute(self, parameters, messages):
-        with script_run_as(u'c:\\data\\arcgis\\addins\\btm\\toolbox\\noaa\\standardize_bpi_grids.py'):
+        with script_run_as(u'c:\\data\\arcgis\\addins\\btm\\toolbox\\standardize_bpi_grids.py'):
             # standardize_bpi_grids.py
             # Description: The Benthic Terrain Modeler (BTM) functions as a toolbox within ArcMap, and relies
             #              on a methodology to analyze benthic terrain from input multibeam bathymetry in ESRI's
@@ -343,7 +322,7 @@ class standardizebpi(object):
                 arcpy.GetMessages()
 
 class btmslope(object):
-    """c:\data\arcgis\addins\btm\toolbox\noaa\BTM.tbx\slope"""
+    """c:\data\arcgis\addins\btm\toolbox\BTM.tbx\slope"""
     def __init__(self):
         self.label = u'4. Calculate Slope'
         self.canRunInBackground = False
@@ -354,7 +333,7 @@ class btmslope(object):
         param_1.displayName = u'Input bathymetric raster'
         param_1.parameterType = 'Required'
         param_1.direction = 'Input'
-        param_1.dataType = u'Raster Layer'
+        param_1.datatype = u'Raster Layer'
 
         # Output_raster
         param_2 = arcpy.Parameter()
@@ -362,7 +341,7 @@ class btmslope(object):
         param_2.displayName = u'Output raster'
         param_2.parameterType = 'Required'
         param_2.direction = 'Output'
-        param_2.dataType = u'Raster Dataset'
+        param_2.datatype = u'Raster Dataset'
 
         return [param_1, param_2]
     def isLicensed(self):
@@ -376,7 +355,7 @@ class btmslope(object):
         if validator:
              return validator(parameters).updateMessages()
     def execute(self, parameters, messages):
-        with script_run_as(u'c:\\data\\arcgis\\addins\\btm\\toolbox\\noaa\\slope.py'):
+        with script_run_as(u'c:\\data\\arcgis\\addins\\btm\\toolbox\\slope.py'):
             # slope.py
             # Description: The Benthic Terrain Modeler (BTM) functions as a toolbox within ArcMap, and relies
             #              on a methodology to analyze benthic terrain from input multibeam bathymetry in ESRI's
@@ -408,7 +387,7 @@ class btmslope(object):
                 arcpy.GetMessages()
 
 class zoneclassification(object):
-    """c:\data\arcgis\addins\btm\toolbox\noaa\BTM.tbx\zoneclassification"""
+    """c:\data\arcgis\addins\btm\toolbox\BTM.tbx\zoneclassification"""
     def __init__(self):
         self.label = u'5. Zone Classification Builder'
         self.canRunInBackground = False
@@ -419,7 +398,7 @@ class zoneclassification(object):
         param_1.displayName = u'Standardized broad-scale BPI raster'
         param_1.parameterType = 'Required'
         param_1.direction = 'Input'
-        param_1.dataType = u'Raster Layer'
+        param_1.datatype = u'Raster Layer'
 
         # Slope_raster
         param_2 = arcpy.Parameter()
@@ -427,7 +406,7 @@ class zoneclassification(object):
         param_2.displayName = u'Slope raster'
         param_2.parameterType = 'Required'
         param_2.direction = 'Input'
-        param_2.dataType = u'Raster Layer'
+        param_2.datatype = u'Raster Layer'
 
         # Standard_deviation_break
         param_3 = arcpy.Parameter()
@@ -435,7 +414,7 @@ class zoneclassification(object):
         param_3.displayName = u'Standard deviation break'
         param_3.parameterType = 'Required'
         param_3.direction = 'Input'
-        param_3.dataType = u'Double'
+        param_3.datatype = u'Double'
 
         # Slope_value__in_degrees__indicating_a_gentle_slope
         param_4 = arcpy.Parameter()
@@ -443,7 +422,7 @@ class zoneclassification(object):
         param_4.displayName = u'Slope value (in degrees) indicating a gentle slope'
         param_4.parameterType = 'Required'
         param_4.direction = 'Input'
-        param_4.dataType = u'Double'
+        param_4.datatype = u'Double'
 
         # Output_raster
         param_5 = arcpy.Parameter()
@@ -451,7 +430,7 @@ class zoneclassification(object):
         param_5.displayName = u'Output raster'
         param_5.parameterType = 'Required'
         param_5.direction = 'Output'
-        param_5.dataType = u'Raster Dataset'
+        param_5.datatype = u'Raster Dataset'
 
         return [param_1, param_2, param_3, param_4, param_5]
     def isLicensed(self):
@@ -465,7 +444,7 @@ class zoneclassification(object):
         if validator:
              return validator(parameters).updateMessages()
     def execute(self, parameters, messages):
-        with script_run_as(u'c:\\data\\arcgis\\addins\\btm\\toolbox\\noaa\\zone_classification.py'):
+        with script_run_as(u'c:\\data\\arcgis\\addins\\btm\\toolbox\\zone_classification.py'):
             # zone_classification.py
             # Description: The Benthic Terrain Modeler (BTM) functions as a toolbox within ArcMap, and relies
             #              on a methodology to analyze benthic terrain from input multibeam bathymetry in ESRI's
@@ -505,7 +484,7 @@ class zoneclassification(object):
                 arcpy.GetMessages()
 
 class structureclassification(object):
-    """c:\data\arcgis\addins\btm\toolbox\noaa\BTM.tbx\structureclassification"""
+    """c:\data\arcgis\addins\btm\toolbox\BTM.tbx\structureclassification"""
     def __init__(self):
         self.label = u'6. Structure Classification Builder'
         self.canRunInBackground = False
@@ -516,7 +495,7 @@ class structureclassification(object):
         param_1.displayName = u'Standardized broad-scale BPI raster'
         param_1.parameterType = 'Required'
         param_1.direction = 'Input'
-        param_1.dataType = u'Raster Layer'
+        param_1.datatype = u'Raster Layer'
 
         # Broad-scale_BPI_standard_deviation_break
         param_2 = arcpy.Parameter()
@@ -524,7 +503,7 @@ class structureclassification(object):
         param_2.displayName = u'Broad-scale BPI standard deviation break'
         param_2.parameterType = 'Required'
         param_2.direction = 'Input'
-        param_2.dataType = u'Double'
+        param_2.datatype = u'Double'
 
         # Standardized_fine-scale_BPI_raster
         param_3 = arcpy.Parameter()
@@ -532,7 +511,7 @@ class structureclassification(object):
         param_3.displayName = u'Standardized fine-scale BPI raster'
         param_3.parameterType = 'Required'
         param_3.direction = 'Input'
-        param_3.dataType = u'Raster Layer'
+        param_3.datatype = u'Raster Layer'
 
         # Fine-scale_BPI_standard_deviation_break
         param_4 = arcpy.Parameter()
@@ -540,7 +519,7 @@ class structureclassification(object):
         param_4.displayName = u'Fine-scale BPI standard deviation break'
         param_4.parameterType = 'Required'
         param_4.direction = 'Input'
-        param_4.dataType = u'Double'
+        param_4.datatype = u'Double'
 
         # Slope_raster
         param_5 = arcpy.Parameter()
@@ -548,7 +527,7 @@ class structureclassification(object):
         param_5.displayName = u'Slope raster'
         param_5.parameterType = 'Required'
         param_5.direction = 'Input'
-        param_5.dataType = u'Raster Layer'
+        param_5.datatype = u'Raster Layer'
 
         # Slope_value__in_degrees__indicating_a_gentle_slope
         param_6 = arcpy.Parameter()
@@ -556,7 +535,7 @@ class structureclassification(object):
         param_6.displayName = u'Slope value (in degrees) indicating a gentle slope'
         param_6.parameterType = 'Required'
         param_6.direction = 'Input'
-        param_6.dataType = u'Double'
+        param_6.datatype = u'Double'
 
         # Slope_value__in_degrees__indicating_a_steep_slope
         param_7 = arcpy.Parameter()
@@ -564,7 +543,7 @@ class structureclassification(object):
         param_7.displayName = u'Slope value (in degrees) indicating a steep slope'
         param_7.parameterType = 'Required'
         param_7.direction = 'Input'
-        param_7.dataType = u'Double'
+        param_7.datatype = u'Double'
 
         # Bathymetric_raster
         param_8 = arcpy.Parameter()
@@ -572,7 +551,7 @@ class structureclassification(object):
         param_8.displayName = u'Bathymetric raster'
         param_8.parameterType = 'Required'
         param_8.direction = 'Input'
-        param_8.dataType = u'Raster Layer'
+        param_8.datatype = u'Raster Layer'
 
         # Depth_indicating_break_between_shelf_and_broad_flat
         param_9 = arcpy.Parameter()
@@ -580,7 +559,7 @@ class structureclassification(object):
         param_9.displayName = u'Depth indicating break between shelf and broad flat'
         param_9.parameterType = 'Required'
         param_9.direction = 'Input'
-        param_9.dataType = u'Double'
+        param_9.datatype = u'Double'
 
         # Output_raster
         param_10 = arcpy.Parameter()
@@ -588,7 +567,7 @@ class structureclassification(object):
         param_10.displayName = u'Output raster'
         param_10.parameterType = 'Required'
         param_10.direction = 'Output'
-        param_10.dataType = u'Raster Dataset'
+        param_10.datatype = u'Raster Dataset'
 
         return [param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8, param_9, param_10]
     def isLicensed(self):
@@ -602,7 +581,7 @@ class structureclassification(object):
         if validator:
              return validator(parameters).updateMessages()
     def execute(self, parameters, messages):
-        with script_run_as(u'c:\\data\\arcgis\\addins\\btm\\toolbox\\noaa\\structure_classification.py'):
+        with script_run_as(u'c:\\data\\arcgis\\addins\\btm\\toolbox\\structure_classification.py'):
             # structure_classification.py
             # Description: The Benthic Terrain Modeler (BTM) functions as a toolbox within ArcMap, and relies
             #              on a methodology to analyze benthic terrain from input multibeam bathymetry in ESRI's
@@ -665,7 +644,7 @@ class structureclassification(object):
                 arcpy.GetMessages()
 
 class terrainruggedness(object):
-    """c:\data\arcgis\addins\btm\toolbox\noaa\BTM.tbx\Ruggedness(VRM)"""
+    """c:\data\arcgis\addins\btm\toolbox\BTM.tbx\Ruggedness(VRM)"""
     class ToolValidator:
       """Class for validating a tool's parameter values and controlling
       the behavior of the tool's dialog."""
@@ -700,7 +679,7 @@ class terrainruggedness(object):
         param_1.displayName = u'Elevation Raster'
         param_1.parameterType = 'Required'
         param_1.direction = 'Input'
-        param_1.dataType = u'Raster Layer'
+        param_1.datatype = u'Raster Layer'
 
         # Neighborhood_Size
         param_2 = arcpy.Parameter()
@@ -708,7 +687,7 @@ class terrainruggedness(object):
         param_2.displayName = u'Neighborhood Size'
         param_2.parameterType = 'Required'
         param_2.direction = 'Input'
-        param_2.dataType = u'Long'
+        param_2.datatype = u'Long'
 
         # Output_Workspace
         param_3 = arcpy.Parameter()
@@ -716,7 +695,7 @@ class terrainruggedness(object):
         param_3.displayName = u'Output Workspace'
         param_3.parameterType = 'Required'
         param_3.direction = 'Input'
-        param_3.dataType = u'Workspace'
+        param_3.datatype = u'Workspace'
 
         # Output_Raster
         param_4 = arcpy.Parameter()
@@ -724,7 +703,7 @@ class terrainruggedness(object):
         param_4.displayName = u'Output Raster'
         param_4.parameterType = 'Required'
         param_4.direction = 'Output'
-        param_4.dataType = u'Raster Dataset'
+        param_4.datatype = u'Raster Dataset'
 
         return [param_1, param_2, param_3, param_4]
     def isLicensed(self):
@@ -738,7 +717,7 @@ class terrainruggedness(object):
         if validator:
              return validator(parameters).updateMessages()
     def execute(self, parameters, messages):
-        with script_run_as(u'c:\\data\\arcgis\\addins\\btm\\toolbox\\noaa\\ruggedness.py'):
+        with script_run_as(u'c:\\data\\arcgis\\addins\\btm\\toolbox\\ruggedness.py'):
             # ruggedness.py
             # Description: This tool measures terrain ruggedness by calculating the vector ruggedness measure
             #              described in Sappington, J.M., K.M. Longshore, and D.B. Thompson. 2007. Quantifying
@@ -934,7 +913,6 @@ class depthstatistics(object):
              return validator(parameters).updateMessages()
 
     def execute(self, parameters, messages):
-        print "executing depth statistics"
         # depth statistics
         # Requirements: Spatial Analyst 
         # Author: Shaun Walbridge
@@ -947,7 +925,6 @@ class depthstatistics(object):
         OutWorkspace = parameters[2]
         OutStats = parameters[3]
       
-        print OutStats
         # initialize our neighborhood
         neighborhood = NbrRectangle(Neighborhood_Size, 
             Neighborhood_Size, "CELL")
