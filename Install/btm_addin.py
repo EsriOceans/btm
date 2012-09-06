@@ -110,6 +110,7 @@ class calculateAspect(object):
     def onClick(self):
         tool_dialog(custom_toolbox, 'Aspect')
 
+#- variance in depth
 #- mean water depth 
 #    + [sum(depth) / n cells] 
 #    + arcpy.sa.Focal()
@@ -122,11 +123,8 @@ class calculateDepthStatistics(object):
         self.enabled = True
         self.checked = False
     def onClick(self):
-        msg = "this method is not yet implemented."
-        title = "Unable to calculate Depth Statistics"
-        pythonaddins.MessageBox(msg, title)
+        tool_dialog(btm_toolbox, 'depthstatistics')
 
-#
 # New geomorphometry functions
 #
 class calculateRugosity(object):
