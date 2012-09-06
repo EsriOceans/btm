@@ -5,8 +5,8 @@
     <CreaTime>02190400</CreaTime>
     <ArcGISFormat>1.0</ArcGISFormat>
     <SyncOnce>TRUE</SyncOnce>
-    <ModDate>20120904</ModDate>
-    <ModTime>220032</ModTime>
+    <ModDate>20120905</ModDate>
+    <ModTime>143726</ModTime>
   </Esri>
   <dataIdInfo>
     <idCitation>
@@ -25,16 +25,16 @@
     <parameters>
       <param name="Input_bathymetric_raster"
       displayname="Input bathymetric raster" type="Required"
-      direction="Input" datatype="String"
+      direction="Input" datatype="Raster Layer"
       expression="Input_bathymetric_raster" />
       <param name="Inner_radius" displayname="Inner radius"
-      type="Required" direction="Input" datatype="String"
+      type="Required" direction="Input" datatype="Long"
       expression="Inner_radius" />
       <param name="Outer_radius" displayname="Outer radius"
-      type="Required" direction="Input" datatype="String"
+      type="Required" direction="Input" datatype="Long"
       expression="Outer_radius" />
       <param name="Output_raster" displayname="Output raster"
-      type="Required" direction="Output" datatype="String"
+      type="Required" direction="Output" datatype="Raster Dataset"
       expression="Output_raster" />
     </parameters>
   </tool>

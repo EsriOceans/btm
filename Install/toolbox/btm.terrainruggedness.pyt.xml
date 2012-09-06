@@ -5,8 +5,8 @@
     <CreaTime>02190400</CreaTime>
     <ArcGISFormat>1.0</ArcGISFormat>
     <SyncOnce>TRUE</SyncOnce>
-    <ModDate>20120904</ModDate>
-    <ModTime>220033</ModTime>
+    <ModDate>20120906</ModDate>
+    <ModTime>013110</ModTime>
   </Esri>
   <dataIdInfo>
     <idCitation>
@@ -24,17 +24,17 @@
   displayname="7. Terrain Ruggedness (VRM)" toolboxalias="">
     <parameters>
       <param name="Elevation_Raster" displayname="Elevation Raster"
-      type="Required" direction="Input" datatype="String"
+      type="Required" direction="Input" datatype="Raster Layer"
       expression="Elevation_Raster" />
       <param name="Neighborhood_Size"
       displayname="Neighborhood Size" type="Required"
-      direction="Input" datatype="String"
+      direction="Input" datatype="Long"
       expression="Neighborhood_Size" />
       <param name="Output_Workspace" displayname="Output Workspace"
-      type="Required" direction="Input" datatype="String"
+      type="Required" direction="Input" datatype="Workspace"
       expression="Output_Workspace" />
       <param name="Output_Raster" displayname="Output Raster"
-      type="Required" direction="Output" datatype="String"
+      type="Required" direction="Output" datatype="Raster Dataset"
       expression="Output_Raster" />
     </parameters>
   </tool>

@@ -5,8 +5,8 @@
     <CreaTime>22003300</CreaTime>
     <ArcGISFormat>1.0</ArcGISFormat>
     <SyncOnce>TRUE</SyncOnce>
-    <ModDate>20120904</ModDate>
-    <ModTime>220033</ModTime>
+    <ModDate>20120906</ModDate>
+    <ModTime>013106</ModTime>
   </Esri>
   <dataIdInfo>
     <idCitation>
@@ -25,10 +25,10 @@
     <parameters>
       <param name="Input_bathymetric_raster"
       displayname="Input bathymetric raster" type="Required"
-      direction="Input" datatype="String"
+      direction="Input" datatype="Raster Layer"
       expression="Input_bathymetric_raster" />
       <param name="Output_raster" displayname="Output raster"
-      type="Required" direction="Output" datatype="String"
+      type="Required" direction="Output" datatype="Raster Dataset"
       expression="Output_raster" />
     </parameters>
   </tool>

@@ -5,8 +5,8 @@
     <CreaTime>02190400</CreaTime>
     <ArcGISFormat>1.0</ArcGISFormat>
     <SyncOnce>TRUE</SyncOnce>
-    <ModDate>20120904</ModDate>
-    <ModTime>220033</ModTime>
+    <ModDate>20120906</ModDate>
+    <ModTime>013107</ModTime>
   </Esri>
   <dataIdInfo>
     <idCitation>
@@ -25,21 +25,21 @@
     <parameters>
       <param name="Standardized_broad-scale_BPI_raster"
       displayname="Standardized broad-scale BPI raster"
-      type="Required" direction="Input" datatype="String"
+      type="Required" direction="Input" datatype="Raster Layer"
       expression="Standardized_broad-scale_BPI_raster" />
       <param name="Slope_raster" displayname="Slope raster"
-      type="Required" direction="Input" datatype="String"
+      type="Required" direction="Input" datatype="Raster Layer"
       expression="Slope_raster" />
       <param name="Standard_deviation_break"
       displayname="Standard deviation break" type="Required"
-      direction="Input" datatype="String"
+      direction="Input" datatype="Double"
       expression="Standard_deviation_break" />
       <param name="Slope_value__in_degrees__indicating_a_gentle_slope"
       displayname="Slope value (in degrees) indicating a gentle slope"
-      type="Required" direction="Input" datatype="String"
+      type="Required" direction="Input" datatype="Double"
       expression="Slope_value__in_degrees__indicating_a_gentle_slope" />
       <param name="Output_raster" displayname="Output raster"
-      type="Required" direction="Output" datatype="String"
+      type="Required" direction="Output" datatype="Raster Dataset"
       expression="Output_raster" />
     </parameters>
   </tool>
