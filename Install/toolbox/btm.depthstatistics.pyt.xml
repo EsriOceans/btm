@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata xml:lang="en">
+  <Esri>
+    <CreaDate>20120905</CreaDate>
+    <CreaTime>12335500</CreaTime>
+    <ArcGISFormat>1.0</ArcGISFormat>
+    <SyncOnce>TRUE</SyncOnce>
+    <ModDate>20120906</ModDate>
+    <ModTime>013111</ModTime>
+  </Esri>
+  <dataIdInfo>
+    <idCitation>
+      <resTitle>Depth Statistics</resTitle>
+    </idCitation>
+  </dataIdInfo>
+  <distInfo>
+    <distributor>
+      <distorFormat>
+        <formatName>ArcToolbox Tool</formatName>
+      </distorFormat>
+    </distributor>
+  </distInfo>
+  <tool name="depthstatistics" displayname="Depth Statistics"
+  toolboxalias="">
+    <parameters>
+      <param name="Elevation_Raster" displayname="Elevation Raster"
+      type="Required" direction="Input" datatype="Raster Layer"
+      expression="Elevation_Raster" />
+      <param name="Neighborhood_Size"
+      displayname="Neighborhood Size" type="Required"
+      direction="Input" datatype="Long"
+      expression="Neighborhood_Size" />
+      <param name="Output_Workspace" displayname="Output Workspace"
+      type="Required" direction="Input" datatype="Workspace"
+      expression="Output_Workspace" />
+      <param name="Statistics_Computed"
+      displayname="Statistics to Compute" type="Required"
+      direction="Input" datatype="Multiple Value"
+      expression="Mean Depth | Variance | Standard Deviation" />
+    </parameters>
+  </tool>
+</metadata>
