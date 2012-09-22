@@ -673,10 +673,10 @@ class terrainruggedness(object):
         self.label = u'7. Terrain Ruggedness (VRM)'
         self.canRunInBackground = False
     def getParameterInfo(self):
-        # Elevation_Raster
+        # Bathymetry_Raster
         param_1 = arcpy.Parameter()
-        param_1.name = u'Elevation_Raster'
-        param_1.displayName = u'Elevation Raster'
+        param_1.name = u'Bathymetry_Raster'
+        param_1.displayName = u'Bathymetry Raster'
         param_1.parameterType = 'Required'
         param_1.direction = 'Input'
         param_1.datatype = u'Raster Layer'
@@ -863,10 +863,10 @@ class depthstatistics(object):
         self.canRunInBackground = False
 
     def getParameterInfo(self):
-        # Elevation_Raster
+        # Bathymetry_Raster 
         param_1 = arcpy.Parameter()
-        param_1.name = u'Elevation_Raster'
-        param_1.displayName = u'Elevation Raster'
+        param_1.name = u'Bathymetry_Raster'
+        param_1.displayName = u'Bathymetry Raster'
         param_1.parameterType = 'Required'
         param_1.direction = 'Input'
         param_1.datatype = 'Raster Layer'
