@@ -10,8 +10,6 @@ from arcpy.sa import *
 # import our local directory so we can import internal modules
 local_path = os.path.dirname(__file__)
 sys.path.insert(0, local_path)
-from scripts import bpi
-from scripts import standardize_bpi_grids
 
 # Check out any necessary licenses
 arcpy.CheckOutExtension("Spatial")
@@ -102,12 +100,12 @@ class broadscalebpi(object):
              return validator(parameters).updateMessages()
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
-        #from scripts import bpi
+        from scripts import bpi
         bpi.main(
-            bathy=parameters[0],
-            inner_radius=parameters[1],
-            outer_radius=parameters[2],
-            out_raster=parameters[3],
+            bathy=parameters[0].valueAsText,
+            inner_radius=parameters[1].valueAsText,
+            outer_radius=parameters[2].valueAsText,
+            out_raster=parameters[3].valueAsText,
 	    bpi_type='broad')
 
 class finescalebpi(object):
@@ -190,12 +188,12 @@ class finescalebpi(object):
 
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
-        #from scripts import bpi
+        from scripts import bpi
         bpi.main(
-            bathy=parameters[0],
-            inner_radius=parameters[1],
-            outer_radius=parameters[2],
-            out_raster=parameters[3],
+            bathy=parameters[0].valueAsText,
+            inner_radius=parameters[1].valueAsText,
+            outer_radius=parameters[2].valueAsText,
+            out_raster=parameters[3].valueAsText,
 	    bpi_type='fine')
     
 class standardizebpi(object):
@@ -233,11 +231,10 @@ class standardizebpi(object):
              return validator(parameters).updateMessages()
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
-        #from scripts import standarize_bpi_grids
-        print "calling fine bpi standardize script..."
+        from scripts import standardize_bpi_grids
         standardize_bpi_grids.main(
-            bpi_raster=parameters[0],
-            out_raster=parameters[1])
+            bpi_raster=parameters[0].valueAsText,
+            out_raster=parameters[1].valueAsText)
  
 class btmslope(object):
     """c:\data\arcgis\addins\btm\toolbox\BTM.tbx\slope"""
@@ -275,8 +272,9 @@ class btmslope(object):
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
         from scripts import slope
-        print "calling slope script..."
-        slope.main(bpi_raster=parameters[0], out_raster=parameters[1])
+        slope.main(
+            bpi_raster=parameters[0].valueAsText,
+            out_raster=parameters[1].valueAsText)
  
 class zoneclassification(object):
     """c:\data\arcgis\addins\btm\toolbox\BTM.tbx\zoneclassification"""
@@ -514,12 +512,11 @@ class terrainruggedness(object):
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
         from scripts import ruggedness
-        print "calling ruggedness script..."
         ruggedness.main(
-                InRaster=parameters[0], 
-                NeighborhoodSize=parameters[1],
-                OutWorkspace=parameters[2],
-                OutRaster=parameters[3])
+                InRaster=parameters[0].valueAsText, 
+                NeighborhoodSize=parameters[1].valueAsText,
+                OutWorkspace=parameters[2].valueAsText,
+                OutRaster=parameters[3].valueAsText)
  
 class depthstatistics(object):
     """ Depth Statistics computes a suite of summary statistics. This initial
