@@ -102,14 +102,13 @@ class broadscalebpi(object):
              return validator(parameters).updateMessages()
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
-        from scripts import broad_scale_bpi
-        print "calling scripts broad_scale_bpi..."
-        broad_scale_bpi.main(
-            Bathy=parameters[0],
-            BroadInnerRadius=parameters[1],
-            BroadOuterRadius=parameters[2],
-            BroadOutRaster=parameters[3])
-           
+        #from scripts import bpi
+        bpi.main(
+            bathy=parameters[0],
+            inner_radius=parameters[1],
+            outer_radius=parameters[2],
+            out_raster=parameters[3],
+	    bpi_type='broad')
 
 class finescalebpi(object):
     """c:\data\arcgis\addins\btm\toolbox\BTM.tbx\finescalebpi"""
@@ -120,7 +119,7 @@ class finescalebpi(object):
       def __init__(self, parameters):
         """Setup arcpy and the list of tool parameters."""
         self.params = parameters
-    
+
       def initializeParameters(self):
         """Refine the properties of a tool's parameters.  This method is
         called when the tool is opened."""
@@ -176,50 +175,27 @@ class finescalebpi(object):
         return [param_1, param_2, param_3, param_4]
     def isLicensed(self):
         return True
+
     def updateParameters(self, parameters):
         validator = getattr(self, 'ToolValidator', None)
         if validator:
              return validator(parameters).updateParameters()
+
     def updateMessages(self, parameters):
         validator = getattr(self, 'ToolValidator', None)
         if validator:
              return validator(parameters).updateMessages()
-    def execute(self, parameters, messages):
-        with script_run_as(u'c:\\data\\arcgis\\addins\\btm\\toolbox\\fine_scale_bpi.py'):
-            # fine_scale_bpi.py
-            # Description: The Benthic Terrain Modeler (BTM) functions as a toolbox within ArcMap, and relies
-            #              on a methodology to analyze benthic terrain from input multibeam bathymetry in ESRI's
-            #              GRID (raster) format. The BTM toolbox contains a set of tools that allow users to
-            #              create grids of slope, bathymetric position index and rugosity from an input data set.
-            #              An integrated XML-based terrain classification dictionary gives users the freedom to
-            #              create their own classifications and define the relationships that characterize them.
-            # Requirements: Spatial Analyst 
-            # Author: Dawn J. Wright, Emily R. Lundblad, Emily M. Larkin, Ronald W. Rinehart
-            # Date: 2005
-            # Converted 11/5/2010 by Emily C. Huntley of the Massachusetts Office of Coastal Zone Management
-            # to a Python Script that runs in ArcGIS 10.
-            
-            # Check out any necessary licenses
-            arcpy.CheckOutExtension("Spatial")
-            
-            # Script arguments
-            Bathy = sys.argv[1]
-            FineInnerRadius = sys.argv[2]
-            FineOuterRadius = sys.argv[3]
-            FineOutRaster = sys.argv[4]
-            
-            try:
-                # Create the fine-scale Bathymetric Position Index (BPI) raster
-                messages.AddMessage("Generating the fine-scale Bathymetric Position Index (BPI) raster...")
-                outFocalStatistics = FocalStatistics(Bathy, NbrAnnulus(FineInnerRadius, FineOuterRadius, "CELL"), "MEAN")
-                outRaster = Int(Plus(Minus(Bathy, outFocalStatistics), 0.5))
-                outRaster.save(FineOutRaster)
-            
-            except:
-            # Print error message if an error occurs
-                arcpy.GetMessages()
-            
 
+    def execute(self, parameters, messages):
+        # run related python script with selected input parameters
+        #from scripts import bpi
+        bpi.main(
+            bathy=parameters[0],
+            inner_radius=parameters[1],
+            outer_radius=parameters[2],
+            out_raster=parameters[3],
+	    bpi_type='fine')
+    
 class standardizebpi(object):
     """c:\data\arcgis\addins\btm\toolbox\BTM.tbx\standardizebpi"""
     def __init__(self):
