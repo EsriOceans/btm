@@ -232,46 +232,13 @@ class standardizebpi(object):
         if validator:
              return validator(parameters).updateMessages()
     def execute(self, parameters, messages):
-        with script_run_as(u'c:\\data\\arcgis\\addins\\btm\\toolbox\\standardize_bpi_grids.py'):
-            # standardize_bpi_grids.py
-            # Description: The Benthic Terrain Modeler (BTM) functions as a toolbox within ArcMap, and relies
-            #              on a methodology to analyze benthic terrain from input multibeam bathymetry in ESRI's
-            #              GRID (raster) format. The BTM toolbox contains a set of tools that allow users to
-            #              create grids of slope, bathymetric position index and rugosity from an input data set.
-            #              An integrated XML-based terrain classification dictionary gives users the freedom to
-            #              create their own classifications and define the relationships that characterize them.
-            # Requirements: Spatial Analyst 
-            # Author: Dawn J. Wright, Emily R. Lundblad, Emily M. Larkin, Ronald W. Rinehart
-            # Date: 2005
-            # Converted 11/5/2010 by Emily C. Huntley of the Massachusetts Office of Coastal Zone Management
-            # to a Python Script that runs in ArcGIS 10.
-            
-            # Check out any necessary licenses
-            arcpy.CheckOutExtension("Spatial")
-            
-            # Script arguments
-            BPIRaster = sys.argv[1]
-            OutRaster = sys.argv[2]
-            
-            try:
-                # Get raster properties
-                messages.AddMessage("Calculating properties of the Bathymetric Position Index (BPI) raster...")
-                result1 = arcpy.GetRasterProperties_management(BPIRaster, "MEAN")
-                BPIMean = result1.getOutput(0)
-                messages.AddMessage("The mean of the BPI raster is " + str(BPIMean) + ".")
-                result2 = arcpy.GetRasterProperties_management(BPIRaster, "STD")
-                BPIStdDev = result2.getOutput(0)
-                messages.AddMessage("The standard deviation of the BPI raster is " + str(BPIStdDev) + ".")
-                
-                # Create the standardized Bathymetric Position Index (BPI) raster
-                messages.AddMessage("Standardizing the Bathymetric Position Index (BPI) raster...")
-                outRaster = Int(Plus(Times(Divide(Minus(BPIRaster, float(BPIMean)), float(BPIStdDev)), 100), 0.5))
-                outRaster.save(OutRaster)
-            
-            except:
-            # Print error message if an error occurs
-                arcpy.GetMessages()
-
+        # run related python script with selected input parameters
+        #from scripts import standarize_bpi_grids
+        print "calling fine bpi standardize script..."
+        standardize_bpi_grids.main(
+            bpi_raster=parameters[0],
+            out_raster=parameters[1])
+ 
 class btmslope(object):
     """c:\data\arcgis\addins\btm\toolbox\BTM.tbx\slope"""
     def __init__(self):
@@ -306,37 +273,11 @@ class btmslope(object):
         if validator:
              return validator(parameters).updateMessages()
     def execute(self, parameters, messages):
-        with script_run_as(u'c:\\data\\arcgis\\addins\\btm\\toolbox\\slope.py'):
-            # slope.py
-            # Description: The Benthic Terrain Modeler (BTM) functions as a toolbox within ArcMap, and relies
-            #              on a methodology to analyze benthic terrain from input multibeam bathymetry in ESRI's
-            #              GRID (raster) format. The BTM toolbox contains a set of tools that allow users to
-            #              create grids of slope, bathymetric position index and rugosity from an input data set.
-            #              An integrated XML-based terrain classification dictionary gives users the freedom to
-            #              create their own classifications and define the relationships that characterize them.
-            # Requirements: Spatial Analyst 
-            # Author: Dawn J. Wright, Emily R. Lundblad, Emily M. Larkin, Ronald W. Rinehart
-            # Date: 2005
-            # Converted 11/5/2010 by Emily C. Huntley of the Massachusetts Office of Coastal Zone Management
-            # to a Python Script that runs in ArcGIS 10.
-            
-            # Check out any necessary licenses
-            arcpy.CheckOutExtension("Spatial")
-            
-            # Script arguments
-            Bathy = sys.argv[1]
-            OutRaster = sys.argv[2]
-            
-            try:
-                # Calculate the slope of the bathymetric raster
-                messages.AddMessage("Calculating the slope...")
-                outSlope = Slope(Bathy, "DEGREE", 1)
-                outSlope.save(OutRaster)
-            
-            except:
-            # Print error message if an error occurs
-                arcpy.GetMessages()
-
+        # run related python script with selected input parameters
+        from scripts import slope
+        print "calling slope script..."
+        slope.main(bpi_raster=parameters[0], out_raster=parameters[1])
+ 
 class zoneclassification(object):
     """c:\data\arcgis\addins\btm\toolbox\BTM.tbx\zoneclassification"""
     def __init__(self):
@@ -395,44 +336,7 @@ class zoneclassification(object):
         if validator:
              return validator(parameters).updateMessages()
     def execute(self, parameters, messages):
-        with script_run_as(u'c:\\data\\arcgis\\addins\\btm\\toolbox\\zone_classification.py'):
-            # zone_classification.py
-            # Description: The Benthic Terrain Modeler (BTM) functions as a toolbox within ArcMap, and relies
-            #              on a methodology to analyze benthic terrain from input multibeam bathymetry in ESRI's
-            #              GRID (raster) format. The BTM toolbox contains a set of tools that allow users to
-            #              create grids of slope, bathymetric position index and rugosity from an input data set.
-            #              An integrated XML-based terrain classification dictionary gives users the freedom to
-            #              create their own classifications and define the relationships that characterize them.
-            # Requirements: Spatial Analyst 
-            # Author: Dawn J. Wright, Emily R. Lundblad, Emily M. Larkin, Ronald W. Rinehart
-            # Date: 2005
-            # Converted 11/5/2010 by Emily C. Huntley of the Massachusetts Office of Coastal Zone Management
-            # to a Python Script that runs in ArcGIS 10.
-            
-            # Script arguments
-            BPIRaster = sys.argv[1]
-            SlopeRaster = sys.argv[2]
-            StdDevDiv = sys.argv[3]
-            SlopeDiv = sys.argv[4]
-            OutRaster = sys.argv[5]
-            
-            try:
-                # Get raster properties
-                messages.AddMessage("Calculating properties of the standardized Bathymetric Position Index (BPI) raster...")
-                result = arcpy.GetRasterProperties_management(BPIRaster, "STD")
-                BPIStdDev = result.getOutput(0)
-                messages.AddMessage("The standard deviation of the BPI raster is " + str(BPIStdDev) + ".")
-                
-                # Create the classified standardized Bathymetric Position Index (BPI) raster
-                messages.AddMessage("Classifying the Bathymetric Position Index (BPI) raster...")
-                CreDiv = float(StdDevDiv) * float(BPIStdDev)
-                DepDiv = -1 * float(StdDevDiv) * float(BPIStdDev)
-                outRaster = Con(Raster(BPIRaster) >= float(CreDiv), 1, Con(Raster(BPIRaster) <= float(DepDiv), 2, Con(Raster(SlopeRaster) <= float(SlopeDiv), 3, 4)))
-                outRaster.save(OutRaster)
-            
-            except:
-            # Print error message if an error occurs
-                arcpy.GetMessages()
+        pass
 
 class structureclassification(object):
     """c:\data\arcgis\addins\btm\toolbox\BTM.tbx\structureclassification"""
@@ -532,67 +436,7 @@ class structureclassification(object):
         if validator:
              return validator(parameters).updateMessages()
     def execute(self, parameters, messages):
-        with script_run_as(u'c:\\data\\arcgis\\addins\\btm\\toolbox\\structure_classification.py'):
-            # structure_classification.py
-            # Description: The Benthic Terrain Modeler (BTM) functions as a toolbox within ArcMap, and relies
-            #              on a methodology to analyze benthic terrain from input multibeam bathymetry in ESRI's
-            #              GRID (raster) format. The BTM toolbox contains a set of tools that allow users to
-            #              create grids of slope, bathymetric position index and rugosity from an input data set.
-            #              An integrated XML-based terrain classification dictionary gives users the freedom to
-            #              create their own classifications and define the relationships that characterize them.
-            # Requirements: Spatial Analyst 
-            # Author: Dawn J. Wright, Emily R. Lundblad, Emily M. Larkin, Ronald W. Rinehart
-            # Date: 2005
-            # Converted 11/5/2010 by Emily C. Huntley of the Massachusetts Office of Coastal Zone Management
-            # to a Python Script that runs in ArcGIS 10.
-            
-            # Script arguments
-            BroadBPIRaster = sys.argv[1]
-            BroadStdDevDiv = sys.argv[2]
-            FineBPIRaster = sys.argv[3]
-            FineStdDevDiv = sys.argv[4]
-            SlopeRaster = sys.argv[5]
-            GentleSlopeDiv = sys.argv[6]
-            SteepSlopeDiv = sys.argv[7]
-            BathyRaster = sys.argv[8]
-            DepthDiv = sys.argv[9]
-            OutRaster = sys.argv[10]
-            
-            try:
-                # Get raster properties
-                messages.AddMessage("Calculating properties of the standardized broad-scale Bathymetric Position Index (BPI) raster...")
-                result1 = arcpy.GetRasterProperties_management(BroadBPIRaster, "STD")
-                BroadBPIStdDev = result1.getOutput(0)
-                messages.AddMessage("The standard deviation of the broad-scale BPI raster is " + str(BroadBPIStdDev) + ".")
-                messages.AddMessage("Calculating properties of the standardized fine-scale Bathymetric Position Index (BPI) raster...")
-                result2 = arcpy.GetRasterProperties_management(FineBPIRaster, "STD")
-                FineBPIStdDev = result2.getOutput(0)
-                messages.AddMessage("The standard deviation of the fine-scale BPI raster is " + str(FineBPIStdDev) + ".")
-                
-                # Create the classified standardized Bathymetric Position Index (BPI) raster
-                messages.AddMessage("Classifying the Bathymetric Position Index (BPI) raster...")
-                BroadCreDiv = float(BroadStdDevDiv) * float(BroadBPIStdDev)
-                BroadDepDiv = -1 * float(BroadStdDevDiv) * float(BroadBPIStdDev)
-                FineCreDiv = float(FineStdDevDiv) * float(FineBPIStdDev)
-                FineDepDiv = -1 * float(FineStdDevDiv) * float(FineBPIStdDev)
-                outRaster = Con(((Raster(BroadBPIRaster) <= float(BroadDepDiv)) & (Raster(FineBPIRaster) <= float(FineDepDiv))), 1, # Narrow depression
-                                Con((Raster(BroadBPIRaster) > float(BroadDepDiv)) & (Raster(BroadBPIRaster) < float(BroadCreDiv)) & (Raster(FineBPIRaster) <= float(FineDepDiv)) & (Raster(SlopeRaster) <= float(GentleSlopeDiv)), 2, # Local depression on flat
-                                    Con((Raster(BroadBPIRaster) > float(BroadDepDiv)) & (Raster(BroadBPIRaster) < float(BroadCreDiv)) & (Raster(FineBPIRaster) <= float(FineDepDiv)) & (Raster(SlopeRaster) > float(GentleSlopeDiv)), 3, # Lateral midslope depression
-                                        Con((Raster(BroadBPIRaster) >= float(BroadCreDiv)) & (Raster(FineBPIRaster) <= float(FineDepDiv)), 4, # Depression on crest
-                                            Con((Raster(BroadBPIRaster) <= float(BroadDepDiv)) & (Raster(FineBPIRaster) > float(FineDepDiv)) & (Raster(FineBPIRaster) < float(FineCreDiv)), 5, # Broad depression with an open bottom
-                                                Con((Raster(BroadBPIRaster) > float(BroadDepDiv)) & (Raster(FineBPIRaster) > float(FineDepDiv)) & (Raster(FineBPIRaster) < float(FineCreDiv)) & (Raster(SlopeRaster) <= float(GentleSlopeDiv)) & (Raster(BathyRaster) < float(DepthDiv)), 6, # Broad flat
-                                                    Con((Raster(BroadBPIRaster) > float(BroadDepDiv)) & (Raster(FineBPIRaster) > float(FineDepDiv)) & (Raster(FineBPIRaster) < float(FineCreDiv)) & (Raster(SlopeRaster) <= float(GentleSlopeDiv)) & (Raster(BathyRaster) >= float(DepthDiv)), 7, # Shelf
-                                                        Con((Raster(BroadBPIRaster) > float(BroadDepDiv)) & (Raster(FineBPIRaster) > float(FineDepDiv)) & (Raster(FineBPIRaster) < float(FineCreDiv)) & (Raster(SlopeRaster) > float(GentleSlopeDiv)) & (Raster(SlopeRaster) <= float(SteepSlopeDiv)), 8, # Open slopes
-                                                            Con((Raster(BroadBPIRaster) <= float(BroadDepDiv)) & (Raster(FineBPIRaster) >= float(FineCreDiv)), 9, # Local crest in depression
-                                                                Con((Raster(BroadBPIRaster) > float(BroadDepDiv)) & (Raster(BroadBPIRaster) < float(BroadCreDiv)) & (Raster(FineBPIRaster) >= float(FineCreDiv)) & (Raster(SlopeRaster) <= float(GentleSlopeDiv)), 10, # Local crest on flat
-                                                                    Con((Raster(BroadBPIRaster) > float(BroadDepDiv)) & (Raster(BroadBPIRaster) < float(BroadCreDiv)) & (Raster(FineBPIRaster) >= float(FineCreDiv)) & (Raster(SlopeRaster) > float(GentleSlopeDiv)), 11, # Lateral midslope crest
-                                                                        Con((Raster(BroadBPIRaster) >= float(BroadCreDiv)) & (Raster(FineBPIRaster) >= float(FineCreDiv)), 12, # Narrow crest
-                                                                            Con((Raster(BroadBPIRaster) > float(BroadDepDiv)) & (Raster(FineBPIRaster) > float(FineDepDiv)) & (Raster(FineBPIRaster) < float(FineCreDiv)) & (Raster(SlopeRaster) > float(SteepSlopeDiv)), 13))))))))))))) # Steep slope
-                outRaster.save(OutRaster)
-            
-            except:
-            # Print error message if an error occurs
-                arcpy.GetMessages()
+        pass
 
 class terrainruggedness(object):
     """c:\data\arcgis\addins\btm\toolbox\BTM.tbx\Ruggedness(VRM)"""
@@ -668,109 +512,15 @@ class terrainruggedness(object):
         if validator:
              return validator(parameters).updateMessages()
     def execute(self, parameters, messages):
-        with script_run_as(u'c:\\data\\arcgis\\addins\\btm\\toolbox\\ruggedness.py'):
-            # ruggedness.py
-            # Description: This tool measures terrain ruggedness by calculating the vector ruggedness measure
-            #              described in Sappington, J.M., K.M. Longshore, and D.B. Thompson. 2007. Quantifying
-            #              Landscape Ruggedness for Animal Habitat Analysis: A Case Study Using Bighorn Sheep in
-            #              the Mojave Desert. Journal of Wildlife Management. 71(5): 1419 -1426.
-            # Requirements: Spatial Analyst 
-            # Author: Mark Sappington
-            # Date: 2/1/2008
-            # Updated 12/1/2010 by Emily C. Huntley of the Massachusetts Office of Coastal Zone Management
-            # to run in ArcGIS 10.
-           
-            # FIXME: validate against http://arcscripts.esri.com/details.asp?dbid=15423
-            
-            # Check out any necessary licenses
-            arcpy.CheckOutExtension("Spatial")
-            
-            # Script arguments
-            InRaster = sys.argv[1]
-            Neighborhood_Size = sys.argv[2]
-            OutWorkspace = sys.argv[3]
-            OutRaster = sys.argv[4]
-            
-            # Local variables
-            AspectRaster = OutWorkspace + "\\aspect"
-            SlopeRaster = OutWorkspace + "\\slope"
-            SlopeRasterRad = OutWorkspace + "\\sloperad"
-            AspectRasterRad = OutWorkspace + "\\aspectrad"
-            xRaster = OutWorkspace + "\\x"
-            yRaster = OutWorkspace + "\\y"
-            zRaster = OutWorkspace + "\\z"
-            xyRaster = OutWorkspace + "\\xy"
-            xSumRaster = OutWorkspace + "\\xsum"
-            ySumRaster = OutWorkspace + "\\ysum"
-            zSumRaster = OutWorkspace + "\\zsum"
-            ResultRaster = OutWorkspace + "\\result"
-            
-            try:
-                # Create Slope and Aspect rasters
-                messages.AddMessage("Calculating aspect...")
-                outAspect = Aspect(InRaster)
-                outAspect.save(AspectRaster)
-                messages.AddMessage("Calculating slope...")
-                outSlope = Slope(InRaster, "DEGREE")
-                outSlope.save(SlopeRaster)
-            
-                # Convert Slope and Aspect rasters to radians
-                messages.AddMessage("Converting slope and aspect to radians...")
-                outTimes1 = Times(SlopeRaster,(3.14/180))
-                outTimes1.save(SlopeRasterRad)
-                outTimes2 = Times(AspectRaster,(3.14/180))
-                outTimes2.save(AspectRasterRad)
-            
-                # Calculate x, y, and z rasters
-                messages.AddMessage("Calculating x, y, and z rasters...")
-                outSin = Sin(SlopeRasterRad)
-                outSin.save(xyRaster)
-                outCos = Cos(SlopeRasterRad)
-                outCos.save(zRaster)
-                OutRas1 = Times(Con(AspectRaster == -1, 0, Sin(AspectRasterRad)), xyRaster)
-                OutRas1.save(xRaster)
-                OutRas2 = Times(Con(AspectRaster == -1, 0, Cos(AspectRasterRad)), xyRaster)
-                OutRas2.save(yRaster)
-                
-                # Calculate sums of x, y, and z rasters for selected neighborhood size
-                messages.AddMessage("Calculating sums of x, y, and z rasters in selected neighborhood...")
-                outFocalStatistics1 = FocalStatistics(xRaster, NbrRectangle(Neighborhood_Size, Neighborhood_Size, "CELL"), "SUM", "NODATA")
-                outFocalStatistics1.save(xSumRaster)
-                outFocalStatistics2 = FocalStatistics(yRaster, NbrRectangle(Neighborhood_Size, Neighborhood_Size, "CELL"), "SUM", "NODATA")
-                outFocalStatistics2.save(ySumRaster)
-                outFocalStatistics3 = FocalStatistics(zRaster, NbrRectangle(Neighborhood_Size, Neighborhood_Size, "CELL"), "SUM", "NODATA")
-                outFocalStatistics3.save(zSumRaster)
-            
-                # Calculate the resultant vector
-                messages.AddMessage("Calculating the resultant vector...")
-                OutRas3 = SquareRoot(Square(xSumRaster) + Square(ySumRaster) + Square(zSumRaster))
-                OutRas3.save(ResultRaster)
-            
-                # Calculate the Ruggedness raster
-                messages.AddMessage("Calculating the final ruggedness raster...")
-                maxValue = int(Neighborhood_Size) * int(Neighborhood_Size)
-                OutRas4 = Minus(1, Divide(ResultRaster, maxValue))
-                OutRas4.save(OutRaster)
-            
-                # Delete all intermediate raster data sets
-                messages.AddMessage("Deleting intermediate data...")
-                arcpy.Delete_management(AspectRaster)
-                arcpy.Delete_management(SlopeRaster)
-                arcpy.Delete_management(SlopeRasterRad)
-                arcpy.Delete_management(AspectRasterRad)
-                arcpy.Delete_management(xRaster)
-                arcpy.Delete_management(yRaster)
-                arcpy.Delete_management(zRaster)
-                arcpy.Delete_management(xyRaster)
-                arcpy.Delete_management(xSumRaster)
-                arcpy.Delete_management(ySumRaster)
-                arcpy.Delete_management(zSumRaster)
-                arcpy.Delete_management(ResultRaster)
-                
-            except:
-            # Print error message if an error occurs
-                arcpy.GetMessages()
-
+        # run related python script with selected input parameters
+        from scripts import ruggedness
+        print "calling ruggedness script..."
+        ruggedness.main(
+                InRaster=parameters[0], 
+                NeighborhoodSize=parameters[1],
+                OutWorkspace=parameters[2],
+                OutRaster=parameters[3])
+ 
 class depthstatistics(object):
     """ Depth Statistics computes a suite of summary statistics. This initial
         version works on a fixed window size, but user feedback has indicated 
