@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import contextlib
 import os
 import string
 import sys
@@ -11,37 +10,11 @@ from arcpy.sa import *
 # import our local directory so we can import internal modules
 local_path = os.path.dirname(__file__)
 sys.path.insert(0, local_path)
+from scripts import bpi
+from scripts import standardize_bpi_grids
 
 # Check out any necessary licenses
 arcpy.CheckOutExtension("Spatial")
-
-# You can ignore/delete this code; these are basic utility functions to
-# streamline porting
-
-@contextlib.contextmanager
-def script_run_as(filename, args=None):
-    oldpath = sys.path[:]
-    oldargv = sys.argv[:]
-    newdir = os.path.dirname(filename)
-    sys.path = oldpath + [newdir]
-    sys.argv = [filename] + [arg.valueAsText for arg in (args or [])]
-    oldcwd = os.getcwdu()
-    os.chdir(newdir)
-
-    try:
-        # Actually run
-        yield filename
-    finally:
-        # Restore old settings
-        sys.path = oldpath
-        sys.argv = oldargv
-        os.chdir(oldcwd)
-
-def set_parameter_as_text(params, index, val):
-    if (hasattr(params[index].value, 'value')):
-        params[index].value.value = val
-    else:
-        params[index].value = val
 
 # Export of toolbox c:\data\arcgis\addins\btm\toolbox\BTM.tbx
 
