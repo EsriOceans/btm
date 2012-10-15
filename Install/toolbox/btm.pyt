@@ -138,7 +138,9 @@ class finescalebpi(object):
     
     def __init__(self):
         self.label = u'2. Build Fine Scale BPI'
+        self.description = u'The concept of bathymetric position is central to the benthic\r\nterrain classification process that is utilized by the BTM.\r\nBathymetric Position Index (BPI) is a measure of where a\r\nreferenced location is relative to the locations surrounding it.\r\nBPI is derived from an input bathymetric data set and itself is a modification of the topographic position index (TPI) algorithm that is used in the terrestrial environment. The application of TPI to develop terrain classifications was explored and developed by Andrew Weiss during his study of terrestrial watersheds in Central Oregon (Weiss 2001). These\r\napplications can be carried into the benthic environment\r\nthrough BPI.\r\n\r\nA fine-scale BPI data set allows you to identify smaller features within the benthic landscape.'
         self.canRunInBackground = False
+ 
     def getParameterInfo(self):
         # Input_bathymetric_raster
         param_1 = arcpy.Parameter()
