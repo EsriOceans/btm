@@ -37,12 +37,11 @@ def main(bathy=None, inner_radius=None, outer_radius=None,
         msg="Generating the {bpi_type}-scale ".format(bpi_type=bpi_type) + \
             "Bathymetric Position Index (BPI) raster..."
         utils.msg(msg)
-        msg=(";".join([bathy, inner_radius, outer_radius, out_raster, bpi_type]))
+        utils.msg("calculating neighborhood...")
         neighborhood = NbrAnnulus(inner_radius, outer_radius, "CELL")
-        utils.msg("fc")
-        utils.msg(bathy)
+        utils.msg("calculating FocalStaistics for %s..." % bathy)
         out_focal_statistics = FocalStatistics(bathy, neighborhood, "MEAN")
-        utils.msg("save raster")
+        utils.msg("saving output raster...")
         outRaster = Int(Plus(Minus(bathy, out_focal_statistics), 0.5))
         outRaster.save(out_raster)
         utils.msg("saved output as %s" % out_raster)
