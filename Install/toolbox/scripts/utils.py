@@ -13,10 +13,11 @@ def msg(msg_text, mtype='message'):
                 msg_text=msg_text, tbinfo=tbinfo)
             print err_msg
         else:
-            arcpy.AddError("Python Error: ${tbinfo}".format(tbinfo=tbinfo))
+            arcpy.AddMessage("Error encountered!")
+            arcpy.AddMessage("Python Error: ${tbinfo}".format(tbinfo=tbinfo))
             arcpy.AddError(msg_text)
     elif config.mode == 'script':
-        print 
+        print msg_text
     else:
         if mtype == 'message':
             arcpy.AddMessage(msg_text)
