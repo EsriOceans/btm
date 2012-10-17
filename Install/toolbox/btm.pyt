@@ -464,6 +464,7 @@ class terrainruggedness(object):
     
     def __init__(self):
         self.label = u'7. Terrain Ruggedness (VRM)'
+        self.description = 'Measure terrain ruggedness by calculating the vecotr ruggedness measure (VRM), as described in Sappington et al, 2007.'
         self.canRunInBackground = False
     def getParameterInfo(self):
         # Bathymetry_Raster
