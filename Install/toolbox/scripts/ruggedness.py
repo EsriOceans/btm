@@ -99,10 +99,11 @@ def main(InRaster=None, NeighborhoodSize=None, OutWorkspace=None, OutRaster=None
         arcpy.Delete_management(zSumRaster)
         arcpy.Delete_management(ResultRaster)
         
-    except:
+    except Exception as e:
         # Print error message if an error occurs
-        errors = arcpy.GetMessages()
-        utils.msg(errors, mtype='error')
+        #errors = arcpy.GetMessages()
+        #print "from except: " + e.message 
+        utils.msg(e, mtype='error')
 
 # when executing as a standalone script get parameters from sys
 if __name__=='__main__':

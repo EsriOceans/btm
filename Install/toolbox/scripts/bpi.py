@@ -45,10 +45,8 @@ def main(bathy=None, inner_radius=None, outer_radius=None,
         outRaster = Int(Plus(Minus(bathy, out_focal_statistics), 0.5))
         outRaster.save(out_raster)
         utils.msg("saved output as %s" % out_raster)
-    except:
-        # Print error message if an error occurs
-        errors = arcpy.GetMessages()
-        utils.msg(errors, mtype='error')
+    except Exception as e:
+        utils.msg(e, mtype='error')
 
 # when executing as a standalone script get parameters from sys
 if __name__=='__main__':

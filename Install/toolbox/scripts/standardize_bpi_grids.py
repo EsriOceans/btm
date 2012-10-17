@@ -42,10 +42,8 @@ def main(bpi_raster=None, out_raster=None):
         outRaster = Int(Plus(Times(Divide(Minus(BPIRaster, float(BPIMean)), float(BPIStdDev)), 100), 0.5))
         outRaster.save(out_raster)
 
-    except:
-        # Print error message if an error occurs
-        errors = arcpy.GetMessages()
-        utils.msg(errors, mtype='error')
+    except Exception as e:
+        utils.msg(e, mtype='error')
 
 
 # when executing as a standalone script get parameters from sys
