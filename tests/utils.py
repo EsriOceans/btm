@@ -1,7 +1,7 @@
 import os
 import sys
 
-local_path = os.path.dirname(__file__)
+from config import *
 
 def addLocalPaths(paths):
     for path_part in paths:
