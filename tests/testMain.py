@@ -1,19 +1,17 @@
 import os
-import sys
 import unittest
 import numpy
 import arcpy
 
-# import our local directory so we can use the internal modules
-local_path = os.path.dirname(__file__)
-scripts_path = os.path.join(local_path, '..', 'Install/toolbox')
-abs_path = os.path.abspath(scripts_path)
-sys.path.insert(0, abs_path)
-
-from scripts import *
-
+from utils import *
+# import our constants;
 # configure test data
 # XXX: use .ini files for these instead? used in other 'important' unit tests
+from config import *
+
+# import our local directory so we can use the internal modules
+import_paths = ['../Install/toolbox', '../Install']
+addLocalPaths(import_paths)
 
 class TestBpiScript(unittest.TestCase):
     from scripts import bpi
@@ -30,6 +28,14 @@ class TestStandardizeBpiGridsScript(unittest.TestCase):
     
     def testStdRun(self):
         pass
+
+class TestBtmDocument(unittest.TestCase):
+    # XXX this won't automatically get the right thing... how can we fix it?
+    import utils
+
+    def testXMLDocumentExists(self):
+        self.assertTrue(os.path.exists(xml_doc))
+
 
 if __name__  == '__main__':
     unittest.main()
