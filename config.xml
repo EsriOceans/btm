@@ -87,6 +87,8 @@
     </Button>
 
     <!-- Geomorphological Parameters -->
+    <!-- 
+         COMMENTED OUT until we implement the old method.
     <Button
       caption="Rugosity"
       category="Benthic Terrain Modeler (BTM)"
@@ -99,6 +101,20 @@
         heading="Calculate Rugosity"
         >Rugosity measures the surface roughness by comparing planar area to surface area.</Help>
     </Button>
+    -->
+    <Button
+      caption="Terrain Ruggedness (VRM)"
+      category="Benthic Terrain Modeler (BTM)"
+      class="calculateTerrainRuggedness"
+      id="calculateTerrainRuggedness.button"
+      image="Images\rugosity_16x16.png"
+      message="Rugosity measures the surface roughness by comparing planar area to surface area."
+      tip="Calculate Terrain Ruggedness using the vector ruggedness measure (VRM)">
+      <Help
+        heading="Calculate Terrain Ruggedness (VRM)"
+        >Measure terrain ruggedness via vector analysis, comparing 3-dimensional orientation of cells.</Help>
+    </Button>
+
 
     <Button
       caption="Aspect"
@@ -209,7 +225,8 @@
         <Button refID="calculateAspect.button" />
         <Button refID="calculateSlope.button" />
         <Button refID="calculateCurvature.button" />
-        <Button refID="calculateRugosity.button" />
+        <!--<Button refID="calculateRugosity.button" />-->
+        <Button refID="calculateTerrainRuggedness.button" />
         <Button refID="calculateDepthStatistics.button" />"
       </Items>
     </Menu>
