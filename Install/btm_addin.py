@@ -127,8 +127,17 @@ class calculateDepthStatistics(object):
 
 # New geomorphometry functions
 #
-class calculateRugosity(object):
-    """Implementation for calculateRugosity.button (Button)"""
+
+#class calculateRugosity(object):
+#    """Implementation for calculateRugosity.button (Button)"""
+#    def __init__(self):
+#        self.enabled = True
+#        self.checked = False
+#    def onClick(self):
+#        tool_dialog(btm_toolbox, 'rugosity')
+
+class calculateTerrainRuggedness(object):
+    """Implementation for calculateTerrainRuggedness.button (Button)"""
     def __init__(self):
         self.enabled = True
         self.checked = False
