@@ -1,0 +1,53 @@
+<ClassDict>
+	<PrjName>Fagatele Bay NMS Benthic Zones</PrjName>
+	<PRJDescription>Benthic zone classifications created by Oregon State University</PRJDescription>
+	<Classifications>
+		<ClassRec ID="2">
+			<Class>1</Class>
+			<Zone>Crests</Zone>
+			<SSB_LowerBounds>100</SSB_LowerBounds>
+			<SSB_UpperBounds></SSB_UpperBounds>
+			<LSB_LowerBounds></LSB_LowerBounds>
+			<LSB_UpperBounds></LSB_UpperBounds>
+			<Slope_LowerBounds></Slope_LowerBounds>
+			<Slope_UpperBounds></Slope_UpperBounds>
+			<Depth_LowerBounds></Depth_LowerBounds>
+			<Depth_UpperBounds></Depth_UpperBounds>
+		</ClassRec>
+		<ClassRec ID="3">
+			<Class>2</Class>
+			<Zone>Depressions</Zone>
+			<SSB_LowerBounds></SSB_LowerBounds>
+			<SSB_UpperBounds>-100</SSB_UpperBounds>
+			<LSB_LowerBounds></LSB_LowerBounds>
+			<LSB_UpperBounds></LSB_UpperBounds>
+			<Slope_LowerBounds></Slope_LowerBounds>
+			<Slope_UpperBounds></Slope_UpperBounds>
+			<Depth_LowerBounds></Depth_LowerBounds>
+			<Depth_UpperBounds></Depth_UpperBounds>
+		</ClassRec>
+		<ClassRec ID="4">
+			<Class>3</Class>
+			<Zone>Flats</Zone>
+			<SSB_LowerBounds>-100</SSB_LowerBounds>
+			<SSB_UpperBounds>100</SSB_UpperBounds>
+			<LSB_LowerBounds></LSB_LowerBounds>
+			<LSB_UpperBounds></LSB_UpperBounds>
+			<Slope_LowerBounds></Slope_LowerBounds>
+			<Slope_UpperBounds>5</Slope_UpperBounds>
+			<Depth_LowerBounds></Depth_LowerBounds>
+			<Depth_UpperBounds></Depth_UpperBounds>
+		</ClassRec>
+		<ClassRec ID="5">
+			<Class>4</Class>
+			<Zone>Slopes</Zone>
+			<SSB_LowerBounds>-100</SSB_LowerBounds>
+			<SSB_UpperBounds>100</SSB_UpperBounds>
+			<LSB_LowerBounds></LSB_LowerBounds>
+			<LSB_UpperBounds></LSB_UpperBounds>
+			<Slope_LowerBounds>5</Slope_LowerBounds>
+			<Slope_UpperBounds></Slope_UpperBounds>
+			<Depth_LowerBounds></Depth_LowerBounds>
+			<Depth_UpperBounds></Depth_UpperBounds>
+		</ClassRec>
+	</Classifications></ClassDict>
