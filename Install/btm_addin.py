@@ -108,6 +108,9 @@ class calculateAspect(object):
         self.enabled = True
         self.checked = False
     def onClick(self):
+        # TODO: replace this with a custom tool that breaks
+        # this result down into two data dimensions via basic trig.
+        # See https://github.com/EsriOceans/btm/issues/10
         tool_dialog(custom_toolbox, 'Aspect')
 
 #- variance in depth
