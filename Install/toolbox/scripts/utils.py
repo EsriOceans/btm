@@ -197,13 +197,14 @@ class BtmCsvDocument(BtmDocument):
             # for now: fake the format used by the XML documents.
             res_row = {'Class': class_code, 
                        'Zone': zone,
-                       'BroadBPI_Lower': broad_lower,
-                       'BroadBPI_Upper': broad_upper,
-                       'FineBPI_Lower': fine_lower,
-                       'Slope_Lower': slope_lower,
-                       'Slope_Upper': slope_upper,
-                       'Depth_Lower': depth_lower,
-                       'Depth_Upper': depth_upper}
+                       'SSB_LowerBounds': broad_lower,
+                       'SSB_UpperBounds': broad_upper,
+                       'LSB_LowerBounds': fine_lower,
+                       'LSB_UpperBounds': fine_upper,
+                       'Slope_LowerBounds': slope_lower,
+                       'Slope_UpperBounds': slope_upper,
+                       'Depth_LowerBounds': depth_lower,
+                       'Depth_UpperBounds': depth_upper}
             result_rows.append(res_row)
         return result_rows
 
