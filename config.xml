@@ -88,7 +88,8 @@
 
     <!-- Geomorphological Parameters -->
     <!-- 
-         COMMENTED OUT until we implement the old method.
+         COMMENTED OUT until we implement the old method. There's a 10.0 version of this
+         in the code that Bob shared, it looked slow but would be worth a look as a starting point.
     <Button
       caption="Rugosity"
       category="Benthic Terrain Modeler (BTM)"
