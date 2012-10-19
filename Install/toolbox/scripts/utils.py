@@ -102,10 +102,7 @@ class NotTextNodeError:
 
 class BtmXmlDocument(BtmDocument):
     def __init__(self, filename):
-        #parent = super(BtmXmlDocument, self).__init__()
-
         self.dom = parse(filename)
-        #self.dom = parse(parent.filename)
         self.node_dict = self.nodeToDic(self.dom)
 
     def name(self):
@@ -119,7 +116,6 @@ class BtmXmlDocument(BtmDocument):
         # currently returns a list of dictionaries, each one with a key:val pair;
         # would be useful to just have a header row, and map the names
         # from the header
-
         return self.node_dict['ClassDict']['Classifications']['ClassRec']
 
     def getTextFromNode(self, node):
