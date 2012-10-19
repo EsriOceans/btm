@@ -282,66 +282,85 @@ class zoneclassification(object):
     def __init__(self):
         self.label = u'5. Zone Classification Builder'
         self.canRunInBackground = False
+
     def getParameterInfo(self):
-        # Standardized_broad-scale_BPI_raster
-        param_1 = arcpy.Parameter()
-        param_1.name = u'Standardized_broad-scale_BPI_raster'
-        param_1.displayName = u'Standardized broad-scale BPI raster'
-        param_1.parameterType = 'Required'
-        param_1.direction = 'Input'
-        param_1.datatype = u'Raster Layer'
+        # Classification Dictionary
+        class_dict = arcpy.Parameter()
+        class_dict.name = u'Classification_dictionary'
+        class_dict.displayName = u'Classification dictionary'
+        class_dict.direction = 'Input'
+        class_dict.datatype = u'File'
+
+        # Standardized broad-scale BPI raster
+        broad_bpi = arcpy.Parameter()
+        broad_bpi.name = u'Standardized_broad-scale_BPI_raster'
+        broad_bpi.displayName = u'Standardized broad-scale BPI raster'
+        broad_bpi.parameterType = 'Required'
+        broad_bpi.direction = 'Input'
+        broad_bpi.datatype = u'Raster Layer'
+
+        # Standardized fine-scale BPI raster
+        fine_bpi = arcpy.Parameter()
+        fine_bpi.name = u'Standardized_fine-scale_BPI_raster'
+        fine_bpi.displayName = u'Standardized fine-scale BPI raster'
+        fine_bpi.parameterType = 'Required'
+        fine_bpi.direction = 'Input'
+        fine_bpi.datatype = u'Raster Layer'
 
         # Slope_raster
-        param_2 = arcpy.Parameter()
-        param_2.name = u'Slope_raster'
-        param_2.displayName = u'Slope raster'
-        param_2.parameterType = 'Required'
-        param_2.direction = 'Input'
-        param_2.datatype = u'Raster Layer'
+        slope = arcpy.Parameter()
+        slope.name = u'Slope_raster'
+        slope.displayName = u'Slope raster'
+        slope.parameterType = 'Required'
+        slope.direction = 'Input'
+        slope.datatype = u'Raster Layer'
 
-        # Standard_deviation_break
-        param_3 = arcpy.Parameter()
-        param_3.name = u'Standard_deviation_break'
-        param_3.displayName = u'Standard deviation break'
-        param_3.parameterType = 'Required'
-        param_3.direction = 'Input'
-        param_3.datatype = u'Double'
-
-        # Slope_value__in_degrees__indicating_a_gentle_slope
-        param_4 = arcpy.Parameter()
-        param_4.name = u'Slope_value__in_degrees__indicating_a_gentle_slope'
-        param_4.displayName = u'Slope value (in degrees) indicating a gentle slope'
-        param_4.parameterType = 'Required'
-        param_4.direction = 'Input'
-        param_4.datatype = u'Double'
+        # Bathymetry raster
+        bathy= arcpy.Parameter()
+        bathy.name = u'Bathymetry_raster'
+        bathy.displayName = u'Bathymetry raster'
+        bathy.parameterType = 'Required'
+        bathy.direction = 'Input'
+        bathy.datatype = u'Raster Layer'
 
         # Output_raster
-        param_5 = arcpy.Parameter()
-        param_5.name = u'Output_raster'
-        param_5.displayName = u'Output raster'
-        param_5.parameterType = 'Required'
-        param_5.direction = 'Output'
-        param_5.datatype = u'Raster Dataset'
+        zones_raster= arcpy.Parameter()
+        zones_raster.name = u'Output_raster'
+        zones_raster.displayName = u'Output raster'
+        zones_raster.parameterType = 'Required'
+        zones_raster.direction = 'Output.'
+        zones_raster.datatype = u'Raster Dataset'
+        return [class_dict, broad_bpi, fine_bpi, slope, bathy, zones_raster]
 
-        return [param_1, param_2, param_3, param_4, param_5]
     def isLicensed(self):
         return True
+
     def updateParameters(self, parameters):
         validator = getattr(self, 'ToolValidator', None)
         if validator:
              return validator(parameters).updateParameters()
+
     def updateMessages(self, parameters):
         validator = getattr(self, 'ToolValidator', None)
         if validator:
              return validator(parameters).updateMessages()
-    def execute(self, parameters, messages):
-        pass
 
+    def execute(self, parameters, messages):
+        from scripts import classify 
+        classify.main(
+            classification_file=parameters[0].valueAsText,
+            bpi_broad=parameters[1].valueAsText,
+            bpi_fine=parameters[2].valueAsText,
+            slope=parameters[3].valueAsText,
+            bathy=parameters[4].valueAsText,
+            out_raster=parameters[5].valueAsText)
+ 
 class structureclassification(object):
     """c:\data\arcgis\addins\btm\toolbox\BTM.tbx\structureclassification"""
     def __init__(self):
         self.label = u'6. Structure Classification Builder'
         self.canRunInBackground = False
+
     def getParameterInfo(self):
         # Standardized_broad-scale_BPI_raster
         param_1 = arcpy.Parameter()
