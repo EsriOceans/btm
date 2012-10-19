@@ -13,23 +13,18 @@ import config
 arcpy.CheckOutExtension("Spatial")
 
 def runCon(lower_bounds, upper_bounds, in_grid, true_val, true_alt=None):
-    print "runCon..."
-    print "lb: `%s`  ub: `%s` grid: `%s`  val: `%s`" % (lower_bounds, upper_bounds, in_grid, true_val)
+    print "runCon: lb: `%s`  ub: `%s` grid: `%s`  val: `%s`" % (lower_bounds, upper_bounds, in_grid, true_val)
     out_grid = ""
     # if our initial desired output value isn't set, use the backup
     if str(true_val) == '':
         true_val = true_alt
     if lower_bounds is not None:
         if upper_bounds is not None:
-            print "upper and lower defined"
             out_grid = Con(in_grid, true_val, 0, ("VALUE < " +  upper_bounds) )
             out_grid = Con(in_grid, out_grid, 0, ("VALUE > " +  lower_bounds) )
         else:
-            print "lower only defined"
-            print 'Con(%s, %s, 0, ("VALUE >= " +  %s) )' % (in_grid, true_val, lower_bounds)
             out_grid = Con(in_grid, true_val, 0, ("VALUE >= " +  lower_bounds ) )
     elif upper_bounds is not None:
-        print "upper only defined"
         out_grid = Con(in_grid, true_val, 0, ("VALUE <= " + upper_bounds) )
 
     return out_grid
@@ -38,8 +33,8 @@ def main(classification_file, bpi_broad, bpi_fine, slope, bathy,
     out_raster=None, mode='toolbox'):
 
     # set up scratch workspace
-    arcpy.env.scratchWorkspace = "c:\\data\\arcgis\\workspace"
-    arcpy.env.workspace = "c:\\data\\arcgis\\workspace"
+    #arcpy.env.scratchWorkspace = "c:\\data\\arcgis\\workspace"
+    #arcpy.env.workspace = "c:\\data\\arcgis\\workspace"
 
     try:
         # Create the broad-scale Bathymetric Position Index (BPI) raster
@@ -62,33 +57,24 @@ def main(classification_file, bpi_broad, bpi_fine, slope, bathy,
         for item in classes:
             out_con = ""
             # here come the CONs:
-            print "1:"
             out_con = runCon(item["Depth_LowerBounds"], item["Depth_UpperBounds"], \
                     bathy, str(item["Class"]))
-            print "2:"
             out_con = runCon(item["Slope_LowerBounds"], item["Slope_UpperBounds"], \
                     slope, out_con, str(item["Class"]))
-            print "3: with %s" % bpi_broad
-            print "out_con: `%s`" % out_con
-            print item
             out_con = runCon(item["LSB_LowerBounds"], item["LSB_UpperBounds"], \
                     bpi_broad, out_con, str(item["Class"]))
-
-            #outConRas = runCon(item["LSB_LowerBounds"], item["LSB_UpperBounds"], inLSStdBPI, outConRas, str(item["Class"]))
-            print "4: with %s" % bpi_fine
-            print "out_con: `%s` (%s)" % (out_con, type(out_con))
             out_con = runCon(item["SSB_LowerBounds"], item["SSB_UpperBounds"], \
                     bpi_fine, out_con, str(item["Class"]))
             grids.append(out_con)
 
-        msg("Creating Benthic Terrain Classification Dataset")
-        merge_grid = grids[0]   #junk start here
+        msg("Creating Benthic Terrain Classification Dataset...")
+        merge_grid = grids[0]
         for index in range(1,len(grids)):
              merge_grid = Con(merge_grid, grids[index], merge_grid, ("VALUE = 0"))
-        msg("Saving Output")
+        msg("Saving Output to %s" % out_raster)
         merge_grid.save(out_raster)
 
-        msg("Complete")
+        msg("Complete.")
 
     except Exception as e:
         msg(e, mtype='error')
