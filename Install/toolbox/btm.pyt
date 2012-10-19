@@ -20,7 +20,8 @@ class Toolbox(object):
     def __init__(self):
         self.label = u'Benthic Terrain Modeler'
         self.alias = ''
-        self.tools = [broadscalebpi, finescalebpi, standardizebpi, btmslope, zoneclassification, structureclassification, terrainruggedness, depthstatistics]
+        self.tools = [broadscalebpi, finescalebpi, standardizebpi, btmslope, zoneclassification, terrainruggedness, depthstatistics]
+        #self.tools = [broadscalebpi, finescalebpi, standardizebpi, btmslope, zoneclassification, structureclassification, terrainruggedness, depthstatistics]
 
 # Tool implementation code
 
