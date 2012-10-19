@@ -42,7 +42,12 @@ class ButtonRunBTMSteps(object):
         self.enabled = True
         self.checked = False
     def onClick(self):
-        pass
+        pythonaddins.GPToolDialog(btm_toolbox, 'broadscalebpi')
+        # XXX: trying to call multiple tools just kills ArcMap.
+        # adding a sleep() just slows down the train wreck. Not yet sure
+        # of the best approach to actually get this to work.
+        #tool_dialog(btm_toolbox, 'finescalebpi')
+        #tool_dialog(btm_toolbox, 'standardizebpi')
 
 class RunBTMSteps(object):
     """Implementation for RunBTMSteps.tool (Tool)"""
