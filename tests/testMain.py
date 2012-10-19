@@ -33,8 +33,11 @@ class TestBtmDocument(unittest.TestCase):
     # XXX this won't automatically get the right thing... how can we fix it?
     import utils
 
-    def testXMLDocumentExists(self):
+    def testXmlDocumentExists(self):
         self.assertTrue(os.path.exists(xml_doc))
+
+    def testCsvDocumentExists(self):
+        self.assertTrue(os.path.exists(csv_doc))
 
 
 if __name__  == '__main__':
