@@ -30,7 +30,8 @@ def msg(output_msg, mtype='message'):
             err_msg = "ArcPy Error: {msg_text}\nPython Error: ${tbinfo}".format(
                 msg_text=arcpy_messages, tbinfo=tbinfo)
         else:
-            arcpy.AddError(error_text)
+            arcpy.AddError(output_msg)
+            arcpy.AddError(arcpy_messages)
             arcpy.AddMessage("Python Error: ${tbinfo}".format(tbinfo=tbinfo))
     elif config.mode == 'script':
         print output_msg
