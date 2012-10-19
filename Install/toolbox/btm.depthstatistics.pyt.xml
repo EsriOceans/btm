@@ -1,17 +1,25 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0"?>
 <metadata xml:lang="en">
   <Esri>
     <CreaDate>20120905</CreaDate>
     <CreaTime>12335500</CreaTime>
     <ArcGISFormat>1.0</ArcGISFormat>
     <SyncOnce>TRUE</SyncOnce>
-    <ModDate>20120906</ModDate>
-    <ModTime>013111</ModTime>
+    <ModDate>20121019</ModDate>
+    <ModTime>010448</ModTime>
+    <scaleRange>
+      <minScale>150000000</minScale>
+      <maxScale>5000</maxScale>
+    </scaleRange>
+    <ArcGISProfile>ItemDescription</ArcGISProfile>
   </Esri>
   <dataIdInfo>
     <idCitation>
       <resTitle>Depth Statistics</resTitle>
     </idCitation>
+    <searchKeys>
+      <keyword>statistics</keyword>
+    </searchKeys>
   </dataIdInfo>
   <distInfo>
     <distributor>
@@ -21,11 +29,12 @@
     </distributor>
   </distInfo>
   <tool name="depthstatistics" displayname="Depth Statistics"
-  toolboxalias="">
+  toolboxalias="" xmlns="">
     <parameters>
-      <param name="Elevation_Raster" displayname="Elevation Raster"
-      type="Required" direction="Input" datatype="Raster Layer"
-      expression="Elevation_Raster" />
+      <param name="Bathymetry_Raster"
+      displayname="Bathymetry Raster" type="Required"
+      direction="Input" datatype="Raster Layer"
+      expression="Bathymetry_Raster" />
       <param name="Neighborhood_Size"
       displayname="Neighborhood Size" type="Required"
       direction="Input" datatype="Long"
@@ -39,4 +48,23 @@
       expression="Mean Depth | Variance | Standard Deviation" />
     </parameters>
   </tool>
+  <Binary>
+    <Enclosure rel="side-panel-help">
+      <Data EsriPropertyType="Image"
+      OriginalFileName="thumbnail.jpg">
+      /9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsK
+      CwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQU
+      FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCAAQABADASIA
+      AhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQA
+      AAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3
+      ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWm
+      p6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEA
+      AwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSEx
+      BhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElK
+      U1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3
+      uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD6n/4S
+      TTz/AMt1/Mf40o8SWB/5br+Y/wAa/KoftH6j/wA/8v8A32aUftIajj/j/l/77Nfpf1rD/wAx+UfV
+      MX/If//Z</Data>
+    </Enclosure>
+  </Binary>
 </metadata>
