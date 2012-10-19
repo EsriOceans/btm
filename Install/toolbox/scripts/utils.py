@@ -170,13 +170,14 @@ class BtmXmlDocument(BtmDocument):
         return dic
 
 class BtmExcelDocument(BtmDocument):
+    # reuse existing implementation in parsepy.py
     pass
 
 class BtmCsvDocument(BtmDocument):
     def __init__(self, filename):
         self.filename = filename
-        self.header = None
-        self.csv = self.parse(csv, self.filename)
+        self.header = None # filled in by parse_csv
+        self.csv = self.parse_csv(self.filename)
 
     def name(self):
         return os.path.basename(self.filename)
@@ -188,7 +189,7 @@ class BtmCsvDocument(BtmDocument):
     def classification(self):
         in_csv = self.csv
         result_rows = []
-        for row in csv_in:
+        for row in in_csv:
             # don't parse the header, assume columns are in expected order.
             (class_code, zone, broad_lower, broad_upper, fine_lower, fine_upper, \
             slope_lower, slope_upper, depth_lower, depth_upper) = row
@@ -217,12 +218,11 @@ class BtmCsvDocument(BtmDocument):
             has_header = sniff_obj.has_header(sample)
 
             # read in CSV, respecting the detected dialect
-            csv_in = csv.reader(f, dialect)
+            in_csv = csv.reader(f, dialect)
 
             if has_header:
-                self.header = csv_in.next()
-            else:
-                self.header = None
+                self.header = in_csv.next()
+
             # everything but the header
-            result = [r for r in csv_in]
+            result = [r for r in in_csv]
         return result
