@@ -632,40 +632,10 @@ class depthstatistics(object):
              return validator(parameters).updateMessages()
 
     def execute(self, parameters, messages):
-        # depth statistics
-        # Requirements: Spatial Analyst 
-        # Author: Shaun Walbridge
-        # Date: 9/1/2012
-           
-        # Script arguments
-        InRaster = parameters[0]
-        # FIXME: this should be a selectable list (multi-scale analysis)
-        Neighborhood_Size = parameters[1]
-        OutWorkspace = parameters[2]
-        OutStats = parameters[3]
-      
-        # initialize our neighborhood
-        neighborhood = NbrRectangle(Neighborhood_Size, 
-            Neighborhood_Size, "CELL")
-
-        try:
-            if 'Mean Depth' in OutStats:
-                messages.AddMessage("Calculating mean depth...")
-                MeanDepth = FocalStats(InRaster, neighborhood, "NODATA")
-                MeanDepth.save(OutWorkspace + "\\meandepth")
-           
-            # compute stdev in eiher of these cases
-            if 'Standard Deviation' in OutStats or 'Variance' in OutStats:
-                messages.AddMessage("Calculating depth standard deviation...")
-                StdevDepth = FocalStats(InRaster, neighborhood, "NODATA")
-                StdevDepth.save(OutWorkspace + "\\stdevdepth")
-            
-                # no direct variance focal stat, have to stdev^2
-                if 'Variance' in OutStats:
-                    messages.AddMessage("Calculating depth variance...")
-                    VarDepth = Power(StdevDepth, 2)
-                    VarDepth.save(OutWorkspace + "\\vardepth")
-          
-        except:
-            # Print error message if an error occurs
-            arcpy.GetMessages()
+        # run related python script with selected input parameters
+        from scripts import depth_statistics
+        depth_statistics.main(
+                in_raster = parameters[0].valueAsText,
+                neighborhood_size = parameters[1].valueAsText,
+                out_workspace = parameters[2].valueAsText,
+                out_stats_raw = parameters[3].valueAsText)
