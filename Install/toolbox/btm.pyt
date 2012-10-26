@@ -274,7 +274,7 @@ class btmslope(object):
         # run related python script with selected input parameters
         from scripts import slope
         slope.main(
-            bpi_raster=parameters[0].valueAsText,
+            bathy=parameters[0].valueAsText,
             out_raster=parameters[1].valueAsText)
  
 class zoneclassification(object):
@@ -505,8 +505,8 @@ class terrainruggedness(object):
 
         # Output_Workspace
         param_3 = arcpy.Parameter()
-        param_3.name = u'Output_Workspace'
-        param_3.displayName = u'Output Workspace'
+        param_3.name = u'Temporary_Workspace'
+        param_3.displayName = u'Temporary Workspace'
         param_3.parameterType = 'Required'
         param_3.direction = 'Input'
         param_3.datatype = u'Workspace'
