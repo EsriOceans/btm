@@ -133,6 +133,9 @@ class calculateDepthStatistics(object):
     def onClick(self):
         tool_dialog(btm_toolbox, 'depthstatistics')
 
+        # XXX: handle adding the statistics to the current map when run
+
+
 # New geomorphometry functions
 #
 
