@@ -11,8 +11,8 @@
 # Requirements: Spatial Analyst 
 # Author: Dawn J. Wright, Emily R. Lundblad, Emily M. Larkin, Ronald W. Rinehart
 # Date: 2005
-# Converted 11/5/2010 by Emily C. Huntley of the Massachusetts Office of Coastal Zone Management
-# to a Python Script that runs in ArcGIS 10.
+# Converted 11/5/2010 by Emily C. Huntley of the Massachusetts Office of 
+# Coastal Zone Management to a Python Script that runs in ArcGIS 10.
 
 # Import system modules
 import sys, arcpy
@@ -31,20 +31,19 @@ def main(bpi_raster=None, out_raster=None):
         utils.msg("Calculating properties of the Bathymetric Position Index (BPI) raster...")
         utils.msg("raster: %s; output: %s" % (bpi_raster, out_raster))
         result1 = arcpy.GetRasterProperties_management(bpi_raster, "MEAN")
-        BPIMean = result1.getOutput(0)
-        utils.msg("The mean of the BPI raster is " + str(BPIMean) + ".")
-        result2 = arcpy.GetRasterProperties_management(BPIRaster, "STD")
-        BPIStdDev = result2.getOutput(0)
-        utils.msg("The standard deviation of the BPI raster is " + str(BPIStdDev) + ".")
+        bpi_mean = result1.getOutput(0)
+        utils.msg("The mean of the BPI raster is " + str(bpi_mean) + ".")
+        result2 = arcpy.GetRasterProperties_management(bpi_raster, "STD")
+        bpi_std_dev = result2.getOutput(0)
+        utils.msg("The standard deviation of the BPI raster is " + str(bpi_std_dev) + ".")
         
         # Create the standardized Bathymetric Position Index (BPI) raster
         arcpy.AddMessage("Standardizing the Bathymetric Position Index (BPI) raster...")
-        outRaster = Int(Plus(Times(Divide(Minus(BPIRaster, float(BPIMean)), float(BPIStdDev)), 100), 0.5))
+        outRaster = Int(Plus(Times(Divide(Minus(bpi_raster, float(bpi_mean)), float(bpi_std_dev)), 100), 0.5))
         outRaster.save(out_raster)
 
     except Exception as e:
         utils.msg(e, mtype='error')
-
 
 # when executing as a standalone script get parameters from sys
 if __name__=='__main__':
