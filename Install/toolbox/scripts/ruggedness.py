@@ -66,11 +66,11 @@ def main(InRaster=None, NeighborhoodSize=None, OutWorkspace=None, OutRaster=None
         
         # Calculate sums of x, y, and z rasters for selected neighborhood size
         arcpy.AddMessage("Calculating sums of x, y, and z rasters in selected neighborhood...")
-        outFocalStatistics1 = FocalStatistics(xRaster, NbrRectangle(Neighborhood_Size, Neighborhood_Size, "CELL"), "SUM", "NODATA")
+        outFocalStatistics1 = FocalStatistics(xRaster, NbrRectangle(NeighborhoodSize, NeighborhoodSize, "CELL"), "SUM", "NODATA")
         outFocalStatistics1.save(xSumRaster)
-        outFocalStatistics2 = FocalStatistics(yRaster, NbrRectangle(Neighborhood_Size, Neighborhood_Size, "CELL"), "SUM", "NODATA")
+        outFocalStatistics2 = FocalStatistics(yRaster, NbrRectangle(NeighborhoodSize, NeighborhoodSize, "CELL"), "SUM", "NODATA")
         outFocalStatistics2.save(ySumRaster)
-        outFocalStatistics3 = FocalStatistics(zRaster, NbrRectangle(Neighborhood_Size, Neighborhood_Size, "CELL"), "SUM", "NODATA")
+        outFocalStatistics3 = FocalStatistics(zRaster, NbrRectangle(NeighborhoodSize, NeighborhoodSize, "CELL"), "SUM", "NODATA")
         outFocalStatistics3.save(zSumRaster)
 
         # Calculate the resultant vector
@@ -80,10 +80,17 @@ def main(InRaster=None, NeighborhoodSize=None, OutWorkspace=None, OutRaster=None
 
         # Calculate the Ruggedness raster
         arcpy.AddMessage("Calculating the final ruggedness raster...")
-        maxValue = int(Neighborhood_Size) * int(Neighborhood_Size)
+        maxValue = int(NeighborhoodSize) * int(NeighborhoodSize)
         OutRas4 = Minus(1, Divide(ResultRaster, maxValue))
         OutRas4.save(OutRaster)
 
+    except Exception as e:
+        # Print error message if an error occurs
+        #errors = arcpy.GetMessages()
+        #print "from except: " + e.message 
+        utils.msg(e, mtype='error')
+
+    try:
         # Delete all intermediate raster data sets
         arcpy.AddMessage("Deleting intermediate data...")
         arcpy.Delete_management(AspectRaster)
@@ -98,13 +105,9 @@ def main(InRaster=None, NeighborhoodSize=None, OutWorkspace=None, OutRaster=None
         arcpy.Delete_management(ySumRaster)
         arcpy.Delete_management(zSumRaster)
         arcpy.Delete_management(ResultRaster)
-        
     except Exception as e:
-        # Print error message if an error occurs
-        #errors = arcpy.GetMessages()
-        #print "from except: " + e.message 
-        utils.msg(e, mtype='error')
-
+        pass
+ 
 # when executing as a standalone script get parameters from sys
 if __name__=='__main__':
     config.mode = 'script'
