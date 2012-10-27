@@ -8,7 +8,6 @@ import pythonaddins
 
 # enable local imports
 local_path = os.path.dirname(__file__)
-#sys.path.insert(0, local_path)
 
 # FIXME: check if this is the best approach; alt is to look up system install dir and load that TBX.
 custom_toolbox = os.path.join(local_path, "toolbox", "custom.tbx")
