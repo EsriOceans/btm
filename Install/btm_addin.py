@@ -9,7 +9,7 @@ import pythonaddins
 # enable local imports
 local_path = os.path.dirname(__file__)
 
-# FIXME: check if this is the best approach; alt is to look up system install dir and load that TBX.
+# only our custom model which can't be embedded in a Python toolbox.
 custom_toolbox = os.path.join(local_path, "toolbox", "custom.tbx")
 btm_toolbox = os.path.join(local_path, "toolbox", "btm.pyt")
 
@@ -103,7 +103,7 @@ class calculateCurvature(object):
         self.enabled = True
         self.checked = False
     def onClick(self):
-        tool_dialog(custom_toolbox, 'Curvature')
+        tool_dialog("Spatial Analyst Tools", 'Curvature')
 
 # arcpy.sa.Aspect()
 class calculateAspect(object):
@@ -115,7 +115,7 @@ class calculateAspect(object):
         # TODO: replace this with a custom tool that breaks
         # this result down into two data dimensions via basic trig.
         # See https://github.com/EsriOceans/btm/issues/10
-        tool_dialog(custom_toolbox, 'Aspect')
+        tool_dialog("Spatial Analyst Tools", 'Aspect')
 
 #- variance in depth
 #- mean water depth 
