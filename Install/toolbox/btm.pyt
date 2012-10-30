@@ -290,6 +290,10 @@ class zoneclassification(object):
         class_dict.displayName = u'Classification dictionary'
         class_dict.direction = 'Input'
         class_dict.datatype = u'File'
+        class_dict.parameterType = 'Required'
+
+        # classification dictionary must be of the types we parse.
+        class_dict.filter.list = ['csv', 'xls', 'xlsx', 'xml']
 
         # Standardized broad-scale BPI raster
         broad_bpi = arcpy.Parameter()
