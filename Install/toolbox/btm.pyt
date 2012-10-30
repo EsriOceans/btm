@@ -52,7 +52,7 @@ class broadscalebpi(object):
         return
     
     def __init__(self):
-        self.label = u'1. Build Broad Scale BPI'
+        self.label = u'Build Broad Scale BPI'
         self.description = u'The concept of bathymetric position is central to the benthic\r\nterrain classification process that is utilized by the BTM.\r\nBathymetric Position Index (BPI) is a measure of where a\r\nreferenced location is relative to the locations surrounding it.\r\nBPI is derived from an input bathymetric data set and itself is a modification of the topographic position index (TPI) algorithm that is used in the terrestrial environment. The application of TPI to develop terrain classifications was explored and developed by Andrew Weiss during his study of terrestrial watersheds in Central Oregon (Weiss 2001). These\r\napplications can be carried into the benthic environment\r\nthrough BPI.\r\n\r\nA broad-scale BPI data set allows you to identify larger features within the benthic landscape.'
         self.canRunInBackground = False
     def getParameterInfo(self):
@@ -136,7 +136,7 @@ class finescalebpi(object):
         return
     
     def __init__(self):
-        self.label = u'2. Build Fine Scale BPI'
+        self.label = u'Build Fine Scale BPI'
         self.description = u'The concept of bathymetric position is central to the benthic\r\nterrain classification process that is utilized by the BTM.\r\nBathymetric Position Index (BPI) is a measure of where a\r\nreferenced location is relative to the locations surrounding it.\r\nBPI is derived from an input bathymetric data set and itself is a modification of the topographic position index (TPI) algorithm that is used in the terrestrial environment. The application of TPI to develop terrain classifications was explored and developed by Andrew Weiss during his study of terrestrial watersheds in Central Oregon (Weiss 2001). These\r\napplications can be carried into the benthic environment\r\nthrough BPI.\r\n\r\nA fine-scale BPI data set allows you to identify smaller features within the benthic landscape.'
         self.canRunInBackground = False
  
@@ -200,7 +200,7 @@ class finescalebpi(object):
 class standardizebpi(object):
     """c:\data\arcgis\addins\btm\toolbox\BTM.tbx\standardizebpi"""
     def __init__(self):
-        self.label = u'3. Standardize BPIs'
+        self.label = u'Standardize BPIs'
         self.canRunInBackground = False
     def getParameterInfo(self):
         # Input_BPI_raster
@@ -240,7 +240,7 @@ class standardizebpi(object):
 class btmslope(object):
     """c:\data\arcgis\addins\btm\toolbox\BTM.tbx\slope"""
     def __init__(self):
-        self.label = u'4. Calculate Slope'
+        self.label = u'Calculate Slope'
         self.canRunInBackground = False
     def getParameterInfo(self):
         # Input_bathymetric_raster
@@ -280,7 +280,7 @@ class btmslope(object):
 class zoneclassification(object):
     """c:\data\arcgis\addins\btm\toolbox\BTM.tbx\zoneclassification"""
     def __init__(self):
-        self.label = u'5. Zone Classification Builder'
+        self.label = u'Zone Classification Builder'
         self.canRunInBackground = False
 
     def getParameterInfo(self):
@@ -358,7 +358,7 @@ class zoneclassification(object):
 class structureclassification(object):
     """c:\data\arcgis\addins\btm\toolbox\BTM.tbx\structureclassification"""
     def __init__(self):
-        self.label = u'6. Structure Classification Builder'
+        self.label = u'Structure Classification Builder'
         self.canRunInBackground = False
 
     def getParameterInfo(self):
