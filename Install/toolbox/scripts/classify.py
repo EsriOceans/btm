@@ -45,10 +45,8 @@ def main(classification_file, bpi_broad, bpi_fine, slope, bathy,
         # XXX: use utils class to get a BTMDocument object.
         # read in the xml doc
         btm_doc = BtmDocument(classification_file)
-        msg("parsing document of type %s..." % btm_doc.doctype)
         classes = btm_doc.classification()
-        class_count = len(classes)
-        msg("found %i classes" % class_count)
+        msg("parsing %s document... found %i classes." % (btm_doc.doctype, len(classes)))
 
         grids = []
         # XXX just do this with an XML file for this first pass, needs
