@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import math
 import string
 import sys
 
@@ -80,6 +81,14 @@ class broadscalebpi(object):
         param_3.direction = 'Input'
         param_3.datatype = u'Long'
 
+        # Scale Factor
+        scale_factor = arcpy.Parameter()
+        scale_factor.name = 'Scale_factor'
+        scale_factor.displayName = 'Scale factor'
+        scale_factor.parameterType = 'Required'
+        scale_factor.datatype = 'Long'
+        scale_factor.enabled = False
+
         # Output_raster
         param_4 = arcpy.Parameter()
         param_4.name = u'Output_raster'
@@ -88,17 +97,35 @@ class broadscalebpi(object):
         param_4.direction = 'Output'
         param_4.datatype = u'Raster Dataset'
 
-        return [param_1, param_2, param_3, param_4]
+        return [param_1, param_2, param_3, scale_factor, param_4]
+
     def isLicensed(self):
         return True
     def updateParameters(self, parameters):
         validator = getattr(self, 'ToolValidator', None)
+
+        # parameter names
+        cols = ['bathy', 'inner', 'outer', 'scale_factor', 'output']
+        outer_radius = parameters[cols.index('outer')].valueAsText
+        bathy = parameters[cols.index('bathy')].valueAsText
+
+        if outer_radius is not None and bathy is not None:
+            raster_desc = arcpy.Describe(bathy)
+            # get the cellsize of the input raster; assume same in X & Y
+            cellsize = raster_desc.meanCellHeight
+            # calculate our 'scale factor':
+            scale_factor = math.ceil(float(cellsize) * int(outer_radius))
+            # try modifying our scale factor
+            parameters[cols.index('scale_factor')].value = scale_factor
+
         if validator:
              return validator(parameters).updateParameters()
+
     def updateMessages(self, parameters):
         validator = getattr(self, 'ToolValidator', None)
         if validator:
              return validator(parameters).updateMessages()
+
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
         from scripts import bpi
@@ -106,7 +133,7 @@ class broadscalebpi(object):
             bathy=parameters[0].valueAsText,
             inner_radius=parameters[1].valueAsText,
             outer_radius=parameters[2].valueAsText,
-            out_raster=parameters[3].valueAsText,
+            out_raster=parameters[4].valueAsText,
 	    bpi_type='broad')
 
 class finescalebpi(object):
@@ -165,6 +192,14 @@ class finescalebpi(object):
         param_3.direction = 'Input'
         param_3.datatype = u'Long'
 
+        # Scale Factor
+        scale_factor = arcpy.Parameter()
+        scale_factor.name = 'Scale_factor'
+        scale_factor.displayName = 'Scale factor'
+        scale_factor.parameterType = 'Required'
+        scale_factor.datatype = 'Long'
+        scale_factor.enabled = False
+
         # Output_raster
         param_4 = arcpy.Parameter()
         param_4.name = u'Output_raster'
@@ -173,12 +208,27 @@ class finescalebpi(object):
         param_4.direction = 'Output'
         param_4.datatype = u'Raster Dataset'
 
-        return [param_1, param_2, param_3, param_4]
+        return [param_1, param_2, param_3, scale_factor, param_4]
     def isLicensed(self):
         return True
 
     def updateParameters(self, parameters):
         validator = getattr(self, 'ToolValidator', None)
+
+        # parameter names
+        cols = ['bathy', 'inner', 'outer', 'scale_factor', 'output']
+        outer_radius = parameters[cols.index('outer')].valueAsText
+        bathy = parameters[cols.index('bathy')].valueAsText
+
+        if outer_radius is not None and bathy is not None:
+            raster_desc = arcpy.Describe(bathy)
+            # get the cellsize of the input raster; assume same in X & Y
+            cellsize = raster_desc.meanCellHeight
+            # calculate our 'scale factor':
+            scale_factor = math.ceil(float(cellsize) * int(outer_radius))
+            # try modifying our scale factor
+            parameters[cols.index('scale_factor')].value = scale_factor
+
         if validator:
              return validator(parameters).updateParameters()
 
@@ -194,7 +244,7 @@ class finescalebpi(object):
             bathy=parameters[0].valueAsText,
             inner_radius=parameters[1].valueAsText,
             outer_radius=parameters[2].valueAsText,
-            out_raster=parameters[3].valueAsText,
+            out_raster=parameters[4].valueAsText,
 	    bpi_type='fine')
     
 class standardizebpi(object):
