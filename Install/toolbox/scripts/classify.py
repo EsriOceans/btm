@@ -13,7 +13,8 @@ import config
 arcpy.CheckOutExtension("Spatial")
 
 def runCon(lower_bounds, upper_bounds, in_grid, true_val, true_alt=None):
-    print "runCon: lb: `%s`  ub: `%s` grid: `%s`  val: `%s`" % (lower_bounds, upper_bounds, in_grid, true_val)
+    # debug message:
+    #msg("runCon: lb: `%s`  ub: `%s` grid: `%s`  val: `%s`" % (lower_bounds, upper_bounds, in_grid, true_val))
     out_grid = ""
     # if our initial desired output value isn't set, use the backup
     if str(true_val) == '':
