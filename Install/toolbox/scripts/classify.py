@@ -48,30 +48,25 @@ def main(classification_file, bpi_broad, bpi_fine, slope, bathy,
 
         # Create the broad-scale Bathymetric Position Index (BPI) raster
         msg_text="Generating the classified grid, based on the provided" +\
-            " classes in '{classes}'...".format(classes=classification_file)
+            " classes in '{classes}'.".format(classes=classification_file)
         msg(msg_text)
         
-        # XXX: use utils class to get a BTMDocument object.
-        # read in the xml doc
+        # Read in the BTM Document; the class handles parsing a variety of inputs.
         btm_doc = BtmDocument(classification_file)
         classes = btm_doc.classification()
-        msg("parsing %s document... found %i classes." % (btm_doc.doctype, len(classes)))
+        msg("Parsing %s document... found %i classes." % (btm_doc.doctype, len(classes)))
 
         grids = []
-        # XXX just do this with an XML file for this first pass, needs
-        # to be generalized to handle CSV/XLS.
 
         for item in classes:
+            cur_class = str(item["Class"])
+            msg("Calculating grid for class %s..." % item["Class"])
             out_con = ""
             # here come the CONs:
-            out_con = runCon(item["Depth_LowerBounds"], item["Depth_UpperBounds"], \
-                    bathy, str(item["Class"]))
-            out_con = runCon(item["Slope_LowerBounds"], item["Slope_UpperBounds"], \
-                    slope, out_con, str(item["Class"]))
-            out_con = runCon(item["LSB_LowerBounds"], item["LSB_UpperBounds"], \
-                    bpi_broad, out_con, str(item["Class"]))
-            out_con = runCon(item["SSB_LowerBounds"], item["SSB_UpperBounds"], \
-                    bpi_fine, out_con, str(item["Class"]))
+            out_con = runCon(item["Depth_LowerBounds"], item["Depth_UpperBounds"], bathy, cur_class)
+            out_con = runCon(item["Slope_LowerBounds"], item["Slope_UpperBounds"], slope, out_con, cur_class)
+            out_con = runCon(item["LSB_LowerBounds"], item["LSB_UpperBounds"], bpi_broad, out_con, cur_class)
+            out_con = runCon(item["SSB_LowerBounds"], item["SSB_UpperBounds"], bpi_fine, out_con, cur_class)
             grids.append(out_con)
 
         msg("Creating Benthic Terrain Classification Dataset...")
