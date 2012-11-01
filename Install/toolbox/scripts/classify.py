@@ -19,15 +19,17 @@ def runCon(lower_bounds, upper_bounds, in_grid, true_val, true_alt=None):
     # if our initial desired output value isn't set, use the backup
     if str(true_val) == '':
         true_val = true_alt
+    # if we're getting a string back, treat it as an integer.
+    if isinstance(true_val, str):
+        true_val = int(true_val)
+    # calculate our output grid
     if lower_bounds is not None:
         if upper_bounds is not None:
-            out_grid = Con(in_grid, true_val, 0, ("VALUE < " +  upper_bounds) )
-            out_grid = Con(in_grid, out_grid, 0, ("VALUE > " +  lower_bounds) )
+            out_grid = Con((Raster(in_grid) > int(lower_bounds)) & (Raster(in_grid) < int(upper_bounds)), true_val, 0)
         else:
-            out_grid = Con(in_grid, true_val, 0, ("VALUE >= " +  lower_bounds ) )
+            out_grid = Con(Raster(in_grid) >= int(lower_bounds), true_val, 0)
     elif upper_bounds is not None:
-        out_grid = Con(in_grid, true_val, 0, ("VALUE <= " + upper_bounds) )
-
+        out_grid = Con(Raster(in_grid) <= int(upper_bounds), true_val, 0)
     return out_grid
 
 def main(classification_file, bpi_broad, bpi_fine, slope, bathy,
