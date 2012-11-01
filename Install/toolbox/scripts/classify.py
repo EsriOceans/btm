@@ -35,11 +35,17 @@ def runCon(lower_bounds, upper_bounds, in_grid, true_val, true_alt=None):
 def main(classification_file, bpi_broad, bpi_fine, slope, bathy,
     out_raster=None, mode='toolbox'):
 
-    # set up scratch workspace
-    #arcpy.env.scratchWorkspace = "c:\\data\\arcgis\\workspace"
-    #arcpy.env.workspace = "c:\\data\\arcgis\\workspace"
-
     try:
+        # set up scratch workspace
+        # FIXME: see issue #18
+        # CON is very very picky. it generates GRID outputs by default, and the
+        # resulting names must not exist. for now, push our temp results
+        # to the output folder.
+        output_dir = os.path.dirname(out_raster)
+        msg("Set scratch workspace to %s..." % output_dir)
+        arcpy.env.scratchWorkspace = output_dir
+        arcpy.env.workspace = output_dir
+
         # Create the broad-scale Bathymetric Position Index (BPI) raster
         msg_text="Generating the classified grid, based on the provided" +\
             " classes in '{classes}'...".format(classes=classification_file)
