@@ -5,12 +5,12 @@
     <CreaTime>02190400</CreaTime>
     <ArcGISFormat>1.0</ArcGISFormat>
     <SyncOnce>TRUE</SyncOnce>
-    <ModDate>20121019</ModDate>
-    <ModTime>010447</ModTime>
+    <ModDate>20121031</ModDate>
+    <ModTime>202513</ModTime>
   </Esri>
   <dataIdInfo>
     <idCitation>
-      <resTitle>5. Zone Classification Builder</resTitle>
+      <resTitle>Zone Classification Builder</resTitle>
     </idCitation>
   </dataIdInfo>
   <distInfo>
@@ -21,23 +21,27 @@
     </distributor>
   </distInfo>
   <tool name="zoneclassification"
-  displayname="5. Zone Classification Builder" toolboxalias="">
+  displayname="Zone Classification Builder" toolboxalias="">
     <parameters>
+      <param name="Classification_dictionary"
+      displayname="Classification dictionary" type="Required"
+      direction="Input" datatype="File"
+      expression="Classification_dictionary" />
       <param name="Standardized_broad-scale_BPI_raster"
       displayname="Standardized broad-scale BPI raster"
       type="Required" direction="Input" datatype="Raster Layer"
       expression="Standardized_broad-scale_BPI_raster" />
+      <param name="Standardized_fine-scale_BPI_raster"
+      displayname="Standardized fine-scale BPI raster"
+      type="Required" direction="Input" datatype="Raster Layer"
+      expression="Standardized_fine-scale_BPI_raster" />
       <param name="Slope_raster" displayname="Slope raster"
       type="Required" direction="Input" datatype="Raster Layer"
       expression="Slope_raster" />
-      <param name="Standard_deviation_break"
-      displayname="Standard deviation break" type="Required"
-      direction="Input" datatype="Double"
-      expression="Standard_deviation_break" />
-      <param name="Slope_value__in_degrees__indicating_a_gentle_slope"
-      displayname="Slope value (in degrees) indicating a gentle slope"
-      type="Required" direction="Input" datatype="Double"
-      expression="Slope_value__in_degrees__indicating_a_gentle_slope" />
+      <param name="Bathymetry_raster"
+      displayname="Bathymetry raster" type="Required"
+      direction="Input" datatype="Raster Layer"
+      expression="Bathymetry_raster" />
       <param name="Output_raster" displayname="Output raster"
       type="Required" direction="Output" datatype="Raster Dataset"
       expression="Output_raster" />
