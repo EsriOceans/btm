@@ -1,400 +1,264 @@
-<?xml version="1.0"?>
-<metadata xml:lang="en">
-  <Esri>
-    <CreaDate>20120901</CreaDate>
-    <CreaTime>02190400</CreaTime>
-    <ArcGISFormat>1.0</ArcGISFormat>
-    <SyncOnce>TRUE</SyncOnce>
-    <ModDate>20121031</ModDate>
-    <ModTime>202513</ModTime>
-    <scaleRange>
-      <minScale>150000000</minScale>
-      <maxScale>5000</maxScale>
-    </scaleRange>
-    <ArcGISProfile>ItemDescription</ArcGISProfile>
-  </Esri>
-  <dataIdInfo>
-    <idCitation>
-      <resTitle>Standardize BPIs</resTitle>
-    </idCitation>
-    <idAbs>&lt;DIV
-    STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Once
-    BPI data sets have been created at both fine and broad scales,
-    the next step in the benthic terrain classification process is
-    to standardize the values of these raster data sets.
-    Bathymetric data tends to be spatially autocorrelated (i.e.
-    locations that are closer together are more related than
-    locations that are farther apart) (Weiss 2001). Therefore, the
-    range of BPI values increases with scale. For example, broad
-    (small) scale BPI data sets would have smaller BPI values
-    because a larger analysis neighborhood is used. This would have
-    the effect of averaging out small variations in the terrain.
-    Fine (large) scale BPI data sets would have larger BPI values
-    because of the smaller neighborhood that is used. This smaller
-    analysis neighborhood would result in the detection of smaller,
-    localized variations in the terrain. Standardization of the raw
-    BPI values allows for the classification of BPI data sets at
-    almost any scale (Weiss 2001).
-    &lt;/SPAN&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN
-    /&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN&gt;To create the standardized
-    output data set, the following algorithm is
-    used:&lt;/SPAN&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN /&gt;&lt;SPAN
-    STYLE="font-style:italic;font-weight:bold;"&gt;&lt;SPAN&gt;BPI&amp;lt;scalefactor&amp;gt;_std
-    = int((((BPI&amp;lt;scalefactor&amp;gt; - mean) / std dev) *
-    100) + 0.05)&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;SPAN /&gt;&lt;SPAN
-    /&gt;&lt;SPAN /&gt;&lt;SPAN /&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN
-    STYLE="font-weight:bold;"&gt;&lt;SPAN&gt;scalefactor&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;SPAN&gt;&lt;SPAN&gt;=
-    outer radius in map units * input bathymetric data set
-    resolution(cell size)&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;SPAN
-    /&gt;&lt;SPAN /&gt;&lt;SPAN /&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN
-    STYLE="font-weight:bold;"&gt;&lt;SPAN&gt;mean&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;SPAN&gt;&lt;SPAN&gt;=
-    mean cell value across BPI data
-    set&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;SPAN /&gt;&lt;SPAN
-    /&gt;&lt;SPAN /&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN
-    STYLE="font-weight:bold;"&gt;&lt;SPAN&gt;std
-    dev&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;SPAN&gt;&lt;SPAN&gt;= standard
-    deviation of cell values across BPI data
-    set&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;SPAN /&gt;&lt;SPAN
-    /&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN
-    /&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;</idAbs>
-    <idCredit>Weiss, A. D. 2001. Topographic positions and
+<metadata xml:lang="en"><Esri><CreaDate>20120901</CreaDate><CreaTime>02190400</CreaTime><ArcGISFormat>1.0</ArcGISFormat><SyncOnce>TRUE</SyncOnce><ModDate>20121031</ModDate><ModTime>21412200</ModTime><scaleRange><minScale>150000000</minScale><maxScale>5000</maxScale></scaleRange><ArcGISProfile>ItemDescription</ArcGISProfile></Esri><dataIdInfo><idCitation><resTitle>Standardize BPIs</resTitle></idCitation><idAbs>&lt;DIV STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Once BPI data sets have been created at both fine and broad scales, the next step in the benthic terrain classification process is to standardize the values of these raster data sets. Bathymetric data tends to be spatially autocorrelated (i.e. locations that are closer together are more related than locations that are farther apart) (Weiss 2001). Therefore, the range of BPI values increases with scale. For example, broad (small) scale BPI data sets would have smaller BPI values because a larger analysis neighborhood is used. This would have the effect of averaging out small variations in the terrain. Fine (large) scale BPI data sets would have larger BPI values because of the smaller neighborhood that is used. This smaller analysis neighborhood would result in the detection of smaller, localized variations in the terrain. Standardization of the raw BPI values allows for the classification of BPI data sets at almost any scale (Weiss 2001). &lt;/SPAN&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN /&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN&gt;To create the standardized output data set, the following algorithm is used:&lt;/SPAN&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN /&gt;&lt;SPAN STYLE="font-style:italic;font-weight:bold;"&gt;&lt;SPAN&gt;BPI&amp;lt;scalefactor&amp;gt;_std = int((((BPI&amp;lt;scalefactor&amp;gt; - mean) / std dev) * 100) + 0.05)&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;SPAN /&gt;&lt;SPAN /&gt;&lt;SPAN /&gt;&lt;SPAN /&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN STYLE="font-weight:bold;"&gt;&lt;SPAN&gt;scalefactor&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;SPAN&gt;&lt;SPAN&gt;= outer radius in map units * input bathymetric data set resolution(cell size)&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;SPAN /&gt;&lt;SPAN /&gt;&lt;SPAN /&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN STYLE="font-weight:bold;"&gt;&lt;SPAN&gt;mean&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;SPAN&gt;&lt;SPAN&gt;= mean cell value across BPI data set&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;SPAN /&gt;&lt;SPAN /&gt;&lt;SPAN /&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN STYLE="font-weight:bold;"&gt;&lt;SPAN&gt;std dev&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;SPAN&gt;&lt;SPAN&gt;= standard deviation of cell values across BPI data set&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;SPAN /&gt;&lt;SPAN /&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN /&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;</idAbs><idCredit>Weiss, A. D. 2001. Topographic positions and
     landforms analysis, Proceedings of the 21st Annual ESRI User
-    Conference (Map Gallery Poster), San Diego, CA.</idCredit>
-    <searchKeys>
-      <keyword>standardize bpi noramlize geomorphometry
-      btm</keyword>
-    </searchKeys>
-  </dataIdInfo>
-  <distInfo>
-    <distributor>
-      <distorFormat>
-        <formatName>ArcToolbox Tool</formatName>
-      </distorFormat>
-    </distributor>
-  </distInfo>
-  <tool name="standardizebpi" displayname="Standardize BPIs"
-  toolboxalias="" xmlns="">
-    <parameters>
-      <param name="Input_BPI_raster" displayname="Input BPI raster"
-      type="Required" direction="Input" datatype="Raster Layer"
-      expression="Input_BPI_raster">
-        <dialogReference>&lt;DIV
+    Conference (Map Gallery Poster), San Diego, CA.</idCredit><searchKeys><keyword>standardize bpi noramlize geomorphometry</keyword><keyword>btm</keyword></searchKeys></dataIdInfo><distInfo><distributor><distorFormat><formatName>ArcToolbox Tool</formatName></distorFormat></distributor></distInfo><tool name="standardizebpi" displayname="Standardize BPIs" toolboxalias="" xmlns=""><parameters><param name="Input_BPI_raster" displayname="Input BPI raster" type="Required" direction="Input" datatype="Raster Layer" expression="Input_BPI_raster"><dialogReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Input
         BPI raster, the process for both broad and fine scale grids
         is the
-        same.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</dialogReference>
-        <pythonReference>&lt;DIV
+        same.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</dialogReference><pythonReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Input
         BPI raster, the process for both broad and fine scale grids
         is the
-        same.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</pythonReference>
-      </param>
-      <param name="Output_raster" displayname="Output raster"
-      type="Required" direction="Output" datatype="Raster Dataset"
-      expression="Output_raster">
-        <dialogReference>&lt;DIV
+        same.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</pythonReference></param><param name="Mean" displayname="Mean" type="Required" direction="Input" datatype="Double" expression="Mean"><dialogReference>&lt;DIV STYLE="text-align:Left;"&gt;&lt;P&gt;&lt;SPAN&gt;The mean value of the input raster. This field is dynamically filled when running the tool to aid in understanding the BPI results.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;</dialogReference><pythonReference>&lt;DIV STYLE="text-align:Left;"&gt;&lt;P&gt;&lt;SPAN&gt;The mean value of the input raster. This field is dynamically filled when running the tool to aid in understanding the BPI results.&lt;/SPAN&gt;&lt;/P&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN /&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</pythonReference></param><param name="Standard_deviation" displayname="Standard Deviation" type="Required" direction="Input" datatype="Double" expression="Standard_deviation"><dialogReference>&lt;DIV STYLE="text-align:Left;"&gt;&lt;P&gt;&lt;SPAN&gt;The standard deviation, a measurement of variance, of the input raster. This field is dynamically filled when running the tool to aid in understanding the BPI results.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;</dialogReference><pythonReference>&lt;DIV STYLE="text-align:Left;"&gt;&lt;P&gt;&lt;SPAN&gt;The standard deviation, a measurement of variance, of the input raster. This field is dynamically filled when running the tool to aid in understanding the BPI results.&lt;/SPAN&gt;&lt;/P&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN /&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</pythonReference></param><param name="Output_raster" displayname="Output raster" type="Required" direction="Output" datatype="Raster Dataset" expression="Output_raster"><dialogReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Result
         raster after
-        standardization.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</dialogReference>
-        <pythonReference>&lt;DIV
+        standardization.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</dialogReference><pythonReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Result
         raster after
-        standardization.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</pythonReference>
-      </param>
-    </parameters>
-    <summary>&lt;DIV
-    STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Once
-    BPI data sets have been created at both fine and broad scales,
-    the next step in the benthic terrain classification process is
-    to standardize the values of these raster data sets.
-    Bathymetric data tends to be spatially autocorrelated (i.e.
-    locations that are closer together are more related than
-    locations that are farther apart) (Weiss 2001). Therefore, the
-    range of BPI values increases with scale. For example, broad
-    (small) scale BPI data sets would have smaller BPI values
-    because a larger analysis neighborhood is used. This would have
-    the effect of averaging out small variations in the terrain.
-    Fine (large) scale BPI data sets would have larger BPI values
-    because of the smaller neighborhood that is used. This smaller
-    analysis neighborhood would result in the detection of smaller,
-    localized variations in the terrain. Standardization of the raw
-    BPI values allows for the classification of BPI data sets at
-    almost any scale (Weiss 2001).
-    &lt;/SPAN&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN
-    /&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN&gt;To create the standardized
-    output data set, the following algorithm is
-    used:&lt;/SPAN&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN /&gt;&lt;SPAN
-    STYLE="font-style:italic;font-weight:bold;"&gt;&lt;SPAN&gt;BPI&amp;lt;scalefactor&amp;gt;_std
-    = int((((BPI&amp;lt;scalefactor&amp;gt; - mean) / std dev) *
-    100) + 0.05)&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;SPAN /&gt;&lt;SPAN
-    /&gt;&lt;SPAN /&gt;&lt;SPAN /&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN
-    STYLE="font-weight:bold;"&gt;&lt;SPAN&gt;scalefactor&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;SPAN&gt;&lt;SPAN&gt;=
-    outer radius in map units * input bathymetric data set
-    resolution(cell size)&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;SPAN
-    /&gt;&lt;SPAN /&gt;&lt;SPAN /&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN
-    STYLE="font-weight:bold;"&gt;&lt;SPAN&gt;mean&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;SPAN&gt;&lt;SPAN&gt;=
-    mean cell value across BPI data
-    set&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;SPAN /&gt;&lt;SPAN
-    /&gt;&lt;SPAN /&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN
-    STYLE="font-weight:bold;"&gt;&lt;SPAN&gt;std
-    dev&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;SPAN&gt;&lt;SPAN&gt;= standard
-    deviation of cell values across BPI data
-    set&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;SPAN /&gt;&lt;SPAN
-    /&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN
-    /&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;</summary>
-  </tool>
-  <Binary>
-    <Enclosure rel="side-panel-help">
-      <Data EsriPropertyType="Image"
-      OriginalFileName="thumbnail.jpg">
-      /9j/4AAQSkZJRgABAQEAYABgAAD/7AARRHVja3kAAQAEAAAAWgAA/9sAQwADAgIDAgIDAwMDBAMD
-      BAUIBQUEBAUKBwcGCAwKDAwLCgsLDQ4SEA0OEQ4LCxAWEBETFBUVFQwPFxgWFBgSFBUU/9sAQwED
-      BAQFBAUJBQUJFA0LDRQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQU
-      FBQUFBQU/8AAEQgBTQEsAwEiAAIRAQMRAf/EAB8AAAEFAQEBAQEBAAAAAAAAAAABAgMEBQYHCAkK
-      C//EALUQAAIBAwMCBAMFBQQEAAABfQECAwAEEQUSITFBBhNRYQcicRQygZGhCCNCscEVUtHwJDNi
-      coIJChYXGBkaJSYnKCkqNDU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6g4SF
-      hoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2drh4uPk5ebn
-      6Onq8fLz9PX29/j5+v/EAB8BAAMBAQEBAQEBAQEAAAAAAAABAgMEBQYHCAkKC//EALURAAIBAgQE
-      AwQHBQQEAAECdwABAgMRBAUhMQYSQVEHYXETIjKBCBRCkaGxwQkjM1LwFWJy0QoWJDThJfEXGBka
-      JicoKSo1Njc4OTpDREVGR0hJSlNUVVZXWFlaY2RlZmdoaWpzdHV2d3h5eoKDhIWGh4iJipKTlJWW
-      l5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uLj5OXm5+jp6vLz9PX29/j5
-      +v/aAAwDAQACEQMRAD8A/VOiiigCtfzta2FxMgBeONnAPqATXxb8Lf2u/F2uH4X3t1408C+NbjxZ
-      dRQal4P8P2EkWqaTE8bu8xcXUvEOz5/MRARnkHAr7UvLcXdpPASVEqMm4dsjGa4b4VfCDTfhX8Mt
-      G8I2jx3UmnaaunNqYtUilnAXG5gO/fGaAPPfD/7Z3hzxZo+j3ui+DPG+pz60ktzpenQ6VGLm9s4l
-      Qy3iK0oAhVpETc5UszAKGzmsGP8AbV0xPGus3EejaxrvgGHwxpviKPVNG0xpHsIZZLtbmS73OpUR
-      +QvyKpcbZflO3jo7L9mTUvCOi/D8+DfGp0XxL4S0OTw6NUvdKW7hvrNzGzCSDzE2uHhR1ZX4O4EM
-      Diudh/Yxv9B06+0nwz8RrzSNG1jw9B4c1uK40yK5nu4VkuZJZ45dyiKeQ3cw3bWVQ3C5C4AO/wBW
-      /aa8O6N4ysdEn0bxAbC81K10iHxGLJV057q4CeSiMziSRWMiL5iIyAtgtwced/Dj9sQ+Ifh6k/ib
-      SNS8P67dW2sPY6xJpROl3s1kZ2ZIP3u52WKLdtbYH8t9rcUXv7EMM/j1Ndg8U28dpb+ILDX7T7To
-      cVxqUAtWhMdit477ltcQgBEVSNxyzDIN3Sf2PtQi0ix0DWfiBNq3hrSItUOjWSaVHBLbT30c8Rkl
-      kDnzRElzKEUKn3ssWwKAKSftSaxb3OpNKsN/HbXyw2NpZ6a3nakn/COR6mUJaYCFjIzEE7htATr8
-      9dD4F/a/0LVfhcfEfibStT0LV7Lw7pev3umC2BadL3KQ/ZAHbzA0qlFyQcsmcZqWx/ZL0+11K1uZ
-      PEV1KkN6t40Yt1XeBoa6QUBycfIvm5x1OOnNcPD+zTqz/Ej4K6HeC91PSfh9pgTU/EphitLXV7eF
-      kbT7MwrI7NJFNFFKSQFHlk9ZMAA+so2LxqxUqSAdp6j2NSUUUAFFFeffGb4w2PwX0PQtT1CwudQi
-      1bXbDQUS1ZQY5LqURrIdxHyqTk45oA9BooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACi
-      iigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAr5g/4KB3P2P4V+CLj/nj4+8P
-      yfldqa+n6+Q/+CoGpnRf2cNL1EEKbPxZpFwG9Nkxb+lAH15RUcUizRI6nKsAwPsRUlABRRRQAUUU
-      UAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFfP3xR/bL8O/DH4nX3gNPBPjz
-      xjr1jZwX10vhPQ/t8cEUudm4hwRnaeox71z/APw3hZf9EQ+Nf/hGP/8AHKAPqGuJ+JXxX0r4YRaY
-      L2y1TVr7U5ZI7TTtGtTc3MojjMkrhcgbURSSSe4AySAfFP8AhvCy/wCiIfGv/wAIx/8A45Xmfx2/
-      aRi+Lui6XbWXwe+LunXlhcvMlxe+BLl8K8LxNtaG6ikU4fOA21wCrgg8AH014V/aO8HeNPFNpo2k
-      vf3VveuILTWvsjDT7i5NuLn7Okp6yiE78EAcMM7gRVXxb+0roHgbxPf6JrOh+JLWe1tLi9W5+wBo
-      J4YmjQujh+jPLEilgoLOB64+LvDHjDT/AAb400HVtK+FPxfis/DsCNpcD/D+5Ehuk08WKSXCrdiJ
-      wFy5ZESR/lUvhBn1bTv2mdNXxl4u17XPgj8ZNdk8QWVppxsrjwC/lQ2sKPuh2tK25Xkllcgj+IA5
-      25oA+o/h78WND+Jqs2ii7YRWsNzOZ4togaQuBC5yf3o8sllGcAqc4YZ7Wvzq+H3xim8A/EbSvEVv
-      8OPjSumx20n2/SrTwNPDFPcOJARHGs4iWEBoQoKF1FrEA2MivdP+G8LL/oiHxr/8Ix//AI5QB9Q0
-      V8vf8N4WX/REPjX/AOEY/wD8co/4bwsv+iIfGv8A8Ix//jlAH1DRXy9/w3hZf9EQ+Nf/AIRj/wDx
-      yj/hvCy/6Ih8a/8AwjH/APjlAH1DXxR/wV5Yp+x1esOo1ywIPp8zV23/AA3hZf8AREPjX/4Rj/8A
-      xyvAf26v2hrH41fBLSfDUnwt+J+iw3viLTd8mteGWtkkBkI8pDvOZWzhV7nilKSirvYD79+HmqjX
-      PAPhrUlOVvNMtbgH1DxK39a6KvBf2FvG83j/APZN+Gmo3Nvd29zbaVHpsou4vLZ3ts27MB3UmPg1
-      71TAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigD5f+HB/wCNhHxj
-      /wCxS0P/ANDmr6gr5f8Ahx/ykH+Mf/YpaH/6HNX1BQAV4N8RdW+MPhfx/wCIdasf7JvPAlroMrWl
-      lb28r3cl5kiNQAxzIXK87duw+vNe80UAeV+H9P1nwl8NNY0DXtOuLbRdF0cWtvqmi6hLdalfqsBE
-      sqxrGHjmyMqFZyWYYOa+etG8Iah4g+AHi7UPD6+KvDrza3p+oWfhC0S9iezjRoEEMjTIHmZwDNMI
-      js35BLAMzfbNFAHyf4+8SfHBNe8UXGi61qVpYQHXZLCxg8PQzLts4IZLNA7Rlm8+R5FJydwGE2sN
-      1fUmlXE11plpNcJ5c8kKPJHgjaxUEjB5HNXKKACiiigAooooAK+av2738v4e/D1v7vxD8PHj/r8W
-      vpWvmj9vT/knXgD/ALKD4f8A/SsV5mZ/7hX/AMEv/SWXD4l6kf7Cs76H4S+IXgOeTM3hDxlqVrDE
-      WyVtLhxdwH2BWc/ka+m6+S/Cl7/wqz9tpo3xFo/xQ0BUVicKdU07JAI6Ze2l+p8r2r60rx+FMzjn
-      GR4TGp3coK/+Je7L/wAmTNK8PZ1ZR8wooor6swCiiigAooooAKKKKACiiigAooooAKKKKACiiigA
-      ooooAKKKKACiiigD5f8Ahx/ykH+Mf/YpaH/6HNX1BXy/8OP+Ug/xj/7FLQ//AEOavqCgAooooAKK
-      KKACistvEmkrYm9OqWQsw5iNwbhPL3jqu7OM8dPapr3WLDTbaO4u722tbeTASWeZURsjIwScHigC
-      9RVFNZ095Z41vrZpLd0jmQSrmN3xsVhngtkYB65GKvUAFFFFABXzR+3p/wAk68Af9lB8P/8ApWK+
-      l6+aP29P+SdeAP8AsoPh/wD9KxXm5n/uNf8AwS/9JZcPiXqUv2kPh5qvjn4fx33hcpH438MXsPiD
-      w9KwGDeW5LCI/wCzKpeMjOMPzXtXwU+LGk/HD4YaB410bK2mqW4d7d/9ZbTKSssDjs6OrIR6rWXX
-      glhro/ZH+NF3qdyxh+D/AI/vlN9Jn914f1t/l+0N2WC5wqseiyBScA1/K/g/xXDC1ZZBi5WjUfNT
-      b/m6x/7esmvNNbyR7eYUOZe1j03PsmimghgCCCDTq/ro8EKKKKACiiigAooooAKKKKACiiigAooo
-      oAKKKKACiiigAooooAKKKKAPl/4cf8pB/jH/ANilof8A6HNX1BXy/wDDj/lIP8Y/+xS0P/0OavqC
-      gAqG4uYrSB5p5UhiQZaSRgqqPcngVNXzv/wUI/5Mw+K//YKH/o6OgD3P/hKtG/6C9j/4Ep/jWH45
-      1HSfEXgnxBpUesxJJfafcWqtZX0Uc4LxsoMbMwCvzwScA4zXiXhz/gnz+zxfeHdLuJvhZpDzS2sU
-      jsZJ+SUBJ/1nrXGfHD9lD9nH4L+FYNZb4Fr4g868t7URaXFdS+X5k0cZZyrnb/rPlBHzMAvegDz2
-      x+F2pTaDLdapot/aaZHdWzado/h3StMg2XcOmy2/2iewuJZ42R3kVDIDyUDfKmGr1X43abf+OfBn
-      gY6hpd7ceJtBsJo/J0KLTLrTjqslnCELQXJYG13mWPeANu1wSoIaua8P/sxfszX/AI5vtO1L4XaV
-      pmnz3Fppmk281veC5lvWgWe4SUhyE2rcW6YbGGV+arePv2U/gR8OPikbbW/hJ4YtvAEPhjUdbkuo
-      ZLua/eW1ktg3yhwqqFnICjcWJ/hxggGn408E614I8SXHijwzDbaxqTfZdX1K2JiuLV9QeSRgkMSN
-      HJOkMjyyfO5KeZBtO2IrX1xpHi+xudJsptQvtOs7+SBGuLZL2NxFIVBdAwOGAORnvivzg8JeCPgJ
-      eeDtW1e9+BHh3xHeWl9rMstt4e1NhHY6fYxQzEPI82JZvLnA+XAZwcbRzXvvws/Y3/Z5+ItjrRvP
-      ghpugalpGoHT7qylvZJwGMMU6ssiSYIKTpn0O4c4yQD6u/4SrRv+gvY/+BKf40f8JVo3/QXsf/Al
-      P8a8I/4d4fs5/wDRKdI/7+z/APxyj/h3h+zn/wBEp0j/AL+z/wDxygD3f/hKtG/6C9j/AOBKf418
-      4ft0a3p2ofD/AMARWuoWtzL/AMLA8PnZDMrNj7WuTgGtj/h3h+zn/wBEp0j/AL+z/wDxyvnf9uH9
-      jb4M/DD4UaBqnhbwFYaJqNx4q0mxkubWaYOYZZ9siAlzjI4yOa4cfFTwlWLdk4y/JmtGLnUjBbtr
-      8z7FBDDIII9qzPE/hjS/Gfh7UNC1uxh1LSdQga3urSdcpLGwwQf8eoxkV8Dw/s8/D+2j8tNAbaCf
-      vX9yT+fmU/8A4UD4B/6AH/k9c/8Axyv4KhwxgqU1OnjJprVP2STXn/GP2T/VPMGtZQ++X/yJ9O/B
-      /wCKGq/s2eKdN+FPxH1Ce+8HX0v2bwX40uzlVX+DTb6Q8LMoG2OQ8SKAOGGK+uq/KS6/Z3+Hd7bP
-      BceG0mhcfMkl5cMPY4MnUdj2r1r4N/tQ+IP2bjbeHPiPc3nij4YqRFYeLSrTX2ip0WK+A+aWEdBM
-      AWHRuMY/rDhTi2hjKVPAY2s5Vkrc0oqHP8lKS5u+qu9l0Pj834Tx2W03iElKHXlu7eeqWn5dT9Aa
-      KoaLren+I9JtNU0q9t9S027jE1veWsgkimQjIZWGQQfUVfr9TPhgooooAKKKKACiiigAooooAKKK
-      KACiiigAooooAKKKKACiiigD5f8Ahx/ykH+Mf/YpaH/6HNX1BXy/8OP+Ug/xj/7FLQ//AEOavqCg
-      Ar53/wCChH/JmHxX/wCwUP8A0dHX0RXzv/wUI/5Mw+K//YKH/o6OgD3Dwl/yKmjf9eUH/osVpTQR
-      3KbJY0lQkHa4BGQcg4+oz+FZvhL/AJFTRv8Aryg/9FitigDO0jQdP0BLpdPtI7Rbu5kvJ/LGPMmk
-      OXc+pJ/kKJ9B0+51u11eWzik1O0hltoLpl+eOKQo0iA+jGOMn/dFaNFAHJ3fws8I3327z/D1hL9u
-      F2LndEP3oulRbnd6+YI0Deu0VtaT4e03Qpb+TT7KG0e+nFzctEuDNKI0j3t6nZGi/RRWlRQAUUUU
-      AFfKf/BR/wD5Ih4Y/wCx20T/ANKa+rK+U/8Ago//AMkQ8Mf9jton/pTXFjf91q/4Zfkzrwn+80/8
-      S/NHizfeNJSt940lfxSf10tgpHRZUZHVXRgQysMhgeCCO4paKadhNXOf8CX/AI2/Zz1aXUvhXdw3
-      GgTSGa+8BarKV0+dics9rJybWU89MoTjI4r7G+A37XHgj46THSIZZ/DHjeBc3fhLXAIL6PHVoweJ
-      o/R4yRjrivlmuf8AGHgLRPHdtBHq9n5s9swktb2F2iurVx0eKVcMhB54PYV+q5Dx3isAlQx6dSmu
-      v2l9/wAXz18+h+a51wXh8a3WwTVOfb7L/wAvlp5H6bUV+e/gH9pH4vfA4Ja6wsnxl8HRcB3dIPEF
-      on++cR3eBnhtrnA5r6v+DH7T/wAOfjzE8fhbxBGdZgH+laDqKm11K1OcESW74cY/vDK+9fu2XZtg
-      s2p+0wdRS7rqvVPVf1Y/GcflmLyyp7PFU3Hz6P0ezPWaKKK9c8sKKKKACiiigAooooAKKKKACiii
-      gAooooAKKKKAPl/4cf8AKQf4x/8AYpaH/wChzV9QV8v/AA4/5SD/ABj/AOxS0P8A9Dmr6goAK+d/
-      +ChH/JmHxX/7BQ/9HR19EV87/wDBQj/kzD4r/wDYKH/o6OgD3Dwl/wAipo3/AF5Qf+ixWxWP4S/5
-      FTRv+vKD/wBFitigAoopv3qAHUV8pfGX4seJ/DX7RUFj/alzp/h/TE0V4NMsr6KK51P7XdTRTmO1
-      aF2vAuxA6q6GNQWX5jVP9lP4x69ra+JE8YeL0u/telWOp2VwbyG8WGWf7VvGERPJlIiU/YiHKeW2
-      GbJwAfXNFfEFn428c6tonjA6D8TH1TRPDN5Y6umtvfRzm8s5raTbiWKADzGmQObEqMB4134cY95/
-      Z0+LMnxBg8RaVqQvh4j0q8eS/W52GKMyTTKIYtrEqsTQyRAOFYiMPjDg0AezV8p/8FH/APkiHhj/
-      ALHbRP8A0pr6sr5T/wCCj/8AyRDwx/2O2if+lNceN/3Wr/hl+TOvCf7zT/xL80eLN940lK33jSV/
-      FB/XS2CiiigAooooAK5rxh8N/D3jmS3n1XTw2oWpDWup2ztBeWzA5DRzIQ6kEZ4OK6WiuihXq4ao
-      qtGTjJbNOz+9GFahSxMHTrRUovo1dEng345fG/4NskVvq1t8W/DUQP8AxLfEcotdWjXOQI71QVlP
-      /XVc+9fQnw0/bu+GPjnUodE125vPhz4okIQaP4uiFoZWI/5ZT5MMo7Da+T6c1871S1rQtO8Sae9h
-      q2n2up2Un3re8hWWNv8AgLAiv0/K/ELH4W1PHRVWPfaX37P5q/mfnOZcC4PEXng5OnLtvH/Nff8A
-      I/R6KVLiJZI3WSNwGV0OQwPQg9xUtfl/4W8OeKfhLMs3ws8eax4NhTJ/sO6c6jpD57fZpifLHvGy
-      kdq9o8L/ALd/jLwhEsPxO+G0mo26Ab9e8By/ao8dCz2kpWZe5+UvX61lvF2UZnaMKvJJ/Zn7r+/Z
-      /Jn5lmHDGaZfdzp80e8dV926+aPtiivL/hP+0v8ADL43Ap4O8Yadql6nEmmu5t72I9w1vIFkH/fP
-      avUK+xTufKbBRRRTAKKKKACiiigAooooAKKKKAPl/wCHH/KQf4x/9ilof/oc1fUFfL/w4/5SD/GP
-      /sUtD/8AQ5q+oKACvnf/AIKEf8mYfFf/ALBQ/wDR0dfRFfO//BQj/kzD4r/9gof+jo6APcPCX/Iq
-      aN/15Qf+ixWxWP4S/wCRU0b/AK8oP/RYrYoAK+J7XwP4y+Pf7Uvx10f/AIXH468FaN4UudIh0/Tv
-      Dd9HFCBcWQkkyro38S54x9419sV8w/s5f8neftT/APX94e/9NxoA43W/2brTS/HeieHtT/aj+JCe
-      KLyOWSwhuNUszOoGwMFJgyhbzFAAwW5xnBqT4f8A7Jd/408Mx69pnx7+K1jaXlzPNEPttkrTlJXj
-      W4+WDBMgUOGPOGGTX0p4w+D3hjxjr0HiC50u1j8TWlrPa2esC3RprcyBQJBkfMyFFKk/dwcYyak8
-      FfCTwx4Cure90rTUi1SPTbfSnvySZJYIUVEVucdEHQdqAPiHSfht/Zl14j0/xR8aPi54FstKv7e0
-      kml1TT7uC61CVGnEEa20DF51RFkYbSRuXnNd38Nv2etN+I7arceDP2pPibqLRtFNeTWV7bxmQyKT
-      HKxNspkDKp2yDIO0gHivoyw+Bmlafb6QiX9401h4mu/FLXDbN9xczi5DK5x91VuSoxziNBmrnww+
-      D+nfC0KLG+urzbo2naKPtO3/AFVmsojbgD5m85s9uBigDx3/AIYv8T/9HKfFz/wZ2/8A8Yr5x/bx
-      /Z28Q/C74J2Guz/G34h+LBH4h06OOx1y9hlgR2lO2UBYgd6EZU5xmv0vr49/4Km/8my2f/Y0aV/6
-      NNY1v4cvRnfl8FUxtGEtnKK/FH50weJPHFvEEHxC15sfxOYGP5mMmn/8JV45/wCiga5/3zb/APxq
-      q1FfiTjSevs4f+AR/wAj/RVcJZKlZUP/ACaf/wAkWf8AhKvHP/RQNc/75t//AI1R/wAJV45/6KBr
-      n/fNv/8AGqrUUuSl/wA+of8AgEf8h/6p5N/z4/8AJp//ACRZ/wCEq8c/9FA1z/vm3/8AjVH/AAlX
-      jn/ooGuf982//wAaqtRRyUv+fUP/AACP+Qf6p5N/z4/8mn/8kWf+Eq8c/wDRQNc/75t//jVH/CVe
-      Of8AooGuf982/wD8aqtRRyUv+fUP/AI/5B/qnk3/AD4/8mn/APJFn/hKvHP/AEUDXP8Avm3/APjV
-      H/CVeOf+iga5/wB82/8A8aqtRRyUv+fUP/AI/wCQf6p5N/z4/wDJp/8AyRZ/4Srxz/0UDXP++bf/
-      AONUDxV45B/5KBrn5W//AMaqtRRyUv8An1D/AMAj/kH+qeTf8+P/ACaf/wAkY3ibRNT8Y3MF1rHi
-      bUry9t2Dw3ojgjuYmHQrKkYcfnXtPwu/a1+N3wbjt7fTfGf/AAmekQqF/srxihuTgD+G5XEq/iWH
-      tXl9FerhsyxOESjRlaK6JK33WPHxvh7w1j4yjWwqu/tJyUvvvf8AQ+//AIbf8FTfBOpGG0+JPhzV
-      Ph9eHaG1CNTqOmkngnzYl3oM/wB5OPWvr/wb488OfETRY9X8L69pviHTJMbbvTLpLiPpnBKkgH2P
-      NfiERkEHBB7Gq+i21z4S1tda8L6rqPhLWkIIv9DuWtnOP7wX5XHqGBzX1GF4kT0xMLea/wAn/mfi
-      eeeCtSF6mS4nmX8lTR/KSVn84rzZ+8tFflr8LP8Ago78Vfh60Np430my+JejRgKb6yC2GqqB/ER/
-      qZTjsAhOOtfbXwR/bI+Ffx7mSx8O+Iks/EB+94f1lPseoKcZ4ic/P9Yyw96+sw+LoYpXozT/AD+7
-      c/AM44ezXIKns8yw8qfZtXi/SSvF/JnuFFFFdZ86FFFFABRRRQB8v/Dj/lIP8Y/+xS0P/wBDmr6g
-      r5f+HH/KQf4x/wDYpaH/AOhzV9QUAFfO/wDwUI/5Mw+K/wD2Ch/6Ojr6Ir53/wCChH/JmHxX/wCw
-      UP8A0dHQB7h4S/5FTRv+vKD/ANFitisfwl/yKmjf9eUH/osVsUAFfMP7OX/J3n7U/wD1/eHv/Tca
-      +nq+Yf2cv+TvP2p/+v7w9/6bjQB9PUUUUAFFFFABXx7/AMFTf+TZbP8A7GjSv/Rpr7Cr49/4Km/8
-      my2f/Y0aV/6NNY1v4cvRnpZZ/v8AQ/xx/wDSkfnHRRRX4kf6ghRRRQAUUUUAFFFFABRRRQAUUUUA
-      FFFFABRRRQAVS1TRLHWkQXlskzRndHJyHjPYqw5U+4NXaKuE5U5c0HZnPiMPRxdN0a8FKD3TSafq
-      noz2f4Nftr/Fv4HNb2c9+3xL8JxYU6Vrs+3UIYwAMQXeCWwBwsobpjIr9EP2ff2sPh9+0hYyjwzq
-      T2uu2qhr3w9qaeRf2vuYyfmX/bQsvI5r8iKryWbpqVnqljeXWka3YuJLPVtOlMN1bOOjJIvI+nQ1
-      9bgeIKlNqGK95d+q/wA/zP564q8IcDjYyxORv2NTfkfwP06xf3x6WW5+81FfBX7JX/BQO41nWdM+
-      Hvxfmt7fW7oiDSvFsaiK21J+ginXpDOexHyOem08H71r72lWhXgqlN3TP5KzDLsXlWJng8bTcKkd
-      Gn/WqfRrRrVBRRRWx5x8v/Dj/lIP8Y/+xS0P/wBDmr6gr5f+HH/KQf4x/wDYpaH/AOhzV9QUAFfO
-      /wDwUI/5Mw+K/wD2Ch/6Ojr6Ir53/wCChH/JmHxX/wCwUP8A0dHQB7h4S/5FTRv+vKD/ANFitisf
-      wl/yKmjf9eUH/osVsUAFfMP7OX/J3n7U/wD1/eHv/Tca+nq+Yf2cv+TvP2p/+v7w9/6bjQB9PUUU
-      UAFFU9Tiup9Nu47GdLa9eF1gmlTekcmDtYrkbgDg4zzivncfDj9qEj/ksngo/wDcmv8A/JNAH0pX
-      x7/wVN/5Nls/+xo0r/0aa6//AIVx+1D/ANFl8Ff+Ea//AMk180/8FAvB3xy0f4DW0/jX4keGfEGj
-      nX9PRbTTvDbWkomMh2P5hmbgHkrjn1FY1lenL0Z6GXPlxtBpX9+P5o+SqK5b+y/F/wD0HtP/APAA
-      /wDxdH9l+L/+g9p//gAf/i6/H/q8P+fsf/Jv/kT/AEe/tfEf9AFX/wApf/LTqaK5b+y/F/8A0HtP
-      /wDAA/8AxdH9l+L/APoPaf8A+AB/+Lo+rw/5+x/8m/8AkQ/tfEf9AFX/AMpf/LTqaK5b+y/F/wD0
-      HtP/APAA/wDxdH9l+L/+g9p//gAf/i6Pq8P+fsf/ACb/AORD+18R/wBAFX/yl/8ALTqaK5b+y/F/
-      /Qe0/wD8AD/8XR/Zfi//AKD2n/8AgAf/AIuj6vD/AJ+x/wDJv/kQ/tfEf9AFX/yl/wDLTqaK5b+y
-      /F//AEHtP/8AAA//ABdH9l+L/wDoPaf/AOAB/wDi6Pq8P+fsf/Jv/kQ/tfEf9AFX/wApf/LTqaK5
-      b+y/F/8A0HtP/wDAA/8AxdH9l+L/APoPaf8A+AB/+Lo+rw/5+x/8m/8AkQ/tfEf9AFX/AMpf/LTq
-      aK5b+y/F/wD0HtP/APAA/wDxdH9l+L/+g9p//gAf/i6Pq8P+fsf/ACb/AORD+18R/wBAFX/yl/8A
-      LTqaK5b+y/F//Qe0/wD8AD/8XR/Zfi//AKD2n/8AgAf/AIuj6vD/AJ+x/wDJv/kQ/tfEf9AFX/yl
-      /wDLTqaK5b+y/F//AEHtP/8AAA//ABdH9l+L/wDoPaf/AOAB/wDi6Pq8P+fsf/Jv/kQ/tfEf9AFX
-      /wApf/LTqaK5b+y/F/8A0HtP/wDAA/8AxdH9l+L/APoPaf8A+AB/+Lo+rw/5+x/8m/8AkQ/tfEf9
-      AFX/AMpf/LToNU0y11mwmsryJZ7eUbWRv5g9iPX2r9CP+Cdv7UGo+N7G6+FHjW/kvvFOhWouNJ1S
-      5bMmp6cCE+c95YiVVieWBVucMa/Nf+y/F/8A0HtP/wDAA/8Axddd8CtF+Jd1+0X8NLfwj4g0+Lxc
-      +oSfZbltPZktoPJcXMkqh/mjEZOVyMkqM5r6TJKrw9dUo1FKMuivv3Wn3+R+LeKGBpZvlEsfVwdS
-      lVo2anL2duVtJxdqjbTv7ujfNtuz92aK+bD8OP2of+iyeCv/AAjX/wDkmj/hXH7UP/RZfBX/AIRr
-      /wDyTX6Efx0Uvhx/ykH+Mf8A2KWh/wDoc1fUFfL/AMOP+Ug/xj/7FLQ//Q5q+oKACvnf/goR/wAm
-      YfFf/sFD/wBHR19EV87/APBQj/kzD4r/APYKH/o6OgD3Dwl/yKmjf9eUH/osVsVj+Ev+RU0b/ryg
-      /wDRYrYoAK+Yf2cv+TvP2p/+v7w9/wCm419PV8w/s5f8neftT/8AX94e/wDTcaAPp6iiigAooooA
-      K+Pf+Cpv/Jstn/2NGlf+jTX2FXx7/wAFTf8Ak2Wz/wCxo0r/ANGmsa38OXoz0ss/3+h/jj/6Uj84
-      6KKK/Ej/AFBCiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKK0fh74M8WfGrxMfDvw60
-      KTxHqUbBbm8JMen2AP8AFcT4wvrtGWODgV1YfDVcVPkoxuzxM3zrL8iwzxeY1VTgu+78kt2/JIxN
-      R1NNOWFBFLdXdzIsFrZWyGSe5lY4WONByzEkAAetfpX+wZ+yVefBjSLvx343t4x8RNegWL7KCHGj
-      2WQy2qnoXY4aRh3AA4XJ2/2WP2GPDfwAnj8T69dL4x+Ikke1tXnj2wWAI+aKzjP+rXnBc/O3sCVr
-      6g+7X6TleVQwC556zfXt5L/M/iXjzj+vxZUWGw6dPCxd0nvJ/wA0v0Wy7t7Oooor6A/IT5f+HH/K
-      Qf4x/wDYpaH/AOhzV9QV8v8Aw4/5SD/GP/sUtD/9Dmr6goAK+d/+ChH/ACZh8V/+wUP/AEdHX0RX
-      zv8A8FCP+TMPiv8A9gof+jo6APcPCX/IqaN/15Qf+ixWxWP4S/5FTRv+vKD/ANFitigAr5h/Zy/5
-      O8/an/6/vD3/AKbjX09XzD+zl/yd5+1P/wBf3h7/ANNxoA+nqKKKACiiigAr49/4Km/8my2f/Y0a
-      V/6NNfYVfHv/AAVN/wCTZbP/ALGjSv8A0aaxrfw5ejPSyz/f6H+OP/pSPzjooor8SP8AUEKKKKAC
-      iiigAooooAKKKKACiiigAooooAKKgv8AUbXS7cz3lzFawr1kmcKv5muv+GXwb+JnxyaM+AfBN9f6
-      fJj/AIn2rg2GmqD/ABCSQBpR7Rq1d2HwVfFu1GDf5ffsfM5xxLlOQU+fMsRGHZXvJ+kVeT+SOXzg
-      ZOAB61L4Q0nXfibrx0PwJ4e1Dxpq6nDxaXGDDBx1lnYiOMf7zV90/CX/AIJb6JbGG++LfiSfxncj
-      5joWlF7LS0PoxBEs3/AmUc/dr7U8I+C9A8AaFBo3hnRbDQdJtwBFZadbpBEvAGdqgDPHXqa+vwnD
-      kV72KlfyX+f9ep/OfEPjRUqXo5FR5V/PPV/KC0Xk235xPgv4M/8ABMK91d4NU+MuvrLbnDf8In4c
-      mdICMfduLrh391TaOPvGvvLwZ4G8P/Drw7a6F4X0Wx0DRrUYistPgWKJfU4Uck45J5Pet6ivr6NC
-      lh48lKKS8j+c8yzXHZxXeJzCtKpN9ZO/yS2S8lZBRRRW55QUUUUAfL/w4/5SD/GP/sUtD/8AQ5q+
-      oK+X/hx/ykH+Mf8A2KWh/wDoc1fUFABXzv8A8FCP+TMPiv8A9gof+jo6+iK+d/8AgoR/yZh8V/8A
-      sFD/ANHR0Ae4eEv+RU0b/ryg/wDRYrYrH8Jf8ipo3/XlB/6LFbFABXx/deC/j38Lf2ifi54t8B+C
-      fDPinQfGk+mzRSarrhtJYvs1oISNgRurFup7D1r7AooA+YP+FiftX/8ARH/Av/hWP/8AGaP+Fift
-      X/8ARH/Av/hWP/8AGa+n6KAPmD/hYn7V/wD0R/wL/wCFY/8A8Zo/4WJ+1f8A9Ef8C/8AhWP/APGa
-      +n6KAPmA/EX9q/8A6I94F/8ACsk/+NV85/t2eJv2gPFPwY03TfGvw38K6BpM/iPTViutO8QtcyNc
-      GXESFTGMKScFu3pX6V18p/8ABR//AJIh4Y/7HbRP/SmuXFScMPUkuif5HXg244mk4uz5l+aPzrX4
-      QfE8j5vD2jK2en9s/wD2qnf8Ke+J3/QA0b/wc/8A2qvqlvvGkr+V3xPiv+fUPul/8kf2Us2zm3++
-      z/8AAaX/AMrPlf8A4U98Tv8AoAaN/wCDn/7VR/wp74nf9ADRv/Bz/wDaq+qKKX+s+K/59Q+6X/yQ
-      /wC1s5/6DZ/+A0v/AJWfK/8Awp74nf8AQA0b/wAHP/2qj/hT3xO/6AGjf+Dn/wC1V9UUUf6z4r/n
-      1D7pf/JB/a2c/wDQbP8A8Bpf/Kz5X/4U98Tv+gBo3/g5/wDtVH/Cnvid/wBADRv/AAc//aq+qKKP
-      9Z8V/wA+ofdL/wCSD+1s5/6DZ/8AgNL/AOVnyv8A8Ke+J3/QA0b/AMHP/wBqo/4U98Tv+gBo3/g5
-      /wDtVfVFYvirxroHgiyF3r+r2mkwMcIbmQBpD6Kv3mPsAa1pcRY2tNU6dGDk9klJt/LmMqmd5tRi
-      51MfJJdXGkl/6bPnH/hT3xO/6AGjf+Dn/wC1Uf8ACnvidgn/AIR/RsDkk6z0/wDIVfSPhDRfip8Z
-      Vjb4ffD65stJmUFPE3jMvptntJ4eOHBnmHfhVHvXt3g//gnvp2qsl58W/GWqeP5iwc6JY50zR1x/
-      CYY23y4Pd35xyK/RMsyrPsdaeIpU6Mf7ylzf+Aqf5tHweY+JdfB3jQx06svKNK33un+Vz80JLXxf
-      c6+mg6H4fs/GHiBmwdK8L3z6jPHg8l/LiKoB33EV9M/DD/gnZ8Y/iHDDc+LbzSvhfp0iozQgjU9R
-      IPJAVSsUZx6sxBPSv0y8EfD3wz8NNEh0fwpoGneHdLiAC2um2yQJ9SFAyfc8nJro6/SsNkmFoRTq
-      RUpd9bfdd/qfnWO8SuKMbGVL624xfZQT/wDAoxi/usfNnwg/YA+D/wAJZ7bUZNDfxl4iiO4a14oc
-      Xkqt6pGQIo8dtqAj1r6PjjWJFRFCIoAVVGAB6CpKK96MVFWirI/NKtWpXm6lWTlJ7tu7fq2FFFFU
-      ZBRRRQAUUUUAFFFFAHy/8OP+Ug/xj/7FLQ//AEOavqCvl/4cf8pB/jH/ANilof8A6HNX1BQAV87/
-      APBQj/kzD4r/APYKH/o6Ovoivnf/AIKEf8mYfFf/ALBQ/wDR0dAHuHhL/kVNG/68oP8A0WK2Kx/C
-      X/IqaN/15Qf+ixWxQAUUUUAFFFFABRRRQAV8p/8ABR//AJIh4Y/7HbRP/SmvqyvlP/go/wD8kQ8M
-      f9jton/pTXFjf91q/wCGX5M68J/vNP8AxL80eLN940lK33jSV/FJ/XS2CiiigAoorlvEHxF0/R9d
-      g8PWFrfeJvFt0M23h3QoDc3knT5mUcRpzy7lQBmuvC4Svjaqo4aDnJ9Erv8ArzOXE4qjg6bq4iaj
-      FdW7HVAZNclr/wAT9E0TWotCt/tfiDxPP/qPD+g27Xt9KemPLTOwe7lR716p4E/Y0+I/xUMd78Td
-      ePw/8Ovhh4V8MXAfUJVznbc32MJx1WEd/vV9ZfCn4IeBfgjog0vwT4asNBt2AEstvHunuCP4pZmy
-      8je7sTX7BlHh3UmlVzSpyr+WOr+ctl8r+p+WZpx5CN6eXQv/AHpbfJbv529D468I/sv/ABr+LAjn
-      1q7svg74dkyTCmzUdbkXtnH7mAke7sM19IfCT9jb4WfB7UU1iw0E694oBDN4k8RynUNQLY6rJJkR
-      /SMKOa9xor9gy/KMDlUOTB0lHz6v1b1f3n5Xjs0xmZS58VUcvLovRbIKKKK9g8sKKKKACiiigAoo
-      ooAKKKKACiiigAooooA+X/hx/wApB/jH/wBilof/AKHNX1BXy/8ADj/lIP8AGP8A7FLQ/wD0Oavq
-      CgAr53/4KEf8mYfFf/sFD/0dHX0RXg37dPh7VPFf7JPxM0nRdNu9X1S60wJBZWMLTTSt5sZwqKCW
-      OATgDtQB7D4S/wCRU0b/AK8oP/RYrYr5P0L9ujT9N0TTrOX4LfGgy29vHE5TwXKRuVQDj5+mRV//
-      AIb10z/oinxq/wDCLl/+OUAfUNFfL3/Deumf9EU+NX/hFy//AByj/hvXTP8Aoinxq/8ACLl/+OUA
-      fUNFfL3/AA3rpn/RFPjV/wCEXL/8co/4b10z/oinxq/8IuX/AOOUAfUNFfL3/Deumf8ARFPjV/4R
-      cv8A8co/4b10z/oinxq/8IuX/wCOUAfUNfKf/BR//kiHhj/sdtE/9Katf8N66Z/0RX41f+EVL/8A
-      HK8B/bP/AGr7L4o/DPw5o1t8MPihoUqeK9Juhca74WktoZNk+fLVtx3SN0VAMseK48Ym8NVS/lf5
-      M6cLJRr05PZNfmW2+8aSuWg8b6ldxiWP4c/EHaSfveGZ1P5Hmn/8Jfqv/ROfiB/4TU9fxo8JWWjX
-      4r/M/p9Z5ln/AEER+86aqOu69p3hjSbnVNWvYNO0+2XdLc3DhUQfU9z2A5PbNcb4m+MSeEhYxal4
-      K8aWt9qU32TTbO40OSKS+uCMrDEGPLHj6Zr6R/Z8/Y2u9S1Gw8f/ABqgttT8QRsLjSfCCnzdO0Lu
-      rOOlxc4xlz8qnIUcA19lw/wjjM5nzz9yit5b38o93+C/A8HN+LsDgKX+zyVSb2Sei82/03Z5V8M/
-      gv8AEn9peOK9tGu/hf8ADibka1dQY1nVI/W1hbi3jYdJZBuIIKrX2n8GvgB4G+Amhvpvg3Q4bB5z
-      uu9QlJmvb1+7zztl3JPPJwM8AV6MBxS1/RmWZRgsnpexwcOXu+r9X1/JdEj8KzHNMXmlX2uKnfsu
-      i9F0/PuFFFFeyeUFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQB8v/Dj/AJSD/GP/ALFL
-      Q/8A0OavqCvl/wCHH/KQf4x/9ilof/oc1fUFABRRRQAUUUUAFFFFABRRRQAUUUUAFfNH7eRx8OvA
-      GM/8lC8PdP8Ar7Wvpevmj9vT/knXgD/soPh//wBKxXm5n/uNf/BL/wBJZcPiXqek1yHxU+J2i/B/
-      wPqHifXpHFpagLHbwLvnupmO2OCJerSOxCgD19M119eH/B/RF/ab+OF18RL8C4+HngK+l03wrbHm
-      LUNUT5bnUSOjLEcxRHkZDsMEV/APA/CtTizNFhndUYe9Ua6R7Lzk9F21etj6rFV1Qhfr0Os/Zz+B
-      OtS6+3xd+KsEU3xI1GEpp+khvMt/DFk3ItYexmI5ll6kkqPl6/SVFFf6C4TCUMBQhhcNBQpwVkls
-      kj5SUnJ8z3CiiiuskKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooA+X/AIcf8pB/
-      jH/2KWh/+hzV9QV8v/Dj/lIP8Y/+xS0P/wBDmr6goAKKKKACiiigAooooAKKKKACiiigAr5o/b0/
-      5J14A/7KD4f/APSsV9L180ft6f8AJOvAH/ZQfD//AKVivNzP/ca/+CX/AKSy4fEvUxP2ofFur6V4
-      EsvCfha4Fv408cahF4c0iUE7rdps+dc8cgRQiR89iFr6M+G/w/0f4V+AtB8IaBb/AGXR9Fs47O2j
-      77VGNzHuzHLE9ySa+c/ANr/wtP8AbV1TUGcyaR8MNDS0gAHy/wBqaiC0pz6rbRoMdvNr6yr8y8Lc
-      jjlHD1OvKNqlf35ej+BenLr6yZ2Y2r7Sq10WgUUUV+vnAFFFFABRRRQAUUUUAFFFFABRRRQAUUUU
-      AFFFFABRRRQAUUUUAFFFFAHxY/xl8DfBz9vz4rXXjfxVpfhaC98K6LHbSancCITMrSlgpPUgEfnX
-      sP8Aw3F8Av8AornhT/wYpXqGtfD3wt4kvje6t4a0jVLwqFNxe2EU0hUdBuZScCqX/CoPAf8A0JPh
-      z/wUwf8AxFAHnn/DcXwC/wCiueFP/BilH/DcXwC/6K54U/8ABileh/8ACoPAf/Qk+HP/AAUwf/EU
-      f8Kg8B/9CT4c/wDBTB/8RQB55/w3F8Av+iueFP8AwYpR/wANxfAL/ornhT/wYpXof/CoPAf/AEJP
-      hz/wUwf/ABFH/CoPAf8A0JPhz/wUwf8AxFAHnn/DcXwC/wCiueFP/BilH/DcXwC/6K54U/8ABile
-      h/8ACoPAf/Qk+HP/AAUwf/EUf8Kg8B/9CT4c/wDBTB/8RQB55/w3F8Av+iueFP8AwYpR/wANxfAL
-      /ornhT/wYpXof/CoPAf/AEJPhz/wUwf/ABFH/CoPAf8A0JPhz/wUwf8AxFAHnn/DcXwC/wCiueFP
-      /BilH/DcXwC/6K54U/8ABileh/8ACoPAf/Qk+HP/AAUwf/EUf8Kg8B/9CT4c/wDBTB/8RQB55/w3
-      F8Av+iueFP8AwYpXhH7Xv7U3wf8AiD4P8C6f4f8AiR4c1a7g8c6FeTRW9+hMcEd0pklbnAVRySeA
-      K+uv+FQeA/8AoSfDn/gpg/8AiK+RP+CovhLwx4A/Ze/tzR/CuiWV7aa/p8ivBp0MZYB2O0kLyDgZ
-      HQ1z4misTRnRbtzJr71YcXytM9O/YGeLxJ8LfFPj9biC6k8a+LNT1YSROH2QpN9mgjJHQiOBeD/e
-      r6cryv8AZc8B2fw1/Z2+HXh+yt47YW2h2jTCNAm+d4leVyB1ZnZiSeTmvVKMNQhhaMMPSVowSivR
-      KyCTcm2woooroEFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUU
-      UAFFFFABRRRQAUUUUAFFFFABXxr/AMFXtNbWv2VF09M77vxHpsC45OWkZf619lV8t/8ABQ62+2fC
-      Dwdb4Leb470GPA6nN0BQB9MaTYLpWlWdkn3LaFIVx6KoA/lVyiigAooooAKKKKACiiigAooooAKK
-      KKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACvmf9vRfM
-      +HPw/XJG74h+HRkdR/pi19MV4P8AtfeFv+Et8H+BbU3P2UQeOdDuy3l793l3Qbb1GM9M9vSgD3ii
-      iigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKAP/2Q==</Data>
-    </Enclosure>
-  </Binary>
-</metadata>
+        standardization.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</pythonReference></param></parameters><summary>&lt;DIV STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Once BPI data sets have been created at both fine and broad scales, the next step in the benthic terrain classification process is to standardize the values of these raster data sets. Bathymetric data tends to be spatially autocorrelated (i.e. locations that are closer together are more related than locations that are farther apart) (Weiss 2001). Therefore, the range of BPI values increases with scale. For example, broad (small) scale BPI data sets would have smaller BPI values because a larger analysis neighborhood is used. This would have the effect of averaging out small variations in the terrain. Fine (large) scale BPI data sets would have larger BPI values because of the smaller neighborhood that is used. This smaller analysis neighborhood would result in the detection of smaller, localized variations in the terrain. Standardization of the raw BPI values allows for the classification of BPI data sets at almost any scale (Weiss 2001). &lt;/SPAN&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN /&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN&gt;To create the standardized output data set, the following algorithm is used:&lt;/SPAN&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN /&gt;&lt;SPAN STYLE="font-style:italic;font-weight:bold;"&gt;&lt;SPAN&gt;BPI&amp;lt;scalefactor&amp;gt;_std = int((((BPI&amp;lt;scalefactor&amp;gt; - mean) / std dev) * 100) + 0.05)&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;SPAN /&gt;&lt;SPAN /&gt;&lt;SPAN /&gt;&lt;SPAN /&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN STYLE="font-weight:bold;"&gt;&lt;SPAN&gt;scalefactor&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;SPAN&gt;&lt;SPAN&gt;= outer radius in map units * input bathymetric data set resolution(cell size)&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;SPAN /&gt;&lt;SPAN /&gt;&lt;SPAN /&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN STYLE="font-weight:bold;"&gt;&lt;SPAN&gt;mean&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;SPAN&gt;&lt;SPAN&gt;= mean cell value across BPI data set&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;SPAN /&gt;&lt;SPAN /&gt;&lt;SPAN /&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN STYLE="font-weight:bold;"&gt;&lt;SPAN&gt;std dev&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;SPAN&gt;&lt;SPAN&gt;= standard deviation of cell values across BPI data set&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;SPAN /&gt;&lt;SPAN /&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN /&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;</summary></tool><Binary><Enclosure rel="side-panel-help"><Data EsriPropertyType="Image" OriginalFileName="thumbnail.jpg">/9j/4AAQSkZJRgABAQEAYABgAAD/7AARRHVja3kAAQAEAAAAWgAA/9sAQwADAgIDAgIDAwMDBAMD
+BAUIBQUEBAUKBwcGCAwKDAwLCgsLDQ4SEA0OEQ4LCxAWEBETFBUVFQwPFxgWFBgSFBUU/9sAQwED
+BAQFBAUJBQUJFA0LDRQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQU
+FBQUFBQU/8AAEQgBTQEsAwEiAAIRAQMRAf/EAB8AAAEFAQEBAQEBAAAAAAAAAAABAgMEBQYHCAkK
+C//EALUQAAIBAwMCBAMFBQQEAAABfQECAwAEEQUSITFBBhNRYQcicRQygZGhCCNCscEVUtHwJDNi
+coIJChYXGBkaJSYnKCkqNDU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6g4SF
+hoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2drh4uPk5ebn
+6Onq8fLz9PX29/j5+v/EAB8BAAMBAQEBAQEBAQEAAAAAAAABAgMEBQYHCAkKC//EALURAAIBAgQE
+AwQHBQQEAAECdwABAgMRBAUhMQYSQVEHYXETIjKBCBRCkaGxwQkjM1LwFWJy0QoWJDThJfEXGBka
+JicoKSo1Njc4OTpDREVGR0hJSlNUVVZXWFlaY2RlZmdoaWpzdHV2d3h5eoKDhIWGh4iJipKTlJWW
+l5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uLj5OXm5+jp6vLz9PX29/j5
++v/aAAwDAQACEQMRAD8A/VOiiigCtfzta2FxMgBeONnAPqATXxb8Lf2u/F2uH4X3t1408C+NbjxZ
+dRQal4P8P2EkWqaTE8bu8xcXUvEOz5/MRARnkHAr7UvLcXdpPASVEqMm4dsjGa4b4VfCDTfhX8Mt
+G8I2jx3UmnaaunNqYtUilnAXG5gO/fGaAPPfD/7Z3hzxZo+j3ui+DPG+pz60ktzpenQ6VGLm9s4l
+Qy3iK0oAhVpETc5UszAKGzmsGP8AbV0xPGus3EejaxrvgGHwxpviKPVNG0xpHsIZZLtbmS73OpUR
++QvyKpcbZflO3jo7L9mTUvCOi/D8+DfGp0XxL4S0OTw6NUvdKW7hvrNzGzCSDzE2uHhR1ZX4O4EM
+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
+HQ1z4misTRnRbtzJr71YcXytM9O/YGeLxJ8LfFPj9biC6k8a+LNT1YSROH2QpN9mgjJHQiOBeD/e
+r6cryv8AZc8B2fw1/Z2+HXh+yt47YW2h2jTCNAm+d4leVyB1ZnZiSeTmvVKMNQhhaMMPSVowSivR
+KyCTcm2woooroEFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUU
+UAFFFFABRRRQAUUUUAFFFFABXxr/AMFXtNbWv2VF09M77vxHpsC45OWkZf619lV8t/8ABQ62+2fC
+Dwdb4Leb470GPA6nN0BQB9MaTYLpWlWdkn3LaFIVx6KoA/lVyiigAooooAKKKKACiiigAooooAKK
+KKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACvmf9vRfM
++HPw/XJG74h+HRkdR/pi19MV4P8AtfeFv+Et8H+BbU3P2UQeOdDuy3l793l3Qbb1GM9M9vSgD3ii
+iigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKAP/2Q==</Data></Enclosure></Binary></metadata>

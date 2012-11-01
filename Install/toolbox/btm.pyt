@@ -261,6 +261,23 @@ class standardizebpi(object):
         param_1.direction = 'Input'
         param_1.datatype = u'Raster Layer'
 
+        # dervied statistics
+        mean = arcpy.Parameter()
+        mean.name = 'Mean'
+        mean.displayName = 'Mean'
+        mean.parameterType = 'Required'
+        mean.datatype = 'Double'
+        mean.enabled = False
+        mean.value = 0
+
+        stddev = arcpy.Parameter()
+        stddev.name = 'Standard_deviation'
+        stddev.displayName = 'Standard Deviation'
+        stddev.parameterType = 'Required'
+        stddev.datatype = 'Double'
+        stddev.enabled = False
+        stddev.value = 0
+
         # Output_raster
         param_2 = arcpy.Parameter()
         param_2.name = u'Output_raster'
@@ -269,7 +286,7 @@ class standardizebpi(object):
         param_2.direction = 'Output'
         param_2.datatype = u'Raster Dataset'
 
-        return [param_1, param_2]
+        return [param_1, mean, stddev, param_2]
     def isLicensed(self):
         return True
     def updateParameters(self, parameters):
@@ -278,14 +295,29 @@ class standardizebpi(object):
              return validator(parameters).updateParameters()
     def updateMessages(self, parameters):
         validator = getattr(self, 'ToolValidator', None)
+
+        # parameter names
+        cols = ['input', 'mean', 'stddev', 'output']
+        input_raster = parameters[cols.index('input')].valueAsText
+
+        if input_raster is not None:
+            mean_res = arcpy.GetRasterProperties_management(input_raster, "MEAN")
+            mean = mean_res.getOutput(0)
+            stddev_res = arcpy.GetRasterProperties_management(input_raster, "STD")
+            stddev = stddev_res.getOutput(0)
+            # try modifying our variables
+            parameters[cols.index('mean')].value = float(mean) 
+            parameters[cols.index('stddev')].value = float(stddev) 
+
         if validator:
              return validator(parameters).updateMessages()
+
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
         from scripts import standardize_bpi_grids
         standardize_bpi_grids.main(
             bpi_raster=parameters[0].valueAsText,
-            out_raster=parameters[1].valueAsText)
+            out_raster=parameters[3].valueAsText)
  
 class btmslope(object):
     """c:\data\arcgis\addins\btm\toolbox\BTM.tbx\slope"""
