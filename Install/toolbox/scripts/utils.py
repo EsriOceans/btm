@@ -190,10 +190,13 @@ class BtmCsvDocument(BtmDocument):
         in_csv = self.csv
         result_rows = []
         for row in in_csv:
+            # replace empty strings with Nones
+            row_clean = [None if x == '' else x for x in row]
+                    
             # don't parse the header, assume columns are in expected order.
             (class_code, zone, broad_lower, broad_upper, fine_lower, fine_upper, \
-            slope_lower, slope_upper, depth_lower, depth_upper) = row
-            
+            slope_lower, slope_upper, depth_lower, depth_upper) = row_clean
+           
             # for now: fake the format used by the XML documents.
             res_row = {'Class': class_code, 
                        'Zone': zone,
