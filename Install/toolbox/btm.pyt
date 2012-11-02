@@ -114,7 +114,7 @@ class broadscalebpi(object):
             # get the cellsize of the input raster; assume same in X & Y
             cellsize = raster_desc.meanCellHeight
             # calculate our 'scale factor':
-            scale_factor = math.ceil(float(cellsize) * int(outer_radius))
+            scale_factor = math.ceil(float(cellsize) * int(outer_radius) - 0.5)
             # try modifying our scale factor
             parameters[cols.index('scale_factor')].value = scale_factor
 
@@ -225,7 +225,7 @@ class finescalebpi(object):
             # get the cellsize of the input raster; assume same in X & Y
             cellsize = raster_desc.meanCellHeight
             # calculate our 'scale factor':
-            scale_factor = math.ceil(float(cellsize) * int(outer_radius))
+            scale_factor = math.ceil(float(cellsize) * int(outer_radius) - 0.5)
             # try modifying our scale factor
             parameters[cols.index('scale_factor')].value = scale_factor
 
@@ -254,39 +254,73 @@ class standardizebpi(object):
         self.canRunInBackground = False
     def getParameterInfo(self):
         # Input_BPI_raster
-        param_1 = arcpy.Parameter()
-        param_1.name = u'Input_BPI_raster'
-        param_1.displayName = u'Input BPI raster'
-        param_1.parameterType = 'Required'
-        param_1.direction = 'Input'
-        param_1.datatype = u'Raster Layer'
+        broad_raster = arcpy.Parameter()
+        broad_raster.name = u'Broad_BPI_raster'
+        broad_raster.displayName = u'Broad BPI raster'
+        broad_raster.parameterType = 'Required'
+        broad_raster.direction = 'Input'
+        broad_raster.datatype = u'Raster Layer'
 
         # dervied statistics
-        mean = arcpy.Parameter()
-        mean.name = 'Mean'
-        mean.displayName = 'Mean'
-        mean.parameterType = 'Required'
-        mean.datatype = 'Double'
-        mean.enabled = False
-        mean.value = 0
+        broad_mean = arcpy.Parameter()
+        broad_mean.name = 'Broad_BPI_Mean'
+        broad_mean.displayName = 'Broad BPI Mean'
+        broad_mean.parameterType = 'Required'
+        broad_mean.datatype = 'Double'
+        broad_mean.enabled = False
+        broad_mean.value = 0
 
-        stddev = arcpy.Parameter()
-        stddev.name = 'Standard_deviation'
-        stddev.displayName = 'Standard Deviation'
-        stddev.parameterType = 'Required'
-        stddev.datatype = 'Double'
-        stddev.enabled = False
-        stddev.value = 0
+        broad_stddev = arcpy.Parameter()
+        broad_stddev.name = 'Broad_BPI_Standard_deviation'
+        broad_stddev.displayName = 'Broad BPI Standard Deviation'
+        broad_stddev.parameterType = 'Required'
+        broad_stddev.datatype = 'Double'
+        broad_stddev.enabled = False
+        broad_stddev.value = 0
 
         # Output_raster
-        param_2 = arcpy.Parameter()
-        param_2.name = u'Output_raster'
-        param_2.displayName = u'Output raster'
-        param_2.parameterType = 'Required'
-        param_2.direction = 'Output'
-        param_2.datatype = u'Raster Dataset'
+        broad_std_output = arcpy.Parameter()
+        broad_std_output.name = u'Output_broad_raster'
+        broad_std_output.displayName = u'Output Standardized Broad BPI raster'
+        broad_std_output.parameterType = 'Required'
+        broad_std_output.direction = 'Output'
+        broad_std_output.datatype = u'Raster Dataset'
 
-        return [param_1, mean, stddev, param_2]
+        # Input_BPI_raster
+        fine_raster = arcpy.Parameter()
+        fine_raster.name = u'Fine_BPI_raster'
+        fine_raster.displayName = u'Fine BPI raster'
+        fine_raster.parameterType = 'Required'
+        fine_raster.direction = 'Input'
+        fine_raster.datatype = u'Raster Layer'
+
+        # dervied statistics
+        fine_mean = arcpy.Parameter()
+        fine_mean.name = 'Fine_BPI_Mean'
+        fine_mean.displayName = 'Fine BPI Mean'
+        fine_mean.parameterType = 'Required'
+        fine_mean.datatype = 'Double'
+        fine_mean.enabled = False
+        fine_mean.value = 0
+
+        fine_stddev = arcpy.Parameter()
+        fine_stddev.name = 'Fine_BPI_Standard_deviation'
+        fine_stddev.displayName = 'Fine BPI Standard Deviation'
+        fine_stddev.parameterType = 'Required'
+        fine_stddev.datatype = 'Double'
+        fine_stddev.enabled = False
+        fine_stddev.value = 0
+
+        # Output_raster
+        fine_std_output = arcpy.Parameter()
+        fine_std_output.name = u'Output_fine_raster'
+        fine_std_output.displayName = u'Output Standardized Fine BPI raster'
+        fine_std_output.parameterType = 'Required'
+        fine_std_output.direction = 'Output'
+        fine_std_output.datatype = u'Raster Dataset'
+
+        return [broad_raster, broad_mean, broad_stddev, broad_std_output, fine_raster, fine_mean, fine_stddev, fine_std_output]
+
     def isLicensed(self):
         return True
     def updateParameters(self, parameters):
@@ -297,27 +331,49 @@ class standardizebpi(object):
         validator = getattr(self, 'ToolValidator', None)
 
         # parameter names
-        cols = ['input', 'mean', 'stddev', 'output']
-        input_raster = parameters[cols.index('input')].valueAsText
+        cols = ['broad_input', 'broad_mean', 'broad_stddev', 'broad_output', \
+                'fine_input', 'fine_mean', 'fine_stddev', 'fine_output']
+        broad_raster = parameters[cols.index('broad_input')].valueAsText
+        fine_raster = parameters[cols.index('fine_input')].valueAsText
 
-        if input_raster is not None:
-            mean_res = arcpy.GetRasterProperties_management(input_raster, "MEAN")
-            mean = mean_res.getOutput(0)
-            stddev_res = arcpy.GetRasterProperties_management(input_raster, "STD")
-            stddev = stddev_res.getOutput(0)
-            # try modifying our variables
-            parameters[cols.index('mean')].value = float(mean) 
-            parameters[cols.index('stddev')].value = float(stddev) 
-
+        for label in ['broad', 'fine']: 
+            input_raster = parameters[cols.index(label + '_input')].valueAsText
+            if input_raster is not None:
+                (mean, stddev) = self.getRasterStats(input_raster)
+                # try modifying our variables
+                parameters[cols.index(label + '_mean')].value = mean 
+                parameters[cols.index(label + '_stddev')].value = stddev 
         if validator:
              return validator(parameters).updateMessages()
+
+    def getRasterStats(self, input_raster = None):
+        result = (None, None)
+        if input_raster is not None:
+            try:
+                raster_desc = arcpy.Describe(input_raster)
+                if raster_desc.dataType == 'RasterLayer':
+                    mean_res = arcpy.GetRasterProperties_management(input_raster, "MEAN")
+                    mean = float(mean_res.getOutput(0))
+                    stddev_res = arcpy.GetRasterProperties_management(input_raster, "STD")
+                    stddev = float(stddev_res.getOutput(0))
+                    result = (mean, stddev)
+            except:
+                # check for raster existence, when running as a model the 'result'
+                # may be set, but not actually exist, causing these steps to fail.
+                pass
+        return result
 
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
         from scripts import standardize_bpi_grids
+        # run for broad raster...
         standardize_bpi_grids.main(
             bpi_raster=parameters[0].valueAsText,
             out_raster=parameters[3].valueAsText)
+        #  ...and again for fine raster.
+        standardize_bpi_grids.main(
+            bpi_raster=parameters[4].valueAsText,
+            out_raster=parameters[7].valueAsText)
  
 class btmslope(object):
     """c:\data\arcgis\addins\btm\toolbox\BTM.tbx\slope"""
@@ -358,7 +414,7 @@ class btmslope(object):
         slope.main(
             bathy=parameters[0].valueAsText,
             out_raster=parameters[1].valueAsText)
- 
+
 class zoneclassification(object):
     """c:\data\arcgis\addins\btm\toolbox\BTM.tbx\zoneclassification"""
     def __init__(self):
@@ -411,8 +467,8 @@ class zoneclassification(object):
 
         # Output_raster
         zones_raster= arcpy.Parameter()
-        zones_raster.name = u'Output_raster'
-        zones_raster.displayName = u'Output raster'
+        zones_raster.name = u'Output_zones_raster'
+        zones_raster.displayName = u'Output Zones Raster'
         zones_raster.parameterType = 'Required'
         zones_raster.direction = 'Output.'
         zones_raster.datatype = u'Raster Dataset'
@@ -440,6 +496,8 @@ class zoneclassification(object):
             slope=parameters[3].valueAsText,
             bathy=parameters[4].valueAsText,
             out_raster=parameters[5].valueAsText)
+
+
  
 class structureclassification(object):
     """c:\data\arcgis\addins\btm\toolbox\BTM.tbx\structureclassification"""
