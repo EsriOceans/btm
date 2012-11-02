@@ -10,7 +10,7 @@ import pythonaddins
 local_path = os.path.dirname(__file__)
 
 # only our custom model which can't be embedded in a Python toolbox.
-custom_toolbox = os.path.join(local_path, "toolbox", "custom.tbx")
+model_toolbox = os.path.join(local_path, "toolbox", "btm model.tbx")
 btm_toolbox = os.path.join(local_path, "toolbox", "btm.pyt")
 
 # FIXME: add in checks for spatial analyst license.
@@ -41,10 +41,12 @@ class ButtonRunBTMSteps(object):
         self.enabled = True
         self.checked = False
     def onClick(self):
-        pythonaddins.GPToolDialog(btm_toolbox, 'broadscalebpi')
+        tool_dialog(model_toolbox, 'BtmModel')
         # XXX: trying to call multiple tools just kills ArcMap.
         # adding a sleep() just slows down the train wreck. Not yet sure
         # of the best approach to actually get this to work.
+        # Still broken after SP1, so it may take till SP2 before a fix
+        # is available.
         #tool_dialog(btm_toolbox, 'finescalebpi')
         #tool_dialog(btm_toolbox, 'standardizebpi')
 
@@ -53,7 +55,9 @@ class RunBTMSteps(object):
     def __init__(self):
         self.enabled = True
         self.shape = "NONE" # Can set to "Line", "Circle" or "Rectangle" for interactive shape drawing
-
+    def onClick(self):
+        pythonaddins.GPToolDialog(model_toolbox, 'BtmModel')
+ 
 """ classification functions"""
 class classifyBenthicTerrain(object):
     """Implementation for classifyBenthicTerrain.button (Button)"""
