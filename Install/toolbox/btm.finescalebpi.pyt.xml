@@ -1,12 +1,11 @@
-<?xml version="1.0"?>
 <metadata xml:lang="en">
   <Esri>
     <CreaDate>20120901</CreaDate>
     <CreaTime>02190400</CreaTime>
     <ArcGISFormat>1.0</ArcGISFormat>
     <SyncOnce>TRUE</SyncOnce>
-    <ModDate>20121101</ModDate>
-    <ModTime>175627</ModTime>
+    <ModDate>20121106</ModDate>
+    <ModTime>14423200</ModTime>
     <scaleRange>
       <minScale>150000000</minScale>
       <maxScale>5000</maxScale>
@@ -18,8 +17,8 @@
       <resTitle>Build Fine Scale BPI</resTitle>
     </idCitation>
     <searchKeys>
-      <keyword>bathymetry geomorphology BPI position
-      index</keyword>
+      <keyword>bathymetry geomorphology BPI position</keyword>
+      <keyword>index</keyword>
     </searchKeys>
     <idAbs>&lt;DIV
     STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;&lt;SPAN&gt;The
@@ -128,17 +127,15 @@
       <param name="Output_raster" displayname="Output raster"
       type="Required" direction="Output" datatype="Raster Dataset"
       expression="Output_raster">
-        <dialogReference>&lt;DIV STYLE="text-align:Left;"&gt;&lt;P
-        STYLE="font-size:16ptmargin:7 0 7
-        0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;Output raster name of
-        broad-scale BPI
-        grid.&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN
-        /&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</dialogReference>
-        <pythonReference>&lt;DIV STYLE="text-align:Left;"&gt;&lt;P
-        STYLE="font-size:16ptmargin:7 0 7
-        0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;Output raster name of
-        broad-scale BPI
-        grid.&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;</pythonReference>
+        <dialogReference>&lt;DIV
+        STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Output
+        raster name of fine-scale BPI
+        grid.&lt;/SPAN&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN
+        /&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;</dialogReference>
+        <pythonReference>&lt;DIV
+        STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Output
+        raster name of fine-scale BPI
+        grid.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;</pythonReference>
       </param>
     </parameters>
     <summary>&lt;DIV
@@ -1154,4 +1151,7 @@
       RQAUUUUAFFFFAH//2Q==</Data>
     </Thumbnail>
   </Binary>
+  <mdHrLv>
+    <ScopeCd value="005"></ScopeCd>
+  </mdHrLv>
 </metadata>
