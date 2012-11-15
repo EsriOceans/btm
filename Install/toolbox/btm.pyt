@@ -46,7 +46,7 @@ class broadscalebpi(object):
         validation is performed.  This method is called whenever a parmater
         has been changed."""
         return
-    
+         
       def updateMessages(self):
         """Modify the messages created by internal validation for each tool
         parameter.  This method is called after internal validation."""
@@ -119,13 +119,23 @@ class broadscalebpi(object):
             parameters[cols.index('scale_factor')].value = scale_factor
 
         if validator:
-             return validator(parameters).updateParameters()
+            return validator(parameters).updateParameters()
 
     def updateMessages(self, parameters):
         validator = getattr(self, 'ToolValidator', None)
-        if validator:
-             return validator(parameters).updateMessages()
+        inner_radius = parameters[1].valueAsText
+        outer_radius = parameters[2].valueAsText
 
+        if outer_radius is not None and inner_radius is not None:
+            inner_rad = int(inner_radius)
+            outer_rad = int(outer_radius)
+            # test that the outer radius exceeds the inner radius.
+            if inner_rad >= outer_rad:
+                msg = "Inner radius cannot exceed the outer radius."
+                parameters[2].setErrorMessage(msg)
+        if validator:
+            return validator(parameters).updateMessages()
+ 
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
         from scripts import bpi
@@ -234,9 +244,19 @@ class finescalebpi(object):
 
     def updateMessages(self, parameters):
         validator = getattr(self, 'ToolValidator', None)
-        if validator:
-             return validator(parameters).updateMessages()
+        inner_radius = parameters[1].valueAsText
+        outer_radius = parameters[2].valueAsText
 
+        if outer_radius is not None and inner_radius is not None:
+            inner_rad = int(inner_radius)
+            outer_rad = int(outer_radius)
+            # test that the outer radius exceeds the inner radius.
+            if inner_rad >= outer_rad:
+                msg = "Inner radius cannot exceed the outer radius."
+                parameters[2].setErrorMessage(msg)
+        if validator:
+            return validator(parameters).updateMessages()
+ 
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
         from scripts import bpi
