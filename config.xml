@@ -109,7 +109,7 @@
       class="calculateTerrainRuggedness"
       id="calculateTerrainRuggedness.button"
       image="Images\vrm_16x16.png"
-      message="Calculate Terrain Ruggedness using the vector ruggedness measure (VRM) of Sappington et al. (2007)"
+      message="Uses the VRM algorithm developed by Sappington et al. (2007)"
       tip="Calculate Terrain Ruggedness using the vector ruggedness measure (VRM)">
       <Help
         heading="Calculate Terrain Ruggedness (VRM)"
