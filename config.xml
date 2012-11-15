@@ -8,7 +8,7 @@
   <Image>Images\btm-steps_64x64.png</Image>
   <Author>Shaun Walbridge</Author>
   <Company>Esri</Company>
-  <Date>08/31/2012</Date>
+  <Date>11/14/2012</Date>
 
 <Targets>
   <Target name="Desktop" version="10.1" />
