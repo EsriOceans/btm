@@ -1,51 +1,50 @@
 <?xml version="1.0"?>
 <metadata xml:lang="en">
-  <Esri>
-    <CreaDate>20120901</CreaDate>
-    <CreaTime>02190400</CreaTime>
-    <ArcGISFormat>1.0</ArcGISFormat>
-    <SyncOnce>TRUE</SyncOnce>
-    <ModDate>20121107</ModDate>
-    <ModTime>231028</ModTime>
-    <scaleRange>
-      <minScale>150000000</minScale>
-      <maxScale>5000</maxScale>
-    </scaleRange>
-    <ArcGISProfile>ItemDescription</ArcGISProfile>
-  </Esri>
-  <toolbox name="btm" alias="">
-    <arcToolboxHelpPath>
-    c:\apps\arcgis\desktop10.1\Help\gp</arcToolboxHelpPath>
-    <toolsets />
-  </toolbox>
-  <dataIdInfo>
-    <idCitation>
-      <resTitle>btm</resTitle>
-    </idCitation>
-    <idPurp>Tools for classifying and understanding benthic
+	<Esri>
+		<CreaDate>20120901</CreaDate>
+		<CreaTime>02190400</CreaTime>
+		<ArcGISFormat>1.0</ArcGISFormat>
+		<SyncOnce>TRUE</SyncOnce>
+		<ModDate>20121114</ModDate>
+		<ModTime>201308</ModTime>
+		<scaleRange>
+			<minScale>150000000</minScale>
+			<maxScale>5000</maxScale>
+		</scaleRange>
+		<ArcGISProfile>ItemDescription</ArcGISProfile>
+	</Esri>
+	<toolbox name="btm" alias="">
+		<arcToolboxHelpPath>c:\apps\arcgis\desktop10.1\Help\gp</arcToolboxHelpPath>
+		<toolsets/>
+	</toolbox>
+	<dataIdInfo>
+		<idCitation>
+			<resTitle>btm</resTitle>
+		</idCitation>
+		<idPurp>Tools for classifying and understanding benthic
     terrain.</idPurp>
-    <searchKeys>
-      <keyword>benthic</keyword>
-      <keyword>terrain</keyword>
-      <keyword>model</keyword>
-      <keyword>science</keyword>
-      <keyword>geomorphology</keyword>
-      <keyword>btm</keyword>
-    </searchKeys>
-  </dataIdInfo>
-  <distInfo>
-    <distributor>
-      <distorFormat>
-        <formatName>ArcToolbox Toolbox</formatName>
-      </distorFormat>
-    </distributor>
-  </distInfo>
-  <mdHrLv>
-    <ScopeCd value="005" />
-  </mdHrLv>
-  <Binary>
-    <Thumbnail>
-      <Data EsriPropertyType="PictureX">
+		<searchKeys>
+			<keyword>benthic</keyword>
+			<keyword>terrain</keyword>
+			<keyword>model</keyword>
+			<keyword>science</keyword>
+			<keyword>geomorphology</keyword>
+			<keyword>btm</keyword>
+		</searchKeys>
+	</dataIdInfo>
+	<distInfo>
+		<distributor>
+			<distorFormat>
+				<formatName>ArcToolbox Toolbox</formatName>
+			</distorFormat>
+		</distributor>
+	</distInfo>
+	<mdHrLv>
+		<ScopeCd value="005"/>
+	</mdHrLv>
+	<Binary>
+		<Thumbnail>
+			<Data EsriPropertyType="PictureX">
       /9j/4AAQSkZJRgABAQEAlgCWAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsK
       CwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQU
       FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCABAAEADASIA
@@ -92,6 +91,6 @@
       YvMcVj0liJ81vT9DRO0FBbIKASpyCQR3FFFeaI9K+Gt5dS6Zdi5k32iOBC0kn3W7qM9Bgiu70D4j
       QaNqH9nLdwybnCoEky6t2A7H8elfPy3Mq27QCRhCzBmjB4JHQ4rpvD+lWum6TLrd/IMqCLWIH5jJ
       ztbHfBH9a+1y3O60KcMLypxW7k+nX/gbmWKwdHMKXspw26n/2Q==</Data>
-    </Thumbnail>
-  </Binary>
+		</Thumbnail>
+	</Binary>
 </metadata>
