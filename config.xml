@@ -108,14 +108,13 @@
       category="Benthic Terrain Modeler (BTM)"
       class="calculateTerrainRuggedness"
       id="calculateTerrainRuggedness.button"
-      image="Images\rugosity_16x16.png"
-      message="Rugosity measures the surface roughness by comparing planar area to surface area."
+      image="Images\vrm_16x16.png"
+      message="Calculate Terrain Ruggedness using the vector ruggedness measure (VRM) of Sappington et al. (2007)"
       tip="Calculate Terrain Ruggedness using the vector ruggedness measure (VRM)">
       <Help
         heading="Calculate Terrain Ruggedness (VRM)"
         >Measure terrain ruggedness via vector analysis, comparing 3-dimensional orientation of cells.</Help>
     </Button>
-
 
     <Button
       caption="Aspect"
