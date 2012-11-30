@@ -158,7 +158,7 @@ class broadscalebpi(object):
             outer_rad = int(outer_radius)
             # test that the outer radius exceeds the inner radius.
             if inner_rad >= outer_rad:
-                msg = "Inner radius cannot exceed the outer radius."
+                msg = "Outer radius must exceed inner radius."
                 parameters[2].setErrorMessage(msg)
         if validator:
             return validator(parameters).updateMessages()
@@ -279,7 +279,7 @@ class finescalebpi(object):
             outer_rad = int(outer_radius)
             # test that the outer radius exceeds the inner radius.
             if inner_rad >= outer_rad:
-                msg = "Inner radius cannot exceed the outer radius."
+                msg = "Outer radius must exceed inner radius."
                 parameters[2].setErrorMessage(msg)
         if validator:
             return validator(parameters).updateMessages()
