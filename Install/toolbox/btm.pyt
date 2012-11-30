@@ -20,22 +20,22 @@ MSG_INVALID_RADIUS = "Outer radius must exceed inner radius."
 
 def raster_is_grid(raster_path):
     is_grid = False
-    ext = os.path.splitext(name_with_extension)[1]
-    if ext is None:
+    ext = os.path.splitext(raster_path)[1]
+    # if the file has a GRID-like name but exists within a GDB, its a-ok
+    if ext == "" and raster_path.lower().find(".gdb") == -1:
         is_grid = True
     return is_grid
 
 # Validate ESRI GRID filenames. The file doesn't exist, so use naming to 
 # validate a potential name.
-def validate_raster_name(raster_path):
+def valid_grid_name(raster_path):
     valid = True
     # GRIDs are the default for any file without a trailing extension.
-    if is_grid(raster_path):
+    if raster_is_grid(raster_path):
         if len(raster_path) > 128:
             valid = False
         else:
-            (path, name_with_extension) = os.path.basename(raster_path)
-            grid_name = os.path.splitext(name_with_extension)[0]
+            grid_name = os.path.basename(raster_path)
             """
             Encode all the rules into a regular expression:
              - no longer than 13 characters
@@ -158,14 +158,20 @@ class broadscalebpi(object):
         validator = getattr(self, 'ToolValidator', None)
         inner_radius = parameters[1].valueAsText
         outer_radius = parameters[2].valueAsText
+        output = parameters[4].valueAsText
 
         if outer_radius is not None and inner_radius is not None:
             inner_rad = int(inner_radius)
             outer_rad = int(outer_radius)
             # test that the outer radius exceeds the inner radius.
             if inner_rad >= outer_rad:
-                msg = "Outer radius must exceed inner radius."
-                parameters[2].setErrorMessage(msg)
+                parameters[2].setErrorMessage(MSG_INVALID_RADIUS)
+
+        # validate the output GRID name
+        if output is not None:
+            if not valid_grid_name(output):
+                parameters[4].setErrorMessage(MSG_INVALID_GRID)
+
         if validator:
             return validator(parameters).updateMessages()
  
@@ -278,14 +284,19 @@ class finescalebpi(object):
         validator = getattr(self, 'ToolValidator', None)
         inner_radius = parameters[1].valueAsText
         outer_radius = parameters[2].valueAsText
-
+        output = parameters[4].valueAsText
         if outer_radius is not None and inner_radius is not None:
             inner_rad = int(inner_radius)
             outer_rad = int(outer_radius)
             # test that the outer radius exceeds the inner radius.
             if inner_rad >= outer_rad:
-                msg = "Outer radius must exceed inner radius."
-                parameters[2].setErrorMessage(msg)
+                parameters[2].setErrorMessage(MSG_INVALID_RADIUS)
+
+        # validate the output GRID name
+        if output is not None:
+            if not valid_grid_name(output):
+                parameters[4].setErrorMessage(MSG_INVALID_GRID)
+
         if validator:
             return validator(parameters).updateMessages()
  
@@ -393,6 +404,14 @@ class standardizebpi(object):
                 # try modifying our variables
                 parameters[cols.index(label + '_mean')].value = mean 
                 parameters[cols.index(label + '_stddev')].value = stddev 
+
+            # Validate GRID outputs.
+            out_param = cols.index(label + '_output') 
+            output_raster = parameters[out_param].valueAsText
+            if output_raster is not None:
+                if not valid_grid_name(output_raster):
+                    parameters[out_param].setErrorMessage(MSG_INVALID_GRID)
+
         if validator:
              return validator(parameters).updateMessages()
 
@@ -456,6 +475,13 @@ class btmslope(object):
              return validator(parameters).updateParameters()
     def updateMessages(self, parameters):
         validator = getattr(self, 'ToolValidator', None)
+
+        output = parameters[1].valueAsText
+        # validate the output GRID name
+        if output is not None:
+            if not valid_grid_name(output):
+                parameters[1].setErrorMessage(MSG_INVALID_GRID)
+
         if validator:
              return validator(parameters).updateMessages()
     def execute(self, parameters, messages):
@@ -534,6 +560,12 @@ class zoneclassification(object):
 
     def updateMessages(self, parameters):
         validator = getattr(self, 'ToolValidator', None)
+        output = parameters[5].valueAsText
+        # validate the output GRID name
+        if output is not None:
+            if not valid_grid_name(output):
+                parameters[5].setErrorMessage(MSG_INVALID_GRID)
+
         if validator:
              return validator(parameters).updateMessages()
 
@@ -721,8 +753,14 @@ class terrainruggedness(object):
              return validator(parameters).updateParameters()
     def updateMessages(self, parameters):
         validator = getattr(self, 'ToolValidator', None)
+        output = parameters[3].valueAsText
+        # validate the output GRID name
+        if output is not None:
+            if not valid_grid_name(output):
+                parameters[3].setErrorMessage(MSG_INVALID_GRID)
         if validator:
              return validator(parameters).updateMessages()
+
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
         from scripts import ruggedness
