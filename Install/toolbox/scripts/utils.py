@@ -171,6 +171,7 @@ class BtmXmlDocument(BtmDocument):
 
 class BtmExcelDocument(BtmDocument):
     # reuse existing implementation in parsepy.py
+    # TODO: fix for 3.1: https://github.com/EsriOceans/btm/issues/28
     pass
 
 class BtmCsvDocument(BtmDocument):
