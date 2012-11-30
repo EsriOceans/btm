@@ -4,6 +4,7 @@ import os
 import math
 import string
 import sys
+import re
 
 import arcpy
 from arcpy.sa import *
@@ -12,7 +13,36 @@ from arcpy.sa import *
 local_path = os.path.dirname(__file__)
 sys.path.insert(0, local_path)
 
-# Check out any necessary licenses
+def raster_is_grid(raster_path):
+    is_grid = False
+    ext = os.path.splitext(name_with_extension)[1]
+    if ext is None:
+        is_grid = True
+    return is_grid
+
+# Validate ESRI GRID filenames. The file doesn't exist, so use naming to 
+# validate a potential name.
+def validate_raster_name(raster_path):
+    valid = True
+    # GRIDs are the default for any file without a trailing extension.
+    if is_grid(raster_path):
+        if len(raster_path) > 128:
+            valid = False
+        else:
+            (path, name_with_extension) = os.path.basename(raster_path)
+            grid_name = os.path.splitext(name_with_extension)[0]
+            """
+            Encode all the rules into a regular expression:
+             - no longer than 13 characters
+             - must start with a letter
+             - only letters, numbers, and underscores.
+            """
+            grid_regex = '^[A-Za-z]{1}[A-Za-z0-9_]{0,12}$'
+            if re.match(grid_regex, grid_name) is None:
+                valid = False
+    return valid
+
+    # Check out any necessary licenses
 arcpy.CheckOutExtension("Spatial")
 
 class Toolbox(object):
