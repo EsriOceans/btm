@@ -15,16 +15,13 @@ sys.path.insert(0, local_path)
 # Check out any necessary licenses
 arcpy.CheckOutExtension("Spatial")
 
-# Export of toolbox c:\data\arcgis\addins\btm\toolbox\BTM.tbx
-
 class Toolbox(object):
     def __init__(self):
         self.label = u'Benthic Terrain Modeler'
         self.alias = ''
         self.tools = [broadscalebpi, finescalebpi, standardizebpi, btmslope, zoneclassification, terrainruggedness, depthstatistics]
-        #self.tools = [broadscalebpi, finescalebpi, standardizebpi, btmslope, zoneclassification, structureclassification, terrainruggedness, depthstatistics]
 
-# Tool implementation code
+# tools below this section, one class per tool.
 
 class broadscalebpi(object):
     """c:\data\arcgis\addins\btm\toolbox\BTM.tbx\broadscalebpi"""
