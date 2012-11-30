@@ -19,20 +19,25 @@ btm_toolbox = os.path.join(local_path, "toolbox", "btm.pyt")
 # which should get initialized, throw an error if it isn't available notifying them
 # that MOST functions [e.g. slope] won't work without it.
 
+# ignore exceptions with this class. Our workaround for current limiations
+# in pythonaddins.GPToolDialog.
+class DevNull:
+    def write(self, msg):
+        pass
+
 def tool_dialog(toolbox, tool):
     """Error-handling wrapper around pythonaddins.GPToolDialog."""
-    result = None
+    # FIXME: either have to supress stderr here or always get an error.
+    # Contacted internal resources to figure out what's going on.
     try:
-        result = pythonaddins.GPToolDialog(toolbox, tool)
-        # FIXME: this is a hack to prevent:
-        # TypeError: GPToolDialog() takes at most 1 argument (2 given)
-        print '', 
-    except TypeError:
-        print "recieved TypeError when trying to run GPToolDialog(" + \
+        err_default = sys.stderr
+        sys.stderr = DevNull()
+        pythonaddins.GPToolDialog(toolbox, tool)
+        sys.stderr = err_default
+    except Exception as e:
+        print "recieved exception when trying to run GPToolDialog(" + \
             "{toolbox}, {tool}))".format(toolbox=toolbox, tool=tool)
-    # don't return anything. this prevents:
-    #   TypeError: GPToolDialog() takes at most 1 argument (2 given)
-    return result
+    return None
 
 """ Run all steps (wizard) """
 class ButtonRunBTMSteps(object):
