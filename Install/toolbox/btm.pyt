@@ -13,6 +13,11 @@ from arcpy.sa import *
 local_path = os.path.dirname(__file__)
 sys.path.insert(0, local_path)
 
+# status messages
+MSG_INVALID_GRID = "ESRI GRIDs must >= 13 characters and contain only " \
+                   "letters, numbers and the underscore ('_') character."
+MSG_INVALID_RADIUS = "Outer radius must exceed inner radius."
+
 def raster_is_grid(raster_path):
     is_grid = False
     ext = os.path.splitext(name_with_extension)[1]
@@ -40,6 +45,7 @@ def validate_raster_name(raster_path):
             grid_regex = '^[A-Za-z]{1}[A-Za-z0-9_]{0,12}$'
             if re.match(grid_regex, grid_name) is None:
                 valid = False
+
     return valid
 
     # Check out any necessary licenses
@@ -256,7 +262,6 @@ class finescalebpi(object):
         cols = ['bathy', 'inner', 'outer', 'scale_factor', 'output']
         outer_radius = parameters[cols.index('outer')].valueAsText
         bathy = parameters[cols.index('bathy')].valueAsText
-
         if outer_radius is not None and bathy is not None:
             raster_desc = arcpy.Describe(bathy)
             # get the cellsize of the input raster; assume same in X & Y
@@ -380,8 +385,6 @@ class standardizebpi(object):
         # parameter names
         cols = ['broad_input', 'broad_mean', 'broad_stddev', 'broad_output', \
                 'fine_input', 'fine_mean', 'fine_stddev', 'fine_output']
-        broad_raster = parameters[cols.index('broad_input')].valueAsText
-        fine_raster = parameters[cols.index('fine_input')].valueAsText
 
         for label in ['broad', 'fine']: 
             input_raster = parameters[cols.index(label + '_input')].valueAsText
@@ -545,7 +548,6 @@ class zoneclassification(object):
             out_raster=parameters[5].valueAsText)
 
 
- 
 class structureclassification(object):
     """c:\data\arcgis\addins\btm\toolbox\BTM.tbx\structureclassification"""
     def __init__(self):
