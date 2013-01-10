@@ -6,7 +6,9 @@ A set of tools useful in the analysis of benthic terrain. Includes a variety of 
 MANIFEST
 ========
 
-README.txt   : This file
+README.md    : This file
+
+LICENSE      : Details of the MPL 2.0 license this project is provided under.
 
 makeaddin.py : Used to generate .esriaddin for this project.
 
