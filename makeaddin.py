@@ -9,7 +9,9 @@ out_zip_name = os.path.join(current_path, "..",
 
 backup_patterns = {
     'PLUGIN_BACKUP_PATTERN': re.compile(".*_addin_[0-9]+[.]py$", re.IGNORECASE),
-    'VIM_SWAP_PATTERN': re.compile(".*_addin*.py.swp$", re.IGNORECASE)
+    'VIM_SWAP_PATTERN': re.compile(".*\.sw[op]$", re.IGNORECASE),
+    'COMPLIED_PYTHON_PATTERN': re.compile(".*\.pyc$", re.IGNORECASE),
+    'TODO_PATTERN': re.compile('todo.txt')
 }
 
 def looks_like_a_backup(filename):
