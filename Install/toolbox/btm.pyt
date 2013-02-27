@@ -416,11 +416,14 @@ class standardizebpi(object):
              return validator(parameters).updateMessages()
 
     def getRasterStats(self, input_raster = None):
+        # What kinds of inputs can we expect to compute statistics on?
+        VALID_RASTER_TYPES = ['RasterDataset', 'RasterLayer']
+
         result = (None, None)
         if input_raster is not None:
             try:
                 raster_desc = arcpy.Describe(input_raster)
-                if raster_desc.dataType == 'RasterLayer':
+                if raster_desc.dataType in VALID_RASTER_TYPES: 
                     mean_res = arcpy.GetRasterProperties_management(input_raster, "MEAN")
                     mean = float(mean_res.getOutput(0))
                     stddev_res = arcpy.GetRasterProperties_management(input_raster, "STD")
