@@ -50,8 +50,12 @@ class TestAddin(unittest.TestCase):
     def testToolboxIsPresent(self):
         toolbox_path = 'Install/toolbox/btm.pyt' 
         self.assertTrue(toolbox_path in self.addin_zip.namelist())
-     
-     
+
+    def testModelNameIsValid(self):
+        """ the signing process changes names to to URL encoded; make sure
+         our model remains invariant."""
+        model_name = 'Install/toolbox/btm_model.tbx' 
+        self.assertTrue(model_name in self.addin_zip.namelist())
 
 if __name__  == '__main__':
     unittest.main()
