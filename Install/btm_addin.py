@@ -10,7 +10,7 @@ import pythonaddins
 local_path = os.path.dirname(__file__)
 
 # only our custom model which can't be embedded in a Python toolbox.
-model_toolbox = os.path.join(local_path, "toolbox", "btm model.tbx")
+model_toolbox = os.path.join(local_path, "toolbox", "btm_model.tbx")
 btm_toolbox = os.path.join(local_path, "toolbox", "btm.pyt")
 
 # FIXME: add in checks for spatial analyst license.
