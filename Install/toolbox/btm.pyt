@@ -401,9 +401,10 @@ class standardizebpi(object):
             input_raster = parameters[cols.index(label + '_input')].valueAsText
             if input_raster is not None:
                 (mean, stddev) = self.getRasterStats(input_raster)
-                # try modifying our variables
-                parameters[cols.index(label + '_mean')].value = mean 
-                parameters[cols.index(label + '_stddev')].value = stddev 
+                if mean is not None:
+                    # try modifying our variables
+                    parameters[cols.index(label + '_mean')].value = mean 
+                    parameters[cols.index(label + '_stddev')].value = stddev 
 
             # Validate GRID outputs.
             out_param = cols.index(label + '_output') 
