@@ -54,6 +54,9 @@ class ButtonRunBTMSteps(object):
         # is available.
         #tool_dialog(btm_toolbox, 'finescalebpi')
         #tool_dialog(btm_toolbox, 'standardizebpi')
+        # update: this bug is documented in NIM085804; no current plans to fix it. 
+        #         Only one call is possible from an onClick event.
+
 
 class RunBTMSteps(object):
     """Implementation for RunBTMSteps.tool (Tool)"""
