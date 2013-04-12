@@ -41,7 +41,7 @@
     used:&lt;/SPAN&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN /&gt;&lt;SPAN
     STYLE="font-style:italic;font-weight:bold;"&gt;&lt;SPAN&gt;BPI&amp;lt;scalefactor&amp;gt;_std
     = int((((BPI&amp;lt;scalefactor&amp;gt; - mean) / std dev) *
-    100) + 0.05)&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;SPAN /&gt;&lt;SPAN
+    100) + 0.5)&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;SPAN /&gt;&lt;SPAN
     /&gt;&lt;SPAN /&gt;&lt;SPAN /&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN
     STYLE="font-weight:bold;"&gt;&lt;SPAN&gt;scalefactor&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;SPAN&gt;&lt;SPAN&gt;=
     outer radius in map units * input bathymetric data set
@@ -219,7 +219,7 @@
     used:&lt;/SPAN&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN /&gt;&lt;SPAN
     STYLE="font-style:italic;font-weight:bold;"&gt;&lt;SPAN&gt;BPI&amp;lt;scalefactor&amp;gt;_std
     = int((((BPI&amp;lt;scalefactor&amp;gt; - mean) / std dev) *
-    100) + 0.05)&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;SPAN /&gt;&lt;SPAN
+    100) + 0.5)&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;SPAN /&gt;&lt;SPAN
     /&gt;&lt;SPAN /&gt;&lt;SPAN /&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN
     STYLE="font-weight:bold;"&gt;&lt;SPAN&gt;scalefactor&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;SPAN&gt;&lt;SPAN&gt;=
     outer radius in map units * input bathymetric data set
