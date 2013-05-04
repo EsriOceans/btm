@@ -4,7 +4,7 @@
   <Name>Benthic Terrain Modeler (BTM)</Name>
   <AddInID>{2dac2ae8-b5f3-4263-9f5d-aaed6b47316b}</AddInID>
   <Description>Tools for modeling and classifying benthic terrain.</Description>
-  <Version>3.0-beta-7</Version>
+  <Version>3.0-beta-10</Version>
   <Image>Images\btm-steps_64x64.png</Image>
   <Author>Shaun Walbridge</Author>
   <Company>Esri</Company>
