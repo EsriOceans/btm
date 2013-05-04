@@ -1,12 +1,11 @@
-<?xml version="1.0"?>
 <metadata xml:lang="en">
   <Esri>
     <CreaDate>20120901</CreaDate>
     <CreaTime>02190400</CreaTime>
     <ArcGISFormat>1.0</ArcGISFormat>
     <SyncOnce>TRUE</SyncOnce>
-    <ModDate>20121107</ModDate>
-    <ModTime>231029</ModTime>
+    <ModDate>20130501</ModDate>
+    <ModTime>17323500</ModTime>
     <scaleRange>
       <minScale>150000000</minScale>
       <maxScale>5000</maxScale>
@@ -60,7 +59,7 @@
         or Excel Spreadsheets, but the tool can also import legacy
         XML dictionaries created with previous versions of the
         tool. See &lt;/SPAN&gt;&lt;A
-        href="http://example.com"&gt;&lt;SPAN&gt;example
+        href="https://ago-item-storage.s3.amazonaws.com/ac1f8aeab63c4ed3b5f513c3475ae60b/fagatelebay_classification.csv?AWSAccessKeyId=AKIAJS2Y2E72HYCOE7BA&amp;Expires=1367455016&amp;Signature=lmEJ9cWrVL3Hy81ryLBjfpMP7lk%3D"&gt;&lt;SPAN&gt;example
         dictionary&lt;/SPAN&gt;&lt;/A&gt;&lt;SPAN&gt; for an
         example of one such classification. To author a dictionary,
         modify the provided sample in any spreadsheet program, and
@@ -1559,4 +1558,7 @@
       kratu7Sd3bbVXPmo0q1at7Sout3fr10+Z1WeRSjrSdxSjr3rzD2D/9k=</Data>
     </Enclosure>
   </Binary>
+  <mdHrLv>
+    <ScopeCd value="005"></ScopeCd>
+  </mdHrLv>
 </metadata>
