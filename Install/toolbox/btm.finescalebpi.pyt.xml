@@ -1,27 +1,27 @@
 <?xml version="1.0"?>
 <metadata xml:lang="en">
-  <Esri>
-    <CreaDate>20120901</CreaDate>
-    <CreaTime>02190400</CreaTime>
-    <ArcGISFormat>1.0</ArcGISFormat>
-    <SyncOnce>TRUE</SyncOnce>
-    <ModDate>20121107</ModDate>
-    <ModTime>231029</ModTime>
-    <scaleRange>
-      <minScale>150000000</minScale>
-      <maxScale>5000</maxScale>
-    </scaleRange>
-    <ArcGISProfile>ItemDescription</ArcGISProfile>
-  </Esri>
-  <dataIdInfo>
-    <idCitation>
-      <resTitle>Build Fine Scale BPI</resTitle>
-    </idCitation>
-    <searchKeys>
-      <keyword>bathymetry geomorphology BPI position</keyword>
-      <keyword>index</keyword>
-    </searchKeys>
-    <idAbs>&lt;DIV
+	<Esri>
+		<CreaDate>20120901</CreaDate>
+		<CreaTime>02190400</CreaTime>
+		<ArcGISFormat>1.0</ArcGISFormat>
+		<SyncOnce>TRUE</SyncOnce>
+		<ModDate>20130615</ModDate>
+		<ModTime>005410</ModTime>
+		<scaleRange>
+			<minScale>150000000</minScale>
+			<maxScale>5000</maxScale>
+		</scaleRange>
+		<ArcGISProfile>ItemDescription</ArcGISProfile>
+	</Esri>
+	<dataIdInfo>
+		<idCitation>
+			<resTitle>Build Fine Scale BPI</resTitle>
+		</idCitation>
+		<searchKeys>
+			<keyword>bathymetry geomorphology BPI position</keyword>
+			<keyword>index</keyword>
+		</searchKeys>
+		<idAbs>&lt;DIV
     STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;&lt;SPAN&gt;The
     concept of bathymetric position is central to the benthic
     terrain classification process that is utilized by the
@@ -40,75 +40,65 @@
     broad-scale BPI data set allows you to identify larger features
     within the benthic
     landscape.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;</idAbs>
-    <idCredit>Weiss, A. D. 2001. Topographic positions and
+		<idCredit>Weiss, A. D. 2001. Topographic positions and
     landforms analysis, Proceedings of the 21st Annual ESRI User
     Conference (Map Gallery Poster), San Diego, CA.</idCredit>
-  </dataIdInfo>
-  <distInfo>
-    <distributor>
-      <distorFormat>
-        <formatName>ArcToolbox Tool</formatName>
-      </distorFormat>
-    </distributor>
-  </distInfo>
-  <tool name="finescalebpi" displayname="Build Fine Scale BPI"
-  toolboxalias="" xmlns="">
-    <parameters>
-      <param name="Input_bathymetric_raster"
-      displayname="Input bathymetric raster" type="Required"
-      direction="Input" datatype="Raster Layer"
-      expression="Input_bathymetric_raster">
-        <dialogReference>&lt;DIV STYLE="text-align:Left;"&gt;&lt;P
+	</dataIdInfo>
+	<distInfo>
+		<distributor>
+			<distorFormat>
+				<formatName>ArcToolbox Tool</formatName>
+			</distorFormat>
+		</distributor>
+	</distInfo>
+	<tool name="finescalebpi" displayname="Build Fine Scale BPI" toolboxalias="" xmlns="">
+		<parameters>
+			<param name="Input_bathymetric_raster" displayname="Input bathymetric raster" type="Required" direction="Input" datatype="Raster Layer" expression="Input_bathymetric_raster">
+				<dialogReference>&lt;DIV STYLE="text-align:Left;"&gt;&lt;P
         STYLE="font-size:16ptmargin:7 0 7
         0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;Input bathymetric raster
         grid.&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN
         /&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</dialogReference>
-        <pythonReference>&lt;DIV STYLE="text-align:Left;"&gt;&lt;P
+				<pythonReference>&lt;DIV STYLE="text-align:Left;"&gt;&lt;P
         STYLE="font-size:16ptmargin:7 0 7
         0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;Input bathymetric raster
         grid.&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN
         /&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</pythonReference>
-      </param>
-      <param name="Inner_radius" displayname="Inner radius"
-      type="Required" direction="Input" datatype="Long"
-      expression="Inner_radius">
-        <dialogReference>&lt;DIV STYLE="text-align:Left;"&gt;&lt;P
+			</param>
+			<param name="Inner_radius" displayname="Inner radius" type="Required" direction="Input" datatype="Long" expression="Inner_radius">
+				<dialogReference>&lt;DIV STYLE="text-align:Left;"&gt;&lt;P
         STYLE="font-size:16ptmargin:7 0 7
         0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;The inner radius of the
         annulus used for defining the BPI region. Radius is defined
         as a number of
         cells.&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN
         /&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</dialogReference>
-        <pythonReference>&lt;DIV STYLE="text-align:Left;"&gt;&lt;P
+				<pythonReference>&lt;DIV STYLE="text-align:Left;"&gt;&lt;P
         STYLE="font-size:16ptmargin:7 0 7
         0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;The inner radius of the
         annulus used for defining the BPI region. Radius is defined
         as a number of
         cells.&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN
         /&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</pythonReference>
-      </param>
-      <param name="Outer_radius" displayname="Outer radius"
-      type="Required" direction="Input" datatype="Long"
-      expression="Outer_radius">
-        <dialogReference>&lt;DIV STYLE="text-align:Left;"&gt;&lt;P
+			</param>
+			<param name="Outer_radius" displayname="Outer radius" type="Required" direction="Input" datatype="Long" expression="Outer_radius">
+				<dialogReference>&lt;DIV STYLE="text-align:Left;"&gt;&lt;P
         STYLE="font-size:16ptmargin:7 0 7
         0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;The outer radius of the
         annulus used for defining the BPI region. Radius is defined
         as a number of
         cells.&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN
         /&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</dialogReference>
-        <pythonReference>&lt;DIV STYLE="text-align:Left;"&gt;&lt;P
+				<pythonReference>&lt;DIV STYLE="text-align:Left;"&gt;&lt;P
         STYLE="font-size:16ptmargin:7 0 7
         0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;The outer radius of the
         annulus used for defining the BPI region. Radius is defined
         as a number of
         cells.&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN
         /&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</pythonReference>
-      </param>
-      <param name="Scale_factor" displayname="Scale factor"
-      type="Required" direction="Input" datatype="Long"
-      expression="Scale_factor">
-        <dialogReference>&lt;DIV
+			</param>
+			<param name="Scale_factor" displayname="Scale factor" type="Required" direction="Input" datatype="Long" expression="Scale_factor">
+				<dialogReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;The
         scale factor is computed on the fly, computed as:
         &lt;/SPAN&gt;&lt;SPAN
@@ -116,7 +106,7 @@
         outer radius in map units * input bathymetric data set
         resolution(cell size)&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;SPAN
         /&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;</dialogReference>
-        <pythonReference>&lt;DIV
+				<pythonReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;P&gt;&lt;SPAN&gt;The scale
         factor is computed on the fly, computed as:
         &lt;/SPAN&gt;&lt;SPAN
@@ -124,22 +114,20 @@
         outer radius in map units * input bathymetric data set
         resolution(cell
         size)&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;</pythonReference>
-      </param>
-      <param name="Output_raster" displayname="Output raster"
-      type="Required" direction="Output" datatype="Raster Dataset"
-      expression="Output_raster">
-        <dialogReference>&lt;DIV
+			</param>
+			<param name="Output_raster" displayname="Output raster" type="Required" direction="Output" datatype="Raster Dataset" expression="Output_raster">
+				<dialogReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Output
         raster name of fine-scale BPI
         grid.&lt;/SPAN&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN
         /&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;</dialogReference>
-        <pythonReference>&lt;DIV
+				<pythonReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Output
         raster name of fine-scale BPI
         grid.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;</pythonReference>
-      </param>
-    </parameters>
-    <summary>&lt;DIV
+			</param>
+		</parameters>
+		<summary>&lt;DIV
     STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;&lt;SPAN&gt;The
     concept of bathymetric position is central to the benthic
     terrain classification process that is utilized by the
@@ -158,7 +146,7 @@
     broad-scale BPI data set allows you to identify larger features
     within the benthic
     landscape.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;</summary>
-    <usage>&lt;DIV
+		<usage>&lt;DIV
     STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Bathymetric
     Position Index (BPI) data sets are created through a
     neighborhood analysis function. Positive cell values within a
@@ -174,11 +162,10 @@
     of constant slope (where the slope of the point is
     significantly greater than zero) (Figure 2) (Weiss
     2001).&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;</usage>
-  </tool>
-  <Binary>
-    <Enclosure rel="side-panel-help">
-      <Data EsriPropertyType="Image"
-      OriginalFileName="thumbnail.jpg">
+	</tool>
+	<Binary>
+		<Enclosure rel="side-panel-help">
+			<Data EsriPropertyType="Image" OriginalFileName="thumbnail.jpg">
       /9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsK
       CwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQU
       FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCAETAUwDASIA
@@ -572,9 +559,9 @@
       mInGdVyi7rT8iKacYpMKKKK5ywooooAKKKKACiiigAooooAKKKKAH0UUUAFFFFABRRRQAUUUUAFF
       FFABQRmiigBNoo2iiigA2ijaKKKADaKNooooANoo2iiigA2ijaKKKADaKNooooANoo2iiigA2ija
       KKKADaKNooooANoo2iiigA2ijaKKKADaKNooooANoo2iiigA2ijaKKKADaKRhg0UUAf/2Q==</Data>
-    </Enclosure>
-    <Thumbnail>
-      <Data EsriPropertyType="PictureX">
+		</Enclosure>
+		<Thumbnail>
+			<Data EsriPropertyType="PictureX">
       /9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsK
       CwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQU
       FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCAEXAUIDASIA
@@ -1150,9 +1137,9 @@
       XR7KHT7G28x5PJgijWONNzks2FUDLEk45JNAGtRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAU
       UUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRR
       RQAUUUUAFFFFAH//2Q==</Data>
-    </Thumbnail>
-  </Binary>
-  <mdHrLv>
-    <ScopeCd value="005"></ScopeCd>
-  </mdHrLv>
+		</Thumbnail>
+	</Binary>
+	<mdHrLv>
+		<ScopeCd value="005"></ScopeCd>
+	</mdHrLv>
 </metadata>

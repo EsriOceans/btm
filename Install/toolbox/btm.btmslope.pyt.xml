@@ -1,23 +1,23 @@
 <?xml version="1.0"?>
 <metadata xml:lang="en">
-  <Esri>
-    <CreaDate>20120904</CreaDate>
-    <CreaTime>22003300</CreaTime>
-    <ArcGISFormat>1.0</ArcGISFormat>
-    <SyncOnce>TRUE</SyncOnce>
-    <ModDate>20121107</ModDate>
-    <ModTime>231029</ModTime>
-    <scaleRange>
-      <minScale>150000000</minScale>
-      <maxScale>5000</maxScale>
-    </scaleRange>
-    <ArcGISProfile>ItemDescription</ArcGISProfile>
-  </Esri>
-  <dataIdInfo>
-    <idCitation>
-      <resTitle>Calculate Slope</resTitle>
-    </idCitation>
-    <idAbs>&lt;DIV STYLE="text-align:Left;"&gt;&lt;P
+	<Esri>
+		<CreaDate>20120904</CreaDate>
+		<CreaTime>22003300</CreaTime>
+		<ArcGISFormat>1.0</ArcGISFormat>
+		<SyncOnce>TRUE</SyncOnce>
+		<ModDate>20130615</ModDate>
+		<ModTime>005410</ModTime>
+		<scaleRange>
+			<minScale>150000000</minScale>
+			<maxScale>5000</maxScale>
+		</scaleRange>
+		<ArcGISProfile>ItemDescription</ArcGISProfile>
+	</Esri>
+	<dataIdInfo>
+		<idCitation>
+			<resTitle>Calculate Slope</resTitle>
+		</idCitation>
+		<idAbs>&lt;DIV STYLE="text-align:Left;"&gt;&lt;P
     STYLE="font-size:16ptmargin:7 0 7 0;"&gt;&lt;SPAN&gt;Identifies
     the slope (gradient, or rate of maximum change in z-value) from
     each cell of a raster surface. This tool assumes that the depth
@@ -25,47 +25,41 @@
     z-factor of 1), and outputs the resulting raster in
     &lt;/SPAN&gt;&lt;SPAN STYLE="font-weight:bold;"&gt;degree
     &lt;/SPAN&gt;&lt;SPAN&gt;units.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;</idAbs>
-    <searchKeys>
-      <keyword>slope geomorphometry raster analysis btm</keyword>
-    </searchKeys>
-  </dataIdInfo>
-  <distInfo>
-    <distributor>
-      <distorFormat>
-        <formatName>ArcToolbox Tool</formatName>
-      </distorFormat>
-    </distributor>
-  </distInfo>
-  <tool name="btmslope" displayname="Calculate Slope"
-  toolboxalias="" xmlns="">
-    <parameters>
-      <param name="Input_bathymetric_raster"
-      displayname="Input bathymetric raster" type="Required"
-      direction="Input" datatype="Raster Layer"
-      expression="Input_bathymetric_raster">
-        <dialogReference>&lt;DIV
+		<searchKeys>
+			<keyword>slope geomorphometry raster analysis btm</keyword>
+		</searchKeys>
+	</dataIdInfo>
+	<distInfo>
+		<distributor>
+			<distorFormat>
+				<formatName>ArcToolbox Tool</formatName>
+			</distorFormat>
+		</distributor>
+	</distInfo>
+	<tool name="btmslope" displayname="Calculate Slope" toolboxalias="" xmlns="">
+		<parameters>
+			<param name="Input_bathymetric_raster" displayname="Input bathymetric raster" type="Required" direction="Input" datatype="Raster Layer" expression="Input_bathymetric_raster">
+				<dialogReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Input
         surface
         raster.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</dialogReference>
-        <pythonReference>&lt;DIV
+				<pythonReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Input
         surface
         raster.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</pythonReference>
-      </param>
-      <param name="Output_raster" displayname="Output raster"
-      type="Required" direction="Output" datatype="Raster Dataset"
-      expression="Output_raster">
-        <dialogReference>&lt;DIV
+			</param>
+			<param name="Output_raster" displayname="Output raster" type="Required" direction="Output" datatype="Raster Dataset" expression="Output_raster">
+				<dialogReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Output
         slope raster, in units of
         degrees.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</dialogReference>
-        <pythonReference>&lt;DIV
+				<pythonReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Output
         slope raster, in units of
         degrees.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</pythonReference>
-      </param>
-    </parameters>
-    <summary>&lt;DIV STYLE="text-align:Left;"&gt;&lt;P
+			</param>
+		</parameters>
+		<summary>&lt;DIV STYLE="text-align:Left;"&gt;&lt;P
     STYLE="font-size:16ptmargin:7 0 7 0;"&gt;&lt;SPAN&gt;Identifies
     the slope (gradient, or rate of maximum change in z-value) from
     each cell of a raster surface. This tool assumes that the depth
@@ -73,10 +67,10 @@
     z-factor of 1), and outputs the resulting raster in
     &lt;/SPAN&gt;&lt;SPAN STYLE="font-weight:bold;"&gt;degree
     &lt;/SPAN&gt;&lt;SPAN&gt;units.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;</summary>
-  </tool>
-  <Binary>
-    <Thumbnail>
-      <Data EsriPropertyType="PictureX">
+	</tool>
+	<Binary>
+		<Thumbnail>
+			<Data EsriPropertyType="PictureX">
       /9j/4AAQSkZJRgABAQEAXQBdAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsK
       CwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQU
       FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCABlAIADASIA
@@ -155,10 +149,9 @@
       11BCkUPgK1hijUKiLqRCqAMAACLgU7/h4fqJ6eCbUfXUW/8AjdFFZvLMJ/J+L/zLWaYz+f8ABf5D
       W/4KHaoBx4Ls/wAb9/8A4isTxj+3jqvinwlrWiv4Rs7dNSsp7NplvHYoJI2QsBt5xuziiiqjluEi
       01D8X/mTLM8XJWc/wX+R/9k=</Data>
-    </Thumbnail>
-    <Enclosure rel="side-panel-help">
-      <Data EsriPropertyType="Image"
-      OriginalFileName="thumbnail.jpg">
+		</Thumbnail>
+		<Enclosure rel="side-panel-help">
+			<Data EsriPropertyType="Image" OriginalFileName="thumbnail.jpg">
       /9j/4AAQSkZJRgABAQEAXQBdAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsK
       CwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQU
       FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCABlAIADASIA
@@ -237,6 +230,6 @@
       11BCkUPgK1hijUKiLqRCqAMAACLgU7/h4fqJ6eCbUfXUW/8AjdFFZvLMJ/J+L/zLWaYz+f8ABf5D
       W/4KHaoBx4Ls/wAb9/8A4isTxj+3jqvinwlrWiv4Rs7dNSsp7NplvHYoJI2QsBt5xuziiiqjluEi
       01D8X/mTLM8XJWc/wX+R/9k=</Data>
-    </Enclosure>
-  </Binary>
+		</Enclosure>
+	</Binary>
 </metadata>

@@ -1,109 +1,96 @@
 <?xml version="1.0"?>
 <metadata xml:lang="en">
-  <Esri>
-    <CreaDate>20120905</CreaDate>
-    <CreaTime>12335500</CreaTime>
-    <ArcGISFormat>1.0</ArcGISFormat>
-    <SyncOnce>TRUE</SyncOnce>
-    <ModDate>20121106</ModDate>
-    <ModTime>145210</ModTime>
-    <scaleRange>
-      <minScale>150000000</minScale>
-      <maxScale>5000</maxScale>
-    </scaleRange>
-    <ArcGISProfile>ItemDescription</ArcGISProfile>
-  </Esri>
-  <dataIdInfo>
-    <idCitation>
-      <resTitle>Depth Statistics</resTitle>
-    </idCitation>
-    <searchKeys>
-      <keyword>statistics raster geomorphometry benthic</keyword>
-    </searchKeys>
-    <idAbs>&lt;DIV
+	<Esri>
+		<CreaDate>20120905</CreaDate>
+		<CreaTime>12335500</CreaTime>
+		<ArcGISFormat>1.0</ArcGISFormat>
+		<SyncOnce>TRUE</SyncOnce>
+		<ModDate>20130615</ModDate>
+		<ModTime>005410</ModTime>
+		<scaleRange>
+			<minScale>150000000</minScale>
+			<maxScale>5000</maxScale>
+		</scaleRange>
+		<ArcGISProfile>ItemDescription</ArcGISProfile>
+	</Esri>
+	<dataIdInfo>
+		<idCitation>
+			<resTitle>Depth Statistics</resTitle>
+		</idCitation>
+		<searchKeys>
+			<keyword>statistics raster geomorphometry benthic</keyword>
+		</searchKeys>
+		<idAbs>&lt;DIV
     STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Provides
     a set of useful depth summary statistics, which can be useful
     predictors in understanding the benthic zones, particularly
     when used for habitat
     classification.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</idAbs>
-  </dataIdInfo>
-  <distInfo>
-    <distributor>
-      <distorFormat>
-        <formatName>ArcToolbox Tool</formatName>
-      </distorFormat>
-    </distributor>
-  </distInfo>
-  <tool name="depthstatistics" displayname="Depth Statistics"
-  toolboxalias="" xmlns="">
-    <parameters>
-      <param name="Bathymetry_Raster"
-      displayname="Bathymetry Raster" type="Required"
-      direction="Input" datatype="Raster Layer"
-      expression="Bathymetry_Raster">
-        <dialogReference>&lt;DIV
+	</dataIdInfo>
+	<distInfo>
+		<distributor>
+			<distorFormat>
+				<formatName>ArcToolbox Tool</formatName>
+			</distorFormat>
+		</distributor>
+	</distInfo>
+	<tool name="depthstatistics" displayname="Depth Statistics" toolboxalias="" xmlns="">
+		<parameters>
+			<param name="Bathymetry_Raster" displayname="Bathymetry Raster" type="Required" direction="Input" datatype="Raster Layer" expression="Bathymetry_Raster">
+				<dialogReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Input
         bathymetric surface
         raster.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</dialogReference>
-        <pythonReference>&lt;DIV
+				<pythonReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Input
         bathymetric surface
         raster.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</pythonReference>
-      </param>
-      <param name="Neighborhood_Size"
-      displayname="Neighborhood Size" type="Required"
-      direction="Input" datatype="Long"
-      expression="Neighborhood_Size">
-        <dialogReference>&lt;DIV
+			</param>
+			<param name="Neighborhood_Size" displayname="Neighborhood Size" type="Required" direction="Input" datatype="Long" expression="Neighborhood_Size">
+				<dialogReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Neighborhood
         size over which to calculate the metrics. Measured in cell
         units.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</dialogReference>
-        <pythonReference>&lt;DIV
+				<pythonReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Neighborhood
         size over which to calculate the metrics. Measured in cell
         units.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</pythonReference>
-      </param>
-      <param name="Output_Workspace" displayname="Output Workspace"
-      type="Required" direction="Input" datatype="Workspace"
-      expression="Output_Workspace">
-        <dialogReference>&lt;DIV
+			</param>
+			<param name="Output_Workspace" displayname="Output Workspace" type="Required" direction="Input" datatype="Workspace" expression="Output_Workspace">
+				<dialogReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Output
         workspace for results produced by this
         tool.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</dialogReference>
-        <pythonReference>&lt;DIV
+				<pythonReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Output
         workspace for results produced by this
         tool.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</pythonReference>
-      </param>
-      <param name="Statistics_Computed"
-      displayname="Statistics to Compute" type="Required"
-      direction="Input" datatype="Multiple Value"
-      expression="Mean Depth | Variance | Standard Deviation">
-        <dialogReference>&lt;DIV
+			</param>
+			<param name="Statistics_Computed" displayname="Statistics to Compute" type="Required" direction="Input" datatype="Multiple Value" expression="Mean Depth | Variance | Standard Deviation">
+				<dialogReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Statistics
         to compute on the input raster. Mean is an average over the
         neighborhood. Variance and standard deviation are two forms
         of the same statistical measure of differences within the
         data.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</dialogReference>
-        <pythonReference>&lt;DIV
+				<pythonReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Statistics
         to compute on the input raster. Mean is an average over the
         neighborhood. Variance and standard deviation are two forms
         of the same statistical measure of differences within the
         data.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</pythonReference>
-      </param>
-    </parameters>
-    <summary>&lt;DIV
+			</param>
+		</parameters>
+		<summary>&lt;DIV
     STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Provides
     a set of useful depth summary statistics, which can be useful
     predictors in understanding the benthic zones, particularly
     when used for habitat
     classification.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</summary>
-  </tool>
-  <Binary>
-    <Enclosure rel="side-panel-help">
-      <Data EsriPropertyType="Image"
-      OriginalFileName="thumbnail.jpg">
+	</tool>
+	<Binary>
+		<Enclosure rel="side-panel-help">
+			<Data EsriPropertyType="Image" OriginalFileName="thumbnail.jpg">
       /9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsK
       CwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQU
       FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCABwAIADASIA
@@ -140,9 +127,9 @@
       1D2Ju/bs9xSi/wAHtWELsjvR9sbPWj2ovYm4b/JpRfHsawjeGkF6fXFHtR+xM0sQRyaMn1pP4qCe
       a4z0BST60oY+pppORQDRcLC5PrSgkHrSZoPIouApJPc0gJ9aCcGkBouFhST60oJHc00nIoAxRcLC
       7iO9KGJHU0meaQHFFwsOyfU0ZPqabuoJyKLhYdk+ppNxHftSKcUE8k0XA//Z</Data>
-    </Enclosure>
-    <Thumbnail>
-      <Data EsriPropertyType="PictureX">
+		</Enclosure>
+		<Thumbnail>
+			<Data EsriPropertyType="PictureX">
       /9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsK
       CwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQU
       FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCABwAIADASIA
@@ -179,6 +166,6 @@
       1D2Ju/bs9xSi/wAHtWELsjvR9sbPWj2ovYm4b/JpRfHsawjeGkF6fXFHtR+xM0sQRyaMn1pP4qCe
       a4z0BST60oY+pppORQDRcLC5PrSgkHrSZoPIouApJPc0gJ9aCcGkBouFhST60oJHc00nIoAxRcLC
       7iO9KGJHU0meaQHFFwsOyfU0ZPqabuoJyKLhYdk+ppNxHftSKcUE8k0XA//Z</Data>
-    </Thumbnail>
-  </Binary>
+		</Thumbnail>
+	</Binary>
 </metadata>

@@ -1,22 +1,23 @@
+<?xml version="1.0"?>
 <metadata xml:lang="en">
-  <Esri>
-    <CreaDate>20120901</CreaDate>
-    <CreaTime>02190400</CreaTime>
-    <ArcGISFormat>1.0</ArcGISFormat>
-    <SyncOnce>TRUE</SyncOnce>
-    <ModDate>20130501</ModDate>
-    <ModTime>17323500</ModTime>
-    <scaleRange>
-      <minScale>150000000</minScale>
-      <maxScale>5000</maxScale>
-    </scaleRange>
-    <ArcGISProfile>ItemDescription</ArcGISProfile>
-  </Esri>
-  <dataIdInfo>
-    <idCitation>
-      <resTitle>Zone Classification Builder</resTitle>
-    </idCitation>
-    <idAbs>&lt;DIV
+	<Esri>
+		<CreaDate>20120901</CreaDate>
+		<CreaTime>02190400</CreaTime>
+		<ArcGISFormat>1.0</ArcGISFormat>
+		<SyncOnce>TRUE</SyncOnce>
+		<ModDate>20130615</ModDate>
+		<ModTime>005410</ModTime>
+		<scaleRange>
+			<minScale>150000000</minScale>
+			<maxScale>5000</maxScale>
+		</scaleRange>
+		<ArcGISProfile>ItemDescription</ArcGISProfile>
+	</Esri>
+	<dataIdInfo>
+		<idCitation>
+			<resTitle>Zone Classification Builder</resTitle>
+		</idCitation>
+		<idAbs>&lt;DIV
     STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;After
     authoring a classification dictionary, this tool allows the
     classification step. It is important to note that the BTM will
@@ -33,122 +34,103 @@
     create the terrain classification data set during the final
     classification process.&lt;/SPAN&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN
     /&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;</idAbs>
-    <searchKeys>
-      <keyword>btm classify geomorphology bathymetry</keyword>
-    </searchKeys>
-  </dataIdInfo>
-  <distInfo>
-    <distributor>
-      <distorFormat>
-        <formatName>ArcToolbox Tool</formatName>
-      </distorFormat>
-    </distributor>
-  </distInfo>
-  <tool name="zoneclassification"
-  displayname="Zone Classification Builder" toolboxalias=""
-  xmlns="">
-    <parameters>
-      <param name="Classification_dictionary"
-      displayname="Classification dictionary" type="Required"
-      direction="Input" datatype="File"
-      expression="Classification_dictionary">
-        <dialogReference>&lt;DIV
+		<searchKeys>
+			<keyword>btm classify geomorphology bathymetry</keyword>
+		</searchKeys>
+	</dataIdInfo>
+	<distInfo>
+		<distributor>
+			<distorFormat>
+				<formatName>ArcToolbox Tool</formatName>
+			</distorFormat>
+		</distributor>
+	</distInfo>
+	<tool name="zoneclassification" displayname="Zone Classification Builder" toolboxalias="" xmlns="">
+		<parameters>
+			<param name="Classification_dictionary" displayname="Classification dictionary" type="Required" direction="Input" datatype="File" expression="Classification_dictionary">
+				<dialogReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;The
         classification dictionary specifies classes based on ranges
         of the input BPI rasters and slope. These are usually CSV
         or Excel Spreadsheets, but the tool can also import legacy
         XML dictionaries created with previous versions of the
         tool. See &lt;/SPAN&gt;&lt;A
-        href="https://ago-item-storage.s3.amazonaws.com/ac1f8aeab63c4ed3b5f513c3475ae60b/fagatelebay_classification.csv?AWSAccessKeyId=AKIAJS2Y2E72HYCOE7BA&amp;Expires=1367455016&amp;Signature=lmEJ9cWrVL3Hy81ryLBjfpMP7lk%3D"&gt;&lt;SPAN&gt;example
+        href="http://4326.us/btm-assets/fagatelebay_classification.csv"&gt;&lt;SPAN&gt;example
         dictionary&lt;/SPAN&gt;&lt;/A&gt;&lt;SPAN&gt; for an
         example of one such classification. To author a dictionary,
         modify the provided sample in any spreadsheet program, and
         as long as the column order remains the same, the tool will
         find your
         classes.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;</dialogReference>
-      </param>
-      <param name="Standardized_broad-scale_BPI_raster"
-      displayname="Standardized broad-scale BPI raster"
-      type="Required" direction="Input" datatype="Raster Layer"
-      expression="Standardized_broad-scale_BPI_raster">
-        <dialogReference>&lt;DIV
+			</param>
+			<param name="Standardized_broad-scale_BPI_raster" displayname="Standardized broad-scale BPI raster" type="Required" direction="Input" datatype="Raster Layer" expression="Standardized_broad-scale_BPI_raster">
+				<dialogReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;P&gt;&lt;SPAN&gt;A
         broad-scale BPI raster, after being normalized with the
         'Standardize BPIs'
         tool.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;</dialogReference>
-        <pythonReference>&lt;DIV
+				<pythonReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;P&gt;&lt;SPAN&gt;A
         broad-scale BPI raster, after being normalized with the
         'Standardize BPIs'
         tool.&lt;/SPAN&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN
         /&gt;&lt;/P&gt;&lt;/DIV&gt;</pythonReference>
-      </param>
-      <param name="Standardized_fine-scale_BPI_raster"
-      displayname="Standardized fine-scale BPI raster"
-      type="Required" direction="Input" datatype="Raster Layer"
-      expression="Standardized_fine-scale_BPI_raster">
-        <dialogReference>&lt;DIV
+			</param>
+			<param name="Standardized_fine-scale_BPI_raster" displayname="Standardized fine-scale BPI raster" type="Required" direction="Input" datatype="Raster Layer" expression="Standardized_fine-scale_BPI_raster">
+				<dialogReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;P&gt;&lt;SPAN&gt;A
         fine-scale BPI raster, after being normalized with the
         'Standardize BPIs'
         tool.&lt;/SPAN&gt;&lt;/P&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN
         /&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</dialogReference>
-        <pythonReference>&lt;DIV
+				<pythonReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;A
         fine-scale BPI raster, after being normalized with the
         'Standardize BPIs'
         tool.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</pythonReference>
-      </param>
-      <param name="Slope_raster" displayname="Slope raster"
-      type="Required" direction="Input" datatype="Raster Layer"
-      expression="Slope_raster">
-        <dialogReference>&lt;DIV
+			</param>
+			<param name="Slope_raster" displayname="Slope raster" type="Required" direction="Input" datatype="Raster Layer" expression="Slope_raster">
+				<dialogReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;A
         slope raster, measuring the angle (in degrees) of the
         surface at that
         location.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</dialogReference>
-        <pythonReference>&lt;DIV
+				<pythonReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;A
         slope raster, measuring the angle (in degrees) of the
         surface at that
         location.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN
         /&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</pythonReference>
-      </param>
-      <param name="Bathymetry_raster"
-      displayname="Bathymetry raster" type="Required"
-      direction="Input" datatype="Raster Layer"
-      expression="Bathymetry_raster">
-        <dialogReference>&lt;DIV
+			</param>
+			<param name="Bathymetry_raster" displayname="Bathymetry raster" type="Required" direction="Input" datatype="Raster Layer" expression="Bathymetry_raster">
+				<dialogReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Input
         Bathymetric raster, can be of any type supported by ArcGIS.
         Expected values are negative elevation (depths) for
         bathymetric
         applications.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</dialogReference>
-        <pythonReference>&lt;DIV
+				<pythonReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Input
         Bathymetric raster, can be of any type supported by ArcGIS.
         Expected values are negative elevation (depths) for
         bathymetric
         applications.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</pythonReference>
-      </param>
-      <param name="Output_zones_raster"
-      displayname="Output Zones Raster" type="Required"
-      direction="Output" datatype="Raster Dataset"
-      expression="Output_zones_raster">
-        <dialogReference>&lt;DIV
+			</param>
+			<param name="Output_zones_raster" displayname="Output Zones Raster" type="Required" direction="Output" datatype="Raster Dataset" expression="Output_zones_raster">
+				<dialogReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;The
         final output zones, a classified raster with classes
         corresponding to those provided in the classification
         dictionary.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</dialogReference>
-        <pythonReference>&lt;DIV
+				<pythonReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;The
         final output zones, a classified raster with classes
         corresponding to those provided in the classification
         dictionary.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN
         /&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</pythonReference>
-      </param>
-    </parameters>
-    <summary>&lt;DIV
+			</param>
+		</parameters>
+		<summary>&lt;DIV
     STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;After
     authoring a classification dictionary, this tool allows the
     classification step. It is important to note that the BTM will
@@ -165,7 +147,7 @@
     create the terrain classification data set during the final
     classification process.&lt;/SPAN&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN
     /&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;</summary>
-    <usage>&lt;DIV
+		<usage>&lt;DIV
     STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;UL&gt;&lt;LI&gt;&lt;P&gt;&lt;SPAN&gt;When
     defining any parameter, it is OK to leave a parameter blank.
     The BTM Tool checks for empty parameters and uses this
@@ -176,10 +158,10 @@
     denotes 1 standard deviation from the mean). When defining
     optional slope and depth parameters, you can use the actual
     values.&lt;/SPAN&gt;&lt;/P&gt;&lt;/LI&gt;&lt;/UL&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;</usage>
-  </tool>
-  <Binary>
-    <Thumbnail>
-      <Data EsriPropertyType="PictureX">
+	</tool>
+	<Binary>
+		<Thumbnail>
+			<Data EsriPropertyType="PictureX">
       /9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsK
       CwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQU
       FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCADtA00DASIA
@@ -1165,10 +1147,9 @@
       rM27k8DavplSe9bvw18P/wDCQ/Ffwzai3W7j0yb+0JUKArAEDeW5PVSGIx6k17x4v+AHhfxhfNdu
       1/pcrs0kg0ycRLI5OSxBU8k9xjqa63wh4K0XwNpn2LRbFLSJsGRyS0kzf3nc/Mx9ya9qOKdDBRy3
       DU0oRteTd29eZq3nK+rk9Nkr2Xk16dfFYiVas1q737/Lp2NwdRS45oHUUAZrkPQP/9k=</Data>
-    </Thumbnail>
-    <Enclosure rel="side-panel-help">
-      <Data EsriPropertyType="Image"
-      OriginalFileName="thumbnail.jpg">
+		</Thumbnail>
+		<Enclosure rel="side-panel-help">
+			<Data EsriPropertyType="Image" OriginalFileName="thumbnail.jpg">
       /9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsK
       CwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQU
       FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCAD/AQ0DASIA
@@ -1556,9 +1537,9 @@
       jknt81dz8DtFj1z43W2oXCGWbTNPmcMjHguFQbx0IAztz0NdFc/sz+I49RjgsPEenWujIQis1q7T
       KmOoXO3P44r2PwB8N9H+HOnzQaakktxcMHub24bdNO2O57AdgOBX1eJx9OeGp4DD03y07R5pW1UU
       kratu7Sd3bbVXPmo0q1at7Sout3fr10+Z1WeRSjrSdxSjr3rzD2D/9k=</Data>
-    </Enclosure>
-  </Binary>
-  <mdHrLv>
-    <ScopeCd value="005"></ScopeCd>
-  </mdHrLv>
+		</Enclosure>
+	</Binary>
+	<mdHrLv>
+		<ScopeCd value="005"></ScopeCd>
+	</mdHrLv>
 </metadata>

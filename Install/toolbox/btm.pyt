@@ -48,7 +48,25 @@ def valid_grid_name(raster_path):
 
     return valid
 
-    # Check out any necessary licenses
+# get rid of problematical tags for revision control.
+def metadata(update=True):
+    if not update:
+        try:
+            pyt_xmls = glob.glob(os.path.join(local_path, "*.pyt.xml"))
+            for xml_path in pyt_xmls:
+                tree = et.parse(xml_path)
+                esri = tree.find('Esri')
+                mod_date = esri.find('ModDate')
+                mod_time = esri.find('ModTime')
+                if mod_date is not None:
+                    esri.remove(mod_date)
+                if mod_time is not None:
+                    esri.remove(mod_time)
+                tree.write(xml_path)
+        except Exception as e:
+            pass
+
+# Check out any necessary licenses
 arcpy.CheckOutExtension("Spatial")
 
 class Toolbox(object):
@@ -89,6 +107,9 @@ class broadscalebpi(object):
         self.label = u'Build Broad Scale BPI'
         self.description = u'The concept of bathymetric position is central to the benthic\r\nterrain classification process that is utilized by the BTM.\r\nBathymetric Position Index (BPI) is a measure of where a\r\nreferenced location is relative to the locations surrounding it.\r\nBPI is derived from an input bathymetric data set and itself is a modification of the topographic position index (TPI) algorithm that is used in the terrestrial environment. The application of TPI to develop terrain classifications was explored and developed by Andrew Weiss during his study of terrestrial watersheds in Central Oregon (Weiss 2001). These\r\napplications can be carried into the benthic environment\r\nthrough BPI.\r\n\r\nA broad-scale BPI data set allows you to identify larger features within the benthic landscape.'
         self.canRunInBackground = False
+        # strip ModTime and ModDate tags from the metadata documents.
+        metadata(update=False)
+
     def getParameterInfo(self):
         # Input_bathymetric_raster
         param_1 = arcpy.Parameter()
