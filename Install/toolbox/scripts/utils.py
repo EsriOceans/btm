@@ -1,7 +1,7 @@
 # utils.py
 # Shaun Walbridge, 2012.10.4
 
-# XML work ported from work done by Jen Boulware at NOAA CSC, October 2011
+# XML code ported from earlier work done by Jen Boulware / NOAA CSC, Oct 2011
 
 import sys
 import traceback
