@@ -9,7 +9,7 @@
 			<maxScale>5000</maxScale>
 		</scaleRange>
 		<ArcGISProfile>ItemDescription</ArcGISProfile>
-	</Esri>
+		</Esri>
 	<toolbox alias="" name="btm">
 		<arcToolboxHelpPath>c:\apps\arcgis\desktop10.1\Help\gp</arcToolboxHelpPath>
 		<toolsets />
