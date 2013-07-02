@@ -1,18 +1,15 @@
-<?xml version="1.0"?>
 <metadata xml:lang="en">
 	<Esri>
 		<CreaDate>20120901</CreaDate>
 		<CreaTime>02190400</CreaTime>
 		<ArcGISFormat>1.0</ArcGISFormat>
 		<SyncOnce>TRUE</SyncOnce>
-		<ModDate>20130615</ModDate>
-		<ModTime>005410</ModTime>
 		<scaleRange>
 			<minScale>150000000</minScale>
 			<maxScale>5000</maxScale>
 		</scaleRange>
 		<ArcGISProfile>ItemDescription</ArcGISProfile>
-	</Esri>
+		</Esri>
 	<dataIdInfo>
 		<idCitation>
 			<resTitle>Standardize BPIs</resTitle>
@@ -72,9 +69,9 @@
 			</distorFormat>
 		</distributor>
 	</distInfo>
-	<tool name="standardizebpi" displayname="Standardize BPIs" toolboxalias="" xmlns="">
+	<tool displayname="Standardize BPIs" name="standardizebpi" toolboxalias="">
 		<parameters>
-			<param name="Broad_BPI_raster" displayname="Broad BPI raster" type="Required" direction="Input" datatype="Raster Layer" expression="Broad_BPI_raster">
+			<param datatype="Raster Layer" direction="Input" displayname="Broad BPI raster" expression="Broad_BPI_raster" name="Broad_BPI_raster" type="Required">
 				<dialogReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Input
         broad-scale BPI raster, generated with the broad-scale BPI
@@ -85,7 +82,7 @@
         tool.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN
         /&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</pythonReference>
 			</param>
-			<param name="Broad_BPI_Mean" displayname="Broad BPI Mean" type="Required" direction="Input" datatype="Double" expression="Broad_BPI_Mean">
+			<param datatype="Double" direction="Input" displayname="Broad BPI Mean" expression="Broad_BPI_Mean" name="Broad_BPI_Mean" type="Required">
 				<dialogReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;The
         mean value of the input broad-scale BPI raster. This field
@@ -99,7 +96,7 @@
         understanding the BPI
         results.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</pythonReference>
 			</param>
-			<param name="Broad_BPI_Standard_deviation" displayname="Broad BPI Standard Deviation" type="Required" direction="Input" datatype="Double" expression="Broad_BPI_Standard_deviation">
+			<param datatype="Double" direction="Input" displayname="Broad BPI Standard Deviation" expression="Broad_BPI_Standard_deviation" name="Broad_BPI_Standard_deviation" type="Required">
 				<dialogReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;The
         standard deviation, a measurement of variance, of the input
@@ -113,7 +110,7 @@
         when running the tool to aid in understanding the BPI
         results.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</pythonReference>
 			</param>
-			<param name="Output_broad_raster" displayname="Output Standardized Broad BPI raster" type="Required" direction="Output" datatype="Raster Dataset" expression="Output_broad_raster">
+			<param datatype="Raster Dataset" direction="Output" displayname="Output Standardized Broad BPI raster" expression="Output_broad_raster" name="Output_broad_raster" type="Required">
 				<dialogReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Output
         standardized broad-scale BPI
@@ -123,7 +120,7 @@
         standardized broad-scale BPI
         raster.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</pythonReference>
 			</param>
-			<param name="Fine_BPI_raster" displayname="Fine BPI raster" type="Required" direction="Input" datatype="Raster Layer" expression="Fine_BPI_raster">
+			<param datatype="Raster Layer" direction="Input" displayname="Fine BPI raster" expression="Fine_BPI_raster" name="Fine_BPI_raster" type="Required">
 				<dialogReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Input
         fine-scale BPI raster, generated with the fine-scale BPI
@@ -133,7 +130,7 @@
         fine-scale BPI raster, generated with the fine-scale BPI
         tool,&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</pythonReference>
 			</param>
-			<param name="Fine_BPI_Mean" displayname="Fine BPI Mean" type="Required" direction="Input" datatype="Double" expression="Fine_BPI_Mean">
+			<param datatype="Double" direction="Input" displayname="Fine BPI Mean" expression="Fine_BPI_Mean" name="Fine_BPI_Mean" type="Required">
 				<dialogReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;The
         mean value of the input fine-scale BPI raster. This field
@@ -147,7 +144,7 @@
         understanding the BPI
         results.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;</pythonReference>
 			</param>
-			<param name="Fine_BPI_Standard_deviation" displayname="Fine BPI Standard Deviation" type="Required" direction="Input" datatype="Double" expression="Fine_BPI_Standard_deviation">
+			<param datatype="Double" direction="Input" displayname="Fine BPI Standard Deviation" expression="Fine_BPI_Standard_deviation" name="Fine_BPI_Standard_deviation" type="Required">
 				<dialogReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;The
         standard deviation, a measurement of variance, of the input
@@ -162,7 +159,7 @@
         results.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN
         /&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</pythonReference>
 			</param>
-			<param name="Output_fine_raster" displayname="Output Standardized Fine BPI raster" type="Required" direction="Output" datatype="Raster Dataset" expression="Output_fine_raster">
+			<param datatype="Raster Dataset" direction="Output" displayname="Output Standardized Fine BPI raster" expression="Output_fine_raster" name="Output_fine_raster" type="Required">
 				<dialogReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Output
         standardized fine-scale BPI
@@ -469,6 +466,6 @@
 		</Enclosure>
 	</Binary>
 	<mdHrLv>
-		<ScopeCd value="005"></ScopeCd>
+		<ScopeCd value="005" />
 	</mdHrLv>
 </metadata>

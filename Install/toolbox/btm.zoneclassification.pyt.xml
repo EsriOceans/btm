@@ -1,18 +1,15 @@
-<?xml version="1.0"?>
 <metadata xml:lang="en">
 	<Esri>
 		<CreaDate>20120901</CreaDate>
 		<CreaTime>02190400</CreaTime>
 		<ArcGISFormat>1.0</ArcGISFormat>
 		<SyncOnce>TRUE</SyncOnce>
-		<ModDate>20130615</ModDate>
-		<ModTime>005410</ModTime>
 		<scaleRange>
 			<minScale>150000000</minScale>
 			<maxScale>5000</maxScale>
 		</scaleRange>
 		<ArcGISProfile>ItemDescription</ArcGISProfile>
-	</Esri>
+		</Esri>
 	<dataIdInfo>
 		<idCitation>
 			<resTitle>Zone Classification Builder</resTitle>
@@ -45,9 +42,9 @@
 			</distorFormat>
 		</distributor>
 	</distInfo>
-	<tool name="zoneclassification" displayname="Zone Classification Builder" toolboxalias="" xmlns="">
+	<tool displayname="Zone Classification Builder" name="zoneclassification" toolboxalias="">
 		<parameters>
-			<param name="Classification_dictionary" displayname="Classification dictionary" type="Required" direction="Input" datatype="File" expression="Classification_dictionary">
+			<param datatype="File" direction="Input" displayname="Classification dictionary" expression="Classification_dictionary" name="Classification_dictionary" type="Required">
 				<dialogReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;The
         classification dictionary specifies classes based on ranges
@@ -63,7 +60,7 @@
         find your
         classes.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;</dialogReference>
 			</param>
-			<param name="Standardized_broad-scale_BPI_raster" displayname="Standardized broad-scale BPI raster" type="Required" direction="Input" datatype="Raster Layer" expression="Standardized_broad-scale_BPI_raster">
+			<param datatype="Raster Layer" direction="Input" displayname="Standardized broad-scale BPI raster" expression="Standardized_broad-scale_BPI_raster" name="Standardized_broad-scale_BPI_raster" type="Required">
 				<dialogReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;P&gt;&lt;SPAN&gt;A
         broad-scale BPI raster, after being normalized with the
@@ -76,7 +73,7 @@
         tool.&lt;/SPAN&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN
         /&gt;&lt;/P&gt;&lt;/DIV&gt;</pythonReference>
 			</param>
-			<param name="Standardized_fine-scale_BPI_raster" displayname="Standardized fine-scale BPI raster" type="Required" direction="Input" datatype="Raster Layer" expression="Standardized_fine-scale_BPI_raster">
+			<param datatype="Raster Layer" direction="Input" displayname="Standardized fine-scale BPI raster" expression="Standardized_fine-scale_BPI_raster" name="Standardized_fine-scale_BPI_raster" type="Required">
 				<dialogReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;P&gt;&lt;SPAN&gt;A
         fine-scale BPI raster, after being normalized with the
@@ -89,7 +86,7 @@
         'Standardize BPIs'
         tool.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</pythonReference>
 			</param>
-			<param name="Slope_raster" displayname="Slope raster" type="Required" direction="Input" datatype="Raster Layer" expression="Slope_raster">
+			<param datatype="Raster Layer" direction="Input" displayname="Slope raster" expression="Slope_raster" name="Slope_raster" type="Required">
 				<dialogReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;A
         slope raster, measuring the angle (in degrees) of the
@@ -102,7 +99,7 @@
         location.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN
         /&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</pythonReference>
 			</param>
-			<param name="Bathymetry_raster" displayname="Bathymetry raster" type="Required" direction="Input" datatype="Raster Layer" expression="Bathymetry_raster">
+			<param datatype="Raster Layer" direction="Input" displayname="Bathymetry raster" expression="Bathymetry_raster" name="Bathymetry_raster" type="Required">
 				<dialogReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Input
         Bathymetric raster, can be of any type supported by ArcGIS.
@@ -116,7 +113,7 @@
         bathymetric
         applications.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</pythonReference>
 			</param>
-			<param name="Output_zones_raster" displayname="Output Zones Raster" type="Required" direction="Output" datatype="Raster Dataset" expression="Output_zones_raster">
+			<param datatype="Raster Dataset" direction="Output" displayname="Output Zones Raster" expression="Output_zones_raster" name="Output_zones_raster" type="Required">
 				<dialogReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;The
         final output zones, a classified raster with classes
@@ -1540,6 +1537,6 @@
 		</Enclosure>
 	</Binary>
 	<mdHrLv>
-		<ScopeCd value="005"></ScopeCd>
+		<ScopeCd value="005" />
 	</mdHrLv>
 </metadata>

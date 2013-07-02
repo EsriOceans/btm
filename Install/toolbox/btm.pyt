@@ -9,6 +9,9 @@ import re
 import arcpy
 from arcpy.sa import *
 
+import xml.etree.cElementTree as et
+import glob
+
 # import our local directory so we can import internal modules
 local_path = os.path.dirname(__file__)
 sys.path.insert(0, local_path)

@@ -1,13 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
 <metadata xml:lang="en">
   <Esri>
     <CreaDate>20120901</CreaDate>
     <CreaTime>02190400</CreaTime>
     <ArcGISFormat>1.0</ArcGISFormat>
     <SyncOnce>TRUE</SyncOnce>
-    <ModDate>20121019</ModDate>
-    <ModTime>010448</ModTime>
-  </Esri>
+    </Esri>
   <dataIdInfo>
     <idCitation>
       <resTitle>6. Structure Classification Builder</resTitle>
@@ -20,48 +17,18 @@
       </distorFormat>
     </distributor>
   </distInfo>
-  <tool name="structureclassification"
-  displayname="6. Structure Classification Builder"
-  toolboxalias="">
+  <tool displayname="6. Structure Classification Builder" name="structureclassification" toolboxalias="">
     <parameters>
-      <param name="Standardized_broad-scale_BPI_raster"
-      displayname="Standardized broad-scale BPI raster"
-      type="Required" direction="Input" datatype="Raster Layer"
-      expression="Standardized_broad-scale_BPI_raster" />
-      <param name="Broad-scale_BPI_standard_deviation_break"
-      displayname="Broad-scale BPI standard deviation break"
-      type="Required" direction="Input" datatype="Double"
-      expression="Broad-scale_BPI_standard_deviation_break" />
-      <param name="Standardized_fine-scale_BPI_raster"
-      displayname="Standardized fine-scale BPI raster"
-      type="Required" direction="Input" datatype="Raster Layer"
-      expression="Standardized_fine-scale_BPI_raster" />
-      <param name="Fine-scale_BPI_standard_deviation_break"
-      displayname="Fine-scale BPI standard deviation break"
-      type="Required" direction="Input" datatype="Double"
-      expression="Fine-scale_BPI_standard_deviation_break" />
-      <param name="Slope_raster" displayname="Slope raster"
-      type="Required" direction="Input" datatype="Raster Layer"
-      expression="Slope_raster" />
-      <param name="Slope_value__in_degrees__indicating_a_gentle_slope"
-      displayname="Slope value (in degrees) indicating a gentle slope"
-      type="Required" direction="Input" datatype="Double"
-      expression="Slope_value__in_degrees__indicating_a_gentle_slope" />
-      <param name="Slope_value__in_degrees__indicating_a_steep_slope"
-      displayname="Slope value (in degrees) indicating a steep slope"
-      type="Required" direction="Input" datatype="Double"
-      expression="Slope_value__in_degrees__indicating_a_steep_slope" />
-      <param name="Bathymetric_raster"
-      displayname="Bathymetric raster" type="Required"
-      direction="Input" datatype="Raster Layer"
-      expression="Bathymetric_raster" />
-      <param name="Depth_indicating_break_between_shelf_and_broad_flat"
-      displayname="Depth indicating break between shelf and broad flat"
-      type="Required" direction="Input" datatype="Double"
-      expression="Depth_indicating_break_between_shelf_and_broad_flat" />
-      <param name="Output_raster" displayname="Output raster"
-      type="Required" direction="Output" datatype="Raster Dataset"
-      expression="Output_raster" />
+      <param datatype="Raster Layer" direction="Input" displayname="Standardized broad-scale BPI raster" expression="Standardized_broad-scale_BPI_raster" name="Standardized_broad-scale_BPI_raster" type="Required" />
+      <param datatype="Double" direction="Input" displayname="Broad-scale BPI standard deviation break" expression="Broad-scale_BPI_standard_deviation_break" name="Broad-scale_BPI_standard_deviation_break" type="Required" />
+      <param datatype="Raster Layer" direction="Input" displayname="Standardized fine-scale BPI raster" expression="Standardized_fine-scale_BPI_raster" name="Standardized_fine-scale_BPI_raster" type="Required" />
+      <param datatype="Double" direction="Input" displayname="Fine-scale BPI standard deviation break" expression="Fine-scale_BPI_standard_deviation_break" name="Fine-scale_BPI_standard_deviation_break" type="Required" />
+      <param datatype="Raster Layer" direction="Input" displayname="Slope raster" expression="Slope_raster" name="Slope_raster" type="Required" />
+      <param datatype="Double" direction="Input" displayname="Slope value (in degrees) indicating a gentle slope" expression="Slope_value__in_degrees__indicating_a_gentle_slope" name="Slope_value__in_degrees__indicating_a_gentle_slope" type="Required" />
+      <param datatype="Double" direction="Input" displayname="Slope value (in degrees) indicating a steep slope" expression="Slope_value__in_degrees__indicating_a_steep_slope" name="Slope_value__in_degrees__indicating_a_steep_slope" type="Required" />
+      <param datatype="Raster Layer" direction="Input" displayname="Bathymetric raster" expression="Bathymetric_raster" name="Bathymetric_raster" type="Required" />
+      <param datatype="Double" direction="Input" displayname="Depth indicating break between shelf and broad flat" expression="Depth_indicating_break_between_shelf_and_broad_flat" name="Depth_indicating_break_between_shelf_and_broad_flat" type="Required" />
+      <param datatype="Raster Dataset" direction="Output" displayname="Output raster" expression="Output_raster" name="Output_raster" type="Required" />
     </parameters>
   </tool>
 </metadata>

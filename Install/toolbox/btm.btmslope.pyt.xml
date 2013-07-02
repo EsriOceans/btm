@@ -1,18 +1,15 @@
-<?xml version="1.0"?>
 <metadata xml:lang="en">
 	<Esri>
 		<CreaDate>20120904</CreaDate>
 		<CreaTime>22003300</CreaTime>
 		<ArcGISFormat>1.0</ArcGISFormat>
 		<SyncOnce>TRUE</SyncOnce>
-		<ModDate>20130615</ModDate>
-		<ModTime>005410</ModTime>
 		<scaleRange>
 			<minScale>150000000</minScale>
 			<maxScale>5000</maxScale>
 		</scaleRange>
 		<ArcGISProfile>ItemDescription</ArcGISProfile>
-	</Esri>
+		</Esri>
 	<dataIdInfo>
 		<idCitation>
 			<resTitle>Calculate Slope</resTitle>
@@ -36,9 +33,9 @@
 			</distorFormat>
 		</distributor>
 	</distInfo>
-	<tool name="btmslope" displayname="Calculate Slope" toolboxalias="" xmlns="">
+	<tool displayname="Calculate Slope" name="btmslope" toolboxalias="">
 		<parameters>
-			<param name="Input_bathymetric_raster" displayname="Input bathymetric raster" type="Required" direction="Input" datatype="Raster Layer" expression="Input_bathymetric_raster">
+			<param datatype="Raster Layer" direction="Input" displayname="Input bathymetric raster" expression="Input_bathymetric_raster" name="Input_bathymetric_raster" type="Required">
 				<dialogReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Input
         surface
@@ -48,7 +45,7 @@
         surface
         raster.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</pythonReference>
 			</param>
-			<param name="Output_raster" displayname="Output raster" type="Required" direction="Output" datatype="Raster Dataset" expression="Output_raster">
+			<param datatype="Raster Dataset" direction="Output" displayname="Output raster" expression="Output_raster" name="Output_raster" type="Required">
 				<dialogReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Output
         slope raster, in units of

@@ -1,18 +1,15 @@
-<?xml version="1.0"?>
 <metadata xml:lang="en">
 	<Esri>
 		<CreaDate>20120905</CreaDate>
 		<CreaTime>12335500</CreaTime>
 		<ArcGISFormat>1.0</ArcGISFormat>
 		<SyncOnce>TRUE</SyncOnce>
-		<ModDate>20130615</ModDate>
-		<ModTime>005410</ModTime>
 		<scaleRange>
 			<minScale>150000000</minScale>
 			<maxScale>5000</maxScale>
 		</scaleRange>
 		<ArcGISProfile>ItemDescription</ArcGISProfile>
-	</Esri>
+		</Esri>
 	<dataIdInfo>
 		<idCitation>
 			<resTitle>Depth Statistics</resTitle>
@@ -34,9 +31,9 @@
 			</distorFormat>
 		</distributor>
 	</distInfo>
-	<tool name="depthstatistics" displayname="Depth Statistics" toolboxalias="" xmlns="">
+	<tool displayname="Depth Statistics" name="depthstatistics" toolboxalias="">
 		<parameters>
-			<param name="Bathymetry_Raster" displayname="Bathymetry Raster" type="Required" direction="Input" datatype="Raster Layer" expression="Bathymetry_Raster">
+			<param datatype="Raster Layer" direction="Input" displayname="Bathymetry Raster" expression="Bathymetry_Raster" name="Bathymetry_Raster" type="Required">
 				<dialogReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Input
         bathymetric surface
@@ -46,7 +43,7 @@
         bathymetric surface
         raster.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</pythonReference>
 			</param>
-			<param name="Neighborhood_Size" displayname="Neighborhood Size" type="Required" direction="Input" datatype="Long" expression="Neighborhood_Size">
+			<param datatype="Long" direction="Input" displayname="Neighborhood Size" expression="Neighborhood_Size" name="Neighborhood_Size" type="Required">
 				<dialogReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Neighborhood
         size over which to calculate the metrics. Measured in cell
@@ -56,7 +53,7 @@
         size over which to calculate the metrics. Measured in cell
         units.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</pythonReference>
 			</param>
-			<param name="Output_Workspace" displayname="Output Workspace" type="Required" direction="Input" datatype="Workspace" expression="Output_Workspace">
+			<param datatype="Workspace" direction="Input" displayname="Output Workspace" expression="Output_Workspace" name="Output_Workspace" type="Required">
 				<dialogReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Output
         workspace for results produced by this
@@ -66,7 +63,7 @@
         workspace for results produced by this
         tool.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</pythonReference>
 			</param>
-			<param name="Statistics_Computed" displayname="Statistics to Compute" type="Required" direction="Input" datatype="Multiple Value" expression="Mean Depth | Variance | Standard Deviation">
+			<param datatype="Multiple Value" direction="Input" displayname="Statistics to Compute" expression="Mean Depth | Variance | Standard Deviation" name="Statistics_Computed" type="Required">
 				<dialogReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Statistics
         to compute on the input raster. Mean is an average over the

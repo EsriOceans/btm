@@ -1,18 +1,15 @@
-<?xml version="1.0"?>
 <metadata xml:lang="en">
 	<Esri>
 		<CreaDate>20120901</CreaDate>
 		<CreaTime>02190400</CreaTime>
 		<ArcGISFormat>1.0</ArcGISFormat>
 		<SyncOnce>TRUE</SyncOnce>
-		<ModDate>20130615</ModDate>
-		<ModTime>005410</ModTime>
 		<scaleRange>
 			<minScale>150000000</minScale>
 			<maxScale>5000</maxScale>
 		</scaleRange>
 		<ArcGISProfile>ItemDescription</ArcGISProfile>
-	</Esri>
+		</Esri>
 	<dataIdInfo>
 		<idCitation>
 			<resTitle>Build Fine Scale BPI</resTitle>
@@ -51,9 +48,9 @@
 			</distorFormat>
 		</distributor>
 	</distInfo>
-	<tool name="finescalebpi" displayname="Build Fine Scale BPI" toolboxalias="" xmlns="">
+	<tool displayname="Build Fine Scale BPI" name="finescalebpi" toolboxalias="">
 		<parameters>
-			<param name="Input_bathymetric_raster" displayname="Input bathymetric raster" type="Required" direction="Input" datatype="Raster Layer" expression="Input_bathymetric_raster">
+			<param datatype="Raster Layer" direction="Input" displayname="Input bathymetric raster" expression="Input_bathymetric_raster" name="Input_bathymetric_raster" type="Required">
 				<dialogReference>&lt;DIV STYLE="text-align:Left;"&gt;&lt;P
         STYLE="font-size:16ptmargin:7 0 7
         0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;Input bathymetric raster
@@ -65,7 +62,7 @@
         grid.&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN
         /&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</pythonReference>
 			</param>
-			<param name="Inner_radius" displayname="Inner radius" type="Required" direction="Input" datatype="Long" expression="Inner_radius">
+			<param datatype="Long" direction="Input" displayname="Inner radius" expression="Inner_radius" name="Inner_radius" type="Required">
 				<dialogReference>&lt;DIV STYLE="text-align:Left;"&gt;&lt;P
         STYLE="font-size:16ptmargin:7 0 7
         0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;The inner radius of the
@@ -81,7 +78,7 @@
         cells.&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN
         /&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</pythonReference>
 			</param>
-			<param name="Outer_radius" displayname="Outer radius" type="Required" direction="Input" datatype="Long" expression="Outer_radius">
+			<param datatype="Long" direction="Input" displayname="Outer radius" expression="Outer_radius" name="Outer_radius" type="Required">
 				<dialogReference>&lt;DIV STYLE="text-align:Left;"&gt;&lt;P
         STYLE="font-size:16ptmargin:7 0 7
         0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;The outer radius of the
@@ -97,7 +94,7 @@
         cells.&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN
         /&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</pythonReference>
 			</param>
-			<param name="Scale_factor" displayname="Scale factor" type="Required" direction="Input" datatype="Long" expression="Scale_factor">
+			<param datatype="Long" direction="Input" displayname="Scale factor" expression="Scale_factor" name="Scale_factor" type="Required">
 				<dialogReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;The
         scale factor is computed on the fly, computed as:
@@ -115,7 +112,7 @@
         resolution(cell
         size)&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;</pythonReference>
 			</param>
-			<param name="Output_raster" displayname="Output raster" type="Required" direction="Output" datatype="Raster Dataset" expression="Output_raster">
+			<param datatype="Raster Dataset" direction="Output" displayname="Output raster" expression="Output_raster" name="Output_raster" type="Required">
 				<dialogReference>&lt;DIV
         STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Output
         raster name of fine-scale BPI
@@ -1140,6 +1137,6 @@
 		</Thumbnail>
 	</Binary>
 	<mdHrLv>
-		<ScopeCd value="005"></ScopeCd>
+		<ScopeCd value="005" />
 	</mdHrLv>
 </metadata>

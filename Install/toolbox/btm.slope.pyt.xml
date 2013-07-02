@@ -1,13 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
 <metadata xml:lang="en">
   <Esri>
     <CreaDate>20120901</CreaDate>
     <CreaTime>02190400</CreaTime>
     <ArcGISFormat>1.0</ArcGISFormat>
     <SyncOnce>TRUE</SyncOnce>
-    <ModDate>20120901</ModDate>
-    <ModTime>021904</ModTime>
-  </Esri>
+    </Esri>
   <dataIdInfo>
     <idCitation>
       <resTitle>4. Calculate Slope</resTitle>
@@ -20,16 +17,10 @@
       </distorFormat>
     </distributor>
   </distInfo>
-  <tool name="slope" displayname="4. Calculate Slope"
-  toolboxalias="">
+  <tool displayname="4. Calculate Slope" name="slope" toolboxalias="">
     <parameters>
-      <param name="Input_bathymetric_raster"
-      displayname="Input bathymetric raster" type="Required"
-      direction="Input" datatype="String"
-      expression="Input_bathymetric_raster" />
-      <param name="Output_raster" displayname="Output raster"
-      type="Required" direction="Output" datatype="String"
-      expression="Output_raster" />
+      <param datatype="String" direction="Input" displayname="Input bathymetric raster" expression="Input_bathymetric_raster" name="Input_bathymetric_raster" type="Required" />
+      <param datatype="String" direction="Output" displayname="Output raster" expression="Output_raster" name="Output_raster" type="Required" />
     </parameters>
   </tool>
 </metadata>
