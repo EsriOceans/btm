@@ -14,23 +14,6 @@ from config import *
 import_paths = ['../Install/toolbox', '../Install']
 addLocalPaths(import_paths)
 
-class TestBpiScript(unittest.TestCase):
-    from scripts import bpi
-    def testBpiImport(self, method=bpi):
-        pass
-        #self.assertRaises(ValueError, method.main(), None)
-
-    def testBpiRun(self):
-        pass
-
-class TestStandardizeBpiGridsScript(unittest.TestCase):
-    from scripts import standardize_bpi_grids
-    def testStdImport(self, method=standardize_bpi_grids):
-        pass
-    
-    def testStdRun(self):
-        pass
-
 class TestBtmDocument(unittest.TestCase):
     # XXX this won't automatically get the right thing... how can we fix it?
     import utils
@@ -40,6 +23,39 @@ class TestBtmDocument(unittest.TestCase):
 
     def testCsvDocumentExists(self):
         self.assertTrue(os.path.exists(csv_doc))
+
+class TestBtmRaster(unittest.TestCase):
+    def testRasterExists(self):
+        self.assertTrue(os.path.exists(bathy_raster))
+
+class TestBpiScript(unittest.TestCase):
+    from scripts import bpi
+
+    """
+    bpi.main( bathy=in_raster, inner_radius=10,
+        outer_radius=30, out_raster=out_raster
+	    bpi_type='broad')
+    """
+    def testBpiImport(self, method=bpi):
+        self.assertTrue('main' in vars(method))
+
+    def testBpiRun(self, method=bpi):
+        base_dir = os.path.abspath(os.path.dirname(__file__))
+        output_raster = os.path.join(base_dir, 'data', 'test_run_bpi.tif')
+        method.main(bathy=bathy_raster, inner_radius=10,
+            outer_radius=30, out_raster=output_raster, bpi_type='broad')
+        self.assertTrue(os.path.exists(output_raster))
+        # clean up
+        arcpy.Delete_management(output_raster)
+        self.assertFalse(os.path.exists(output_raster))
+
+class TestStandardizeBpiGridsScript(unittest.TestCase):
+    from scripts import standardize_bpi_grids
+    def testStdImport(self, method=standardize_bpi_grids):
+        self.assertTrue('main' in vars(method))
+    
+    def testStdRun(self):
+        pass
 
 # this test should be run after a fresh run of makeaddin to rebuild the .esriaddin file.
 class TestAddin(unittest.TestCase):
