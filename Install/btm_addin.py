@@ -73,7 +73,7 @@ class classifyBenthicTerrain(object):
         self.enabled = True
         self.checked = False
     def onClick(self):
-        tool_dialog(btm_toolbox, 'zoneclassification')
+        tool_dialog(btm_toolbox, 'classify')
 
 
 """ BPI specific functions """
