@@ -118,6 +118,10 @@ class broadscalebpi(object):
         self.label = u'Build Broad Scale BPI'
         self.description = u'The concept of bathymetric position is central to the benthic\r\nterrain classification process that is utilized by the BTM.\r\nBathymetric Position Index (BPI) is a measure of where a\r\nreferenced location is relative to the locations surrounding it.\r\nBPI is derived from an input bathymetric data set and itself is a modification of the topographic position index (TPI) algorithm that is used in the terrestrial environment. The application of TPI to develop terrain classifications was explored and developed by Andrew Weiss during his study of terrestrial watersheds in Central Oregon (Weiss 2001). These\r\napplications can be carried into the benthic environment\r\nthrough BPI.\r\n\r\nA broad-scale BPI data set allows you to identify larger features within the benthic landscape.'
         self.canRunInBackground = False
+        # one of the tools needs to have the metadata deletion call included in it. If it's done elsewhere
+        # in the script, the script state isn't correct and the ModTime and ModDate fields will remain.
+        metadata(update=False)
+
     def getParameterInfo(self):
         # Input_bathymetric_raster
         input_raster = arcpy.Parameter()
