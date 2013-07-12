@@ -84,7 +84,7 @@
         region. Radius is defined as a number of
         cells.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</pythonReference>
 			</param>
-			<param datatype="Long" direction="Input" displayname="Scale factor" expression="Scale_factor" name="Scale_factor" type="Required">
+			<param datatype="Long" direction="Input" displayname="Scale factor" expression="{Scale_factor}" name="Scale_factor" type="Optional">
 				<dialogReference>&lt;DIV STYLE="text-align:Left;"&gt;&lt;P
         STYLE="font-size:16ptmargin:7 0 7 0;"&gt;&lt;SPAN&gt;The
         scale factor is computed on the fly, computed as:
