@@ -12,7 +12,7 @@
 		</Esri>
 	<dataIdInfo>
 		<idCitation>
-			<resTitle>Zone Classification Builder</resTitle>
+			<resTitle>Classify Benthic Terrain</resTitle>
 		</idCitation>
 		<idAbs>&lt;DIV
     STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;After
@@ -42,7 +42,7 @@
 			</distorFormat>
 		</distributor>
 	</distInfo>
-	<tool displayname="Zone Classification Builder" name="zoneclassification" toolboxalias="">
+	<tool displayname="Classify Benthic Terrain" name="classify" toolboxalias="">
 		<parameters>
 			<param datatype="File" direction="Input" displayname="Classification dictionary" expression="Classification_dictionary" name="Classification_dictionary" type="Required">
 				<dialogReference>&lt;DIV
