@@ -84,7 +84,7 @@ class Toolbox(object):
     def __init__(self):
         self.label = u'Benthic Terrain Modeler'
         self.alias = ''
-        self.tools = [broadscalebpi, finescalebpi, standardizebpi, btmslope, zoneclassification, terrainruggedness, depthstatistics]
+        self.tools = [broadscalebpi, finescalebpi, standardizebpi, btmslope, classify, terrainruggedness, depthstatistics]
 
 # tools below this section, one class per tool.
 
@@ -542,10 +542,10 @@ class btmslope(object):
             bathy=parameters[0].valueAsText,
             out_raster=parameters[1].valueAsText)
 
-class zoneclassification(object):
-    """c:\data\arcgis\addins\btm\toolbox\BTM.tbx\zoneclassification"""
+class classify(object):
+    """c:\data\arcgis\addins\btm\toolbox\BTM.tbx\classify"""
     def __init__(self):
-        self.label = u'Zone Classification Builder'
+        self.label = u'Classify Benthic Terrain'
         self.canRunInBackground = False
 
     def getParameterInfo(self):
