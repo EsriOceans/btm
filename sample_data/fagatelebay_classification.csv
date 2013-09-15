@@ -1,0 +1,12 @@
+Class,Zone,BroadBPI_Lower,BroadBPI_Upper,FineBPI_Lower,FineBPI_Upper,Slope_Lower,Slope_Lower,Depth_Lower,Depth_Upper
+1,Reef Crest,,-100,,-100,,,,
+2,Mid-Slope Ridges,,-100,-100,100,,,,
+3,Back Reef,,-100,100,,,,,
+4,Upper Slopes,-100,100,,-100,,,,
+5,Lower Bank Shelf,-100,100,-100,100,,28.907,,30
+6,Upper Reef Flat,-100,100,-100,100,,28.907,28,
+7,Open Slopes,-100,100,-100,100,28.907,88.099,,
+8,Depression,-100,100,100,,,,,
+9,Back Reef,,100,,-100,,,,
+10,Mid-Slope Depressions,,100,-100,100,,,,
+11,Deep Depression,100,,100,,,,,
