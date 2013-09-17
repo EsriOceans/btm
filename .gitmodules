@@ -1,0 +1,3 @@
+[submodule "Install/toolbox/datatype"]
+	path = Install/toolbox/datatype
+	url = https://github.com/EsriOceans/datatype-names.git
