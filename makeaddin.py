@@ -1,6 +1,12 @@
 import os
 import re
+import sys
 import zipfile
+
+VERBOSE_MODE = False
+if len(sys.argv) == 2:
+    if sys.argv[1] == '--verbose':
+        VERBOSE_MODE = True 
 
 current_path = os.path.dirname(os.path.abspath(__file__))
 
@@ -32,7 +38,8 @@ for directory in dirs_to_add:
         found_file = False
         for file in (f for f in files if not looks_like_a_backup(f)):
             archive_file = os.path.join(archive_path, file)
-            print archive_file
+            if VERBOSE_MODE:
+                print archive_file
             zip_file.write(os.path.join(path, file), archive_file)
             found_file = True
         if not found_file:
