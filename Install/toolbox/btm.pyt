@@ -13,6 +13,10 @@ from arcpy.sa import *
 import xml.etree.cElementTree as et
 import glob
 
+# import our datatype conversion submodule
+from datatype import datatype
+dt = datatype.DataType()
+
 # import our local directory so we can import internal modules
 local_path = os.path.dirname(__file__)
 sys.path.insert(0, local_path)
@@ -129,7 +133,7 @@ class broadscalebpi(object):
         input_raster.displayName = u'Input bathymetric raster'
         input_raster.parameterType = 'Required'
         input_raster.direction = 'Input'
-        input_raster.datatype = u'Raster Layer'
+        input_raster.datatype = dt.format('Raster Layer')
 
         # Inner_radius
         inner_radius = arcpy.Parameter()
@@ -137,7 +141,7 @@ class broadscalebpi(object):
         inner_radius.displayName = u'Inner radius'
         inner_radius.parameterType = 'Required'
         inner_radius.direction = 'Input'
-        inner_radius.datatype = u'Long'
+        inner_radius.datatype = dt.format('Long')
 
         # Outer_radius
         outer_radius = arcpy.Parameter()
@@ -145,14 +149,14 @@ class broadscalebpi(object):
         outer_radius.displayName = u'Outer radius'
         outer_radius.parameterType = 'Required'
         outer_radius.direction = 'Input'
-        outer_radius.datatype = u'Long'
+        outer_radius.datatype = dt.format('Long')
 
         # Scale Factor
         scale_factor = arcpy.Parameter()
         scale_factor.name = 'Scale_factor'
         scale_factor.displayName = 'Scale factor'
         scale_factor.parameterType = 'Optional'
-        scale_factor.datatype = 'Long'
+        scale_factor.datatype = dt.format('Long')
         scale_factor.enabled = False
 
         # Output_raster
@@ -161,7 +165,7 @@ class broadscalebpi(object):
         output_raster.displayName = u'Output raster'
         output_raster.parameterType = 'Required'
         output_raster.direction = 'Output'
-        output_raster.datatype = u'Raster Dataset'
+        output_raster.datatype = dt.format('Raster Dataset')
 
         return [input_raster, inner_radius, outer_radius, scale_factor, output_raster]
 
@@ -256,7 +260,7 @@ class finescalebpi(object):
         input_raster.displayName = u'Input bathymetric raster'
         input_raster.parameterType = 'Required'
         input_raster.direction = 'Input'
-        input_raster.datatype = u'Raster Layer'
+        input_raster.datatype = dt.format('Raster Layer')
 
         # Inner_radius
         inner_radius = arcpy.Parameter()
@@ -264,7 +268,7 @@ class finescalebpi(object):
         inner_radius.displayName = u'Inner radius'
         inner_radius.parameterType = 'Required'
         inner_radius.direction = 'Input'
-        inner_radius.datatype = u'Long'
+        inner_radius.datatype = dt.format('Long')
 
         # Outer_radius
         outer_radius = arcpy.Parameter()
@@ -272,14 +276,14 @@ class finescalebpi(object):
         outer_radius.displayName = u'Outer radius'
         outer_radius.parameterType = 'Required'
         outer_radius.direction = 'Input'
-        outer_radius.datatype = u'Long'
+        outer_radius.datatype = dt.format('Long')
 
         # Scale Factor
         scale_factor = arcpy.Parameter()
         scale_factor.name = 'Scale_factor'
         scale_factor.displayName = 'Scale factor'
         scale_factor.parameterType = 'Optional'
-        scale_factor.datatype = 'Long'
+        scale_factor.datatype = dt.format('Long')
         scale_factor.enabled = False
 
         # Output_raster
@@ -288,7 +292,7 @@ class finescalebpi(object):
         output_raster.displayName = u'Output raster'
         output_raster.parameterType = 'Required'
         output_raster.direction = 'Output'
-        output_raster.datatype = u'Raster Dataset'
+        output_raster.datatype = dt.format('Raster Dataset')
 
         # TODO: implement mutlvalue support
         multivalue = arcpy.Parameter()
@@ -296,7 +300,7 @@ class finescalebpi(object):
         multivalue.displayName = u'Test multi'
         multivalue.parameterType = 'Optional'
         multivalue.direction = 'Input'
-        multivalue.datatype = u'Any Value'
+        multivalue.datatype = dt.format('Any Value')
 
         return [input_raster, inner_radius, outer_radius, scale_factor, output_raster]
 
@@ -364,14 +368,14 @@ class standardizebpi(object):
         broad_raster.displayName = u'Broad BPI raster'
         broad_raster.parameterType = 'Required'
         broad_raster.direction = 'Input'
-        broad_raster.datatype = u'Raster Layer'
+        broad_raster.datatype = dt.format('Raster Layer')
 
         # dervied statistics
         broad_mean = arcpy.Parameter()
         broad_mean.name = 'Broad_BPI_Mean'
         broad_mean.displayName = 'Broad BPI Mean'
         broad_mean.parameterType = 'Required'
-        broad_mean.datatype = 'Double'
+        broad_mean.datatype = dt.format('Double')
         broad_mean.enabled = False
         broad_mean.value = 0
 
@@ -379,7 +383,7 @@ class standardizebpi(object):
         broad_stddev.name = 'Broad_BPI_Standard_deviation'
         broad_stddev.displayName = 'Broad BPI Standard Deviation'
         broad_stddev.parameterType = 'Required'
-        broad_stddev.datatype = 'Double'
+        broad_stddev.datatype = dt.format('Double')
         broad_stddev.enabled = False
         broad_stddev.value = 0
 
@@ -389,7 +393,7 @@ class standardizebpi(object):
         broad_std_output.displayName = u'Output Standardized Broad BPI raster'
         broad_std_output.parameterType = 'Required'
         broad_std_output.direction = 'Output'
-        broad_std_output.datatype = u'Raster Dataset'
+        broad_std_output.datatype = dt.format('Raster Dataset')
 
         # Input_BPI_raster
         fine_raster = arcpy.Parameter()
@@ -397,14 +401,14 @@ class standardizebpi(object):
         fine_raster.displayName = u'Fine BPI raster'
         fine_raster.parameterType = 'Required'
         fine_raster.direction = 'Input'
-        fine_raster.datatype = u'Raster Layer'
+        fine_raster.datatype = dt.format('Raster Layer')
 
         # dervied statistics
         fine_mean = arcpy.Parameter()
         fine_mean.name = 'Fine_BPI_Mean'
         fine_mean.displayName = 'Fine BPI Mean'
         fine_mean.parameterType = 'Required'
-        fine_mean.datatype = 'Double'
+        fine_mean.datatype = dt.format('Double')
         fine_mean.enabled = False
         fine_mean.value = 0
 
@@ -412,7 +416,7 @@ class standardizebpi(object):
         fine_stddev.name = 'Fine_BPI_Standard_deviation'
         fine_stddev.displayName = 'Fine BPI Standard Deviation'
         fine_stddev.parameterType = 'Required'
-        fine_stddev.datatype = 'Double'
+        fine_stddev.datatype = dt.format('Double')
         fine_stddev.enabled = False
         fine_stddev.value = 0
 
@@ -422,7 +426,7 @@ class standardizebpi(object):
         fine_std_output.displayName = u'Output Standardized Fine BPI raster'
         fine_std_output.parameterType = 'Required'
         fine_std_output.direction = 'Output'
-        fine_std_output.datatype = u'Raster Dataset'
+        fine_std_output.datatype = dt.format('Raster Dataset')
 
         return [broad_raster, broad_mean, broad_stddev, broad_std_output, fine_raster, fine_mean, fine_stddev, fine_std_output]
 
@@ -503,7 +507,7 @@ class btmslope(object):
         input_raster.displayName = u'Input bathymetric raster'
         input_raster.parameterType = 'Required'
         input_raster.direction = 'Input'
-        input_raster.datatype = u'Raster Layer'
+        input_raster.datatype = dt.format('Raster Layer')
 
         # Output_raster
         output_raster = arcpy.Parameter()
@@ -511,7 +515,7 @@ class btmslope(object):
         output_raster.displayName = u'Output raster'
         output_raster.parameterType = 'Required'
         output_raster.direction = 'Output'
-        output_raster.datatype = u'Raster Dataset'
+        output_raster.datatype = dt.format('Raster Dataset')
 
         return [input_raster, output_raster]
 
@@ -554,7 +558,7 @@ class classify(object):
         class_dict.name = u'Classification_dictionary'
         class_dict.displayName = u'Classification dictionary'
         class_dict.direction = 'Input'
-        class_dict.datatype = u'File'
+        class_dict.datatype = dt.format('File')
         class_dict.parameterType = 'Required'
 
         # classification dictionary must be of the types we parse.
@@ -566,7 +570,7 @@ class classify(object):
         broad_bpi.displayName = u'Standardized broad-scale BPI raster'
         broad_bpi.parameterType = 'Required'
         broad_bpi.direction = 'Input'
-        broad_bpi.datatype = u'Raster Layer'
+        broad_bpi.datatype = dt.format('Raster Layer')
 
         # Standardized fine-scale BPI raster
         fine_bpi = arcpy.Parameter()
@@ -574,7 +578,7 @@ class classify(object):
         fine_bpi.displayName = u'Standardized fine-scale BPI raster'
         fine_bpi.parameterType = 'Required'
         fine_bpi.direction = 'Input'
-        fine_bpi.datatype = u'Raster Layer'
+        fine_bpi.datatype = dt.format('Raster Layer')
 
         # Slope_raster
         slope = arcpy.Parameter()
@@ -582,7 +586,7 @@ class classify(object):
         slope.displayName = u'Slope raster'
         slope.parameterType = 'Required'
         slope.direction = 'Input'
-        slope.datatype = u'Raster Layer'
+        slope.datatype = dt.format('Raster Layer')
 
         # Bathymetry raster
         bathy= arcpy.Parameter()
@@ -590,7 +594,7 @@ class classify(object):
         bathy.displayName = u'Bathymetry raster'
         bathy.parameterType = 'Required'
         bathy.direction = 'Input'
-        bathy.datatype = u'Raster Layer'
+        bathy.datatype = dt.format('Raster Layer')
 
         # Output_raster
         zones_raster= arcpy.Parameter()
@@ -598,7 +602,7 @@ class classify(object):
         zones_raster.displayName = u'Output Zones Raster'
         zones_raster.parameterType = 'Required'
         zones_raster.direction = 'Output.'
-        zones_raster.datatype = u'Raster Dataset'
+        zones_raster.datatype = dt.format('Raster Dataset')
         return [class_dict, broad_bpi, fine_bpi, slope, bathy, zones_raster]
 
     def isLicensed(self):
@@ -644,7 +648,7 @@ class structureclassification(object):
         broad_bpi.displayName = u'Standardized broad-scale BPI raster'
         broad_bpi.parameterType = 'Required'
         broad_bpi.direction = 'Input'
-        broad_bpi.datatype = u'Raster Layer'
+        broad_bpi.datatype = dt.format('Raster Layer')
 
         # Broad-scale_BPI_standard_deviation_break
         broad_stddev = arcpy.Parameter()
@@ -652,7 +656,7 @@ class structureclassification(object):
         broad_stddev.displayName = u'Broad-scale BPI standard deviation break'
         broad_stddev.parameterType = 'Required'
         broad_stddev.direction = 'Input'
-        broad_stddev.datatype = u'Double'
+        broad_stddev.datatype = dt.format('Double')
 
         # Standardized_fine-scale_BPI_raster
         fine_bpi = arcpy.Parameter()
@@ -660,7 +664,7 @@ class structureclassification(object):
         fine_bpi.displayName = u'Standardized fine-scale BPI raster'
         fine_bpi.parameterType = 'Required'
         fine_bpi.direction = 'Input'
-        fine_bpi.datatype = u'Raster Layer'
+        fine_bpi.datatype = dt.format('Raster Layer')
 
         # Fine-scale_BPI_standard_deviation_break
         fine_stddev = arcpy.Parameter()
@@ -668,7 +672,7 @@ class structureclassification(object):
         fine_stddev.displayName = u'Fine-scale BPI standard deviation break'
         fine_stddev.parameterType = 'Required'
         fine_stddev.direction = 'Input'
-        fine_stddev.datatype = u'Double'
+        fine_stddev.datatype = dt.format('Double')
 
         # Slope_raster
         slope = arcpy.Parameter()
@@ -676,7 +680,7 @@ class structureclassification(object):
         slope.displayName = u'Slope raster'
         slope.parameterType = 'Required'
         slope.direction = 'Input'
-        slope.datatype = u'Raster Layer'
+        slope.datatype = dt.format('Raster Layer')
 
         # Slope_value__in_degrees__indicating_a_gentle_slope
         slope_gentle = arcpy.Parameter()
@@ -684,7 +688,7 @@ class structureclassification(object):
         slope_gentle.displayName = u'Slope value (in degrees) indicating a gentle slope'
         slope_gentle.parameterType = 'Required'
         slope_gentle.direction = 'Input'
-        slope_gentle.datatype = u'Double'
+        slope_gentle.datatype = dt.format('Double')
 
         # Slope_value__in_degrees__indicating_a_steep_slope
         slope_steep = arcpy.Parameter()
@@ -692,7 +696,7 @@ class structureclassification(object):
         slope_steep.displayName = u'Slope value (in degrees) indicating a steep slope'
         slope_steep.parameterType = 'Required'
         slope_steep.direction = 'Input'
-        slope_steep.datatype = u'Double'
+        slope_steep.datatype = dt.format('Double')
 
         # Bathymetric_raster
         bathy = arcpy.Parameter()
@@ -700,7 +704,7 @@ class structureclassification(object):
         bathy.displayName = u'Bathymetric raster'
         bathy.parameterType = 'Required'
         bathy.direction = 'Input'
-        bathy.datatype = u'Raster Layer'
+        bathy.datatype = dt.format('Raster Layer')
 
         # Depth_indicating_break_between_shelf_and_broad_flat
         broad_vs_flat = arcpy.Parameter()
@@ -708,7 +712,7 @@ class structureclassification(object):
         broad_vs_flat.displayName = u'Depth indicating break between shelf and broad flat'
         broad_vs_flat.parameterType = 'Required'
         broad_vs_flat.direction = 'Input'
-        broad_vs_flat.datatype = u'Double'
+        broad_vs_flat.datatype = dt.format('Double')
 
         # Output_raster
         output_raster = arcpy.Parameter()
@@ -716,7 +720,7 @@ class structureclassification(object):
         output_raster.displayName = u'Output raster'
         output_raster.parameterType = 'Required'
         output_raster.direction = 'Output'
-        output_raster.datatype = u'Raster Dataset'
+        output_raster.datatype = dt.format('Raster Dataset')
 
         return [broad_bpi, broad_stddev, fine_bpi, fine_stddev, slope, slope_gentle, slope_steep, bathy, broad_vs_flat, output_raster]
 
@@ -773,7 +777,7 @@ class terrainruggedness(object):
         input_raster.displayName = u'Bathymetry Raster'
         input_raster.parameterType = 'Required'
         input_raster.direction = 'Input'
-        input_raster.datatype = u'Raster Layer'
+        input_raster.datatype = dt.format('Raster Layer')
 
         # Neighborhood_Size
         neighborhood = arcpy.Parameter()
@@ -781,7 +785,7 @@ class terrainruggedness(object):
         neighborhood.displayName = u'Neighborhood Size'
         neighborhood.parameterType = 'Required'
         neighborhood.direction = 'Input'
-        neighborhood.datatype = u'Long'
+        neighborhood.datatype = dt.format('Long')
 
         # Output_Workspace
         workspace = arcpy.Parameter()
@@ -789,7 +793,7 @@ class terrainruggedness(object):
         workspace.displayName = u'Temporary Workspace'
         workspace.parameterType = 'Required'
         workspace.direction = 'Input'
-        workspace.datatype = u'Workspace'
+        workspace.datatype = dt.format('Workspace')
 
         # Output_Raster
         output_raster = arcpy.Parameter()
@@ -797,7 +801,7 @@ class terrainruggedness(object):
         output_raster.displayName = u'Output Raster'
         output_raster.parameterType = 'Required'
         output_raster.direction = 'Output'
-        output_raster.datatype = u'Raster Dataset'
+        output_raster.datatype = dt.format('Raster Dataset')
 
         return [input_raster, neighborhood, workspace, output_raster]
 
@@ -877,7 +881,7 @@ class depthstatistics(object):
         input_raster.displayName = u'Bathymetry Raster'
         input_raster.parameterType = 'Required'
         input_raster.direction = 'Input'
-        input_raster.datatype = 'Raster Layer'
+        input_raster.datatype = dt.format('Raster Layer')
 
         # Neighborhood_Size
         neighborhood = arcpy.Parameter()
@@ -885,7 +889,7 @@ class depthstatistics(object):
         neighborhood.displayName = u'Neighborhood Size'
         neighborhood.parameterType = 'Required'
         neighborhood.direction = 'Input'
-        neighborhood.datatype = 'Long'
+        neighborhood.datatype = dt.format('Long')
 
         # Output_Workspace
         output_workspace = arcpy.Parameter()
@@ -893,7 +897,7 @@ class depthstatistics(object):
         output_workspace.displayName = u'Output Workspace'
         output_workspace.parameterType = 'Required'
         output_workspace.direction = 'Input'
-        output_workspace.datatype = 'Workspace'
+        output_workspace.datatype = dt.format('Workspace')
 
        # Statistics to Compute
         statistics = arcpy.Parameter()
@@ -901,7 +905,7 @@ class depthstatistics(object):
         statistics.displayName = u'Statistics to Compute'
         statistics.parameterType = 'Required'
         statistics.direction = 'Input'
-        statistics.datatype = 'String'
+        statistics.datatype = dt.format('String')
         statistics.multiValue = True
         statistics.filter.list = ['Mean Depth', 'Variance', 'Standard Deviation']
 
