@@ -2,12 +2,13 @@ import os
 import unittest
 import numpy
 import arcpy
+import arcgisscripting # our error objects are within this class
 import zipfile
 
 from utils import *
 # import our constants;
 # configure test data
-# XXX: use .ini files for these instead? used in other 'important' unit tests
+# FIXME: use .ini files for these instead? used in other 'important' unit tests
 from config import *
 
 # import our local directory so we can use the internal modules
@@ -15,8 +16,6 @@ import_paths = ['../Install/toolbox', '../Install']
 addLocalPaths(import_paths)
 
 class TestBtmDocument(unittest.TestCase):
-    # XXX this won't automatically get the right thing... how can we fix it?
-    import utils
 
     def testXmlDocumentExists(self):
         self.assertTrue(os.path.exists(xml_doc))
@@ -56,6 +55,29 @@ class TestStandardizeBpiGridsScript(unittest.TestCase):
     
     def testStdRun(self):
         pass
+
+class TestClassifyWizard(unittest.TestCase):
+    def testToolboxImport(self):
+        self.toolbox = arcpy.ImportToolbox(tbx_file)
+        self.assertTrue('BtmModel' in vars(self.toolbox))
+
+    def testModelExecute(self):
+        try:
+            model_run = self.toolbox('BtmModel')
+        except Exception as e:
+            self.assertTrue(e, arcgisscripting.ExecuteError)
+
+    # TODO: test the classify wizard works with valid inputs
+    """ parameters:
+         - workspace
+         - bathy
+         - broad_bpi inner radius
+         - broad_bpi outer radius
+         - fine_bpi inner radius
+         - fine_bpi outer radius
+         - classification dict
+         - output zones [raster result]
+    """
 
 # this test should be run after a fresh run of makeaddin to rebuild the .esriaddin file.
 class TestAddin(unittest.TestCase):
