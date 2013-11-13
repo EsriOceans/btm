@@ -11,7 +11,7 @@
 		<ArcGISProfile>ItemDescription</ArcGISProfile>
 		</Esri>
 	<toolbox alias="" name="btm">
-		<arcToolboxHelpPath>c:\apps\arcgis\desktop10.1\Help\gp</arcToolboxHelpPath>
+		<arcToolboxHelpPath>c:\apps\arcgis\desktop10.2\Help\gp</arcToolboxHelpPath>
 		<toolsets />
 	</toolbox>
 	<dataIdInfo>
