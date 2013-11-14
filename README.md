@@ -25,9 +25,9 @@ To get the latest source, clone this repository, and run `makeaddin.py` to creat
 Using
 -----
 
-Install the Python Add-in `btm.esriaddin`, to access the graphical tools. The Python toolbox can be added by navigating to a path containing `btm.pyt`. All of the tools also support being run directly from the command-line:
+Install the Python Add-in `btm.esriaddin`, to access the graphical tools. The Python toolbox can be added by navigating to a path containing `btm.pyt`. All of the tools also support being run directly from the command-line (here btm is installed to the users directory in 'btm'):
 
-    cd ~\btm\Install\toolbox\scripts
+    cd %HOME%\btm\Install\toolbox\scripts
     python bpi.py e:\\bathy5m 5 10 e:\\bpi_fine
 
 Testing
