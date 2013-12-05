@@ -16,14 +16,14 @@ echo "building code..."
 # the tag version should be named 'v$MAJOR.$MINOR{-$subversion}'. 
 # There is also version parsing code in the python stdlib I believe.
 PROJECT='btm'
-VERSION='3.0-beta-12'
+VERSION='3.0-beta-14'
 RELEASE_BASE='../btm-release'
 RELEASE_NAME="${PROJECT}-${VERSION}"
 RELEASE_DIR="${RELEASE_BASE}/${RELEASE_NAME}"
 RELEASE_ARCHIVE=${RELEASE_NAME}.zip 
 
-if [ -d ${RELEASE_DIR} ]; then
-    rm -rf ${RELEASE_DIR}
+if [ -d "${RELEASE_DIR}" ]; then
+    rm -rf "${RELEASE_DIR}"
 fi
 mkdir ${RELEASE_DIR}
 
@@ -57,7 +57,9 @@ echo "creating archive..."
 # compress result
 repo_dir=`pwd`
 cd ${RELEASE_BASE}
-rm ${RELEASE_ARCHIVE}
+if [ -e "${RELEASE_ARCHIVE}" ]; then
+    rm ${RELEASE_ARCHIVE}
+fi
 RELEASE_ABS=`pwd`
 zip -qr9 ${RELEASE_ARCHIVE} ${RELEASE_NAME}
 echo "completed build for ${RELEASE_NAME}, archive: ${RELEASE_ABS}/${RELEASE_ARCHIVE}"
