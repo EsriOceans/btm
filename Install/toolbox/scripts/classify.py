@@ -64,7 +64,8 @@ def main(classification_file, bpi_broad, bpi_fine, slope, bathy,
 
         for item in classes:
             cur_class = str(item["Class"])
-            msg("Calculating grid for class %s..." % cur_class)
+            cur_name = str(item["Zone"])
+            msg("Calculating grid for %s..." % cur_name)
             out_con = ""
             # here come the CONs:
             out_con = runCon(item["Depth_LowerBounds"], item["Depth_UpperBounds"], bathy, cur_class)
