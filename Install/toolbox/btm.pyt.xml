@@ -10,7 +10,7 @@
 		</scaleRange>
 		<ArcGISProfile>ItemDescription</ArcGISProfile>
 		</Esri>
-	<toolbox alias="" name="btm">
+	<toolbox alias="btm" name="btm">
 		<arcToolboxHelpPath>c:\apps\arcgis\desktop10.2\Help\gp</arcToolboxHelpPath>
 		<toolsets />
 	</toolbox>

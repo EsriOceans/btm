@@ -42,7 +42,7 @@
 			</distorFormat>
 		</distributor>
 	</distInfo>
-	<tool displayname="Classify Benthic Terrain" name="classify" toolboxalias="">
+	<tool displayname="Classify Benthic Terrain" name="classify" toolboxalias="btm">
 		<parameters>
 			<param datatype="File" direction="Input" displayname="Classification dictionary" expression="Classification_dictionary" name="Classification_dictionary" type="Required">
 				<dialogReference>&lt;DIV

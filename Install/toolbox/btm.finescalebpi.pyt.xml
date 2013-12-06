@@ -48,7 +48,7 @@
 			</distorFormat>
 		</distributor>
 	</distInfo>
-	<tool displayname="Build Fine Scale BPI" name="finescalebpi" toolboxalias="">
+	<tool displayname="Build Fine Scale BPI" name="finescalebpi" toolboxalias="btm">
 		<parameters>
 			<param datatype="Raster Layer" direction="Input" displayname="Input bathymetric raster" expression="Input_bathymetric_raster" name="Input_bathymetric_raster" type="Required" /><param datatype="Long" direction="Input" displayname="Inner radius" expression="Inner_radius" name="Inner_radius" type="Required" /><param datatype="Long" direction="Input" displayname="Outer radius" expression="Outer_radius" name="Outer_radius" type="Required" /><param datatype="Long" direction="Input" displayname="Scale factor" expression="{Scale_factor}" name="Scale_factor" type="Optional" /><param datatype="Raster Dataset" direction="Output" displayname="Output raster" expression="Output_raster" name="Output_raster" type="Required" /></parameters>
 		<summary>&lt;DIV

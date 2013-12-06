@@ -87,7 +87,7 @@ arcpy.CheckOutExtension("Spatial")
 class Toolbox(object):
     def __init__(self):
         self.label = u'Benthic Terrain Modeler'
-        self.alias = ''
+        self.alias = 'btm'
         self.tools = [broadscalebpi, finescalebpi, standardizebpi, btmslope, classify, terrainruggedness, depthstatistics]
 
 # tools below this section, one class per tool.

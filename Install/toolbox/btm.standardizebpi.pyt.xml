@@ -69,7 +69,7 @@
 			</distorFormat>
 		</distributor>
 	</distInfo>
-	<tool displayname="Standardize BPIs" name="standardizebpi" toolboxalias="">
+	<tool displayname="Standardize BPIs" name="standardizebpi" toolboxalias="btm">
 		<parameters>
 			<param datatype="Raster Layer" direction="Input" displayname="Broad BPI raster" expression="Broad_BPI_raster" name="Broad_BPI_raster" type="Required">
 				<dialogReference>&lt;DIV

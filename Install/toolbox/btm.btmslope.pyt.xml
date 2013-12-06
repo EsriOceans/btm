@@ -33,7 +33,7 @@
 			</distorFormat>
 		</distributor>
 	</distInfo>
-	<tool displayname="Calculate Slope" name="btmslope" toolboxalias="">
+	<tool displayname="Calculate Slope" name="btmslope" toolboxalias="btm">
 		<parameters>
 			<param datatype="Raster Layer" direction="Input" displayname="Input bathymetric raster" expression="Input_bathymetric_raster" name="Input_bathymetric_raster" type="Required">
 				<dialogReference>&lt;DIV

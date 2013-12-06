@@ -31,7 +31,7 @@
 			</distorFormat>
 		</distributor>
 	</distInfo>
-	<tool displayname="Depth Statistics" name="depthstatistics" toolboxalias="">
+	<tool displayname="Depth Statistics" name="depthstatistics" toolboxalias="btm">
 		<parameters>
 			<param datatype="Raster Layer" direction="Input" displayname="Bathymetry Raster" expression="Bathymetry_Raster" name="Bathymetry_Raster" type="Required">
 				<dialogReference>&lt;DIV

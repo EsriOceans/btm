@@ -48,7 +48,7 @@
 			</distorFormat>
 		</distributor>
 	</distInfo>
-	<tool displayname="Build Broad Scale BPI" name="broadscalebpi" toolboxalias="">
+	<tool displayname="Build Broad Scale BPI" name="broadscalebpi" toolboxalias="btm">
 		<parameters>
 			<param datatype="Raster Layer" direction="Input" displayname="Input bathymetric raster" expression="Input_bathymetric_raster" name="Input_bathymetric_raster" type="Required">
 				<dialogReference>&lt;DIV
