@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata xml:lang="en"><Esri><CreaDate>20131212</CreaDate><CreaTime>03335000</CreaTime><ArcGISFormat>1.0</ArcGISFormat><SyncOnce>TRUE</SyncOnce><DataProperties><lineage><Process ToolSource="c:\apps\arcgis\desktop10.2\ArcToolbox\Toolboxes\Data Management Tools.tbx\CalculateStatistics" Date="20131212" Time="033350">CalculateStatistics c:\Users\shau7031\addins\btm\tests\data\bathy5m_clip.tif 1 1 # OVERWRITE "Feature Set"</Process></lineage></DataProperties></Esri></metadata>
