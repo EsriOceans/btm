@@ -4,6 +4,7 @@ import numpy
 import arcpy
 import arcgisscripting # our error objects are within this class
 import zipfile
+from tempdir import TempDir
 
 import utils
 # import our constants;
@@ -41,14 +42,14 @@ class TestBpiScript(unittest.TestCase):
         self.assertTrue('main' in vars(method))
 
     def testBpiRun(self, method=bpi):
-        base_dir = os.path.abspath(os.path.dirname(__file__))
-        output_raster = os.path.join(base_dir, 'data', 'test_run_bpi.tif')
-        method.main(bathy=bathy_raster, inner_radius=10,
-            outer_radius=30, out_raster=output_raster, bpi_type='broad')
-        self.assertTrue(os.path.exists(output_raster))
-        # clean up
-        arcpy.Delete_management(output_raster)
-        self.assertFalse(os.path.exists(output_raster))
+        with TempDir() as d:
+            output_raster = os.path.join(d, 'test_run_bpi.tif')
+            method.main(bathy=config.bathy_raster, inner_radius=10,
+                outer_radius=30, out_raster=output_raster, bpi_type='broad')
+            self.assertTrue(os.path.exists(output_raster))
+            # clean up
+            arcpy.Delete_management(output_raster)
+            self.assertFalse(os.path.exists(output_raster))
 
 class TestStandardizeBpiGridsScript(unittest.TestCase):
     from scripts import standardize_bpi_grids
