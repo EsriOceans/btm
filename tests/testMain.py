@@ -5,27 +5,29 @@ import arcpy
 import arcgisscripting # our error objects are within this class
 import zipfile
 
-from utils import *
+import utils
 # import our constants;
 # configure test data
+import config
 # FIXME: use .ini files for these instead? used in other 'important' unit tests
-from config import *
 
 # import our local directory so we can use the internal modules
 import_paths = ['../Install/toolbox', '../Install']
-addLocalPaths(import_paths)
+utils.addLocalPaths(import_paths)
+
+# create a temporary directory for analysis steps
 
 class TestBtmDocument(unittest.TestCase):
 
     def testXmlDocumentExists(self):
-        self.assertTrue(os.path.exists(xml_doc))
+        self.assertTrue(os.path.exists(config.xml_doc))
 
     def testCsvDocumentExists(self):
-        self.assertTrue(os.path.exists(csv_doc))
+        self.assertTrue(os.path.exists(config.csv_doc))
 
 class TestBtmRaster(unittest.TestCase):
     def testRasterExists(self):
-        self.assertTrue(os.path.exists(bathy_raster))
+        self.assertTrue(os.path.exists(config.bathy_raster))
 
 class TestBpiScript(unittest.TestCase):
     from scripts import bpi
@@ -82,7 +84,7 @@ class TestClassifyWizard(unittest.TestCase):
 # this test should be run after a fresh run of makeaddin to rebuild the .esriaddin file.
 class TestAddin(unittest.TestCase):
     def setUp(self):
-        self.addin_path = os.sep.join([local_path, '..', '..', 'btm.esriaddin'])
+        self.addin_path = os.sep.join([config.local_path, '..', '..', 'btm.esriaddin'])
         self.addin_zip = zipfile.ZipFile(self.addin_path, 'r')
 
     def testToolboxIsPresent(self):
