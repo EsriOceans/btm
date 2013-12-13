@@ -643,6 +643,117 @@ class classify(object):
             bathy=parameters[4].valueAsText,
             out_raster=parameters[5].valueAsText)
 
+class runfullmodel(object):
+    """ Run all model steps to classify benthic terrain. """
+
+    def __init__(self):
+        self.label = u'Run All Model Steps'
+        self.canRunInBackground = False
+
+    def getParameterInfo(self):
+        # Output_Workspace
+
+        workspace = arcpy.Parameter()
+        workspace.name = u'Output_Workspace'
+        workspace.displayName = u'Output Workspace'
+        workspace.parameterType = 'Required'
+        workspace.direction = 'Input'
+        workspace.datatype = dt.format('Workspace')
+
+        # Bathymetry raster
+        bathy= arcpy.Parameter()
+        bathy.name = u'Bathymetry_raster'
+        bathy.displayName = u'Bathymetry raster'
+        bathy.parameterType = 'Required'
+        bathy.direction = 'Input'
+        bathy.datatype = dt.format('Raster Layer')
+
+        # Broad-scale BPI raster inner radius
+        broad_bpi_inner = arcpy.Parameter()
+        broad_bpi_inner.name = u'broad-scale_BPI_inner_radius'
+        broad_bpi_inner.displayName = u'broad-scale BPI inner radius'
+        broad_bpi_inner.parameterType = 'Required'
+        broad_bpi_inner.direction = 'Input'
+        broad_bpi_inner.datatype = dt.format('Long')
+
+        # Broad-scale BPI raster inner radius
+        broad_bpi_outer= arcpy.Parameter()
+        broad_bpi_outer.name = u'broad-scale_BPI_outer_radius'
+        broad_bpi_outer.displayName = u'broad-scale BPI outer radius'
+        broad_bpi_outer.parameterType = 'Required'
+        broad_bpi_outer.direction = 'Input'
+        broad_bpi_outer.datatype = dt.format('Long')
+
+        # Fine-scale BPI raster inner radius
+        fine_bpi_inner = arcpy.Parameter()
+        fine_bpi_inner.name = u'fine-scale_BPI_inner_radius'
+        fine_bpi_inner.displayName = u'fine-scale BPI inner radius'
+        fine_bpi_inner.parameterType = 'Required'
+        fine_bpi_inner.direction = 'Input'
+        fine_bpi_inner.datatype = dt.format('Long')
+
+        # Fine-scale BPI raster inner radius
+        fine_bpi_outer= arcpy.Parameter()
+        fine_bpi_outer.name = u'fine-scale_BPI_outer_radius'
+        fine_bpi_outer.displayName = u'fine-scale BPI outer radius'
+        fine_bpi_outer.parameterType = 'Required'
+        fine_bpi_outer.direction = 'Input'
+        fine_bpi_outer.datatype = dt.format('Long')
+
+        # Classification Dictionary
+        class_dict = arcpy.Parameter()
+        class_dict.name = u'Classification_dictionary'
+        class_dict.displayName = u'Classification dictionary'
+        class_dict.direction = 'Input'
+        class_dict.datatype = dt.format('File')
+        class_dict.parameterType = 'Required'
+
+        # classification dictionary must be of the types we parse.
+        class_dict.filter.list = ['csv', 'xls', 'xlsx', 'xml']
+
+        # Output_raster
+        zones_raster= arcpy.Parameter()
+        zones_raster.name = u'Output_zones_raster'
+        zones_raster.displayName = u'Output Zones Raster'
+        zones_raster.parameterType = 'Required'
+        zones_raster.direction = 'Output'
+        zones_raster.datatype = dt.format('String') # was raster dataset, but no way to control path then...
+
+        return [workspace, bathy, broad_bpi_inner, broad_bpi_outer, fine_bpi_inner, fine_bpi_outer, class_dict, zones_raster]
+
+    def isLicensed(self):
+        return True
+
+    def updateParameters(self, parameters):
+        validator = getattr(self, 'ToolValidator', None)
+        cols = ['workspace', 'bathy', 'broad_bpi_inner', 'broad_bpi_outer', \
+                'fine_bpi_inner', 'fine_bpi_outer', 'class_dict', 'zones_raster']
+        workspace = parameters[cols.index('workspace')].valueAsText
+        zones_raster = parameters[cols.index('zones_raster')].valueAsText
+
+        # TODO: make this work so that if they update the output_zones, we respect it.
+        if workspace is not None and zones_raster is None:
+            parameters[cols.index('zones_raster')].value = os.path.join(workspace, "output_zones")
+        if validator:
+             return validator(parameters).updateParameters()
+ 
+
+    def updateMessages(self, parameters):
+        validator = getattr(self, 'ToolValidator', None)
+        if validator:
+             return validator(parameters).updateMessages()
+
+    def execute(self, parameters, messages):
+        from scripts import btm_model
+        btm_model.main(
+            workspace = parameters[0].valueAsText,
+            input_bathymetry = parameters[1].valueAsText,
+            broad_bpi_inner_radius = parameters[2].valueAsText,
+            broad_bpi_outer_radius = parameters[3].valueAsText,
+            fine_bpi_inner_radius = parameters[4].valueAsText,
+            fine_bpi_outer_radius = parameters[5].valueAsText,
+            classification_dict = parameters[6].valueAsText,
+            output_zones = parameters[7].valueAsText)
 
 class structureclassification(object):
     """Classify benthic terrain based on structures."""
