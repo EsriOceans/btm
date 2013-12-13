@@ -4,16 +4,17 @@ import numpy
 import arcpy
 import arcgisscripting # our error objects are within this class
 import zipfile
-from tempdir import TempDir
 
+from tempdir import TempDir
 import utils
 import config
 
 # import our local directory so we can use the internal modules
 import_paths = ['../Install/toolbox', '../Install']
 utils.addLocalPaths(import_paths)
-
-from scripts import bpi, standardize_bpi_grids, btm_model
+# now we can import our scripts
+from scripts import bpi, standardize_bpi_grids, btm_model, slope, \
+        ruggedness, depth_statistics
 
 class TestBtmDocument(unittest.TestCase):
 
@@ -44,14 +45,14 @@ class TestBpiScript(unittest.TestCase):
                 outer_radius=30, out_raster=bpi_raster, bpi_type='broad')
             self.assertTrue(os.path.exists(bpi_raster))
 
+            #r = arcpy.Raster(bpi_raster)
+            #self.assertAlmostEqual(r.mean, 0.295664335664)
+            #self.assertAlmostEqual(r.standardDeviation, 1.65611606614)
+
             arcpy.CalculateStatistics_management(bpi_raster) 
             self.assertAlmostEqual(utils.raster_properties(bpi_raster, "MEAN"), 0.295664335664)
             self.assertAlmostEqual(utils.raster_properties(bpi_raster, "STD"), 1.65611606614)
  
-            # clean up
-            arcpy.Delete_management(bpi_raster)
-            self.assertFalse(os.path.exists(bpi_raster))
-
 class TestStandardizeBpiGridsScript(unittest.TestCase):
 
     def testStdImport(self):
@@ -78,13 +79,121 @@ class TestStandardizeBpiGridsScript(unittest.TestCase):
             self.assertAlmostEqual(utils.raster_properties(std_raster, "MEAN"), 0.671608391608)
             self.assertAlmostEqual(utils.raster_properties(std_raster, "STD"), 99.655593923183)
 
-            # clean up
-            arcpy.Delete_management(in_raster)
-            arcpy.Delete_management(std_raster)
-            self.assertFalse(os.path.exists(std_raster))
+class TestBpiSlope(unittest.TestCase):
 
-class TestClassifyWizard(unittest.TestCase):
+    """
+    slope.main(bathy=None, out_raster=None)
+    """
+    def testSlopeImport(self):
+        self.assertTrue('main' in vars(slope))
 
+    def testSlopeRun(self):
+        with TempDir() as d:
+            slope_raster = os.path.join(d, 'test_slope.tif')
+            slope.main(bathy=config.bathy_raster, out_raster=slope_raster)
+            self.assertTrue(os.path.exists(slope_raster))
+            # doing this causes WindowsError: [Error 32] file used by another process
+            #with Rast(slope_raster) as r:
+                #self.assertAlmostEqual(r.mean, 3.802105241105673)
+                #self.assertAlmostEqual(r.mean, 100)
+ 
+            arcpy.CalculateStatistics_management(slope_raster) 
+            self.assertAlmostEqual(utils.raster_properties(slope_raster, "MEAN"), \
+                3.802105241105673)
+
+class TestBpiSlope(unittest.TestCase):
+
+    """
+    slope.main(bathy=None, out_raster=None)
+    """
+    def testSlopeImport(self):
+        self.assertTrue('main' in vars(slope))
+
+    def testSlopeRun(self):
+        with TempDir() as d:
+            slope_raster = os.path.join(d, 'test_slope.tif')
+            slope.main(bathy=config.bathy_raster, out_raster=slope_raster)
+            self.assertTrue(os.path.exists(slope_raster))
+            # doing this causes WindowsError: [Error 32] file used by another process
+            #with Rast(slope_raster) as r:
+                #self.assertAlmostEqual(r.mean, 3.802105241105673)
+                #self.assertAlmostEqual(r.mean, 100)
+ 
+            arcpy.CalculateStatistics_management(slope_raster) 
+            self.assertAlmostEqual(utils.raster_properties(slope_raster, "MEAN"), \
+                3.802105241105673)
+
+class TestVrm(unittest.TestCase):
+    """
+    ruggestness.main(InRaster=None, NeighborhoodSize=None, 
+        OutWorkspace=None, OutRaster=None)
+    """
+    def testVrmImport(self):
+        self.assertTrue('main' in vars(ruggedness))
+
+    def testVrmRun(self):
+        with TempDir() as d:
+            neighborhood = 3 # 3x3 neighborhood
+            vrm_raster = os.path.join(d, 'test_vrm.tif')
+
+            arcpy.env.scratchWorkspace = d 
+            ruggedness.main(config.bathy_raster, neighborhood, d, \
+                    vrm_raster)
+            self.assertTrue(os.path.exists(vrm_raster))
+
+            arcpy.CalculateStatistics_management(vrm_raster) 
+            self.assertAlmostEqual(utils.raster_properties(vrm_raster, "MEAN"), \
+                0.000625595213874938)
+            self.assertAlmostEqual(utils.raster_properties(vrm_raster, "STD"), \
+                0.0008735527042842267)
+class TestDepthStatistics(unittest.TestCase):
+    """
+    depth_statistics.main(in_raster=None, neighborhood_size=None, 
+        out_workspace=None, out_stats_raw=None)
+    """
+    def testDepthStatisticsImport(self):
+        self.assertTrue('main' in vars(depth_statistics))
+
+    def testDepthStatisticsRun(self):
+        with TempDir() as d:
+            neighborhood = 3 # 3x3 neighborhood
+            out_workspace = d
+            stats = "Mean Depth;Variance;Standard Deviation"
+            depth_statistics.main(config.bathy_raster, neighborhood, 
+                    out_workspace, stats)
+
+            # mean of depth summary rasters
+            mean_depths = {
+                'meandepth': -20.56248074571827,
+                'stdevdepth': 0.2946229406453136,
+                'vardepth': 0.1281792675921596 }
+
+            for (stat, mean_value) in mean_depths.items():
+                raster = os.path.join(d, stat)
+                self.assertTrue(os.path.exists(raster))
+                arcpy.CalculateStatistics_management(raster)
+                self.assertAlmostEqual(utils.raster_properties(raster, "MEAN"), \
+                        mean_value)
+
+class TestRunFullModel(unittest.TestCase):
+
+    def setUp(self):
+        self.broad_inner_rad = 10
+        self.broad_outer_rad = 30
+        self.fine_inner_rad = 5
+        self.fine_outer_rad = 10
+        self.csv_mean = None
+        self.xml_mean = None
+    
+    def sumFirstClass(self, in_raster):
+        # Extract and sum only the first class from the input raster 
+        #   (raster values of 1).
+        remap = arcpy.sa.RemapValue([[1,1]])
+        remappedRaster = arcpy.sa.Reclassify(in_raster, "Value", remap, "NODATA")
+        remapped_numpy = arcpy.RasterToNumPyArray(remappedRaster)
+        del remappedRaster
+        return remapped_numpy.sum() 
+    
     def testToolboxImport(self):
         self.toolbox = arcpy.ImportToolbox(config.pyt_file)
         self.assertTrue('runfullmodel' in vars(self.toolbox))
@@ -92,30 +201,43 @@ class TestClassifyWizard(unittest.TestCase):
     def testWizardImport(self):
         self.assertTrue('main' in vars(btm_model))
 
-    def testModelExecute(self):
+    def testModelExecuteWithCsv(self):
         with TempDir() as d:
-            workspace = d
-            bathy = config.bathy_raster
-            broad_inner_radius=10
-            broad_outer_radius=30
-            fine_inner_radius=5
-            fine_outer_radius=10
-            classification_dict = config.csv_doc
             model_output = os.path.join(d, 'output_zones.tif')
         
-            btm_model.main(workspace, bathy, broad_inner_radius, broad_outer_radius, fine_inner_radius, fine_outer_radius, classification_dict, model_output)
+            btm_model.main(d, config.bathy_raster, self.broad_inner_rad, \
+                    self.broad_outer_rad, self.fine_inner_rad, self.fine_outer_rad, \
+                    config.csv_doc, model_output)
 
             self.assertTrue(os.path.exists(model_output))
 
-            # do something fancy to count up the number of cells of each class?
-            self.assertAlmostEqual(utils.raster_properties(model_output, "MEAN"), \
-                    5.45594405594)
+            self.csv_mean = utils.raster_properties(model_output, "MEAN")
+            self.assertAlmostEqual(self.csv_mean, 5.6517482517483)
 
-            remap = arcpy.sa.RemapValue([[1,1]])
-            remappedRaster = arcpy.sa.Reclassify(model_output, "Value", remap, "NODATA")
-            remapped_numpy = arcpy.RasterToNumPyArray(remappedRaster)
-            del remappedRaster
-            self.assertEqual(remapped_numpy.sum(), 88)
+            # count up the number of cells in the first class
+            self.assertEqual(self.sumFirstClass(model_output), 88)
+
+    def testModelExecuteWithXml(self):
+        with TempDir() as d:
+            model_output = os.path.join(d, 'output_zones.tif')
+        
+            btm_model.main(d, config.bathy_raster, self.broad_inner_rad, \
+                    self.broad_outer_rad, self.fine_inner_rad, self.fine_outer_rad, \
+                    config.xml_doc, model_output)
+
+            self.assertTrue(os.path.exists(model_output))
+
+            self.xml_mean = utils.raster_properties(model_output, "MEAN")
+            self.assertAlmostEqual(self.xml_mean, 5.6517482517483)
+
+            # count up the number of cells in the first class
+            self.assertEqual(self.sumFirstClass(model_output), 88)
+
+    def testXmlCsvConsistency(self):
+        # XML and CSV are two separate classification backends, make sure the
+        # results are consistent between the model runs.
+        # FIXME: not consistent right now.
+        self.assertEqual(self.csv_mean, self.xml_mean)
 
 # this test should be run after a fresh run of makeaddin to rebuild the .esriaddin file.
 class TestAddin(unittest.TestCase):

@@ -8,6 +8,7 @@
 from __future__ import with_statement
 import os
 import tempfile
+import time
 import shutil
 from functools import wraps
 from contextlib import contextmanager
@@ -29,6 +30,8 @@ Might not work on windows when the files are still opened
         return self.name
 
     def __exit__(self, *errstuff):
+        # slow down, champ: arcpy is slow to give up access, let if have a little breather.
+        #time.sleep(0.5) 
         return self.dissolve()
 
     def dissolve(self):
