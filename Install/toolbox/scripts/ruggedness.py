@@ -37,6 +37,9 @@ def main(InRaster=None, NeighborhoodSize=None, OutWorkspace=None, OutRaster=None
     zSumRaster = OutWorkspace + "\\zsum"
     ResultRaster = OutWorkspace + "\\result"
 
+    # force temporary stats to be computed in our output workspace
+    arcpy.env.scratchWorkspace = OutWorkspace
+
     try:
         # Create Slope and Aspect rasters
         arcpy.AddMessage("Calculating aspect...")
