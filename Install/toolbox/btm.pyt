@@ -18,7 +18,7 @@ from datatype import datatype
 dt = datatype.DataType()
 
 # import our local directory so we can import internal modules
-local_path = os.path.dirname(__file__)
+local_path = os.path.abspath(os.path.dirname(__file__))
 sys.path.insert(0, local_path)
 
 # status messages
@@ -85,39 +85,42 @@ def metadata(update=True):
 arcpy.CheckOutExtension("Spatial")
 
 class Toolbox(object):
+    """ Benthic Terrain Modeler Python toolbox metaclass."""
     def __init__(self):
         self.label = u'Benthic Terrain Modeler'
         self.alias = 'btm'
-        self.tools = [broadscalebpi, finescalebpi, standardizebpi, btmslope, classify, terrainruggedness, depthstatistics]
+        self.tools = [broadscalebpi, finescalebpi, standardizebpi, btmslope, classify, terrainruggedness, depthstatistics, runfullmodel]
 
 # tools below this section, one class per tool.
 
+# XXX TODO: add detailed description pulled from __init__ method, push these outside of this script.
 class broadscalebpi(object):
-    """c:\data\arcgis\addins\btm\toolbox\BTM.tbx\broadscalebpi"""
+    """ Calculate Broad-scale Bathymetric Position Index (BPI).  """
+
     class ToolValidator:
-      """Class for validating a tool's parameter values and controlling
-      the behavior of the tool's dialog."""
-    
-      def __init__(self, parameters):
-        """Setup arcpy and the list of tool parameters."""
-        self.params = parameters
-    
-      def initializeParameters(self):
-        """Refine the properties of a tool's parameters.  This method is
-        called when the tool is opened."""
-        return
-    
-      def updateParameters(self):
-        """Modify the values and properties of parameters before internal
-        validation is performed.  This method is called whenever a parmater
-        has been changed."""
-        return
-         
-      def updateMessages(self):
-        """Modify the messages created by internal validation for each tool
-        parameter.  This method is called after internal validation."""
-        return
-    
+        """Class for validating a tool's parameter values and controlling
+        the behavior of the tool's dialog."""
+
+        def __init__(self, parameters):
+            """Setup arcpy and the list of tool parameters."""
+            self.params = parameters
+
+        def initializeParameters(self):
+            """Refine the properties of a tool's parameters.  This method is
+            called when the tool is opened."""
+            return
+
+        def updateParameters(self):
+            """Modify the values and properties of parameters before internal
+            validation is performed.  This method is called whenever a parmater
+            has been changed."""
+            return
+
+        def updateMessages(self):
+            """Modify the messages created by internal validation for each tool
+            parameter.  This method is called after internal validation."""
+            return
+
     def __init__(self):
         self.label = u'Build Broad Scale BPI'
         self.description = u'The concept of bathymetric position is central to the benthic\r\nterrain classification process that is utilized by the BTM.\r\nBathymetric Position Index (BPI) is a measure of where a\r\nreferenced location is relative to the locations surrounding it.\r\nBPI is derived from an input bathymetric data set and itself is a modification of the topographic position index (TPI) algorithm that is used in the terrestrial environment. The application of TPI to develop terrain classifications was explored and developed by Andrew Weiss during his study of terrestrial watersheds in Central Oregon (Weiss 2001). These\r\napplications can be carried into the benthic environment\r\nthrough BPI.\r\n\r\nA broad-scale BPI data set allows you to identify larger features within the benthic landscape.'
@@ -171,6 +174,7 @@ class broadscalebpi(object):
 
     def isLicensed(self):
         return True
+
     def updateParameters(self, parameters):
         validator = getattr(self, 'ToolValidator', None)
 
@@ -211,7 +215,7 @@ class broadscalebpi(object):
 
         if validator:
             return validator(parameters).updateMessages()
- 
+
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
         from scripts import bpi
@@ -220,10 +224,11 @@ class broadscalebpi(object):
             inner_radius=parameters[1].valueAsText,
             outer_radius=parameters[2].valueAsText,
             out_raster=parameters[4].valueAsText,
-	    bpi_type='broad')
+            bpi_type='broad')
 
 class finescalebpi(object):
-    """c:\data\arcgis\addins\btm\toolbox\BTM.tbx\finescalebpi"""
+    """ Calculate Fine-scale Bathymetric Position Index (BPI).  """
+
     class ToolValidator:
       """Class for validating a tool's parameter values and controlling
       the behavior of the tool's dialog."""
@@ -354,10 +359,13 @@ class finescalebpi(object):
             inner_radius=parameters[1].valueAsText,
             outer_radius=parameters[2].valueAsText,
             out_raster=parameters[4].valueAsText,
-	    bpi_type='fine')
+	        bpi_type='fine')
     
 class standardizebpi(object):
-    """c:\data\arcgis\addins\btm\toolbox\BTM.tbx\standardizebpi"""
+    """
+    Standardize BPI rasters.
+    """
+
     def __init__(self):
         self.label = u'Standardize BPIs'
         self.canRunInBackground = False
@@ -428,7 +436,8 @@ class standardizebpi(object):
         fine_std_output.direction = 'Output'
         fine_std_output.datatype = dt.format('Raster Dataset')
 
-        return [broad_raster, broad_mean, broad_stddev, broad_std_output, fine_raster, fine_mean, fine_stddev, fine_std_output]
+        return [broad_raster, broad_mean, broad_stddev, broad_std_output, \
+                fine_raster, fine_mean, fine_stddev, fine_std_output]
 
     def isLicensed(self):
         return True
@@ -495,7 +504,7 @@ class standardizebpi(object):
             out_raster=parameters[7].valueAsText)
  
 class btmslope(object):
-    """c:\data\arcgis\addins\btm\toolbox\BTM.tbx\slope"""
+    """ Calculate slope, uses standard SA function internally."""
     def __init__(self):
         self.label = u'Calculate Slope'
         self.canRunInBackground = False
@@ -547,7 +556,7 @@ class btmslope(object):
             out_raster=parameters[1].valueAsText)
 
 class classify(object):
-    """c:\data\arcgis\addins\btm\toolbox\BTM.tbx\classify"""
+    """ Classify Benthic Terrain based on classification dictionary. """
     def __init__(self):
         self.label = u'Classify Benthic Terrain'
         self.canRunInBackground = False
@@ -636,7 +645,7 @@ class classify(object):
 
 
 class structureclassification(object):
-    """c:\data\arcgis\addins\btm\toolbox\BTM.tbx\structureclassification"""
+    """Classify benthic terrain based on structures."""
     def __init__(self):
         self.label = u'Structure Classification Builder'
         self.canRunInBackground = False
@@ -741,7 +750,7 @@ class structureclassification(object):
         pass
 
 class terrainruggedness(object):
-    """c:\data\arcgis\addins\btm\toolbox\BTM.tbx\Ruggedness(VRM)"""
+    """Compute Terrain Ruggedness Measure (VRM)."""
     class ToolValidator:
       """Class for validating a tool's parameter values and controlling
       the behavior of the tool's dialog."""
@@ -899,7 +908,7 @@ class depthstatistics(object):
         output_workspace.direction = 'Input'
         output_workspace.datatype = dt.format('Workspace')
 
-       # Statistics to Compute
+        # Statistics to Compute
         statistics = arcpy.Parameter()
         statistics.name = u'Statistics_Computed'
         statistics.displayName = u'Statistics to Compute'
