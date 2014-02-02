@@ -88,9 +88,6 @@ def main(InRaster=None, NeighborhoodSize=None, OutWorkspace=None, OutRaster=None
         OutRas4.save(OutRaster)
 
     except Exception as e:
-        # Print error message if an error occurs
-        #errors = arcpy.GetMessages()
-        #print "from except: " + e.message 
         utils.msg(e, mtype='error')
 
     try:
