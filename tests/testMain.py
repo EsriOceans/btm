@@ -5,6 +5,7 @@ import arcpy
 import arcgisscripting # our error objects are within this class
 import zipfile
 
+from nose.tools import *
 from tempdir import TempDir
 import utils
 import config
@@ -14,7 +15,7 @@ import_paths = ['../Install/toolbox', '../Install']
 utils.addLocalPaths(import_paths)
 # now we can import our scripts
 from scripts import bpi, standardize_bpi_grids, btm_model, slope, \
-        ruggedness, depth_statistics
+        ruggedness, depth_statistics, classify
 
 class TestBtmDocument(unittest.TestCase):
 
@@ -23,6 +24,10 @@ class TestBtmDocument(unittest.TestCase):
 
     def testCsvDocumentExists(self):
         self.assertTrue(os.path.exists(config.csv_doc))
+
+    def testMalformedCsvDocumentExsists(self):
+        self.assertTrue(os.path.exists(config.malformed_csv_doc))
+
 
 class TestBtmRaster(unittest.TestCase):
     def testRasterExists(self):
@@ -90,6 +95,7 @@ class TestBpiSlope(unittest.TestCase):
     def testSlopeRun(self):
         with TempDir() as d:
             slope_raster = os.path.join(d, 'test_slope.tif')
+            arcpy.env.scratchWorkspace = d 
             slope.main(bathy=config.bathy_raster, out_raster=slope_raster)
             self.assertTrue(os.path.exists(slope_raster))
             # doing this causes WindowsError: [Error 32] file used by another process
@@ -112,6 +118,7 @@ class TestBpiSlope(unittest.TestCase):
     def testSlopeRun(self):
         with TempDir() as d:
             slope_raster = os.path.join(d, 'test_slope.tif')
+            arcpy.env.scratchWorkspace = d 
             slope.main(bathy=config.bathy_raster, out_raster=slope_raster)
             self.assertTrue(os.path.exists(slope_raster))
             # doing this causes WindowsError: [Error 32] file used by another process
@@ -157,6 +164,7 @@ class TestDepthStatistics(unittest.TestCase):
     def testDepthStatisticsRun(self):
         with TempDir() as d:
             neighborhood = 3 # 3x3 neighborhood
+            arcpy.env.scratchWorkspace = d 
             out_workspace = d
             stats = "Mean Depth;Variance;Standard Deviation"
             depth_statistics.main(config.bathy_raster, neighborhood, 
@@ -204,6 +212,7 @@ class TestRunFullModel(unittest.TestCase):
     def testModelExecuteWithCsv(self):
         with TempDir() as d:
             model_output = os.path.join(d, 'output_zones.tif')
+            arcpy.env.scratchWorkspace = d 
         
             btm_model.main(d, config.bathy_raster, self.broad_inner_rad, \
                     self.broad_outer_rad, self.fine_inner_rad, self.fine_outer_rad, \
@@ -217,9 +226,19 @@ class TestRunFullModel(unittest.TestCase):
             # count up the number of cells in the first class
             self.assertEqual(self.sumFirstClass(model_output), 88)
 
+    @raises(ValueError)
+    def testModelExecuteWithMalformedCsv(self):
+        with TempDir() as d:
+            # raises a ValueError when the malformed line is encountered.
+            classify.main(config.malformed_csv_doc, 'null.tif', \
+                    'null.tif', 'null.tif', 'null.tif', config.bathy_raster, \
+                     os.path.join(d, 'null.tif'))
+
+
     def testModelExecuteWithXml(self):
         with TempDir() as d:
             model_output = os.path.join(d, 'output_zones.tif')
+            arcpy.env.scratchWorkspace = d 
         
             btm_model.main(d, config.bathy_raster, self.broad_inner_rad, \
                     self.broad_outer_rad, self.fine_inner_rad, self.fine_outer_rad, \

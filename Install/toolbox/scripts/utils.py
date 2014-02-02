@@ -193,11 +193,15 @@ class BtmCsvDocument(BtmDocument):
         for row in in_csv:
             # replace empty strings with Nones
             row_clean = [None if x == '' else x for x in row]
-                    
+
+            if len(row_clean) != 10:
+                msg = "Encountered malformed row which requires correction:" + \
+                        "{}\"".format(",".join(row))
+                raise ValueError(msg)
             # don't parse the header, assume columns are in expected order.
             (class_code, zone, broad_lower, broad_upper, fine_lower, fine_upper, \
             slope_lower, slope_upper, depth_lower, depth_upper) = row_clean
-           
+
             # for now: fake the format used by the XML documents.
             res_row = {'Class': class_code, 
                        'Zone': zone,
@@ -219,8 +223,16 @@ class BtmCsvDocument(BtmDocument):
             sample = f.read(1024)
             f.seek(0)
             sniff_obj = csv.Sniffer()
-            dialect = sniff_obj.sniff(sample)
-            has_header = sniff_obj.has_header(sample)
+            try: 
+                dialect = sniff_obj.sniff(sample)
+                has_header = sniff_obj.has_header(sample)
+            except csv.Error:
+                # If the CSV is malformed (e.g. a missing ',' in a row),
+                # this error can be raised. In that case, we shouldn't 
+                # automatically give up, but instead just set the default 
+                # dialect and assume a header.
+                dialect = "excel"
+                has_header = True
 
             # read in CSV, respecting the detected dialect
             in_csv = csv.reader(f, dialect)

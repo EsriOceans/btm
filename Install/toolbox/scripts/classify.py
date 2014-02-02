@@ -57,6 +57,7 @@ def main(classification_file, bpi_broad, bpi_fine, slope, bathy,
         
         # Read in the BTM Document; the class handles parsing a variety of inputs.
         btm_doc = BtmDocument(classification_file)
+
         classes = btm_doc.classification()
         msg("Parsing %s document... found %i classes." % (btm_doc.doctype, len(classes)))
 
@@ -84,6 +85,8 @@ def main(classification_file, bpi_broad, bpi_fine, slope, bathy,
         msg("Complete.")
 
     except Exception as e:
+        if type(e) is ValueError:
+            raise e
         msg(e, mtype='error')
 
 # when executing as a standalone script get parameters from sys
