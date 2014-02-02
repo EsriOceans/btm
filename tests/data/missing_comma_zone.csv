@@ -1,0 +1,6 @@
+Class,Zone,BroadBPI_Lower,BroadBPI_Upper,FineBPI_Lower,FineBPI_Upper,Slope_Lower,Slope_Upper,Depth_Lower,Depth_Upper
+1,A,-201,0,-84,0,87,70,,
+2,B,,,0,207,5,87,,
+3,C,201,414,-84,223,70,,
+4,D,-201,0,,,87,70,,
+5,E,-223,223,-40,123,5,87,,
