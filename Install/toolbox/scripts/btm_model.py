@@ -15,7 +15,7 @@ import sys
 import utils
 import config
 
-import bpi
+import bpi, slope, classify
 
 # Check out any necessary licenses
 arcpy.CheckOutExtension("Spatial")
@@ -30,7 +30,7 @@ def main(workspace, input_bathymetry, broad_bpi_inner_radius, broad_bpi_outer_ra
     # local variables:
     broad_bpi = os.path.join(workspace, "broad_bpi")
     fine_bpi = os.path.join(workspace, "fine_bpi")
-    slope = os.path.join(workspace, "slope")
+    slope_rast = os.path.join(workspace, "slope")
     broad_std = os.path.join(workspace, "broad_std")
     fine_std = os.path.join(workspace, "fine_std")
 
@@ -44,25 +44,27 @@ def main(workspace, input_bathymetry, broad_bpi_inner_radius, broad_bpi_outer_ra
     try:
         # Process: Build Broad Scale BPI
         utils.msg("Calculating broad-scale BPI...")
-        #arcpy.broadscalebpi_btm(input_bathymetry, broad_bpi_inner_radius, broad_bpi_outer_radius, "", broad_bpi)
-        bpi.main(input_bathymetry, broad_bpi_inner_radius, broad_bpi_outer_radius, broad_bpi, bpi_type='broad')
+        bpi.main(input_bathymetry, broad_bpi_inner_radius, \
+                broad_bpi_outer_radius, broad_bpi, bpi_type='broad')
 
         # Process: Build Fine Scale BPI
         utils.msg("Calculating fine-scale BPI...")
-        #arcpy.finescalebpi_btm(input_bathymetry, fine_bpi_inner_radius, fine_bpi_outer_radius, "", fine_bpi)
-        bpi.main(input_bathymetry, fine_bpi_inner_radius, fine_bpi_outer_radius, fine_bpi, bpi_type='fine')
+        bpi.main(input_bathymetry, fine_bpi_inner_radius, \
+                fine_bpi_outer_radius, fine_bpi, bpi_type='fine')
 
         # Process: Standardize BPIs
         utils.msg("Standardizing BPI rasters...")
-        arcpy.standardizebpi_btm(broad_bpi, "0", "0", broad_std, fine_bpi, "0", "0", fine_std)
+        arcpy.standardizebpi_btm(broad_bpi, "0", "0", broad_std, fine_bpi, \
+                "0", "0", fine_std)
 
         # Process: Calculate Slope
         utils.msg("Calculating slope...")
-        arcpy.btmslope_btm(input_bathymetry, slope)
+        slope.main(input_bathymetry, slope_rast)
 
         # Process: Zone Classification Builder
         utils.msg("Classifying Zones...")
-        arcpy.classify_btm(classification_dict, broad_std, fine_std, slope, input_bathymetry, output_zones)
+        classify.main(classification_dict, broad_std, fine_std, slope_rast, \
+                input_bathymetry, output_zones)
 
     except Exception as e:
         # Print error message if an error occurs
