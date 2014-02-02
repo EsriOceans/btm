@@ -30,15 +30,28 @@ Might not work on windows when the files are still opened
         return self.name
 
     def __exit__(self, *errstuff):
-        # slow down, champ: arcpy is slow to give up access, let if have a little breather.
-        #time.sleep(0.5) 
         return self.dissolve()
 
     def dissolve(self):
         """remove all files and directories created within the tempdir"""
         if self.name:
-            shutil.rmtree(self.name)
+            self._rm()
+
         self.name = ""
+
+    def _rm(self, count=10):
+        try:
+            shutil.rmtree(self.name)
+        except WindowsError:
+            # abandon all hope -- arcpy won't give up the lock.
+            if count == 0:
+                pass
+            else:
+                # slow down, champ: arcpy is slow to give up access, 
+                # let if have a little breather.
+                time.sleep(0.5)
+                # backoff counter so we don't get stuck
+                self._rm(count - 1) 
 
     def __str__(self):
         if self.name:
