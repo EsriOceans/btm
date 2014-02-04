@@ -734,7 +734,7 @@ class runfullmodel(object):
         # TODO: make this work so that if they update the output_zones, we respect it.
         if out_workspace is not None and zones_raster is None:
             parameters[cols.index('zones_raster')].value = \
-                    os.path.join(outworkspace, "output_zones")
+                    os.path.join(out_workspace, "output_zones")
         if validator:
              return validator(parameters).updateParameters()
  
