@@ -244,3 +244,15 @@ class BtmCsvDocument(BtmDocument):
             # everything but the header
             result = [r for r in in_csv]
         return result
+
+def workspaceExists(directory):
+    """
+    Ensure workspace exists.
+    """
+    if os.path.isdir(directory):
+        exists = True
+    else:
+        err_msg = "Output `{}` workspace doesn't exist".format(directory)
+        msg(err_msg, mtype='error')
+        sys.exit(1)
+    return exists

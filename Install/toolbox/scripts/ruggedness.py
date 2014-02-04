@@ -37,6 +37,7 @@ def main(InRaster=None, NeighborhoodSize=None, OutWorkspace=None, OutRaster=None
     zSumRaster = OutWorkspace + "\\zsum"
     ResultRaster = OutWorkspace + "\\result"
 
+    utils.workspaceExists(OutWorkspace)
     # force temporary stats to be computed in our output workspace
     arcpy.env.scratchWorkspace = OutWorkspace
 

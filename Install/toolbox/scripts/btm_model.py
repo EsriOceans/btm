@@ -20,7 +20,7 @@ import bpi, slope, classify
 # Check out any necessary licenses
 arcpy.CheckOutExtension("Spatial")
 
-def main(workspace, input_bathymetry, broad_bpi_inner_radius, broad_bpi_outer_radius, fine_bpi_inner_radius, fine_bpi_outer_radius, classification_dict, output_zones):
+def main(out_workspace, input_bathymetry, broad_bpi_inner_radius, broad_bpi_outer_radius, fine_bpi_inner_radius, fine_bpi_outer_radius, classification_dict, output_zones):
 
     # Load required toolboxes
     local_path = os.path.dirname(__file__)
@@ -28,15 +28,16 @@ def main(workspace, input_bathymetry, broad_bpi_inner_radius, broad_bpi_outer_ra
     arcpy.ImportToolbox(btm_toolbox)
 
     # local variables:
-    broad_bpi = os.path.join(workspace, "broad_bpi")
-    fine_bpi = os.path.join(workspace, "fine_bpi")
-    slope_rast = os.path.join(workspace, "slope")
-    broad_std = os.path.join(workspace, "broad_std")
-    fine_std = os.path.join(workspace, "fine_std")
+    broad_bpi = os.path.join(out_workspace, "broad_bpi")
+    fine_bpi = os.path.join(out_workspace, "fine_bpi")
+    slope_rast = os.path.join(out_workspace, "slope")
+    broad_std = os.path.join(out_workspace, "broad_std")
+    fine_std = os.path.join(out_workspace, "fine_std")
 
+    utils.workspaceExists(out_workspace)
     # set geoprocessing environments
-    arcpy.env.scratchWorkspace = workspace
-    arcpy.env.workspace = workspace
+    arcpy.env.scratchWorkspace = out_workspace
+    arcpy.env.workspace = out_workspace
 
     # TODO: currently set to automatically overwrite, expose this as option
     arcpy.env.overwriteOutput = True
@@ -74,7 +75,7 @@ def main(workspace, input_bathymetry, broad_bpi_inner_radius, broad_bpi_outer_ra
 if __name__=='__main__':
     config.mode = 'script'
     main(
-        workspace = sys.argv[1],
+        out_workspace = sys.argv[1],
         input_bathymetry = sys.argv[2],
         broad_bpi_inner_radius = sys.argv[3],
         broad_bpi_outer_radius = sys.argv[4],

@@ -2,11 +2,10 @@
 # Shaun Walbridge, 2012.10.07
 
 # Import system modules
-import sys, arcpy
+import os, sys, arcpy
 from arcpy.sa import *
 
-# local imports
-from utils import *
+import utils
 import config
 
 # Check out any necessary licenses
@@ -45,10 +44,12 @@ def main(classification_file, bpi_broad, bpi_fine, slope, bathy,
         # CON is very very picky. it generates GRID outputs by default, and the
         # resulting names must not exist. for now, push our temp results
         # to the output folder.
-        output_dir = os.path.dirname(out_raster)
-        msg("Set scratch workspace to %s..." % output_dir)
-        arcpy.env.scratchWorkspace = output_dir
-        arcpy.env.workspace = output_dir
+        out_workspace = os.path.dirname(out_raster)
+        # make sure workspace exists
+        utils.workspaceExists(out_workspace)
+        utils.msg("Set scratch workspace to %s..." % out_workspace)
+        arcpy.env.scratchWorkspace = out_workspace
+        arcpy.env.workspace = out_workspace
 
         # Create the broad-scale Bathymetric Position Index (BPI) raster
         msg_text="Generating the classified grid, based on the provided" +\

@@ -653,12 +653,12 @@ class runfullmodel(object):
     def getParameterInfo(self):
         # Output_Workspace
 
-        workspace = arcpy.Parameter()
-        workspace.name = u'Output_Workspace'
-        workspace.displayName = u'Output Workspace'
-        workspace.parameterType = 'Required'
-        workspace.direction = 'Input'
-        workspace.datatype = dt.format('Workspace')
+        out_workspace = arcpy.Parameter()
+        out_workspace.name = u'Output_Workspace'
+        out_workspace.displayName = u'Output Workspace'
+        out_workspace.parameterType = 'Required'
+        out_workspace.direction = 'Input'
+        out_workspace.datatype = dt.format('Workspace')
 
         # Bathymetry raster
         bathy= arcpy.Parameter()
@@ -719,21 +719,22 @@ class runfullmodel(object):
         zones_raster.direction = 'Output'
         zones_raster.datatype = dt.format('String') # was raster dataset, but no way to control path then...
 
-        return [workspace, bathy, broad_bpi_inner, broad_bpi_outer, fine_bpi_inner, fine_bpi_outer, class_dict, zones_raster]
+        return [out_workspace, bathy, broad_bpi_inner, broad_bpi_outer, fine_bpi_inner, fine_bpi_outer, class_dict, zones_raster]
 
     def isLicensed(self):
         return True
 
     def updateParameters(self, parameters):
         validator = getattr(self, 'ToolValidator', None)
-        cols = ['workspace', 'bathy', 'broad_bpi_inner', 'broad_bpi_outer', \
+        cols = ['out_workspace', 'bathy', 'broad_bpi_inner', 'broad_bpi_outer', \
                 'fine_bpi_inner', 'fine_bpi_outer', 'class_dict', 'zones_raster']
-        workspace = parameters[cols.index('workspace')].valueAsText
+        out_workspace = parameters[cols.index('out_workspace')].valueAsText
         zones_raster = parameters[cols.index('zones_raster')].valueAsText
 
         # TODO: make this work so that if they update the output_zones, we respect it.
-        if workspace is not None and zones_raster is None:
-            parameters[cols.index('zones_raster')].value = os.path.join(workspace, "output_zones")
+        if out_workspace is not None and zones_raster is None:
+            parameters[cols.index('zones_raster')].value = \
+                    os.path.join(outworkspace, "output_zones")
         if validator:
              return validator(parameters).updateParameters()
  
@@ -746,7 +747,7 @@ class runfullmodel(object):
     def execute(self, parameters, messages):
         from scripts import btm_model
         btm_model.main(
-            workspace = parameters[0].valueAsText,
+            out_workspace = parameters[0].valueAsText,
             input_bathymetry = parameters[1].valueAsText,
             broad_bpi_inner_radius = parameters[2].valueAsText,
             broad_bpi_outer_radius = parameters[3].valueAsText,
@@ -908,12 +909,12 @@ class terrainruggedness(object):
         neighborhood.datatype = dt.format('Long')
 
         # Output_Workspace
-        workspace = arcpy.Parameter()
-        workspace.name = u'Temporary_Workspace'
-        workspace.displayName = u'Temporary Workspace'
-        workspace.parameterType = 'Required'
-        workspace.direction = 'Input'
-        workspace.datatype = dt.format('Workspace')
+        out_workspace = arcpy.Parameter()
+        out_workspace.name = u'Temporary_Workspace'
+        out_workspace.displayName = u'Temporary Workspace'
+        out_workspace.parameterType = 'Required'
+        out_workspace.direction = 'Input'
+        out_workspace.datatype = dt.format('Workspace')
 
         # Output_Raster
         output_raster = arcpy.Parameter()
@@ -923,7 +924,7 @@ class terrainruggedness(object):
         output_raster.direction = 'Output'
         output_raster.datatype = dt.format('Raster Dataset')
 
-        return [input_raster, neighborhood, workspace, output_raster]
+        return [input_raster, neighborhood, out_workspace, output_raster]
 
     def isLicensed(self):
         return True
@@ -1012,12 +1013,12 @@ class depthstatistics(object):
         neighborhood.datatype = dt.format('Long')
 
         # Output_Workspace
-        output_workspace = arcpy.Parameter()
-        output_workspace.name = u'Output_Workspace'
-        output_workspace.displayName = u'Output Workspace'
-        output_workspace.parameterType = 'Required'
-        output_workspace.direction = 'Input'
-        output_workspace.datatype = dt.format('Workspace')
+        out_workspace = arcpy.Parameter()
+        out_workspace.name = u'Output_Workspace'
+        out_workspace.displayName = u'Output Workspace'
+        out_workspace.parameterType = 'Required'
+        out_workspace.direction = 'Input'
+        out_workspace.datatype = dt.format('Workspace')
 
         # Statistics to Compute
         statistics = arcpy.Parameter()
@@ -1029,7 +1030,7 @@ class depthstatistics(object):
         statistics.multiValue = True
         statistics.filter.list = ['Mean Depth', 'Variance', 'Standard Deviation']
 
-        return [input_raster, neighborhood, output_workspace, statistics]
+        return [input_raster, neighborhood, out_workspace, statistics]
 
     def isLicensed(self):
         return True
