@@ -13,7 +13,7 @@ arcpy.CheckOutExtension("Spatial")
 
 def runCon(lower_bounds, upper_bounds, in_grid, true_val, true_alt=None):
     # debug message:
-    #msg("runCon: lb: `%s`  ub: `%s` grid: `%s`  val: `%s`" % (lower_bounds, upper_bounds, in_grid, true_val))
+    #utils.msg("runCon: lb: `%s`  ub: `%s` grid: `%s`  val: `%s`" % (lower_bounds, upper_bounds, in_grid, true_val))
     out_grid = ""
     # if our initial desired output value isn't set, use the backup
     if str(true_val) == '':
@@ -54,20 +54,20 @@ def main(classification_file, bpi_broad, bpi_fine, slope, bathy,
         # Create the broad-scale Bathymetric Position Index (BPI) raster
         msg_text="Generating the classified grid, based on the provided" +\
             " classes in '{classes}'.".format(classes=classification_file)
-        msg(msg_text)
+        utils.msg(msg_text)
         
         # Read in the BTM Document; the class handles parsing a variety of inputs.
-        btm_doc = BtmDocument(classification_file)
+        btm_doc = utils.BtmDocument(classification_file)
 
         classes = btm_doc.classification()
-        msg("Parsing %s document... found %i classes." % (btm_doc.doctype, len(classes)))
+        utils.msg("Parsing %s document... found %i classes." % (btm_doc.doctype, len(classes)))
 
         grids = []
 
         for item in classes:
             cur_class = str(item["Class"])
             cur_name = str(item["Zone"])
-            msg("Calculating grid for %s..." % cur_name)
+            utils.msg("Calculating grid for %s..." % cur_name)
             out_con = ""
             # here come the CONs:
             out_con = runCon(item["Depth_LowerBounds"], item["Depth_UpperBounds"], bathy, cur_class)
@@ -76,19 +76,19 @@ def main(classification_file, bpi_broad, bpi_fine, slope, bathy,
             out_con = runCon(item["SSB_LowerBounds"], item["SSB_UpperBounds"], bpi_fine, out_con, cur_class)
             grids.append(out_con)
 
-        msg("Creating Benthic Terrain Classification Dataset...")
+        utils.msg("Creating Benthic Terrain Classification Dataset...")
         merge_grid = grids[0]
         for index in range(1,len(grids)):
              merge_grid = Con(merge_grid, grids[index], merge_grid, ("VALUE = 0"))
-        msg("Saving Output to %s" % out_raster)
+        utils.msg("Saving Output to %s" % out_raster)
         merge_grid.save(out_raster)
 
-        msg("Complete.")
+        utils.msg("Complete.")
 
     except Exception as e:
         if type(e) is ValueError:
             raise e
-        msg(e, mtype='error')
+        utils.msg(e, mtype='error')
 
 # when executing as a standalone script get parameters from sys
 if __name__=='__main__':
