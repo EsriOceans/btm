@@ -15,7 +15,7 @@ import_paths = ['../Install/toolbox', '../Install']
 utils.addLocalPaths(import_paths)
 # now we can import our scripts
 from scripts import bpi, standardize_bpi_grids, btm_model, slope, \
-        ruggedness, depth_statistics, classify
+        ruggedness, depth_statistics, classify, surface_area_to_planar_area
 
 class TestBtmDocument(unittest.TestCase):
 
@@ -153,6 +153,37 @@ class TestVrm(unittest.TestCase):
                 0.000625595213874938)
             self.assertAlmostEqual(utils.raster_properties(vrm_raster, "STD"), \
                 0.0008735527042842267)
+
+class TestSaPa(unittest.TestCase):
+    """
+    surface_area_to_planar_area.main(in_raster=None, out_raster=None, 
+        area_raster)
+    """
+    def testSaPaImport(self):
+        self.assertTrue('main' in vars(surface_area_to_planar_area))
+
+    def testSaPaRun(self):
+        with TempDir() as d:
+            ratio_raster = os.path.join(d, 'test_sapa_ratio.tif')
+            surf_raster = os.path.join(d, 'test_surface_area.tif')
+
+            arcpy.env.scratchWorkspace = d 
+            surface_area_to_planar_area.main(config.bathy_raster, 
+                    ratio_raster, surf_raster)
+            self.assertTrue(os.path.exists(ratio_raster))
+
+            arcpy.CalculateStatistics_management(ratio_raster) 
+            self.assertAlmostEqual(utils.raster_properties(ratio_raster, "MEAN"), \
+               1.0042422342676) 
+            self.assertAlmostEqual(utils.raster_properties(ratio_raster, "STD"), \
+               0.0058175502835692)
+
+            self.assertAlmostEqual(utils.raster_properties(surf_raster, "MEAN"), \
+                25.119343739217)
+            self.assertAlmostEqual(utils.raster_properties(surf_raster, "STD"), \
+                0.14551573347447)
+
+
 class TestDepthStatistics(unittest.TestCase):
     """
     depth_statistics.main(in_raster=None, neighborhood_size=None, 

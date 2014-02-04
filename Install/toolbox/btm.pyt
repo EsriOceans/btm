@@ -89,7 +89,7 @@ class Toolbox(object):
     def __init__(self):
         self.label = u'Benthic Terrain Modeler'
         self.alias = 'btm'
-        self.tools = [broadscalebpi, finescalebpi, standardizebpi, btmslope, classify, terrainruggedness, depthstatistics, runfullmodel]
+        self.tools = [broadscalebpi, finescalebpi, standardizebpi, btmslope, classify, surfacetoplanar, terrainruggedness, depthstatistics, runfullmodel]
 
 # tools below this section, one class per tool.
 
@@ -860,6 +860,90 @@ class structureclassification(object):
 
     def execute(self, parameters, messages):
         pass
+
+class surfacetoplanar(object):
+    """Compute Surface Area to Planar Area (ratio)."""
+    class ToolValidator:
+      """Class for validating a tool's parameter values and controlling
+      the behavior of the tool's dialog."""
+    
+      def __init__(self, parameters):
+        """Setup arcpy and the list of tool parameters."""
+        self.params = parameters
+    
+      def initializeParameters(self):
+        """Refine the properties of a tool's parameters.  This method is
+        called when the tool is opened."""
+        return
+    
+      def updateParameters(self):
+        """Modify the values and properties of parameters before internal
+        validation is performed.  This method is called whenever a parmater
+        has been changed."""
+        return
+    
+      def updateMessages(self):
+        """Modify the messages created by internal validation for each tool
+        parameter.  This method is called after internal validation."""
+        return
+
+    def __init__(self):
+        self.label = u'Surface Area to Planar Area'
+        self.description = 'Measure terrain ruggedness by calculating the ratio between the surface area and the planar area, as described in Jenness 2002.'
+        self.canRunInBackground = False
+
+    def getParameterInfo(self):
+        # Bathymetry_Raster
+        input_raster = arcpy.Parameter()
+        input_raster.name = u'Bathymetry_Raster'
+        input_raster.displayName = u'Bathymetry Raster'
+        input_raster.parameterType = 'Required'
+        input_raster.direction = 'Input'
+        input_raster.datatype = dt.format('Raster Layer')
+
+        # Output_Raster
+        output_raster = arcpy.Parameter()
+        output_raster.name = u'Output_Raster'
+        output_raster.displayName = u'Output Raster'
+        output_raster.parameterType = 'Required'
+        output_raster.direction = 'Output'
+        output_raster.datatype = dt.format('Raster Dataset')
+
+        # Area_Raster
+        area_raster = arcpy.Parameter()
+        area_raster.name = u'Area_Raster'
+        area_raster.displayName = u'Area Raster'
+        area_raster.parameterType = 'Optional'
+        area_raster.direction = 'Output'
+        area_raster.datatype = dt.format('Raster Dataset')
+
+        return [input_raster, output_raster, area_raster]
+
+    def isLicensed(self):
+        return True
+
+    def updateParameters(self, parameters):
+        validator = getattr(self, 'ToolValidator', None)
+        if validator:
+             return validator(parameters).updateParameters()
+
+    def updateMessages(self, parameters):
+        validator = getattr(self, 'ToolValidator', None)
+        output = parameters[1].valueAsText
+        # validate the output GRID name
+        if output is not None:
+            if not valid_grid_name(output):
+                parameters[1].setErrorMessage(MSG_INVALID_GRID)
+        if validator:
+             return validator(parameters).updateMessages()
+
+    def execute(self, parameters, messages):
+        # run related python script with selected input parameters
+        from scripts import surface_area_to_planar_area
+        surface_area_to_planar_area.main(
+                in_raster=parameters[0].valueAsText, 
+                out_raster=parameters[1].valueAsText,
+                area_raster=parameters[2].valueAsText)
 
 class terrainruggedness(object):
     """Compute Terrain Ruggedness Measure (VRM)."""

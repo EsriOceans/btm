@@ -253,6 +253,6 @@ def workspaceExists(directory):
         exists = True
     else:
         err_msg = "Output `{}` workspace doesn't exist".format(directory)
-        msg(err_msg, mtype='error')
+        msg(err_msg)
         sys.exit(1)
     return exists

@@ -5,11 +5,11 @@
   <Name>Benthic Terrain Modeler (BTM)</Name>
   <AddInID>{2dac2ae8-b5f3-4263-9f5d-aaed6b47316b}</AddInID>
   <Description>Tools for modeling and classifying benthic terrain.</Description>
-  <Version>3.0-beta-13</Version>
+  <Version>3.0-beta-15</Version>
   <Image>Images\btm-steps_64x64.png</Image>
   <Author>Shaun Walbridge</Author>
   <Company>Esri</Company>
-  <Date>11/14/2012</Date>
+  <Date>12/13/2013</Date>
 
 <Targets>
   <Target name="Desktop" version="10.1" />
@@ -88,22 +88,19 @@
     </Button>
 
     <!-- Geomorphological Parameters -->
-    <!-- 
-         COMMENTED OUT until we implement the old method. There's a 10.0 version of this
-         in the code that Bob shared, it looked slow but would be worth a look as a starting point.
+    
     <Button
-      caption="Rugosity"
+      caption="Surface Area to Planar Area"
       category="Benthic Terrain Modeler (BTM)"
-      class="calculateRugosity"
-      id="calculateRugosity.button"
-      image="Images\rugosity_16x16.png"
-      message="Rugosity measures the surface roughness by comparing planar area to surface area."
-      tip="Calculate Rugosity">
+      class="calculateSaPa"
+      id="calculateSaPa.button"
+      image="Images\sapa_16x16.png"
+      message="Measures the surface roughness by comparing the ratio planar area to surface area. In previous versions of BTM, this tool was called 'Rugosity'."
+      tip="Calculate Surface Area to Planar Area">
       <Help
-        heading="Calculate Rugosity"
-        >Rugosity measures the surface roughness by comparing planar area to surface area.</Help>
+        heading="Calculate Surface Area to Planar Area"
+        >Measures the surface roughness by comparing the ratio planar area to surface area. In older versions of BTM, this tool was labeled 'Rugosity'.</Help>
     </Button>
-    -->
     <Button
       caption="Terrain Ruggedness (VRM)"
       category="Benthic Terrain Modeler (BTM)"
@@ -226,7 +223,7 @@
         <Button refID="calculateAspect.button" />
         <Button refID="calculateSlope.button" />
         <Button refID="calculateCurvature.button" />
-        <!--<Button refID="calculateRugosity.button" />-->
+        <Button refID="calculateSaPa.button" />-->
         <Button refID="calculateTerrainRuggedness.button" />
         <Button refID="calculateDepthStatistics.button" />"
       </Items>
