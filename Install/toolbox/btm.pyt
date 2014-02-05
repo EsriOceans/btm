@@ -1032,10 +1032,10 @@ class terrainruggedness(object):
         # run related python script with selected input parameters
         from scripts import ruggedness
         ruggedness.main(
-                InRaster=parameters[0].valueAsText, 
-                NeighborhoodSize=parameters[1].valueAsText,
-                OutWorkspace=parameters[2].valueAsText,
-                OutRaster=parameters[3].valueAsText)
+                in_raster=parameters[0].valueAsText, 
+                neighborhood_size=parameters[1].valueAsText,
+                out_workspace=parameters[2].valueAsText,
+                out_raster=parameters[3].valueAsText)
  
 class depthstatistics(object):
     """ Depth Statistics computes a suite of summary statistics. This initial

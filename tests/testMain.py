@@ -150,9 +150,10 @@ class TestVrm(unittest.TestCase):
 
             arcpy.CalculateStatistics_management(vrm_raster) 
             self.assertAlmostEqual(utils.raster_properties(vrm_raster, "MEAN"), \
-                0.000625595213874938)
+                    0.00062628513039036) 
             self.assertAlmostEqual(utils.raster_properties(vrm_raster, "STD"), \
-                0.0008735527042842267)
+                    0.00087457748556755)
+
 
 class TestSaPa(unittest.TestCase):
     """
