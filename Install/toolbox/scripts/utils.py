@@ -20,18 +20,19 @@ def addLocalPaths(paths):
 
 def msg(output, mtype='message'):
     if mtype == 'error':
-        err_message = "{}: {}".format(type(output).__name__, output)
+        exception_message = "{}: {}".format(type(output).__name__, output)
         arcpy_messages = arcpy.GetMessages()
         tb = sys.exc_info()[2]
         tbinfo = traceback.format_tb(tb)[0]
         if config.mode == 'script':
             # print the raw exception
-            print err_message
+            print exception_message
             # Arcpy and Python stuff, hopefully also helpful
             err_msg = "ArcPy Error: {msg_text}\nPython Error: ${tbinfo}".format(
                 msg_text=arcpy_messages, tbinfo=tbinfo)
+            print err_msg
         else:
-            arcpy.AddError(err_message)
+            arcpy.AddError(exception_message)
             arcpy.AddError(arcpy_messages)
             arcpy.AddMessage("Python Error: {tbinfo}".format(tbinfo=tbinfo))
     elif config.mode == 'script':
