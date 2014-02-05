@@ -1,8 +1,9 @@
+# -*- coding: utf-8 -*-
 # classify.py
 # Shaun Walbridge, 2012.10.07
 
 # Import system modules
-import os, sys, arcpy
+import os, sys, textwrap, arcpy
 from arcpy.sa import *
 
 import utils
@@ -51,6 +52,7 @@ def main(classification_file, bpi_broad, bpi_fine, slope, bathy,
         arcpy.env.scratchWorkspace = out_workspace
         arcpy.env.workspace = out_workspace
 
+        arcpy.env.overwriteOutput = True
         # Create the broad-scale Bathymetric Position Index (BPI) raster
         msg_text="Generating the classified grid, based on the provided" +\
             " classes in '{classes}'.".format(classes=classification_file)
@@ -58,33 +60,58 @@ def main(classification_file, bpi_broad, bpi_fine, slope, bathy,
         
         # Read in the BTM Document; the class handles parsing a variety of inputs.
         btm_doc = utils.BtmDocument(classification_file)
-
         classes = btm_doc.classification()
         utils.msg("Parsing %s document... found %i classes." % (btm_doc.doctype, len(classes)))
 
         grids = []
-
         for item in classes:
             cur_class = str(item["Class"])
             cur_name = str(item["Zone"])
             utils.msg("Calculating grid for %s..." % cur_name)
             out_con = ""
             # here come the CONs:
-            out_con = runCon(item["Depth_LowerBounds"], item["Depth_UpperBounds"], bathy, cur_class)
-            out_con = runCon(item["Slope_LowerBounds"], item["Slope_UpperBounds"], slope, out_con, cur_class)
-            out_con = runCon(item["LSB_LowerBounds"], item["LSB_UpperBounds"], bpi_broad, out_con, cur_class)
-            out_con = runCon(item["SSB_LowerBounds"], item["SSB_UpperBounds"], bpi_fine, out_con, cur_class)
-            grids.append(out_con)
+            out_con = runCon(item["Depth_LowerBounds"], item["Depth_UpperBounds"], \
+                    bathy, cur_class)
+            out_con = runCon(item["Slope_LowerBounds"], item["Slope_UpperBounds"], \
+                    slope, out_con, cur_class)
+            out_con = runCon(item["LSB_LowerBounds"], item["LSB_UpperBounds"], \
+                    bpi_broad, out_con, cur_class)
+            out_con = runCon(item["SSB_LowerBounds"], item["SSB_UpperBounds"], \
+                    bpi_fine, out_con, cur_class)
+            if type(out_con) == arcpy.sa.Raster:
+                rast = utils.saveRaster(out_con, "con_{}.tif".format(cur_name))
+                grids.append(rast)
+            else:
+                # fall-through: no valid values detected for this class.
+                warn_msg = """\
+                        WARNING: no valid locations found for class {}:
+                          depth:     ({}本})
+                          slope:     ({}本}) 
+                          broad BPI: ({}本}) 
+                          fine BPI:  ({}本})""".format(\
+                                cur_name, item["Depth_LowerBounds"],
+                                item["Depth_UpperBounds"], item["Slope_LowerBounds"],
+                                item["Slope_UpperBounds"], item["LSB_LowerBounds"],
+                                item["LSB_UpperBounds"], item["SSB_LowerBounds"],
+                                item["SSB_UpperBounds"])
+                utils.msg(textwrap.dedent(warn_msg))
 
         utils.msg("Creating Benthic Terrain Classification Dataset...")
         merge_grid = grids[0]
-        for index in range(1,len(grids)):
-             merge_grid = Con(merge_grid, grids[index], merge_grid, ("VALUE = 0"))
+        for i in range(1, len(grids)):
+            utils.msg("{} of {}".format(i, len(grids)-1))
+            merge_grid = Con(merge_grid, grids[i], merge_grid, "VALUE = 0")
         utils.msg("Saving Output to %s" % out_raster)
         merge_grid.save(out_raster)
 
         utils.msg("Complete.")
 
+        # Delete all intermediate raster data sets
+        arcpy.AddMessage("Deleting intermediate data...")
+        paths = []
+        for grid in grids:
+            arcpy.Delete_management(grid.catalogPath)
+ 
     except Exception as e:
         if type(e) is ValueError:
             raise e

@@ -231,8 +231,8 @@ class BtmCsvDocument(BtmDocument):
             except csv.Error:
                 # If the CSV is malformed (e.g. a missing ',' in a row),
                 # this error can be raised. In that case, we shouldn't 
-                # automatically give up, but instead just set the default 
-                # dialect and assume a header.
+                # give up, but instead just set the default dialect and 
+                # assume a header.
                 dialect = "excel"
                 has_header = True
 
@@ -257,3 +257,8 @@ def workspaceExists(directory):
         msg(err_msg)
         sys.exit(1)
     return exists
+
+def saveRaster(raster, path):
+    """Save input raster object to path, and return raster reference."""
+    raster.save(path)
+    return arcpy.sa.Raster(path)
