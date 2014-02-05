@@ -9,15 +9,7 @@ import pythonaddins
 # enable local imports
 local_path = os.path.dirname(__file__)
 
-# only our custom model which can't be embedded in a Python toolbox.
-model_toolbox = os.path.join(local_path, "toolbox", "btm_model.tbx")
 btm_toolbox = os.path.join(local_path, "toolbox", "btm.pyt")
-
-# FIXME: add in checks for spatial analyst license.
-# a wrapper around:
-# arcpy.CheckOutExtension("spatial")
-# which should get initialized, throw an error if it isn't available notifying them
-# that MOST functions [e.g. slope] won't work without it.
 
 # ignore exceptions with this class. Our workaround for current limiations
 # in pythonaddins.GPToolDialog.
@@ -46,7 +38,7 @@ class ButtonRunBTMSteps(object):
         self.enabled = True
         self.checked = False
     def onClick(self):
-        tool_dialog(model_toolbox, 'BtmModel')
+        tool_dialog(btm_toolbox, 'runfullmodel')
         # XXX: trying to call multiple tools just kills ArcMap.
         # adding a sleep() just slows down the train wreck. Not yet sure
         # of the best approach to actually get this to work.
@@ -64,7 +56,7 @@ class RunBTMSteps(object):
         self.enabled = True
         self.shape = "NONE" # Can set to "Line", "Circle" or "Rectangle" for interactive shape drawing
     def onClick(self):
-        pythonaddins.GPToolDialog(model_toolbox, 'BtmModel')
+        tool_dialog(btm_toolbox, 'runfullmodel')
  
 """ classification functions"""
 class classifyBenthicTerrain(object):
