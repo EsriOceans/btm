@@ -12,9 +12,9 @@ from xml.dom.minidom import parse
 import arcpy
 import config
 
-def addLocalPaths(paths):
+def add_local_paths(paths):
     for path_part in paths:
-        base_path = os.path.join(local_path, path_part)
+        base_path = os.path.join(config.local_path, path_part)
         abs_path = os.path.abspath(base_path)
         sys.path.insert(0, abs_path)
 
@@ -43,9 +43,10 @@ def msg(output, mtype='message'):
         elif mtype == 'warning':
             arcpy.AddWarning(output)
 
-# override default handling of the XML DOM
-class NotTextNodeError:
-    pass
+# override default handling of 'not text' by minidom
+class NotTextNodeError(Exception):
+    def __init__(self):
+        pass
 
 class BtmDocument(object):
     """ A wrapper class for handling any kind of BTM Classification file.
@@ -70,7 +71,7 @@ class BtmDocument(object):
         if known_types.has_key(ext):
             dtype = known_types[ext]
         else:
-            raise UnknownType
+            raise TypeError("Invalid document type for {}".format(self.filename))
         return dtype
 
     def _get_schema(self):
@@ -97,15 +98,10 @@ class BtmDocument(object):
     def classification(self):
         return self.schema.classification()
 
-
-# override default handling of 'not text' by minidom
-class NotTextNodeError:
-    pass
-
 class BtmXmlDocument(BtmDocument):
     def __init__(self, filename):
         self.dom = parse(filename)
-        self.node_dict = self.nodeToDic(self.dom)
+        self.node_dict = self.node_to_dict(self.dom)
 
     def name(self):
         return self.node_dict['ClassDict']['PrjName']
@@ -120,10 +116,10 @@ class BtmXmlDocument(BtmDocument):
         # from the header
         return self.node_dict['ClassDict']['Classifications']['ClassRec']
 
-    def getTextFromNode(self, node):
+    def get_text_from_node(self, node):
         """
         scans through all children of node and gathers the
-        text. 
+        text.
         """
         t = ""
         emptyNode = node.hasChildNodes()
@@ -137,7 +133,7 @@ class BtmXmlDocument(BtmDocument):
             t = None
         return t
 
-    def nodeToDic(self, node):
+    def node_to_dict(self, node):
         dic = {}
         multlist = {} # holds temporary lists where there are multiple children
         multiple = 0
@@ -152,16 +148,16 @@ class BtmXmlDocument(BtmDocument):
                     multlist[n.nodeName] = []
             try:
                 # text node
-                text = self.getTextFromNode(n)
+                text = self.get_text_from_node(n)
             except NotTextNodeError:
                 if multiple:
                     # append to our list
-                    multlist[n.nodeName].append(self.nodeToDic(n))
+                    multlist[n.nodeName].append(self.node_to_dict(n))
                     dic.update({n.nodeName:multlist[n.nodeName]})
                     continue
                 else:
                     # 'normal' node
-                    dic.update({n.nodeName:self.nodeToDic(n)})
+                    dic.update({n.nodeName:self.node_to_dict(n)})
                     continue
             # text node
             if multiple:
@@ -197,15 +193,15 @@ class BtmCsvDocument(BtmDocument):
             row_clean = [None if x == '' else x for x in row]
 
             if len(row_clean) != 10:
-                msg = "Encountered malformed row which requires correction:" + \
+                message = "Encountered malformed row which requires correction:" + \
                         "{}\"".format(",".join(row))
-                raise ValueError(msg)
+                raise ValueError(message)
             # don't parse the header, assume columns are in expected order.
             (class_code, zone, broad_lower, broad_upper, fine_lower, fine_upper, \
             slope_lower, slope_upper, depth_lower, depth_upper) = row_clean
 
             # for now: fake the format used by the XML documents.
-            res_row = {'Class': class_code, 
+            res_row = {'Class': class_code,
                        'Zone': zone,
                        'SSB_LowerBounds': broad_lower,
                        'SSB_UpperBounds': broad_upper,
@@ -225,13 +221,13 @@ class BtmCsvDocument(BtmDocument):
             sample = f.read(1024)
             f.seek(0)
             sniff_obj = csv.Sniffer()
-            try: 
+            try:
                 dialect = sniff_obj.sniff(sample)
                 has_header = sniff_obj.has_header(sample)
             except csv.Error:
                 # If the CSV is malformed (e.g. a missing ',' in a row),
-                # this error can be raised. In that case, we shouldn't 
-                # give up, but instead just set the default dialect and 
+                # this error can be raised. In that case, we shouldn't
+                # give up, but instead just set the default dialect and
                 # assume a header.
                 dialect = "excel"
                 has_header = True
@@ -246,7 +242,7 @@ class BtmCsvDocument(BtmDocument):
             result = [r for r in in_csv]
         return result
 
-def workspaceExists(directory):
+def workspace_exists(directory):
     """
     Ensure workspace exists.
     """
@@ -258,7 +254,12 @@ def workspaceExists(directory):
         sys.exit(1)
     return exists
 
-def saveRaster(raster, path):
+def save_raster(raster, path):
     """Save input raster object to path, and return raster reference."""
     raster.save(path)
     return arcpy.sa.Raster(path)
+
+def raster_properties(input_raster, attribute='MEAN'):
+    """ Wrapper for GetRasterProperties_management which does the right thing."""
+    attr_object = arcpy.GetRasterProperties_management(input_raster, attribute)
+    return float(attr_object.getOutput(0))

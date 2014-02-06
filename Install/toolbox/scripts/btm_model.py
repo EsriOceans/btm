@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
 # ---------------------------------------------------------------------------
 # btm-model.py
-# Usage: btm-model <Workspace> <Input_Bathymetric_Raster> <Broad-scale_BPI_inner_radius_value_> <Broad-scale_BPI_outer_radius_value> <Fine-scale_BPI_inner_radius_value> <Fine-scale_BPI_outer_radius_value> <Classification_dictionary> <Output_Zone_Classification_raster> 
-# Description: 
+# Usage: btm-model <Workspace> <Input_Bathymetric_Raster> <Broad-scale_BPI_inner_radius>
+#    <Broad-scale_BPI_outer_radius> <Fine-scale_BPI_inner_radius_value>
+#    <Fine-scale_BPI_outer_radius> <Classification_dictionary>
+#    <Output_Zone_Classification_raster>
+#
+# Description:
 # Run all steps of the BTM model.
 # ---------------------------------------------------------------------------
 
@@ -20,7 +24,9 @@ import bpi, slope, classify
 # Check out any necessary licenses
 arcpy.CheckOutExtension("Spatial")
 
-def main(out_workspace, input_bathymetry, broad_bpi_inner_radius, broad_bpi_outer_radius, fine_bpi_inner_radius, fine_bpi_outer_radius, classification_dict, output_zones):
+def main(out_workspace, input_bathymetry, broad_bpi_inner_radius, 
+        broad_bpi_outer_radius, fine_bpi_inner_radius, fine_bpi_outer_radius, 
+        classification_dict, output_zones):
 
     # Load required toolboxes
     local_path = os.path.dirname(__file__)
@@ -34,7 +40,7 @@ def main(out_workspace, input_bathymetry, broad_bpi_inner_radius, broad_bpi_oute
     broad_std = os.path.join(out_workspace, "broad_std")
     fine_std = os.path.join(out_workspace, "fine_std")
 
-    utils.workspaceExists(out_workspace)
+    utils.workspace_exists(out_workspace)
     # set geoprocessing environments
     arcpy.env.scratchWorkspace = out_workspace
     arcpy.env.workspace = out_workspace
@@ -59,7 +65,6 @@ def main(out_workspace, input_bathymetry, broad_bpi_inner_radius, broad_bpi_oute
                 "0", "0", fine_std)
 
         # Process: Calculate Slope
-        utils.msg("Calculating slope...")
         slope.main(input_bathymetry, slope_rast)
 
         # Process: Zone Classification Builder
@@ -75,11 +80,11 @@ def main(out_workspace, input_bathymetry, broad_bpi_inner_radius, broad_bpi_oute
 if __name__=='__main__':
     config.mode = 'script'
     main(
-        out_workspace = sys.argv[1],
-        input_bathymetry = sys.argv[2],
-        broad_bpi_inner_radius = sys.argv[3],
-        broad_bpi_outer_radius = sys.argv[4],
-        fine_bpi_inner_radius = sys.argv[5],
-        fine_bpi_outer_radius = sys.argv[6],
-        classification_dict = sys.argv[7],
-        output_zones = sys.argv[8])
+        out_workspace=sys.argv[1],
+        input_bathymetry=sys.argv[2],
+        broad_bpi_inner_radius=sys.argv[3],
+        broad_bpi_outer_radius=sys.argv[4],
+        fine_bpi_inner_radius=sys.argv[5],
+        fine_bpi_outer_radius=sys.argv[6],
+        classification_dict=sys.argv[7],
+        output_zones=sys.argv[8])

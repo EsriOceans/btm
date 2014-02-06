@@ -7,12 +7,12 @@
 #              rugosity from an input data set.
 #
 #              An integrated XML-based terrain classification dictionary gives
-#              users the freedom to create their own classifications and 
+#              users the freedom to create their own classifications and
 #              definethe relationships that characterize them.
-# Requirements: Spatial Analyst 
+# Requirements: Spatial Analyst
 # Authors: Dawn J. Wright, Emily R. Lundblad, Emily M. Larkin, Ronald W. Rinehart
 # Date: 2005
-# Converted 11/5/2010 by Emily C. Huntley of the Massachusetts Office of Coastal 
+# Converted 11/5/2010 by Emily C. Huntley of the Massachusetts Office of Coastal
 # Zone Management to an ArcGIS 10 Python Script.
 # Converted 9/6/2012 by Shaun Walbridge to a script that can be run from either
 # a Python addin GUI, as a standard python script or from a toolbox.
@@ -20,7 +20,7 @@
 import sys
 
 import arcpy
-from arcpy.sa import *
+from arcpy.sa import NbrAnnulus, Int, Plus, Minus, FocalStatistics
 
 # local imports
 import utils
@@ -34,21 +34,21 @@ def main(bathy=None, inner_radius=None, outer_radius=None,
 
     try:
         # Create the broad-scale Bathymetric Position Index (BPI) raster
-        msg="Generating the {bpi_type}-scale ".format(bpi_type=bpi_type) + \
-            "Bathymetric Position Index (BPI) raster..."
+        msg = "Generating the {bpi_type}-scale ".format(bpi_type=bpi_type) + \
+                "Bathymetric Position Index (BPI) raster..."
         utils.msg(msg)
         utils.msg("Calculating neighborhood...")
         neighborhood = NbrAnnulus(inner_radius, outer_radius, "CELL")
-        utils.msg("Calculating FocalStatistics for %s..." % bathy)
+        utils.msg("Calculating FocalStatistics for {}...".format(bathy))
         out_focal_statistics = FocalStatistics(bathy, neighborhood, "MEAN")
         outRaster = Int(Plus(Minus(bathy, out_focal_statistics), 0.5))
         outRaster.save(out_raster)
-        utils.msg("Saved output as %s" % out_raster)
+        utils.msg("Saved output as {}".format(out_raster))
     except Exception as e:
         utils.msg(e, mtype='error')
 
 # when executing as a standalone script get parameters from sys
-if __name__=='__main__':
+if __name__ == '__main__':
     config.mode = 'script'
     main(
         bathy=sys.argv[1],

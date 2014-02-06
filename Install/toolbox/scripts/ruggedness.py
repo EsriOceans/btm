@@ -1,20 +1,23 @@
 # ruggedness.py
-# Description: This tool measures terrain ruggedness by calculating the 
+# Description: This tool measures terrain ruggedness by calculating the
 #              vector ruggedness measure (VRM) described in Sappington, J.M.,
-#              K.M. Longshore, and D.B. Thompson. 2007. Quantifying Landscape 
-#              Ruggedness for Animal Habitat Analysis: A Case Study Using 
-#              Bighorn Sheep in the Mojave Desert. Journal of Wildlife 
+#              K.M. Longshore, and D.B. Thompson. 2007. Quantifying Landscape
+#              Ruggedness for Animal Habitat Analysis: A Case Study Using
+#              Bighorn Sheep in the Mojave Desert. Journal of Wildlife
 #              Management. 71(5): 1419 -1426.
-# Requirements: Spatial Analyst 
+# Requirements: Spatial Analyst
 # Author: Mark Sappington
 # Date: 2/1/2008
-# Updated 12/1/2010 by Emily C. Huntley of the Massachusetts Office of 
-# Coastal Zone Management to run in ArcGIS 10. 
+# Updated 12/1/2010 by Emily C. Huntley of the Massachusetts Office of
+# Coastal Zone Management to run in ArcGIS 10.
 # Updated 2012-2014 by Shaun Walbridge to improve performance, use idomatic code.
 
 # Import system modules
-import sys, string, os, math, arcpy
-from arcpy.sa import *
+import math
+import sys
+import arcpy
+from arcpy.sa import Aspect, Cos, Sin, Slope, Con, \
+        NbrRectangle, FocalStatistics
 
 # local imports
 import utils
@@ -26,7 +29,7 @@ arcpy.CheckOutExtension("Spatial")
 def main(in_raster=None, neighborhood_size=None, out_workspace=None, out_raster=None):
     hood_size = int(neighborhood_size)
 
-    utils.workspaceExists(out_workspace)
+    utils.workspace_exists(out_workspace)
     # force temporary stats to be computed in our output workspace
     arcpy.env.scratchWorkspace = out_workspace
     # TODO expose as config
@@ -37,37 +40,37 @@ def main(in_raster=None, neighborhood_size=None, out_workspace=None, out_raster=
 
     try:
         # Create Slope and Aspect rasters
-        arcpy.AddMessage("Calculating aspect...")
+        utils.msg("Calculating aspect...")
         out_aspect = Aspect(in_raster)
-        arcpy.AddMessage("Calculating slope...")
+        utils.msg("Calculating slope...")
         out_slope = Slope(in_raster, "DEGREE")
 
         # Convert Slope and Aspect rasters to radians
-        arcpy.AddMessage("Converting slope and aspect to radians...")
+        utils.msg("Converting slope and aspect to radians...")
         slope_rad = out_slope * (math.pi / 180)
         aspect_rad = out_aspect * (math.pi / 180)
 
         # Calculate x, y, and z rasters
-        arcpy.AddMessage("Calculating x, y, and z rasters...")
+        utils.msg("Calculating x, y, and z rasters...")
         xy_raster_calc = Sin(slope_rad)
         z_raster_calc = Cos(slope_rad)
         x_raster_calc = Con(out_aspect == -1, 0, Sin(aspect_rad)) * xy_raster_calc
         y_raster_calc = Con(out_aspect == -1, 0, Cos(aspect_rad)) * xy_raster_calc
-        
+
         # Calculate sums of x, y, and z rasters for selected neighborhood size
-        arcpy.AddMessage("Calculating sums of x, y, and z rasters in selected neighborhood...")
+        utils.msg("Calculating sums of x, y, and z rasters in neighborhood...")
         hood = NbrRectangle(hood_size, hood_size, "CELL")
         x_sum_calc = FocalStatistics(x_raster_calc, hood, "SUM", "NODATA")
         y_sum_calc = FocalStatistics(y_raster_calc, hood, "SUM", "NODATA")
         z_sum_calc = FocalStatistics(z_raster_calc, hood, "SUM", "NODATA")
 
         # Calculate the resultant vector
-        arcpy.AddMessage("Calculating the resultant vector...")
+        utils.msg("Calculating the resultant vector...")
         result_vect = (x_sum_calc**2 + y_sum_calc**2 + z_sum_calc**2)**0.5
 
         arcpy.env.pyramid = pyramid_orig
         # Calculate the Ruggedness raster
-        arcpy.AddMessage("Calculating the final ruggedness raster...")
+        utils.msg("Calculating the final ruggedness raster...")
         ruggedness = 1 - (result_vect / hood_size**2)
         ruggedness.save(out_raster)
 
@@ -75,7 +78,7 @@ def main(in_raster=None, neighborhood_size=None, out_workspace=None, out_raster=
         utils.msg(e, mtype='error')
 
 # when executing as a standalone script get parameters from sys
-if __name__=='__main__':
+if __name__ == '__main__':
     config.mode = 'script'
-    main(in_raster=sys.argv[1], neighborhood_size=sys.argv[2], 
+    main(in_raster=sys.argv[1], neighborhood_size=sys.argv[2],
             out_workspace=sys.argv[3], out_raster=sys.argv[4])

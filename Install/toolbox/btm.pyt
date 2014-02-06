@@ -2,13 +2,12 @@
 
 import os
 import math
-import string
 import sys
 import re
 import tempfile
+import textwrap
 
 import arcpy
-from arcpy.sa import *
 
 import xml.etree.cElementTree as et
 import glob
@@ -41,7 +40,7 @@ def raster_is_grid(raster_path):
             is_grid = False
     return is_grid
 
-# Validate ESRI GRID filenames. The file doesn't exist, so use naming to 
+# Validate ESRI GRID filenames. The file doesn't exist, so use naming to
 # validate a potential name.
 def valid_grid_name(raster_path):
     valid = True
@@ -51,12 +50,10 @@ def valid_grid_name(raster_path):
             valid = False
         else:
             grid_name = os.path.basename(raster_path)
-            """
-            Encode all the rules into a regular expression:
-             - no longer than 13 characters
-             - must start with a letter
-             - only letters, numbers, and underscores.
-            """
+            # Encode all the rules into a regular expression:
+            #  - no longer than 13 characters
+            #  - must start with a letter
+            #  - only letters, numbers, and underscores.
             grid_regex = '^[A-Za-z]{1}[A-Za-z0-9_]{0,12}$'
             if re.match(grid_regex, grid_name) is None:
                 valid = False
@@ -78,8 +75,12 @@ def metadata(update=True):
                 if mod_time is not None:
                     esri.remove(mod_time)
                 tree.write(xml_path)
-        except Exception as e:
+        except:
             pass
+
+def dedent(text, ending='\r\n'):
+    text = text.replace('\n', ending)
+    return textwrap.dedent(text)
 
 # Check out any necessary licenses
 arcpy.CheckOutExtension("Spatial")
@@ -89,11 +90,10 @@ class Toolbox(object):
     def __init__(self):
         self.label = u'Benthic Terrain Modeler'
         self.alias = 'btm'
-        self.tools = [broadscalebpi, finescalebpi, standardizebpi, btmslope, classify, surfacetoplanar, terrainruggedness, depthstatistics, runfullmodel]
+        self.tools = [broadscalebpi, finescalebpi, standardizebpi, btmslope, classifyterrain,
+                      surfacetoplanar, terrainruggedness, depthstatistics, runfullmodel]
 
 # tools below this section, one class per tool.
-
-# XXX TODO: add detailed description pulled from __init__ method, push these outside of this script.
 class broadscalebpi(object):
     """ Calculate Broad-scale Bathymetric Position Index (BPI).  """
 
@@ -123,10 +123,25 @@ class broadscalebpi(object):
 
     def __init__(self):
         self.label = u'Build Broad Scale BPI'
-        self.description = u'The concept of bathymetric position is central to the benthic\r\nterrain classification process that is utilized by the BTM.\r\nBathymetric Position Index (BPI) is a measure of where a\r\nreferenced location is relative to the locations surrounding it.\r\nBPI is derived from an input bathymetric data set and itself is a modification of the topographic position index (TPI) algorithm that is used in the terrestrial environment. The application of TPI to develop terrain classifications was explored and developed by Andrew Weiss during his study of terrestrial watersheds in Central Oregon (Weiss 2001). These\r\napplications can be carried into the benthic environment\r\nthrough BPI.\r\n\r\nA broad-scale BPI data set allows you to identify larger features within the benthic landscape.'
+        self.description = dedent("""\
+                The concept of bathymetric position is central to the benthic
+                terrain classification process that is utilized by the BTM.
+                Bathymetric Position Index (BPI) is a measure of where a
+                referenced location is relative to the locations surrounding it.
+                BPI is derived from an input bathymetric data set and itself is
+                a modification of the topographic position index (TPI) algorithm
+                that is used in the terrestrial environment. The application of
+                TPI to develop terrain classifications was explored and
+                developed by Andrew Weiss during his study of terrestrial
+                watersheds in Central Oregon (Weiss 2001). These applications
+                can be carried into the benthic environment through BPI.
+
+                A broad-scale BPI data set allows you to identify larger
+                features within the benthic landscape.""")
         self.canRunInBackground = False
-        # one of the tools needs to have the metadata deletion call included in it. If it's done elsewhere
-        # in the script, the script state isn't correct and the ModTime and ModDate fields will remain.
+        # one of the tools needs to have the metadata deletion call included in it.
+        # If it's done elsewhere in the script, the script state isn't correct and
+        # the ModTime and ModDate fields will remain.
         metadata(update=False)
 
     def getParameterInfo(self):
@@ -230,34 +245,48 @@ class finescalebpi(object):
     """ Calculate Fine-scale Bathymetric Position Index (BPI).  """
 
     class ToolValidator:
-      """Class for validating a tool's parameter values and controlling
-      the behavior of the tool's dialog."""
-    
-      def __init__(self, parameters):
-        """Setup arcpy and the list of tool parameters."""
-        self.params = parameters
+        """Class for validating a tool's parameter values and controlling
+        the behavior of the tool's dialog."""
 
-      def initializeParameters(self):
-        """Refine the properties of a tool's parameters.  This method is
-        called when the tool is opened."""
-        return
-    
-      def updateParameters(self):
-        """Modify the values and properties of parameters before internal
-        validation is performed.  This method is called whenever a parmater
-        has been changed."""
-        return
-    
-      def updateMessages(self):
-        """Modify the messages created by internal validation for each tool
-        parameter.  This method is called after internal validation."""
-        return
-    
+        def __init__(self, parameters):
+            """Setup arcpy and the list of tool parameters."""
+            self.params = parameters
+
+        def initializeParameters(self):
+            """Refine the properties of a tool's parameters.  This method is
+            called when the tool is opened."""
+            return
+
+        def updateParameters(self):
+            """Modify the values and properties of parameters before internal
+            validation is performed.  This method is called whenever a parmater
+            has been changed."""
+            return
+
+        def updateMessages(self):
+            """Modify the messages created by internal validation for each tool
+            parameter.  This method is called after internal validation."""
+            return
+
     def __init__(self):
         self.label = u'Build Fine Scale BPI'
-        self.description = u'The concept of bathymetric position is central to the benthic\r\nterrain classification process that is utilized by the BTM.\r\nBathymetric Position Index (BPI) is a measure of where a\r\nreferenced location is relative to the locations surrounding it.\r\nBPI is derived from an input bathymetric data set and itself is a modification of the topographic position index (TPI) algorithm that is used in the terrestrial environment. The application of TPI to develop terrain classifications was explored and developed by Andrew Weiss during his study of terrestrial watersheds in Central Oregon (Weiss 2001). These\r\napplications can be carried into the benthic environment\r\nthrough BPI.\r\n\r\nA fine-scale BPI data set allows you to identify smaller features within the benthic landscape.'
+        self.description = dedent("""\
+                The concept of bathymetric position is central to the benthic
+                terrain classification process that is utilized by the BTM.
+                Bathymetric Position Index (BPI) is a measure of where a
+                referenced location is relative to the locations surrounding it.
+                BPI is derived from an input bathymetric data set and itself is
+                a modification of the topographic position index (TPI) algorithm
+                that is used in the terrestrial environment. The application of
+                TPI to develop terrain classifications was explored and
+                developed by Andrew Weiss during his study of terrestrial
+                watersheds in Central Oregon (Weiss 2001). These applications
+                can be carried into the benthic environment through BPI.
+
+                A broad-scale BPI data set allows you to identify larger
+                features within the benthic landscape.""")
         self.canRunInBackground = False
- 
+
     def getParameterInfo(self):
         # Input_bathymetric_raster
         input_raster = arcpy.Parameter()
@@ -329,7 +358,7 @@ class finescalebpi(object):
             parameters[cols.index('scale_factor')].value = scale_factor
 
         if validator:
-             return validator(parameters).updateParameters()
+            return validator(parameters).updateParameters()
 
     def updateMessages(self, parameters):
         validator = getattr(self, 'ToolValidator', None)
@@ -350,7 +379,7 @@ class finescalebpi(object):
 
         if validator:
             return validator(parameters).updateMessages()
- 
+
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
         from scripts import bpi
@@ -360,7 +389,7 @@ class finescalebpi(object):
             outer_radius=parameters[2].valueAsText,
             out_raster=parameters[4].valueAsText,
 	        bpi_type='fine')
-    
+
 class standardizebpi(object):
     """
     Standardize BPI rasters.
@@ -369,6 +398,7 @@ class standardizebpi(object):
     def __init__(self):
         self.label = u'Standardize BPIs'
         self.canRunInBackground = False
+
     def getParameterInfo(self):
         # Input_BPI_raster
         broad_raster = arcpy.Parameter()
@@ -441,10 +471,12 @@ class standardizebpi(object):
 
     def isLicensed(self):
         return True
+
     def updateParameters(self, parameters):
         validator = getattr(self, 'ToolValidator', None)
         if validator:
-             return validator(parameters).updateParameters()
+            return validator(parameters).updateParameters()
+
     def updateMessages(self, parameters):
         validator = getattr(self, 'ToolValidator', None)
 
@@ -452,26 +484,26 @@ class standardizebpi(object):
         cols = ['broad_input', 'broad_mean', 'broad_stddev', 'broad_output', \
                 'fine_input', 'fine_mean', 'fine_stddev', 'fine_output']
 
-        for label in ['broad', 'fine']: 
+        for label in ['broad', 'fine']:
             input_raster = parameters[cols.index(label + '_input')].valueAsText
             if input_raster is not None:
                 (mean, stddev) = self.getRasterStats(input_raster)
                 if mean is not None:
                     # try modifying our variables
-                    parameters[cols.index(label + '_mean')].value = mean 
-                    parameters[cols.index(label + '_stddev')].value = stddev 
+                    parameters[cols.index(label + '_mean')].value = mean
+                    parameters[cols.index(label + '_stddev')].value = stddev
 
             # Validate GRID outputs.
-            out_param = cols.index(label + '_output') 
+            out_param = cols.index(label + '_output')
             output_raster = parameters[out_param].valueAsText
             if output_raster is not None:
                 if not valid_grid_name(output_raster):
                     parameters[out_param].setErrorMessage(MSG_INVALID_GRID)
 
         if validator:
-             return validator(parameters).updateMessages()
+            return validator(parameters).updateMessages()
 
-    def getRasterStats(self, input_raster = None):
+    def getRasterStats(self, input_raster=None):
         # What kinds of inputs can we expect to compute statistics on?
         VALID_RASTER_TYPES = ['RasterDataset', 'RasterLayer']
 
@@ -479,10 +511,12 @@ class standardizebpi(object):
         if input_raster is not None:
             try:
                 raster_desc = arcpy.Describe(input_raster)
-                if raster_desc.dataType in VALID_RASTER_TYPES: 
-                    mean_res = arcpy.GetRasterProperties_management(input_raster, "MEAN")
+                if raster_desc.dataType in VALID_RASTER_TYPES:
+                    mean_res = arcpy.GetRasterProperties_management(
+                            input_raster, "MEAN")
                     mean = float(mean_res.getOutput(0))
-                    stddev_res = arcpy.GetRasterProperties_management(input_raster, "STD")
+                    stddev_res = arcpy.GetRasterProperties_management(
+                            input_raster, "STD")
                     stddev = float(stddev_res.getOutput(0))
                     result = (mean, stddev)
             except:
@@ -502,7 +536,7 @@ class standardizebpi(object):
         standardize_bpi_grids.main(
             bpi_raster=parameters[4].valueAsText,
             out_raster=parameters[7].valueAsText)
- 
+
 class btmslope(object):
     """ Calculate slope, uses standard SA function internally."""
     def __init__(self):
@@ -534,7 +568,7 @@ class btmslope(object):
     def updateParameters(self, parameters):
         validator = getattr(self, 'ToolValidator', None)
         if validator:
-             return validator(parameters).updateParameters()
+            return validator(parameters).updateParameters()
 
     def updateMessages(self, parameters):
         validator = getattr(self, 'ToolValidator', None)
@@ -546,7 +580,7 @@ class btmslope(object):
                 parameters[1].setErrorMessage(MSG_INVALID_GRID)
 
         if validator:
-             return validator(parameters).updateMessages()
+            return validator(parameters).updateMessages()
 
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
@@ -555,7 +589,7 @@ class btmslope(object):
             bathy=parameters[0].valueAsText,
             out_raster=parameters[1].valueAsText)
 
-class classify(object):
+class classifyterrain(object):
     """ Classify Benthic Terrain based on classification dictionary. """
     def __init__(self):
         self.label = u'Classify Benthic Terrain'
@@ -598,7 +632,7 @@ class classify(object):
         slope.datatype = dt.format('Raster Layer')
 
         # Bathymetry raster
-        bathy= arcpy.Parameter()
+        bathy = arcpy.Parameter()
         bathy.name = u'Bathymetry_raster'
         bathy.displayName = u'Bathymetry raster'
         bathy.parameterType = 'Required'
@@ -606,7 +640,7 @@ class classify(object):
         bathy.datatype = dt.format('Raster Layer')
 
         # Output_raster
-        zones_raster= arcpy.Parameter()
+        zones_raster = arcpy.Parameter()
         zones_raster.name = u'Output_zones_raster'
         zones_raster.displayName = u'Output Zones Raster'
         zones_raster.parameterType = 'Required'
@@ -620,7 +654,7 @@ class classify(object):
     def updateParameters(self, parameters):
         validator = getattr(self, 'ToolValidator', None)
         if validator:
-             return validator(parameters).updateParameters()
+            return validator(parameters).updateParameters()
 
     def updateMessages(self, parameters):
         validator = getattr(self, 'ToolValidator', None)
@@ -631,10 +665,10 @@ class classify(object):
                 parameters[5].setErrorMessage(MSG_INVALID_GRID)
 
         if validator:
-             return validator(parameters).updateMessages()
+            return validator(parameters).updateMessages()
 
     def execute(self, parameters, messages):
-        from scripts import classify 
+        from scripts import classify
         classify.main(
             classification_file=parameters[0].valueAsText,
             bpi_broad=parameters[1].valueAsText,
@@ -649,6 +683,8 @@ class runfullmodel(object):
     def __init__(self):
         self.label = u'Run All Model Steps'
         self.canRunInBackground = False
+        self.cols = ['out_workspace', 'bathy', 'broad_bpi_inner', 'broad_bpi_outer', \
+                'fine_bpi_inner', 'fine_bpi_outer', 'class_dict', 'zones_raster']
 
     def getParameterInfo(self):
         # Output_Workspace
@@ -661,7 +697,7 @@ class runfullmodel(object):
         out_workspace.datatype = dt.format('Workspace')
 
         # Bathymetry raster
-        bathy= arcpy.Parameter()
+        bathy = arcpy.Parameter()
         bathy.name = u'Bathymetry_raster'
         bathy.displayName = u'Bathymetry raster'
         bathy.parameterType = 'Required'
@@ -677,7 +713,7 @@ class runfullmodel(object):
         broad_bpi_inner.datatype = dt.format('Long')
 
         # Broad-scale BPI raster inner radius
-        broad_bpi_outer= arcpy.Parameter()
+        broad_bpi_outer = arcpy.Parameter()
         broad_bpi_outer.name = u'broad-scale_BPI_outer_radius'
         broad_bpi_outer.displayName = u'broad-scale BPI outer radius'
         broad_bpi_outer.parameterType = 'Required'
@@ -693,7 +729,7 @@ class runfullmodel(object):
         fine_bpi_inner.datatype = dt.format('Long')
 
         # Fine-scale BPI raster inner radius
-        fine_bpi_outer= arcpy.Parameter()
+        fine_bpi_outer = arcpy.Parameter()
         fine_bpi_outer.name = u'fine-scale_BPI_outer_radius'
         fine_bpi_outer.displayName = u'fine-scale BPI outer radius'
         fine_bpi_outer.parameterType = 'Required'
@@ -712,49 +748,72 @@ class runfullmodel(object):
         class_dict.filter.list = ['csv', 'xls', 'xlsx', 'xml']
 
         # Output_raster
-        zones_raster= arcpy.Parameter()
+        zones_raster = arcpy.Parameter()
         zones_raster.name = u'Output_zones_raster'
         zones_raster.displayName = u'Output Zones Raster'
         zones_raster.parameterType = 'Required'
         zones_raster.direction = 'Output'
-        zones_raster.datatype = dt.format('String') # was raster dataset, but no way to control path then...
+        # was raster dataset, but no way to control path then...
+        zones_raster.datatype = dt.format('String')
 
-        return [out_workspace, bathy, broad_bpi_inner, broad_bpi_outer, fine_bpi_inner, fine_bpi_outer, class_dict, zones_raster]
+        return [out_workspace, bathy, broad_bpi_inner, broad_bpi_outer, fine_bpi_inner,
+                fine_bpi_outer, class_dict, zones_raster]
 
     def isLicensed(self):
         return True
 
+    def validateRadius(self, inner_param, outer_param):
+        is_valid = True
+        inner_val = inner_param.valueAsText
+        outer_val = outer_param.valueAsText
+
+        if inner_val is not None and outer_val is not None:
+            inner_rad = int(inner_val)
+            outer_rad = int(outer_val)
+            # test that the outer radius exceeds the inner radius.
+            if inner_rad >= outer_rad:
+                is_valid = False
+        return is_valid
+
     def updateParameters(self, parameters):
         validator = getattr(self, 'ToolValidator', None)
-        cols = ['out_workspace', 'bathy', 'broad_bpi_inner', 'broad_bpi_outer', \
-                'fine_bpi_inner', 'fine_bpi_outer', 'class_dict', 'zones_raster']
-        out_workspace = parameters[cols.index('out_workspace')].valueAsText
-        zones_raster = parameters[cols.index('zones_raster')].valueAsText
+        out_workspace = parameters[self.cols.index('out_workspace')].valueAsText
+        zones_raster = parameters[self.cols.index('zones_raster')].valueAsText
 
         # TODO: make this work so that if they update the output_zones, we respect it.
         if out_workspace is not None and zones_raster is None:
-            parameters[cols.index('zones_raster')].value = \
+            parameters[self.cols.index('zones_raster')].value = \
                     os.path.join(out_workspace, "output_zones")
         if validator:
-             return validator(parameters).updateParameters()
- 
+            return validator(parameters).updateParameters()
 
     def updateMessages(self, parameters):
         validator = getattr(self, 'ToolValidator', None)
+
+        broad_inner = parameters[self.cols.index('broad_bpi_inner')]
+        broad_outer = parameters[self.cols.index('broad_bpi_outer')]
+        if not self.validateRadius(broad_inner, broad_outer):
+            broad_inner.setErrorMessage(MSG_INVALID_RADIUS)
+
+        fine_inner = parameters[self.cols.index('fine_bpi_inner')]
+        fine_outer = parameters[self.cols.index('fine_bpi_outer')]
+        if not self.validateRadius(fine_inner, fine_outer):
+            fine_inner.setErrorMessage(MSG_INVALID_RADIUS)
+
         if validator:
-             return validator(parameters).updateMessages()
+            return validator(parameters).updateMessages()
 
     def execute(self, parameters, messages):
         from scripts import btm_model
         btm_model.main(
-            out_workspace = parameters[0].valueAsText,
-            input_bathymetry = parameters[1].valueAsText,
-            broad_bpi_inner_radius = parameters[2].valueAsText,
-            broad_bpi_outer_radius = parameters[3].valueAsText,
-            fine_bpi_inner_radius = parameters[4].valueAsText,
-            fine_bpi_outer_radius = parameters[5].valueAsText,
-            classification_dict = parameters[6].valueAsText,
-            output_zones = parameters[7].valueAsText)
+            out_workspace=parameters[0].valueAsText,
+            input_bathymetry=parameters[1].valueAsText,
+            broad_bpi_inner_radius=parameters[2].valueAsText,
+            broad_bpi_outer_radius=parameters[3].valueAsText,
+            fine_bpi_inner_radius=parameters[4].valueAsText,
+            fine_bpi_outer_radius=parameters[5].valueAsText,
+            classification_dict=parameters[6].valueAsText,
+            output_zones=parameters[7].valueAsText)
 
 class structureclassification(object):
     """Classify benthic terrain based on structures."""
@@ -843,7 +902,8 @@ class structureclassification(object):
         output_raster.direction = 'Output'
         output_raster.datatype = dt.format('Raster Dataset')
 
-        return [broad_bpi, broad_stddev, fine_bpi, fine_stddev, slope, slope_gentle, slope_steep, bathy, broad_vs_flat, output_raster]
+        return [broad_bpi, broad_stddev, fine_bpi, fine_stddev, slope, slope_gentle,
+                slope_steep, bathy, broad_vs_flat, output_raster]
 
     def isLicensed(self):
         return True
@@ -851,12 +911,12 @@ class structureclassification(object):
     def updateParameters(self, parameters):
         validator = getattr(self, 'ToolValidator', None)
         if validator:
-             return validator(parameters).updateParameters()
+            return validator(parameters).updateParameters()
 
     def updateMessages(self, parameters):
         validator = getattr(self, 'ToolValidator', None)
         if validator:
-             return validator(parameters).updateMessages()
+            return validator(parameters).updateMessages()
 
     def execute(self, parameters, messages):
         pass
@@ -864,32 +924,34 @@ class structureclassification(object):
 class surfacetoplanar(object):
     """Compute Surface Area to Planar Area (ratio)."""
     class ToolValidator:
-      """Class for validating a tool's parameter values and controlling
-      the behavior of the tool's dialog."""
-    
-      def __init__(self, parameters):
-        """Setup arcpy and the list of tool parameters."""
-        self.params = parameters
-    
-      def initializeParameters(self):
-        """Refine the properties of a tool's parameters.  This method is
-        called when the tool is opened."""
-        return
-    
-      def updateParameters(self):
-        """Modify the values and properties of parameters before internal
-        validation is performed.  This method is called whenever a parmater
-        has been changed."""
-        return
-    
-      def updateMessages(self):
-        """Modify the messages created by internal validation for each tool
-        parameter.  This method is called after internal validation."""
-        return
+        """Class for validating a tool's parameter values and controlling
+        the behavior of the tool's dialog."""
+
+        def __init__(self, parameters):
+            """Setup arcpy and the list of tool parameters."""
+            self.params = parameters
+
+        def initializeParameters(self):
+            """Refine the properties of a tool's parameters.  This method is
+            called when the tool is opened."""
+            return
+
+        def updateParameters(self):
+            """Modify the values and properties of parameters before internal
+            validation is performed.  This method is called whenever a parmater
+            has been changed."""
+            return
+
+        def updateMessages(self):
+            """Modify the messages created by internal validation for each tool
+            parameter.  This method is called after internal validation."""
+            return
 
     def __init__(self):
         self.label = u'Surface Area to Planar Area'
-        self.description = 'Measure terrain ruggedness by calculating the ratio between the surface area and the planar area, as described in Jenness 2002.'
+        self.description = dedent("""\
+                Measure terrain ruggedness by calculating the ratio between
+                the surface area and the planar area, as described in Jenness 2002.""")
         self.canRunInBackground = False
 
     def getParameterInfo(self):
@@ -925,7 +987,7 @@ class surfacetoplanar(object):
     def updateParameters(self, parameters):
         validator = getattr(self, 'ToolValidator', None)
         if validator:
-             return validator(parameters).updateParameters()
+            return validator(parameters).updateParameters()
 
     def updateMessages(self, parameters):
         validator = getattr(self, 'ToolValidator', None)
@@ -935,46 +997,50 @@ class surfacetoplanar(object):
             if not valid_grid_name(output):
                 parameters[1].setErrorMessage(MSG_INVALID_GRID)
         if validator:
-             return validator(parameters).updateMessages()
+            return validator(parameters).updateMessages()
 
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
         from scripts import surface_area_to_planar_area
         surface_area_to_planar_area.main(
-                in_raster=parameters[0].valueAsText, 
+                in_raster=parameters[0].valueAsText,
                 out_raster=parameters[1].valueAsText,
                 area_raster=parameters[2].valueAsText)
 
 class terrainruggedness(object):
     """Compute Terrain Ruggedness Measure (VRM)."""
+
     class ToolValidator:
-      """Class for validating a tool's parameter values and controlling
-      the behavior of the tool's dialog."""
-    
-      def __init__(self, parameters):
-        """Setup arcpy and the list of tool parameters."""
-        self.params = parameters
-    
-      def initializeParameters(self):
-        """Refine the properties of a tool's parameters.  This method is
-        called when the tool is opened."""
-        return
-    
-      def updateParameters(self):
-        """Modify the values and properties of parameters before internal
-        validation is performed.  This method is called whenever a parmater
-        has been changed."""
-        return
-    
-      def updateMessages(self):
-        """Modify the messages created by internal validation for each tool
-        parameter.  This method is called after internal validation."""
-        return
-    
+        """Class for validating a tool's parameter values and controlling
+        the behavior of the tool's dialog."""
+
+        def __init__(self, parameters):
+            """Setup arcpy and the list of tool parameters."""
+            self.params = parameters
+
+        def initializeParameters(self):
+            """Refine the properties of a tool's parameters.  This method is
+            called when the tool is opened."""
+            return
+
+        def updateParameters(self):
+            """Modify the values and properties of parameters before internal
+            validation is performed.  This method is called whenever a parmater
+            has been changed."""
+            return
+
+        def updateMessages(self):
+            """Modify the messages created by internal validation for each tool
+            parameter.  This method is called after internal validation."""
+            return
+
     def __init__(self):
         self.label = u'Terrain Ruggedness (VRM)'
-        self.description = 'Measure terrain ruggedness by calculating the vecotr ruggedness measure (VRM), as described in Sappington et al, 2007.'
+        self.description = dedent("""\
+                Measure terrain ruggedness by calculating the vecotr ruggedness
+                measure (VRM), as described in Sappington et al, 2007.""")
         self.canRunInBackground = False
+
     def getParameterInfo(self):
         # Bathymetry_Raster
         input_raster = arcpy.Parameter()
@@ -1016,7 +1082,7 @@ class terrainruggedness(object):
     def updateParameters(self, parameters):
         validator = getattr(self, 'ToolValidator', None)
         if validator:
-             return validator(parameters).updateParameters()
+            return validator(parameters).updateParameters()
 
     def updateMessages(self, parameters):
         validator = getattr(self, 'ToolValidator', None)
@@ -1026,61 +1092,60 @@ class terrainruggedness(object):
             if not valid_grid_name(output):
                 parameters[3].setErrorMessage(MSG_INVALID_GRID)
         if validator:
-             return validator(parameters).updateMessages()
+            return validator(parameters).updateMessages()
 
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
         from scripts import ruggedness
         ruggedness.main(
-                in_raster=parameters[0].valueAsText, 
+                in_raster=parameters[0].valueAsText,
                 neighborhood_size=parameters[1].valueAsText,
                 out_workspace=parameters[2].valueAsText,
                 out_raster=parameters[3].valueAsText)
- 
+
 class depthstatistics(object):
     """ Depth Statistics computes a suite of summary statistics. This initial
-        version works on a fixed window size, but user feedback has indicated 
-        a more general version which supported multiple window sizes, 
+        version works on a fixed window size, but user feedback has indicated
+        a more general version which supported multiple window sizes,
         including vector-based ones, would be preferable.
 
         Also, this current version uses focal tools, but could be computed in
         one pass using numpy instead, but memory considerations would need
         to be taken into account, or the algorithm would need to operate on
-        blocks within the data. see 'rugosity.py' script an example of this 
+        blocks within the data. see 'rugosity.py' script an example of this
         approach, can use NumPyArrayToRaster and vice versa.
     """
-       
 
     class ToolValidator:
-      """Class for validating a tool's parameter values and controlling
-      the behavior of the tool's dialog."""
+        """Class for validating a tool's parameter values and controlling
+        the behavior of the tool's dialog."""
 
-      def __init__(self, parameters):
-        """Setup arcpy and the list of tool parameters."""
-        self.params = parameters
+        def __init__(self, parameters):
+            """Setup arcpy and the list of tool parameters."""
+            self.params = parameters
 
-      def initializeParameters(self):
-        """Refine the properties of a tool's parameters.  This method is
-        called when the tool is opened."""
-        return
+        def initializeParameters(self):
+            """Refine the properties of a tool's parameters.  This method is
+            called when the tool is opened."""
+            return
 
-      def updateParameters(self):
-        """Modify the values and properties of parameters before internal
-        validation is performed.  This method is called whenever a parmater
-        has been changed."""
-        return
+        def updateParameters(self):
+            """Modify the values and properties of parameters before internal
+            validation is performed.  This method is called whenever a parmater
+            has been changed."""
+            return
 
-      def updateMessages(self):
-        """Modify the messages created by internal validation for each tool
-        parameter.  This method is called after internal validation."""
-        return
+        def updateMessages(self):
+            """Modify the messages created by internal validation for each tool
+            parameter.  This method is called after internal validation."""
+            return
 
     def __init__(self):
         self.label = u'Depth Statistics'
         self.canRunInBackground = False
 
     def getParameterInfo(self):
-        # Bathymetry_Raster 
+        # Bathymetry_Raster
         input_raster = arcpy.Parameter()
         input_raster.name = u'Bathymetry_Raster'
         input_raster.displayName = u'Bathymetry Raster'
@@ -1122,18 +1187,18 @@ class depthstatistics(object):
     def updateParameters(self, parameters):
         validator = getattr(self, 'ToolValidator', None)
         if validator:
-             return validator(parameters).updateParameters()
+            return validator(parameters).updateParameters()
 
     def updateMessages(self, parameters):
         validator = getattr(self, 'ToolValidator', None)
         if validator:
-             return validator(parameters).updateMessages()
+            return validator(parameters).updateMessages()
 
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
         from scripts import depth_statistics
         depth_statistics.main(
-                in_raster = parameters[0].valueAsText,
-                neighborhood_size = parameters[1].valueAsText,
-                out_workspace = parameters[2].valueAsText,
-                out_stats_raw = parameters[3].valueAsText)
+                in_raster=parameters[0].valueAsText,
+                neighborhood_size=parameters[1].valueAsText,
+                out_workspace=parameters[2].valueAsText,
+                out_stats_raw=parameters[3].valueAsText)

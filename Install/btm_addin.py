@@ -3,7 +3,6 @@ import sys
 
 # ArcGIS specific imports
 import arcpy
-import arcpy.sa as sa
 import pythonaddins
 
 # enable local imports
@@ -26,12 +25,12 @@ def tool_dialog(toolbox, tool):
         sys.stderr = DevNull()
         pythonaddins.GPToolDialog(toolbox, tool)
         sys.stderr = err_default
-    except Exception as e:
+    except:
         print "recieved exception when trying to run GPToolDialog(" + \
             "{toolbox}, {tool}))".format(toolbox=toolbox, tool=tool)
     return None
 
-""" Run all steps (wizard) """
+## Run all steps (wizard)
 class ButtonRunBTMSteps(object):
     """Implementation for runBTMSteps.button (Button)"""
     def __init__(self):
@@ -46,7 +45,7 @@ class ButtonRunBTMSteps(object):
         # is available.
         #tool_dialog(btm_toolbox, 'finescalebpi')
         #tool_dialog(btm_toolbox, 'standardizebpi')
-        # update: this bug is documented in NIM085804; no current plans to fix it. 
+        # update: this bug is documented in NIM085804; no current plans to fix it.
         #         Only one call is possible from an onClick event.
 
 
@@ -54,21 +53,22 @@ class RunBTMSteps(object):
     """Implementation for RunBTMSteps.tool (Tool)"""
     def __init__(self):
         self.enabled = True
-        self.shape = "NONE" # Can set to "Line", "Circle" or "Rectangle" for interactive shape drawing
+        self.shape = "NONE" # Can set to "Line", "Circle" or
+                            # "Rectangle" for interactive shape drawing
     def onClick(self):
         tool_dialog(btm_toolbox, 'runfullmodel')
- 
-""" classification functions"""
+
+## classification functions
 class classifyBenthicTerrain(object):
     """Implementation for classifyBenthicTerrain.button (Button)"""
     def __init__(self):
         self.enabled = True
         self.checked = False
     def onClick(self):
-        tool_dialog(btm_toolbox, 'classify')
+        tool_dialog(btm_toolbox, 'classifyterrain')
 
 
-""" BPI specific functions """
+## BPI specific functions
 class calculateBroadBPI(object):
     """Implementation for caculateBroadBPI.button (Button)"""
     def __init__(self):
@@ -93,7 +93,7 @@ class standarizeBPI(object):
     def onClick(self):
         tool_dialog(btm_toolbox, 'standardizebpi')
 
-""" Geomorphometry Functions """
+## Geomorphometry Functions
 
 #
 # Convienience functions pulled in from spatial analyst
@@ -122,8 +122,8 @@ class calculateAspect(object):
         tool_dialog("Spatial Analyst Tools", 'Aspect')
 
 #- variance in depth
-#- mean water depth 
-#    + [sum(depth) / n cells] 
+#- mean water depth
+#    + [sum(depth) / n cells]
 #    + arcpy.sa.Focal()
 #- std dev. water depth
 #    + stddev = sqrt(variance)
