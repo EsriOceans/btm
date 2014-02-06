@@ -1,4 +1,4 @@
-3.0-beta-15: handle CSV files more robustly, provide clearer error messages, fix classify bug, add new Surface Area to Planar Area tool.
+3.0-beta-20: handle CSV files more robustly, provide clearer error messages, fix classify bug, add new Surface Area to Planar Area tool, improvements to VRM code, internal code cleanup, Excel support.
 3.0-beta-14: move model into a Python script over ModelBuilder, complete
 top-level unit tests.
 3.0-beta-13:
