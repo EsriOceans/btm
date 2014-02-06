@@ -16,6 +16,7 @@ arcpy.CheckOutExtension("Spatial")
 
 def main(in_raster=None, neighborhood_size=None, out_workspace=None, out_stats_raw=None):
     out_stats = out_stats_raw.replace("'", '').split(";")
+    arcpy.env.rasterStatistics = "STATISTICS"
 
     # convert our data to sets for easy comparison
     mean_set = set(['Mean Depth'])

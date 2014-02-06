@@ -104,6 +104,7 @@ def main(classification_file, bpi_broad, bpi_fine, slope, bathy,
         utils.msg("Saving Output to %s" % out_raster)
         merge_grid.save(out_raster)
 
+        arcpy.env.rasterStatistics = "STATISTICS"
         utils.msg("Complete.")
 
         # Delete all intermediate raster data sets

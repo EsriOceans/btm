@@ -32,6 +32,7 @@ arcpy.CheckOutExtension("Spatial")
 def main(bathy=None, inner_radius=None, outer_radius=None,
     out_raster=None, bpi_type='broad', mode='toolbox'):
 
+    arcpy.env.rasterStatistics = "STATISTICS"
     try:
         # Create the broad-scale Bathymetric Position Index (BPI) raster
         msg = "Generating the {bpi_type}-scale ".format(bpi_type=bpi_type) + \

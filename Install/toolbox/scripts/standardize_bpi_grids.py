@@ -40,6 +40,7 @@ def main(bpi_raster=None, out_raster=None):
         # Create the standardized Bathymetric Position Index (BPI) raster
         message = "Standardizing the Bathymetric Position Index (BPI) raster..."
         utils.msg(message)
+        arcpy.env.rasterStatistics = "STATISTICS"
         outRaster = Int(Plus(Times(Divide(
                 Minus(bpi_raster, float(bpi_mean)), float(bpi_std_dev)), 100), 0.5))
         outRaster.save(out_raster)

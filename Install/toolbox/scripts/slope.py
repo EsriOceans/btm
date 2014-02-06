@@ -27,6 +27,7 @@ arcpy.CheckOutExtension("Spatial")
 
 def main(bathy=None, out_raster=None):
     try:
+        arcpy.env.rasterStatistics = "STATISTICS"
         # Calculate the slope of the bathymetric raster
         utils.msg("Calculating the slope...")
         out_slope = Slope(bathy, "DEGREE", 1)

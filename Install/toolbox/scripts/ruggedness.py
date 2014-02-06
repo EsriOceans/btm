@@ -68,6 +68,7 @@ def main(in_raster=None, neighborhood_size=None, out_workspace=None, out_raster=
         utils.msg("Calculating the resultant vector...")
         result_vect = (x_sum_calc**2 + y_sum_calc**2 + z_sum_calc**2)**0.5
 
+        arcpy.env.rasterStatistics = "STATISTICS"
         arcpy.env.pyramid = pyramid_orig
         # Calculate the Ruggedness raster
         utils.msg("Calculating the final ruggedness raster...")

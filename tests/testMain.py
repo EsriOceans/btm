@@ -71,9 +71,10 @@ class TestStandardizeBpiGridsScript(unittest.TestCase):
             standardize_bpi_grids.main(bpi_raster=in_raster, out_raster=std_raster)
             self.assertTrue(os.path.exists(std_raster))
 
-            arcpy.CalculateStatistics_management(std_raster) 
-            self.assertAlmostEqual(utils.raster_properties(std_raster, "MEAN"), 0.671608391608)
-            self.assertAlmostEqual(utils.raster_properties(std_raster, "STD"), 99.655593923183)
+            self.assertAlmostEqual(
+                    utils.raster_properties(std_raster, "MEAN"), 0.671608391608)
+            self.assertAlmostEqual(
+                    utils.raster_properties(std_raster, "STD"), 99.655593923183)
 
 class TestBpiSlope(unittest.TestCase):
 
@@ -89,16 +90,6 @@ class TestBpiSlope(unittest.TestCase):
             arcpy.env.scratchWorkspace = d
             slope.main(bathy=config.bathy_raster, out_raster=slope_raster)
             self.assertTrue(os.path.exists(slope_raster))
-            # doing this causes WindowsError: [Error 32] file used by another process
-            #with Rast(slope_raster) as r:
-                #self.assertAlmostEqual(r.mean, 3.802105241105673)
-                #self.assertAlmostEqual(r.mean, 100)
- 
-            arcpy.CalculateStatistics_management(slope_raster) 
-            self.assertAlmostEqual(utils.raster_properties(slope_raster, "MEAN"), \
-                3.802105241105673)
-
-class TestBpiSlope(unittest.TestCase):
 
             self.assertAlmostEqual(utils.raster_properties(slope_raster, "MEAN"), \
                 3.802105241105673)

@@ -132,6 +132,7 @@ def main(in_raster=None, out_raster=None, area_raster=None):
 
         utils.msg("Summing Triangle Area...")
         arcpy.env.pyramid = pyramid_orig
+        arcpy.env.rasterStatistics = "STATISTICS"
         total_area = (areas[0] + areas[1] + areas[2] + areas[3] + \
                       areas[4] + areas[5] + areas[6] + areas[7])
         if area_raster:
