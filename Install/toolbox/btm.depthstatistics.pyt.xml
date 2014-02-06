@@ -9,7 +9,7 @@
 			<maxScale>5000</maxScale>
 		</scaleRange>
 		<ArcGISProfile>ItemDescription</ArcGISProfile>
-		</Esri>
+	</Esri>
 	<dataIdInfo>
 		<idCitation>
 			<resTitle>Depth Statistics</resTitle>
