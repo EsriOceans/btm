@@ -230,7 +230,6 @@ class TestRunFullModel(unittest.TestCase):
                     'null.tif', 'null.tif', 'null.tif', config.bathy_raster, \
                      os.path.join(d, 'null.tif'))
 
-
     def testModelExecuteWithXml(self):
         with TempDir() as d:
             model_output = os.path.join(d, 'output_zones.tif')
@@ -264,7 +263,6 @@ class TestRunFullModel(unittest.TestCase):
 
             # count up the number of cells in the first class
             self.assertEqual(self.sumFirstClass(model_output), 88)
-
 
     def testOutputConsistency(self):
         # Test that all three of our classification backends concur on the
