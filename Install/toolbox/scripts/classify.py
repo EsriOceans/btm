@@ -18,28 +18,25 @@ class NoValidClasses(Exception):
 
 def run_con(lower_bounds, upper_bounds, in_grid, true_val, true_alt=None):
     # debug message:
-    #utils.msg("run_con: lb: `{}`  ub: `{}` grid: `{}`  val: `{}`".format(
-    #        lower_bounds, upper_bounds, in_grid, true_val))
-    out_grid = ""
+    #utils.msg("run_con: lb: `{}`  ub: `{}` grid: `{}`  val: `{}`, alt: `{}`".format(
+    #        lower_bounds, upper_bounds, in_grid, true_val, true_alt))
+    out_grid = None
     # if our initial desired output value isn't set, use the backup
-    if str(true_val) == '':
+    if true_val is None:
         true_val = true_alt
-    # if we're getting a string back, treat it as an integer.
-    if isinstance(true_val, str):
-        # if it's a blank one, set our val to None
-        if true_val == '':
-            true_val = None
-        else:
-            true_val = float(true_val)
     # calculate our output grid
     if lower_bounds is not None:
         if upper_bounds is not None:
-            out_grid = Con((Raster(in_grid) > float(lower_bounds)) & \
-                    (Raster(in_grid) < float(upper_bounds)), true_val, 0)
+            out_grid_a = Con(in_grid, true_val, 0, "VALUE < {}".format(upper_bounds))
+            out_grid = Con(in_grid, out_grid_a, 0, "VALUE > {}".format(lower_bounds))
         else:
-            out_grid = Con(Raster(in_grid) >= float(lower_bounds), true_val, 0)
+            out_grid = Con(in_grid, true_val, 0, "VALUE >= {}".format(lower_bounds))
     elif upper_bounds is not None:
-        out_grid = Con(Raster(in_grid) <= float(upper_bounds), true_val, 0)
+        out_grid = Con(in_grid, true_val, 0, "VALUE <= {}".format(upper_bounds))
+
+    if type(out_grid).__name__ == 'NoneType' and type(true_val) == arcpy.sa.Raster:
+        out_grid = true_val
+
     return out_grid
 
 def main(classification_file, bpi_broad_std, bpi_fine_std, slope, bathy,
@@ -54,7 +51,6 @@ def main(classification_file, bpi_broad_std, bpi_fine_std, slope, bathy,
         out_workspace = os.path.dirname(out_raster)
         # make sure workspace exists
         utils.workspace_exists(out_workspace)
-        utils.msg("Set scratch workspace to {}...".format(out_workspace))
         arcpy.env.scratchWorkspace = out_workspace
         arcpy.env.workspace = out_workspace
 
@@ -75,33 +71,41 @@ def main(classification_file, bpi_broad_std, bpi_fine_std, slope, bathy,
             cur_class = str(item["Class"])
             cur_name = str(item["Zone"])
             utils.msg("Calculating grid for {}...".format(cur_name))
-            out_con = ""
+            out_con = None
             # here come the CONs:
             out_con = run_con(item["Depth_LowerBounds"], item["Depth_UpperBounds"], \
                     bathy, cur_class)
-            out_con = run_con(item["Slope_LowerBounds"], item["Slope_UpperBounds"], \
+            out_con2 = run_con(item["Slope_LowerBounds"], item["Slope_UpperBounds"], \
                     slope, out_con, cur_class)
-            out_con = run_con(item["SSB_LowerBounds"], item["SSB_UpperBounds"], \
-                    bpi_broad, out_con, cur_class)
-            out_con = run_con(item["LSB_LowerBounds"], item["LSB_UpperBounds"], \
-                    bpi_fine, out_con, cur_class)
-            if type(out_con) == arcpy.sa.Raster:
-                rast = utils.save_raster(out_con, "con_{}.tif".format(cur_name))
+            out_con3 = run_con(item["LSB_LowerBounds"], item["LSB_UpperBounds"], \
+                    bpi_fine_std, out_con2, cur_class)
+            out_con4 = run_con(item["SSB_LowerBounds"], item["SSB_UpperBounds"], \
+                    bpi_broad_std, out_con3, cur_class)
+
+            if type(out_con4) == arcpy.sa.Raster:
+                rast = utils.save_raster(out_con4, "con_{}.tif".format(cur_name))
                 grids.append(rast)
             else:
                 # fall-through: no valid values detected for this class.
-                warn_msg = """\
-                        WARNING: no valid locations found for class {}:
-                          depth:     ({}本})
-                          slope:     ({}本})
-                          broad BPI: ({}本})
-                          fine BPI:  ({}本})""".format(\
-                                cur_name, item["Depth_LowerBounds"],
-                                item["Depth_UpperBounds"], item["Slope_LowerBounds"],
-                                item["Slope_UpperBounds"], item["SSB_LowerBounds"],
-                                item["SSB_UpperBounds"], item["LSB_LowerBounds"],
-                                item["LSB_UpperBounds"])
+                warn_msg = "WARNING, no valid locations found for class" + \
+                        " {}:\n".format(cur_name)
+                classifications = {
+                        'depth': (item["Depth_LowerBounds"], item["Depth_UpperBounds"]),
+                        'slope': (item["Slope_LowerBounds"], item["Slope_UpperBounds"]),
+                        'broad': (item["SSB_LowerBounds"], item["SSB_UpperBounds"]), 
+                        'fine': (item["LSB_LowerBounds"], item["LSB_UpperBounds"])}
+                for (name, vrange) in classifications.items(): 
+                    (vmin, vmax) = vrange
+                    if vmin or vmax is not None:
+                        if vmin is None:
+                            vmin = ""
+                        if vmax is None:
+                            vmax = ""
+                        warn_msg += "  {}: {{{}:{}}}\n".format(name, vmin, vmax)
+
                 utils.msg(textwrap.dedent(warn_msg))
+        if len(grids) == 0:
+            raise NoValidClasses
 
         utils.msg("Creating Benthic Terrain Classification Dataset...")
         merge_grid = grids[0]
@@ -115,10 +119,10 @@ def main(classification_file, bpi_broad_std, bpi_fine_std, slope, bathy,
         utils.msg("Complete.")
 
         # Delete all intermediate raster data sets
-        utils.msg("Deleting intermediate data...")
         for grid in grids:
             arcpy.Delete_management(grid.catalogPath)
-
+    except NoValidClasses as e:
+        utils.msg(e, mtype='error')
     except Exception as e:
         if type(e) is ValueError:
             raise e

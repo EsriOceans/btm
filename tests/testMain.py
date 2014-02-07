@@ -267,9 +267,71 @@ class TestRunFullModel(unittest.TestCase):
 
 
     def testOutputConsistency(self):
-        # Test that all three of our classification backends concur on the 
+        # Test that all three of our classification backends concur on the
         # output, and that results are consistent between the model runs.
         self.assertEqual(self.csv_mean, self.xml_mean)
+        self.assertEqual(self.excel_mean, self.xml_mean)
+
+class TestRunFullModelKnownZones(unittest.TestCase):
+    def setUp(self):
+        self.broad_inner_rad = 1
+        self.broad_outer_rad = 5
+        self.fine_inner_rad = 1
+        self.fine_outer_rad = 3
+        self.xml_mean = None
+        self.excel_mean = None
+        self.toolbox = None
+        self.xml_zones = None
+        self.excel_zones = None
+        self.expected = {1: 433, 2: 6, 3: 2428, 4: 708} # one cell differs from v1.
+
+    def extractRasterAttributeTable(self, raster_path):
+        rat = {}
+        raster = arcpy.sa.Raster(raster_path)
+        self.assertTrue(raster.hasRAT)
+        rows = arcpy.SearchCursor(raster, "", "", "Value;Count", "")
+        for row in rows:
+            rat[row.getValue("Value")] = row.getValue("Count")
+        return rat
+
+    def testModelExecuteWithXml(self):
+        with TempDir() as d:
+            zones_output = os.path.join(d, 'output_zones.tif')
+            arcpy.env.scratchWorkspace = d
+
+            btm_model.main(d, config.bathy_raster, self.broad_inner_rad, \
+                    self.broad_outer_rad, self.fine_inner_rad, self.fine_outer_rad, \
+                    config.zones_xml, zones_output)
+
+            self.assertTrue(os.path.exists(zones_output))
+            arcpy.BuildRasterAttributeTable_management(zones_output)
+
+            self.xml_mean = utils.raster_properties(zones_output, "MEAN")
+            self.xml_zones = zones_output
+
+            # some asserts here for validation
+            rat = self.extractRasterAttributeTable(self.xml_zones)
+            for (value, count) in self.expected.items():
+                self.assertEqual(count, rat[value])
+
+    def testModelExecuteWithExcel(self):
+        with TempDir() as d:
+            zones_output = os.path.join(d, 'output_zones.tif')
+            arcpy.env.scratchWorkspace = d
+
+            btm_model.main(d, config.bathy_raster, self.broad_inner_rad, \
+                    self.broad_outer_rad, self.fine_inner_rad, self.fine_outer_rad, \
+                    config.zones_excel, zones_output)
+
+            self.assertTrue(os.path.exists(zones_output))
+            arcpy.BuildRasterAttributeTable_management(zones_output)
+
+            self.excel_mean = utils.raster_properties(zones_output, "MEAN")
+            self.excel_zones = zones_output
+            # some asserts here for validation
+            rat = self.extractRasterAttributeTable(self.excel_zones)
+            for (value, count) in self.expected.items():
+                self.assertEqual(count, rat[value])
 
 # this test should be run after a fresh run of makeaddin to rebuild the .esriaddin file.
 class TestAddin(unittest.TestCase):
