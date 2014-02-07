@@ -21,6 +21,7 @@ def run_con(lower_bounds, upper_bounds, in_grid, true_val, true_alt=None):
     #utils.msg("run_con: lb: `{}`  ub: `{}` grid: `{}`  val: `{}`, alt: `{}`".format(
     #        lower_bounds, upper_bounds, in_grid, true_val, true_alt))
     out_grid = None
+
     # if our initial desired output value isn't set, use the backup
     if true_val is None:
         true_val = true_alt
@@ -104,6 +105,7 @@ def main(classification_file, bpi_broad_std, bpi_fine_std, slope, bathy,
                         warn_msg += "  {}: {{{}:{}}}\n".format(name, vmin, vmax)
 
                 utils.msg(textwrap.dedent(warn_msg))
+
         if len(grids) == 0:
             raise NoValidClasses
 
