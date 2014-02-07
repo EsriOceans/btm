@@ -42,7 +42,7 @@ def run_con(lower_bounds, upper_bounds, in_grid, true_val, true_alt=None):
         out_grid = Con(Raster(in_grid) <= float(upper_bounds), true_val, 0)
     return out_grid
 
-def main(classification_file, bpi_broad, bpi_fine, slope, bathy,
+def main(classification_file, bpi_broad_std, bpi_fine_std, slope, bathy,
     out_raster=None, mode='toolbox'):
 
     try:
@@ -129,8 +129,8 @@ if __name__ == '__main__':
     config.mode = 'script'
     main(
         classification_file=sys.argv[1],
-        bpi_broad=sys.argv[2],
-        bpi_fine=sys.argv[3],
+        bpi_broad_std=sys.argv[2],
+        bpi_fine_std=sys.argv[3],
         slope=sys.argv[4],
         bathy=sys.argv[5],
         out_raster=sys.argv[6])

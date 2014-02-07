@@ -608,20 +608,20 @@ class classifyterrain(object):
         class_dict.filter.list = ['csv', 'xls', 'xlsx', 'xml']
 
         # Standardized broad-scale BPI raster
-        broad_bpi = arcpy.Parameter()
-        broad_bpi.name = u'Standardized_broad-scale_BPI_raster'
-        broad_bpi.displayName = u'Standardized broad-scale BPI raster'
-        broad_bpi.parameterType = 'Required'
-        broad_bpi.direction = 'Input'
-        broad_bpi.datatype = dt.format('Raster Layer')
+        broad_bpi_std = arcpy.Parameter()
+        broad_bpi_std.name = u'Standardized_broad-scale_BPI_raster'
+        broad_bpi_std.displayName = u'Standardized broad-scale BPI raster'
+        broad_bpi_std.parameterType = 'Required'
+        broad_bpi_std.direction = 'Input'
+        broad_bpi_std.datatype = dt.format('Raster Layer')
 
         # Standardized fine-scale BPI raster
-        fine_bpi = arcpy.Parameter()
-        fine_bpi.name = u'Standardized_fine-scale_BPI_raster'
-        fine_bpi.displayName = u'Standardized fine-scale BPI raster'
-        fine_bpi.parameterType = 'Required'
-        fine_bpi.direction = 'Input'
-        fine_bpi.datatype = dt.format('Raster Layer')
+        fine_bpi_std = arcpy.Parameter()
+        fine_bpi_std.name = u'Standardized_fine-scale_BPI_raster'
+        fine_bpi_std.displayName = u'Standardized fine-scale BPI raster'
+        fine_bpi_std.parameterType = 'Required'
+        fine_bpi_std.direction = 'Input'
+        fine_bpi_std.datatype = dt.format('Raster Layer')
 
         # Slope_raster
         slope = arcpy.Parameter()
@@ -646,7 +646,7 @@ class classifyterrain(object):
         zones_raster.parameterType = 'Required'
         zones_raster.direction = 'Output.'
         zones_raster.datatype = dt.format('Raster Dataset')
-        return [class_dict, broad_bpi, fine_bpi, slope, bathy, zones_raster]
+        return [class_dict, broad_bpi_std, fine_bpi_std, slope, bathy, zones_raster]
 
     def isLicensed(self):
         return True
@@ -671,8 +671,8 @@ class classifyterrain(object):
         from scripts import classify
         classify.main(
             classification_file=parameters[0].valueAsText,
-            bpi_broad=parameters[1].valueAsText,
-            bpi_fine=parameters[2].valueAsText,
+            bpi_broad_std=parameters[1].valueAsText,
+            bpi_fine_std=parameters[2].valueAsText,
             slope=parameters[3].valueAsText,
             bathy=parameters[4].valueAsText,
             out_raster=parameters[5].valueAsText)
