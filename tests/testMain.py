@@ -19,13 +19,13 @@ from scripts import bpi, standardize_bpi_grids, btm_model, slope, \
 class TestBtmDocument(unittest.TestCase):
 
     def testXmlDocumentExists(self):
-        self.assertTrue(os.path.exists(config.xml_doc))
+        self.assertTrue(os.path.exists(config.base_xml))
 
     def testCsvDocumentExists(self):
-        self.assertTrue(os.path.exists(config.csv_doc))
+        self.assertTrue(os.path.exists(config.base_csv))
 
     def testMalformedCsvDocumentExsists(self):
-        self.assertTrue(os.path.exists(config.malformed_csv_doc))
+        self.assertTrue(os.path.exists(config.malformed_csv))
 
 
 class TestBtmRaster(unittest.TestCase):
@@ -211,7 +211,7 @@ class TestRunFullModel(unittest.TestCase):
 
             btm_model.main(d, config.bathy_raster, self.broad_inner_rad, \
                     self.broad_outer_rad, self.fine_inner_rad, self.fine_outer_rad, \
-                    config.csv_doc, model_output)
+                    config.base_csv, model_output)
 
             self.assertTrue(os.path.exists(model_output))
 
@@ -225,7 +225,7 @@ class TestRunFullModel(unittest.TestCase):
     def testModelExecuteWithMalformedCsv(self):
         with TempDir() as d:
             # raises a ValueError when the malformed line is encountered.
-            classify.main(config.malformed_csv_doc, 'null.tif', \
+            classify.main(config.malformed_csv, 'null.tif', \
                     'null.tif', 'null.tif', 'null.tif', config.bathy_raster, \
                      os.path.join(d, 'null.tif'))
 
@@ -237,7 +237,7 @@ class TestRunFullModel(unittest.TestCase):
 
             btm_model.main(d, config.bathy_raster, self.broad_inner_rad, \
                     self.broad_outer_rad, self.fine_inner_rad, self.fine_outer_rad, \
-                    config.xml_doc, model_output)
+                    config.base_xml, model_output)
 
             self.assertTrue(os.path.exists(model_output))
 
