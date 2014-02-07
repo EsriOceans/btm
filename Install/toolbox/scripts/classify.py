@@ -12,6 +12,10 @@ import config
 # Check out any necessary licenses
 arcpy.CheckOutExtension("Spatial")
 
+class NoValidClasses(Exception):
+    def __init__(self):
+        Exception.__init__(self, "No valid output classes found")
+
 def run_con(lower_bounds, upper_bounds, in_grid, true_val, true_alt=None):
     # debug message:
     #utils.msg("run_con: lb: `{}`  ub: `{}` grid: `{}`  val: `{}`".format(
