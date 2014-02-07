@@ -16,7 +16,7 @@ echo "building code..."
 # the tag version should be named 'v$MAJOR.$MINOR{-$subversion}'. 
 # There is also version parsing code in the python stdlib I believe.
 PROJECT='btm'
-VERSION='3.0-beta-14'
+VERSION='3.0-rc-1'
 RELEASE_BASE='../btm-release'
 RELEASE_NAME="${PROJECT}-${VERSION}"
 RELEASE_DIR="${RELEASE_BASE}/${RELEASE_NAME}"
@@ -68,6 +68,6 @@ cp ${RELEASE_ARCHIVE} "btm-3.0-beta.zip"
 cd ${repo_dir}
 
 # TODO: tag the resulting version with a new tag
-# git tag 
+# git tag -a v${VERSION} -m '3.0 release candidate 1'
 
 
