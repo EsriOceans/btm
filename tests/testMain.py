@@ -184,6 +184,7 @@ class TestRunFullModel(unittest.TestCase):
         self.broad_outer_rad = 30
         self.fine_inner_rad = 5
         self.fine_outer_rad = 10
+        self.true_mean = 5.7815384615385
         self.csv_mean = None
         self.xml_mean = None
         self.excel_mean = None
@@ -217,7 +218,7 @@ class TestRunFullModel(unittest.TestCase):
             self.assertTrue(os.path.exists(model_output))
 
             self.csv_mean = utils.raster_properties(model_output, "MEAN")
-            self.assertAlmostEqual(self.csv_mean, 5.6517482517483)
+            self.assertAlmostEqual(self.csv_mean, self.true_mean)
 
             # count up the number of cells in the first class
             self.assertEqual(self.sumFirstClass(model_output), 88)
@@ -242,7 +243,7 @@ class TestRunFullModel(unittest.TestCase):
             self.assertTrue(os.path.exists(model_output))
 
             self.xml_mean = utils.raster_properties(model_output, "MEAN")
-            self.assertAlmostEqual(self.xml_mean, 5.6517482517483)
+            self.assertAlmostEqual(self.xml_mean, self.true_mean)
 
             # count up the number of cells in the first class
             self.assertEqual(self.sumFirstClass(model_output), 88)
@@ -259,7 +260,7 @@ class TestRunFullModel(unittest.TestCase):
             self.assertTrue(os.path.exists(model_output))
 
             self.excel_mean = utils.raster_properties(model_output, "MEAN")
-            self.assertAlmostEqual(self.excel_mean, 5.6517482517483)
+            self.assertAlmostEqual(self.excel_mean, self.true_mean)
 
             # count up the number of cells in the first class
             self.assertEqual(self.sumFirstClass(model_output), 88)
