@@ -167,10 +167,80 @@ class BtmXmlDocument(BtmDocument):
                 dic.update({n.nodeName:text})
         return dic
 
+
+
 class BtmExcelDocument(BtmDocument):
-    # reuse existing implementation in parsepy.py
-    # TODO: fix for 3.1: https://github.com/EsriOceans/btm/issues/28
-    pass
+    # TODO: FORCE A TEST FOR ARCGIS 10.2 INSTALLATION
+
+    def __init__(self, filename):
+        self.filename = filename
+        self.header = None # filled in by parse_workbook
+        self.workbook = self.parse_workbook(self.filename)
+
+    def name(self):
+        return os.path.basename(self.filename)
+
+    def description(self):
+        # TODO: implement metadata in Excel?
+        return None
+
+    def classification(self):
+        in_workbook = self.workbook
+        result_rows = []
+        for row in in_workbook:
+            # replace empty strings with Nones
+            row_clean = [None if x == '' else x for x in row]
+
+            if len(row_clean) != 10:
+                message = "Encountered malformed row which requires correction:" + \
+                        "{}\"".format(",".join(row))
+                raise ValueError(message)
+            # don't parse the header, assume columns are in expected order.
+            (class_code, zone, broad_lower, broad_upper, fine_lower, fine_upper, \
+            slope_lower, slope_upper, depth_lower, depth_upper) = row_clean
+
+            # for now: fake the format used by the XML documents.
+            res_row = {'Class': str(int(class_code)),
+                       'Zone': zone,
+                       'SSB_LowerBounds': broad_lower,
+                       'SSB_UpperBounds': broad_upper,
+                       'LSB_LowerBounds': fine_lower,
+                       'LSB_UpperBounds': fine_upper,
+                       'Slope_LowerBounds': slope_lower,
+                       'Slope_UpperBounds': slope_upper,
+                       'Depth_LowerBounds': depth_lower,
+                       'Depth_UpperBounds': depth_upper}
+            result_rows.append(res_row)
+        return result_rows
+
+    def parse_workbook(self, filename):
+        result = []
+        try:
+            import xlrd
+        except ImportError:
+            msg = "Reading Excel files requires the `xlrd` library, which is "+ \
+                    "included in ArcGIS 10.2+. If you'd like Excel support in"+\
+                    " ArcGIS 10.1, please install `xlrd` manually."
+            raise Exception(msg)
+
+        with xlrd.open_workbook(filename) as workbook:
+            # assume data is in the first sheet
+            sheet = workbook.sheet_by_index(0)
+
+            # FIXME: assume all column labels are fixed
+            self.header = ['Class', 'Zone', 'bpi_broad_lower', 'bpi_broad_upper',
+                    'bpi_fine_lower', 'bpi_fine_upper', 'slope_lower',
+                    'slope_upper', 'depth_lower', 'depth_upper']
+            for row in range(2, sheet.nrows):
+                cell = sheet.cell(row, 0)
+                # an empty row terminates the set
+                if cell.value in ["", None] :
+                    break
+                # we have an expected row of classes.
+                else:
+                    result.append([sheet.cell(row, col).value for col in range(10)])
+        return result
+
 
 class BtmCsvDocument(BtmDocument):
     def __init__(self, filename):

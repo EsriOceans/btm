@@ -186,6 +186,7 @@ class TestRunFullModel(unittest.TestCase):
         self.fine_outer_rad = 10
         self.csv_mean = None
         self.xml_mean = None
+        self.excel_mean = None
         self.toolbox = None
 
     def sumFirstClass(self, in_raster):
@@ -247,9 +248,27 @@ class TestRunFullModel(unittest.TestCase):
             # count up the number of cells in the first class
             self.assertEqual(self.sumFirstClass(model_output), 88)
 
-    def testXmlCsvConsistency(self):
-        # XML and CSV are two separate classification backends, make sure the
-        # results are consistent between the model runs.
+    def testModelExecuteWithExcel(self):
+        with TempDir() as d:
+            model_output = os.path.join(d, 'output_zones.tif')
+            arcpy.env.scratchWorkspace = d
+
+            btm_model.main(d, config.bathy_raster, self.broad_inner_rad, \
+                    self.broad_outer_rad, self.fine_inner_rad, self.fine_outer_rad, \
+                    config.base_excel, model_output)
+
+            self.assertTrue(os.path.exists(model_output))
+
+            self.excel_mean = utils.raster_properties(model_output, "MEAN")
+            self.assertAlmostEqual(self.excel_mean, 5.6517482517483)
+
+            # count up the number of cells in the first class
+            self.assertEqual(self.sumFirstClass(model_output), 88)
+
+
+    def testOutputConsistency(self):
+        # Test that all three of our classification backends concur on the 
+        # output, and that results are consistent between the model runs.
         self.assertEqual(self.csv_mean, self.xml_mean)
 
 # this test should be run after a fresh run of makeaddin to rebuild the .esriaddin file.
