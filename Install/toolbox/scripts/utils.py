@@ -201,7 +201,7 @@ class BtmCsvDocument(BtmDocument):
             slope_lower, slope_upper, depth_lower, depth_upper) = row_clean
 
             # for now: fake the format used by the XML documents.
-            res_row = {'Class': int(class_code),
+            res_row = {'Class': class_code,
                        'Zone': zone,
                        'SSB_LowerBounds': broad_lower,
                        'SSB_UpperBounds': broad_upper,
