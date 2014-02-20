@@ -141,6 +141,7 @@ def main(in_raster=None, out_raster=None, area_raster=None):
 
         area_ratio = total_area / cell_size**2
 
+        out_raster = utils.validate_path(out_raster)
         utils.msg("Saving Surface Area to Planar Area ratio to {}.".format(out_raster))
         area_ratio.save(out_raster)
 

@@ -74,6 +74,9 @@ def main(in_raster=None, neighborhood_size=None, out_workspace=None, out_raster=
         utils.msg("Calculating the final ruggedness raster...")
         ruggedness = 1 - (result_vect / hood_size**2)
         ruggedness.save(out_raster)
+        out_raster = utils.validate_path(out_raster)
+        utils.msg("Saving ruggedness raster to to {}.".format(out_raster))
+        ruggedness.save(out_raster)
 
     except Exception as e:
         utils.msg(e, mtype='error')

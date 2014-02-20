@@ -31,6 +31,7 @@ def main(bathy=None, out_raster=None):
         # Calculate the slope of the bathymetric raster
         utils.msg("Calculating the slope...")
         out_slope = Slope(bathy, "DEGREE", 1)
+        out_raster = utils.validate_path(out_raster)
         out_slope.save(out_raster)
     except Exception as e:
         utils.msg(e, mtype='error')

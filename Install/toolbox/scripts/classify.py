@@ -116,6 +116,8 @@ def main(classification_file, bpi_broad_std, bpi_fine_std, slope, bathy,
             merge_grid = Con(merge_grid, grids[i], merge_grid, "VALUE = 0")
 
         arcpy.env.rasterStatistics = "STATISTICS"
+        # validate the output raster path
+        out_raster = utils.validate_path(out_raster)
         utils.msg("Saving Output to {}".format(out_raster))
         merge_grid.save(out_raster)
         utils.msg("Complete.")

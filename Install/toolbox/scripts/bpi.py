@@ -43,6 +43,8 @@ def main(bathy=None, inner_radius=None, outer_radius=None,
         utils.msg("Calculating FocalStatistics for {}...".format(bathy))
         out_focal_statistics = FocalStatistics(bathy, neighborhood, "MEAN")
         outRaster = Int(Plus(Minus(bathy, out_focal_statistics), 0.5))
+
+        out_raster = utils.validate_path(out_raster)
         outRaster.save(out_raster)
         utils.msg("Saved output as {}".format(out_raster))
     except Exception as e:

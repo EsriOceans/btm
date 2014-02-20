@@ -324,8 +324,24 @@ def workspace_exists(directory):
         sys.exit(1)
     return exists
 
+def validate_path(path):
+    """If our path contains a DB name, make sure we have a valid DB name and not a standard file name."""
+    dirname, file_name = os.path.split(path)
+    file_base = os.path.splitext(file_name)[0]
+    if dirname == '':
+        # a relative path only, relying on the workspace
+        dirname = arcpy.env.workspace
+    path_ext = os.path.splitext(dirname)[1].lower()
+    if path_ext in ['.mdb', '.gdb', '.sde']:
+        # we're working in a database
+        file_name = arcpy.ValidateTableName(file_base)
+    validated_path = os.path.join(dirname, file_name)
+    msg("validated path: %s; (from %s)" % (validated_path, path))
+    return validated_path
+ 
 def save_raster(raster, path):
     """Save input raster object to path, and return raster reference."""
+    path = validate_path(path)
     raster.save(path)
     return arcpy.sa.Raster(path)
 
