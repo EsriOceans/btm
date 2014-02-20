@@ -6,6 +6,7 @@
 """
 
 from __future__ import with_statement
+import gc
 import os
 import tempfile
 import time
@@ -39,19 +40,16 @@ Might not work on windows when the files are still opened
 
         self.name = ""
 
-    def _rm(self, count=10):
+    def _rm(self):
         try:
+            # force garbage collection, ArcPy likes to keep holding
+            # on to refs despite being out of scope. Testing shows
+            # this only takes about 10ms, and prevents WindowsError exceptions.
+            gc.collect()
             shutil.rmtree(self.name)
-        except WindowsError:
+        except WindowsError as e:
             # abandon all hope -- arcpy won't give up the lock.
-            if count == 0:
-                pass
-            else:
-                # slow down, champ: arcpy is slow to give up access, 
-                # let if have a little breather.
-                time.sleep(0.5)
-                # backoff counter so we don't get stuck
-                self._rm(count - 1) 
+            raise e
 
     def __str__(self):
         if self.name:
