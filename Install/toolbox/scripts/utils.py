@@ -336,7 +336,6 @@ def validate_path(path):
         # we're working in a database
         file_name = arcpy.ValidateTableName(file_base)
     validated_path = os.path.join(dirname, file_name)
-    msg("validated path: %s; (from %s)" % (validated_path, path))
     return validated_path
  
 def save_raster(raster, path):
