@@ -13,6 +13,11 @@ malformed_csv = os.path.abspath(
 zones_excel = os.path.abspath(os.path.join(data_path, 'fagatelebay_zone.xlsx'))
 zones_xml = os.path.abspath(os.path.join(data_path, 'fagatelebay_zone.xlsx'))
 bathy_raster = os.path.abspath(os.path.join(data_path, 'bathy5m_clip.tif'))
+# a set of precomputed results with Broad(1,5) and Fine(1,3) 
+# to facilitate running the test suite.
+slope_raster = os.path.abspath(os.path.join(data_path, 'slope.tif'))
+broad_std_raster = os.path.abspath(os.path.join(data_path, 'broad_std.tif'))
+fine_std_raster = os.path.abspath(os.path.join(data_path, 'fine_std.tif'))
 
 pyt_file = os.path.abspath(
         os.path.join(local_path, '..', 'Install', 'toolbox', 'btm.pyt'))
