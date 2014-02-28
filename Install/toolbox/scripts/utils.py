@@ -335,6 +335,8 @@ def validate_path(path):
     if path_ext in ['.mdb', '.gdb', '.sde']:
         # we're working in a database
         file_name = arcpy.ValidateTableName(file_base)
+        if file_name != file_base:
+            msg("Warning: renamed output table to {}".format(file_name))
     validated_path = os.path.join(dirname, file_name)
     return validated_path
  
