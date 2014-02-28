@@ -13,8 +13,8 @@ import utils
 import_paths = ['../Install/toolbox', '../Install']
 utils.add_local_paths(import_paths)
 # now we can import our scripts
-from scripts import bpi, standardize_bpi_grids, btm_model, slope, \
-        ruggedness, depth_statistics, classify, surface_area_to_planar_area
+from scripts import bpi, standardize_bpi_grids, btm_model, aspect, \
+        slope, ruggedness, depth_statistics, classify, surface_area_to_planar_area
 
 class TestBtmDocument(unittest.TestCase):
 
@@ -75,6 +75,32 @@ class TestStandardizeBpiGridsScript(unittest.TestCase):
                     utils.raster_properties(std_raster, "MEAN"), 0.671608391608)
             self.assertAlmostEqual(
                     utils.raster_properties(std_raster, "STD"), 99.655593923183)
+
+class TestBpiAspect(unittest.TestCase):
+
+    """
+    aspect.main(bathy=None, out_sin_raster=None, out_cos_raster=None)
+    """
+
+    def testAspectImport(self):
+        self.assertTrue('main' in vars(aspect))
+
+    def testAspectRun(self):
+        with TempDir() as d:
+            aspect_sin_raster = os.path.join(d, 'test_aspect_sin.tif')
+            aspect_cos_raster = os.path.join(d, 'test_aspect_cos.tif')
+            arcpy.env.scratchWorkspace = d
+
+            aspect.main(bathy=config.bathy_raster, out_sin_raster=aspect_sin_raster, \
+                    out_cos_raster=aspect_cos_raster)
+
+            self.assertTrue(os.path.exists(aspect_sin_raster))
+            self.assertTrue(os.path.exists(aspect_cos_raster))
+
+            self.assertAlmostEqual(utils.raster_properties(aspect_sin_raster, "MEAN"), \
+                -0.06153140691827335)
+            self.assertAlmostEqual(utils.raster_properties(aspect_cos_raster, "MEAN"), \
+                0.02073092622177259) 
 
 class TestBpiSlope(unittest.TestCase):
 

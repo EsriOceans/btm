@@ -123,7 +123,21 @@
       message="Compute Aspect"
       tip="Compute Aspect">
       <Help heading="Compute Aspect" />
+  </Button>
+
+    <Button
+      caption="Aspect (Statistical)"
+      category="Benthic Terrain Modeler (BTM)"
+      class="calculateStatisticalAspect"
+      id="calculateStatisticalAspect.button"
+      image="Images\aspect_statistical_16x16.png"
+      message="Compute Statistical Aspect"
+      tip="Compute the Sine and Cosine of the Aspect, for modeling use">
+      <Help
+          heading="Compute Statistical Aspect"
+          >Aspect can be a useful variable for modeling, but because of its circular values it can't be treated like other covariates. This tool computes the Sine and Cosine functions against Aspect, which combined can be used for modeling purposes.</Help>
     </Button>
+
 
     <Button
       caption="Slope"
@@ -221,6 +235,7 @@
       separator="true">
       <Items>
         <Button refID="calculateAspect.button" />
+        <Button refID="calculateStatisticalAspect.button" />
         <Button refID="calculateSlope.button" />
         <Button refID="calculateCurvature.button" />
         <Button refID="calculateSaPa.button" />-->

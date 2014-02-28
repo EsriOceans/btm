@@ -90,8 +90,9 @@ class Toolbox(object):
     def __init__(self):
         self.label = u'Benthic Terrain Modeler'
         self.alias = 'btm'
-        self.tools = [broadscalebpi, finescalebpi, standardizebpi, btmslope, classifyterrain,
-                      surfacetoplanar, terrainruggedness, depthstatistics, runfullmodel]
+        self.tools = [broadscalebpi, finescalebpi, standardizebpi, btmslope, 
+                      statisticalaspect, classifyterrain, surfacetoplanar, 
+                      terrainruggedness, depthstatistics, runfullmodel]
 
 # tools below this section, one class per tool.
 class broadscalebpi(object):
@@ -536,6 +537,73 @@ class standardizebpi(object):
         standardize_bpi_grids.main(
             bpi_raster=parameters[4].valueAsText,
             out_raster=parameters[7].valueAsText)
+
+class statisticalaspect(object):
+    """ Calculate statistical aspect, uses standard SA function internally."""
+    def __init__(self):
+        self.label = u'Calculate Statistical Aspect'
+        self.canRunInBackground = False
+
+    def getParameterInfo(self):
+        # Input_bathymetric_raster
+        input_raster = arcpy.Parameter()
+        input_raster.name = u'Input_bathymetric_raster'
+        input_raster.displayName = u'Input bathymetric raster'
+        input_raster.parameterType = 'Required'
+        input_raster.direction = 'Input'
+        input_raster.datatype = dt.format('Raster Layer')
+
+        # Output Sin raster
+        output_sin_raster = arcpy.Parameter()
+        output_sin_raster.name = u'Output_sin_raster'
+        output_sin_raster.displayName = u'Output Sin(Aspect) raster'
+        output_sin_raster.parameterType = 'Required'
+        output_sin_raster.direction = 'Output'
+        output_sin_raster.datatype = dt.format('Raster Dataset')
+
+        # Output Cos raster
+        output_cos_raster = arcpy.Parameter()
+        output_cos_raster.name = u'Output_cos_raster'
+        output_cos_raster.displayName = u'Output Cos(Aspect) raster'
+        output_cos_raster.parameterType = 'Required'
+        output_cos_raster.direction = 'Output'
+        output_cos_raster.datatype = dt.format('Raster Dataset')
+
+        return [input_raster, output_sin_raster, output_cos_raster]
+
+    def isLicensed(self):
+        return True
+
+    def updateParameters(self, parameters):
+        validator = getattr(self, 'ToolValidator', None)
+        if validator:
+            return validator(parameters).updateParameters()
+
+    def updateMessages(self, parameters):
+        validator = getattr(self, 'ToolValidator', None)
+
+        output_sin = parameters[1].valueAsText
+        output_cos = parameters[2].valueAsText
+
+        # validate the output GRID name
+        if output_sin is not None:
+            if not valid_grid_name(output_sin):
+                parameters[1].setErrorMessage(MSG_INVALID_GRID)
+
+        if output_cos is not None:
+            if not valid_grid_name(output_cos):
+                parameters[2].setErrorMessage(MSG_INVALID_GRID)
+
+        if validator:
+            return validator(parameters).updateMessages()
+
+    def execute(self, parameters, messages):
+        # run related python script with selected input parameters
+        from scripts import aspect
+        aspect.main(
+            bathy=parameters[0].valueAsText,
+            out_sin_raster=parameters[1].valueAsText,
+            out_cos_raster=parameters[2].valueAsText)
 
 class btmslope(object):
     """ Calculate slope, uses standard SA function internally."""

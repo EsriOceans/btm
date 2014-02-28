@@ -116,10 +116,16 @@ class calculateAspect(object):
         self.enabled = True
         self.checked = False
     def onClick(self):
-        # TODO: replace this with a custom tool that breaks
-        # this result down into two data dimensions via basic trig.
-        # See https://github.com/EsriOceans/btm/issues/10
         tool_dialog("Spatial Analyst Tools", 'Aspect')
+
+# computes the trignometric identities for the circular variable aspect
+class calculateStatisticalAspect(object):
+    """Implementation for calculateAspect.button (Button)"""
+    def __init__(self):
+        self.enabled = True
+        self.checked = False
+    def onClick(self):
+        tool_dialog(btm_toolbox, "statisticalaspect")
 
 #- variance in depth
 #- mean water depth
