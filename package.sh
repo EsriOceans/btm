@@ -16,7 +16,7 @@ echo "building code..."
 # the tag version should be named 'v$MAJOR.$MINOR{-$subversion}'. 
 # There is also version parsing code in the python stdlib I believe.
 PROJECT='btm'
-VERSION='3.0-rc-1'
+VERSION='3.0-rc-2'
 RELEASE_BASE='../btm-release'
 RELEASE_NAME="${PROJECT}-${VERSION}"
 RELEASE_DIR="${RELEASE_BASE}/${RELEASE_NAME}"
