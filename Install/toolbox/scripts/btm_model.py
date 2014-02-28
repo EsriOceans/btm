@@ -68,9 +68,12 @@ def main(out_workspace, input_bathymetry, broad_bpi_inner_radius,
         slope.main(input_bathymetry, slope_rast)
 
         # Process: Zone Classification Builder
+        outputs_base = arcpy.env.addOutputsToMap
+        arcpy.env.addOutputsToMap = True
         utils.msg("Classifying Zones...")
         classify.main(classification_dict, broad_std, fine_std, slope_rast, \
                 input_bathymetry, output_zones)
+        arcpy.env.addOutputsToMap = outputs_base
 
     except Exception as e:
         # Print error message if an error occurs
