@@ -272,8 +272,6 @@ class TestRunFullModel(unittest.TestCase):
         self.assertEqual(self.excel_mean, self.xml_mean)
 
 class TestClassifyFgdb(unittest.TestCase):
-    def setUp(self):
-        pass
 
     def testClassifyWithFgdbLocation(self):
         with TempDir() as d:
@@ -281,11 +279,16 @@ class TestClassifyFgdb(unittest.TestCase):
             fgdb_workspace = os.path.join(d, fgdb_name)
             # create a temporary File Geodatabase location
             arcpy.CreateFileGDB_management(d, fgdb_name)
+            self.assertTrue(os.path.exists(fgdb_workspace))
             # TODO: this currently hacks up the path to be a valid name, but should probably
             # instead throw an error and let the user correct the output name.
-            classify_raster = os.path.join(fgdb_workspace, 'output_in_fgdb.tif')
+            classify_raster = os.path.join(fgdb_workspace, 'output_in_fgdb')
             classify.main(config.base_xml, config.broad_std_raster, config.fine_std_raster, \
                     config.slope_raster,  config.bathy_raster, classify_raster)
+            # resulting 'fixed' name
+            mean = utils.raster_properties(classify_raster, "MEAN")
+            self.assertAlmostEqual(mean, 5.78153846153846)
+
 
 class TestRunFullModelKnownZones(unittest.TestCase):
     def setUp(self):
