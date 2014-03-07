@@ -81,6 +81,7 @@ def main(in_raster=None, out_raster=None, area_raster=None):
 
         corners = (1, 3, 6, 8) # dist * sqrt(2), as set in corner_dist
         orthogonals = (2, 4, 5, 7) # von Neumann neighbors, straight dist
+        temp_rasts = []
 
         shift_rasts = [None] # offset to align numbers
         for (n, pos) in enumerate(positions, start=1):
@@ -90,6 +91,8 @@ def main(in_raster=None, out_raster=None, area_raster=None):
 
             # set explicit path on shift rasters, otherwise suffer inexplicable 999999 errors.
             shift_out = os.path.join(out_workspace, "shift_{}.tif".format(n))
+            shift_out = utils.validate_path(shift_out)
+            temp_rasts.append(shift_out)
             arcpy.Shift_management(bathy, shift_out, x_shift, y_shift)
             shift_rasts.append(arcpy.sa.Raster(shift_out))
 
@@ -105,6 +108,8 @@ def main(in_raster=None, out_raster=None, area_raster=None):
             else:
                 dist = cell_size
             edge_out = os.path.join(out_workspace, "edge_{}.tif".format(n))
+            edge_out = utils.validate_path(edge_out)
+            temp_rasts.append(edge_out)
             edge = compute_edge(bathy, shift, dist)
             edge.save(edge_out)
             edge_rasts.append(arcpy.sa.Raster(edge_out))
@@ -117,6 +122,8 @@ def main(in_raster=None, out_raster=None, area_raster=None):
             utils.msg("Calculating Triangle Edge {} of 16...".format(n))
             (i, j) = pair # the two shift rasters for this iteration
             edge_out = os.path.join(out_workspace, "edge_{}.tif".format(n))
+            edge_out = utils.validate_path(edge_out)
+            temp_rasts.append(edge_out)
             edge = compute_edge(shift_rasts[i], shift_rasts[j], cell_size)
             edge.save(edge_out)
             edge_rasts.append(arcpy.sa.Raster(edge_out))
@@ -126,6 +133,9 @@ def main(in_raster=None, out_raster=None, area_raster=None):
             utils.msg("Calculating Triangle Area {} of 8...".format(n))
             (i, j) = pair # the two shift rasters; n has the third side
             area_out = os.path.join(out_workspace, "area_{}.tif".format(n))
+            area_out = utils.validate_path(area_out)
+            temp_rasts.append(area_out)
+ 
             area = triangle_area(edge_rasts[i], edge_rasts[j], edge_rasts[n+8])
             area.save(area_out)
             areas.append(arcpy.sa.Raster(area_out))
@@ -151,16 +161,8 @@ def main(in_raster=None, out_raster=None, area_raster=None):
     try:
         # Delete all intermediate raster data sets
         utils.msg("Deleting intermediate data...")
-        paths = []
-        for i in range(1, 9):
-            paths.append("shift_{}.tif".format(i))
-        for i in range(1, 17):
-            paths.append("edge_{}.tif".format(i))
-        for i in range(1, 9):
-            paths.append("area_{}.tif".format(i))
-        for path in paths:
-            rel_path = os.path.join(out_workspace, "{}.tif".format(path))
-            arcpy.Delete_management(rel_path)
+        for path in temp_rasts:
+            arcpy.Delete_management(path)
 
     except Exception as e:
         utils.msg(e, mtype='error')

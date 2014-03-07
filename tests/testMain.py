@@ -173,6 +173,32 @@ class TestSaPa(unittest.TestCase):
             self.assertAlmostEqual(utils.raster_properties(surf_raster, "STD"), \
                 0.14551573347447)
 
+    def testSaPaRunWithFgdbLocation(self):
+        with TempDir() as d:
+            fgdb_name = "sapa.gdb"
+            fgdb_workspace = os.path.join(d, fgdb_name)
+            # create a temporary File Geodatabase location
+            arcpy.CreateFileGDB_management(d, fgdb_name)
+            self.assertTrue(os.path.exists(fgdb_workspace))
+
+            ratio_raster = os.path.join(fgdb_workspace, 'test_sapa_ratio')
+            surf_raster = os.path.join(fgdb_workspace, 'test_sapa_area')
+
+            arcpy.env.scratchWorkspace = d
+            surface_area_to_planar_area.main(config.bathy_raster,
+                    ratio_raster, surf_raster)
+
+            self.assertAlmostEqual(utils.raster_properties(ratio_raster, "MEAN"), \
+               1.0042422342676)
+            self.assertAlmostEqual(utils.raster_properties(ratio_raster, "STD"), \
+               0.0058175502835692)
+
+            self.assertAlmostEqual(utils.raster_properties(surf_raster, "MEAN"), \
+                25.119343739217)
+            self.assertAlmostEqual(utils.raster_properties(surf_raster, "STD"), \
+                0.14551573347447)
+
+
 
 class TestDepthStatistics(unittest.TestCase):
     """
