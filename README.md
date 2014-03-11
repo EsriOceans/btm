@@ -13,7 +13,7 @@ Installation
 
 The current release of the Add-in, Toolbox and demonstration data is [available on ArcGIS Online](http://www.arcgis.com/home/item.html?id=b0d0be66fd33440d97e8c83d220e7926)
 
-![Installation](https://raw.github.com/EsriOceans/btm/master/btm-install.gif)
+![Installation](https://raw.github.com/EsriOceans/btm/master/Images/btm-install.gif)
 
 Steps:
 - Unzip the BTM zip file to your desired location.
