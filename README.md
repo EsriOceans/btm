@@ -21,7 +21,7 @@ Steps:
 - To view important documentation on each script right-click on that script in the BTM toolset and select Item Description as well as Properties. 
 - Click on the Add Data button in ArcMap and proceed to add your bathymetry data to your ArcMap session. You may now run the BTM tools on your data.
 
-![Installation](https://raw.github.com/EsriOceans/btm/master/Images/btm-install.gif)
+![Installation](https://raw.github.com/EsriOceans/btm/master/resources/btm-install.gif)
 
 To get the latest source, clone this repository, and run `makeaddin.py` to create an installable `btm.esriaddin`.
 
