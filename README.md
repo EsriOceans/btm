@@ -13,8 +13,6 @@ Installation
 
 The current release of the Add-in, Toolbox and demonstration data is [available on ArcGIS Online](http://www.arcgis.com/home/item.html?id=b0d0be66fd33440d97e8c83d220e7926)
 
-![Installation](https://raw.github.com/EsriOceans/btm/master/Images/btm-install.gif)
-
 Steps:
 - Unzip the BTM zip file to your desired location.
 - Close any existing ArcMap sessions.
@@ -23,7 +21,7 @@ Steps:
 - To view important documentation on each script right-click on that script in the BTM toolset and select Item Description as well as Properties. 
 - Click on the Add Data button in ArcMap and proceed to add your bathymetry data to your ArcMap session. You may now run the BTM tools on your data.
 
-
+![Installation](https://raw.github.com/EsriOceans/btm/master/Images/btm-install.gif)
 
 To get the latest source, clone this repository, and run `makeaddin.py` to create an installable `btm.esriaddin`.
 
