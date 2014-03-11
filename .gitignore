@@ -37,3 +37,6 @@ nosetests.xml
 # vim
 *.swp
 *.swo
+
+# os x
+.DS_Store
