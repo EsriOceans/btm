@@ -16,7 +16,7 @@ echo "building code..."
 # the tag version should be named 'v$MAJOR.$MINOR{-$subversion}'. 
 # There is also version parsing code in the python stdlib I believe.
 PROJECT='btm'
-VERSION='3.0-rc-2'
+VERSION='3.0-rc-3'
 RELEASE_BASE='../btm-release'
 RELEASE_NAME="${PROJECT}-${VERSION}"
 RELEASE_DIR="${RELEASE_BASE}/${RELEASE_NAME}"
@@ -39,9 +39,16 @@ else
   exit
 fi
 
+# export the 'clean repository' to get rid of anything which is git ignored
+git archive -o tmp.zip master
+mkdir tmp
+unzip tmp.zip -d tmp
+
 # copy in our toolbox elements to the release so it's usable from the 
 # catalog view.
-cp -Rp Install/toolbox ${RELEASE_DIR}/
+cp -Rp tmp/Install/toolbox ${RELEASE_DIR}/
+rm -rf tmp/
+rm tmp.zip
 
 # add tutorial and data; skip hidden
 TUTORIAL_DIR=${RELEASE_DIR}/tutorial
