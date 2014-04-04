@@ -12,13 +12,24 @@ import arcpy
 import xml.etree.cElementTree as et
 import glob
 
-# import our datatype conversion submodule
-from datatype import datatype
-dt = datatype.DataType()
-
 # import our local directory so we can import internal modules
 local_path = os.path.abspath(os.path.dirname(__file__))
 sys.path.insert(0, local_path)
+
+# add paths so that AGS can find them
+datatype_path = os.path.join(local_path, "datatype")
+scripts_path = os.path.join(local_path, "scripts")
+
+sys.path.append(datatype_path)
+sys.path.append(scripts_path)
+
+#print sys.path
+# import our datatype conversion submodule
+import datatype.datatype as mdt 
+dt = mdt.DataType()
+
+# now import everything that's used in scripts
+import bpi as bpi
 
 # status messages
 MSG_INVALID_GRID = "ESRI GRIDs must >= 13 characters and contain only " \
@@ -61,8 +72,8 @@ def valid_grid_name(raster_path):
     return valid
 
 # get rid of problematical tags for revision control.
-def metadata(update=True):
-    if not update:
+def metadata(update=False):
+    if update:
         try:
             pyt_xmls = glob.glob(os.path.join(local_path, "*.pyt.xml"))
             for xml_path in pyt_xmls:
@@ -143,7 +154,7 @@ class broadscalebpi(object):
         # one of the tools needs to have the metadata deletion call included in it.
         # If it's done elsewhere in the script, the script state isn't correct and
         # the ModTime and ModDate fields will remain.
-        metadata(update=False)
+        metadata(update=True)
 
     def getParameterInfo(self):
         # Input_bathymetric_raster
@@ -234,7 +245,6 @@ class broadscalebpi(object):
 
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
-        from scripts import bpi
         bpi.main(
             bathy=parameters[0].valueAsText,
             inner_radius=parameters[1].valueAsText,
@@ -383,7 +393,6 @@ class finescalebpi(object):
 
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
-        from scripts import bpi
         bpi.main(
             bathy=parameters[0].valueAsText,
             inner_radius=parameters[1].valueAsText,
@@ -528,7 +537,7 @@ class standardizebpi(object):
 
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
-        from scripts import standardize_bpi_grids
+        import standardize_bpi_grids
         # run for broad raster...
         standardize_bpi_grids.main(
             bpi_raster=parameters[0].valueAsText,
@@ -599,7 +608,7 @@ class statisticalaspect(object):
 
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
-        from scripts import aspect
+        import aspect
         aspect.main(
             bathy=parameters[0].valueAsText,
             out_sin_raster=parameters[1].valueAsText,
@@ -652,7 +661,7 @@ class btmslope(object):
 
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
-        from scripts import slope
+        import slope
         slope.main(
             bathy=parameters[0].valueAsText,
             out_raster=parameters[1].valueAsText)
@@ -736,7 +745,7 @@ class classifyterrain(object):
             return validator(parameters).updateMessages()
 
     def execute(self, parameters, messages):
-        from scripts import classify
+        import classify
         classify.main(
             classification_file=parameters[0].valueAsText,
             bpi_broad_std=parameters[1].valueAsText,
@@ -872,7 +881,7 @@ class runfullmodel(object):
             return validator(parameters).updateMessages()
 
     def execute(self, parameters, messages):
-        from scripts import btm_model
+        import btm_model
         btm_model.main(
             out_workspace=parameters[0].valueAsText,
             input_bathymetry=parameters[1].valueAsText,
@@ -1069,7 +1078,7 @@ class surfacetoplanar(object):
 
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
-        from scripts import surface_area_to_planar_area
+        import surface_area_to_planar_area
         surface_area_to_planar_area.main(
                 in_raster=parameters[0].valueAsText,
                 out_raster=parameters[1].valueAsText,
@@ -1164,7 +1173,7 @@ class terrainruggedness(object):
 
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
-        from scripts import ruggedness
+        import ruggedness
         ruggedness.main(
                 in_raster=parameters[0].valueAsText,
                 neighborhood_size=parameters[1].valueAsText,
@@ -1264,7 +1273,7 @@ class depthstatistics(object):
 
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
-        from scripts import depth_statistics
+        import depth_statistics
         depth_statistics.main(
                 in_raster=parameters[0].valueAsText,
                 neighborhood_size=parameters[1].valueAsText,
