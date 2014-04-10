@@ -122,15 +122,22 @@ def main(classification_file, bpi_broad_std, bpi_fine_std, slope, bathy,
         merge_grid.save(out_raster)
         utils.msg("Complete.")
 
-        # Delete all intermediate raster data sets
-        for grid in grids:
-            arcpy.Delete_management(grid.catalogPath)
     except NoValidClasses as e:
         utils.msg(e, mtype='error')
     except Exception as e:
         if type(e) is ValueError:
             raise e
         utils.msg(e, mtype='error')
+
+    try:
+        utils.msg("Deleting intermediate data...")
+        # Delete all intermediate raster data sets
+        for grid in grids:
+            arcpy.Delete_management(grid.catalogPath)
+    except Exception as e:
+        # hack -- swallowing this exception, because sometimes it seems like refs are left around
+        # for these files.
+        utils.msg("WARNING: failed to delete all intermediate data.")
 
 # when executing as a standalone script get parameters from sys
 if __name__ == '__main__':
