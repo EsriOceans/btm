@@ -123,7 +123,7 @@ class TestBpiSlope(unittest.TestCase):
 class TestVrm(unittest.TestCase):
     """
     ruggestness.main(InRaster=None, NeighborhoodSize=None,
-        OutWorkspace=None, OutRaster=None)
+        OutRaster=None)
     """
     def testVrmImport(self):
         self.assertTrue('main' in vars(ruggedness))
@@ -134,8 +134,7 @@ class TestVrm(unittest.TestCase):
             vrm_raster = os.path.join(d, 'test_vrm.tif')
 
             arcpy.env.scratchWorkspace = d
-            ruggedness.main(config.bathy_raster, neighborhood, d, \
-                    vrm_raster)
+            ruggedness.main(config.bathy_raster, neighborhood, vrm_raster)
             self.assertTrue(os.path.exists(vrm_raster))
 
             self.assertAlmostEqual(utils.raster_properties(vrm_raster, "MEAN"), \

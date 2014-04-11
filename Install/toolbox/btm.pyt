@@ -1126,14 +1126,6 @@ class terrainruggedness(object):
         neighborhood.direction = 'Input'
         neighborhood.datatype = dt.format('Long')
 
-        # Output_Workspace
-        out_workspace = arcpy.Parameter()
-        out_workspace.name = u'Temporary_Workspace'
-        out_workspace.displayName = u'Temporary Workspace'
-        out_workspace.parameterType = 'Required'
-        out_workspace.direction = 'Input'
-        out_workspace.datatype = dt.format('Workspace')
-
         # Output_Raster
         output_raster = arcpy.Parameter()
         output_raster.name = u'Output_Raster'
@@ -1142,7 +1134,7 @@ class terrainruggedness(object):
         output_raster.direction = 'Output'
         output_raster.datatype = dt.format('Raster Dataset')
 
-        return [input_raster, neighborhood, out_workspace, output_raster]
+        return [input_raster, neighborhood, output_raster]
 
     def isLicensed(self):
         return True
@@ -1154,11 +1146,11 @@ class terrainruggedness(object):
 
     def updateMessages(self, parameters):
         validator = getattr(self, 'ToolValidator', None)
-        output = parameters[3].valueAsText
+        output = parameters[2].valueAsText
         # validate the output GRID name
         if output is not None:
             if not valid_grid_name(output):
-                parameters[3].setErrorMessage(MSG_INVALID_GRID)
+                parameters[2].setErrorMessage(MSG_INVALID_GRID)
         if validator:
             return validator(parameters).updateMessages()
 
@@ -1168,8 +1160,7 @@ class terrainruggedness(object):
         ruggedness.main(
                 in_raster=parameters[0].valueAsText,
                 neighborhood_size=parameters[1].valueAsText,
-                out_workspace=parameters[2].valueAsText,
-                out_raster=parameters[3].valueAsText)
+                out_raster=parameters[2].valueAsText)
 
 class depthstatistics(object):
     """ Depth Statistics computes a suite of summary statistics. This initial

@@ -26,12 +26,16 @@ import config
 # Check out any necessary licenses
 arcpy.CheckOutExtension("Spatial")
 
-def main(in_raster=None, neighborhood_size=None, out_workspace=None, out_raster=None):
+def main(in_raster=None, neighborhood_size=None, out_raster=None):
     hood_size = int(neighborhood_size)
 
+    # FIXME: expose this as an option per #18
+    out_workspace = os.path.dirname(out_raster)
     utils.workspace_exists(out_workspace)
     # force temporary stats to be computed in our output workspace
     arcpy.env.scratchWorkspace = out_workspace
+    arcpy.env.workspace = out_workspace
+
     # TODO expose as config
     pyramid_orig = arcpy.env.pyramid
     arcpy.env.pyramid = "NONE"
@@ -85,4 +89,4 @@ def main(in_raster=None, neighborhood_size=None, out_workspace=None, out_raster=
 if __name__ == '__main__':
     config.mode = 'script'
     main(in_raster=sys.argv[1], neighborhood_size=sys.argv[2],
-            out_workspace=sys.argv[3], out_raster=sys.argv[4])
+            out_raster=sys.argv[3])
