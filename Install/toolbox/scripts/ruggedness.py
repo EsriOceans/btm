@@ -14,6 +14,7 @@
 
 # Import system modules
 import math
+import os
 import sys
 import arcpy
 from arcpy.sa import Aspect, Cos, Sin, Slope, Con, \
