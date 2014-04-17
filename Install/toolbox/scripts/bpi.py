@@ -18,6 +18,7 @@
 # a Python addin GUI, as a standard python script or from a toolbox.
 
 import sys
+import time
 
 import arcpy
 from arcpy.sa import NbrAnnulus, Int, Plus, Minus, FocalStatistics
@@ -29,10 +30,13 @@ import config
 # Check out any necessary licenses
 arcpy.CheckOutExtension("Spatial")
 
+t00 = time.time() 
 def main(bathy=None, inner_radius=None, outer_radius=None,
     out_raster=None, bpi_type='broad', mode='toolbox'):
 
+    t0 = time.time()
     arcpy.env.rasterStatistics = "STATISTICS"
+    arcpy.env.overwriteOutput = True
     try:
         # Create the broad-scale Bathymetric Position Index (BPI) raster
         msg = "Generating the {bpi_type}-scale ".format(bpi_type=bpi_type) + \
@@ -49,6 +53,9 @@ def main(bathy=None, inner_radius=None, outer_radius=None,
         utils.msg("Saved output as {}".format(out_raster))
     except Exception as e:
         utils.msg(e, mtype='error')
+
+    utils.msg("analysis took {}".format(time.time() - t0))
+    utils.msg("total time: {}".format(time.time() - t00))
 
 # when executing as a standalone script get parameters from sys
 if __name__ == '__main__':
