@@ -1,0 +1,1 @@
+tried using matplotlib to create a cluster of plots which show different cell sizes for a sample of the raster (200x200). With some extension, I think this could be made to do good work for selecting appropriate scales for the two BPI scores.
