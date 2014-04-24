@@ -1,4 +1,4 @@
-Class,Zone,BroadBPI_Lower,BroadBPI_Upper,FineBPI_Lower,FineBPI_Upper,Slope_Lower,Slope_Lower,Depth_Lower,Depth_Upper
+Class,Zone,BroadBPI_Lower,BroadBPI_Upper,FineBPI_Lower,FineBPI_Upper,Slope_Lower,Slope_Upper,Depth_Lower,Depth_Upper
 1,Reef Crest,,-100,,-100,,,,
 2,Mid-Slope Ridges,,-100,-100,100,,,,
 3,Back Reef,,-100,100,,,,,

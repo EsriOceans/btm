@@ -14,7 +14,8 @@ import_paths = ['../Install/toolbox', '../Install']
 utils.add_local_paths(import_paths)
 # now we can import our scripts
 from scripts import bpi, standardize_bpi_grids, btm_model, aspect, \
-        slope, ruggedness, depth_statistics, classify, surface_area_to_planar_area
+        slope, ruggedness, depth_statistics, classify, \
+        surface_area_to_planar_area, utils as su
 
 class TestBtmDocument(unittest.TestCase):
 
@@ -27,6 +28,19 @@ class TestBtmDocument(unittest.TestCase):
     def testMalformedCsvDocumentExsists(self):
         self.assertTrue(os.path.exists(config.malformed_csv))
 
+    def testCsvHeaderColumns(self):
+        btm_doc = su.BtmDocument(config.base_csv)
+        header = btm_doc.schema.header # CSV files contain a header element.
+        # one of the header labels was wrong previously, check that we have the 
+        # elements we expect in the correct positions.
+
+        expected_header = ['Class','Zone','BroadBPI_Lower','BroadBPI_Upper',\
+                'FineBPI_Lower','FineBPI_Upper','Slope_Lower','Slope_Upper',\
+                'Depth_Lower','Depth_Upper']
+
+        for (i, label) in enumerate(header):
+            self.assertTrue(label in expected_header)
+            self.assertTrue(label == expected_header[i])
 
 class TestBtmRaster(unittest.TestCase):
     def testRasterExists(self):
@@ -39,10 +53,13 @@ class TestBpiScript(unittest.TestCase):
 
     def testBpiRun(self):
         with TempDir() as d:
-            bpi_raster = os.path.join(d, 'test_run_bpi.tif')
+            raster_fn = 'test_run_bpi.tif'
+            bpi_raster = os.path.join(d, raster_fn)
             bpi.main(bathy=config.bathy_raster, inner_radius=10,
                 outer_radius=30, out_raster=bpi_raster, bpi_type='broad')
-            self.assertTrue(os.path.exists(bpi_raster))
+            ls = os.listdir(d)
+            print ls
+            self.assertTrue(raster_fn in os.listdir(d))
 
             self.assertAlmostEqual(
                     utils.raster_properties(bpi_raster, "MEAN"), 0.295664335664)
