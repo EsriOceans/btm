@@ -2,7 +2,7 @@
 echo "building addin..."
 python ./makeaddin.py
 echo "signing addin..."
-"/c/Program Files (x86)/Common Files/ArcGIS/bin/ESRISignAddin.exe" c:\\data\\arcgis\\addins\\btm.esriaddin /c:c:\\data\\arcgis\\addins\\cert.cer
+"/c/Program Files (x86)/Common Files/ArcGIS/bin/ESRISignAddin.exe" Z:\\data\\arcgis\\addins\\btm.esriaddin /c:Z:\\data\\arcgis\\addins\\cert.cer
 echo "Would you like to run the test suite? y/N"
 read input
 
