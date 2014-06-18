@@ -60,24 +60,6 @@ def valid_grid_name(raster_path):
 
     return valid
 
-# get rid of problematical tags for revision control.
-def metadata(update=True):
-    if not update:
-        try:
-            pyt_xmls = glob.glob(os.path.join(local_path, "*.pyt.xml"))
-            for xml_path in pyt_xmls:
-                tree = et.parse(xml_path)
-                esri = tree.find('Esri')
-                mod_date = esri.find('ModDate')
-                mod_time = esri.find('ModTime')
-                if mod_date is not None:
-                    esri.remove(mod_date)
-                if mod_time is not None:
-                    esri.remove(mod_time)
-                tree.write(xml_path)
-        except:
-            pass
-
 def dedent(text, ending='\r\n'):
     text = text.replace('\n', ending)
     return textwrap.dedent(text)
@@ -140,10 +122,6 @@ class broadscalebpi(object):
                 A broad-scale BPI data set allows you to identify larger
                 features within the benthic landscape.""")
         self.canRunInBackground = False
-        # one of the tools needs to have the metadata deletion call included in it.
-        # If it's done elsewhere in the script, the script state isn't correct and
-        # the ModTime and ModDate fields will remain.
-        metadata(update=False)
 
     def getParameterInfo(self):
         # Input_bathymetric_raster

@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <metadata xml:lang="en">
 	<Esri>
 		<CreaDate>20120901</CreaDate>
@@ -9,10 +10,10 @@
 			<maxScale>5000</maxScale>
 		</scaleRange>
 		<ArcGISProfile>ItemDescription</ArcGISProfile>
-		</Esri>
+		<ModDate>20140617</ModDate><ModTime>235144</ModTime></Esri>
 	<toolbox alias="btm" name="btm">
 		<arcToolboxHelpPath>c:\apps\arcgis\desktop10.2\Help\gp</arcToolboxHelpPath>
-		<toolsets />
+		<toolsets/>
 	</toolbox>
 	<dataIdInfo>
 		<idCitation>
@@ -37,7 +38,7 @@
 		</distributor>
 	</distInfo>
 	<mdHrLv>
-		<ScopeCd value="005" />
+		<ScopeCd value="005"/>
 	</mdHrLv>
 	<Binary>
 		<Thumbnail>
