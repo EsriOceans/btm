@@ -72,9 +72,22 @@ class Toolbox(object):
     def __init__(self):
         self.label = u'Benthic Terrain Modeler'
         self.alias = 'btm'
-        self.tools = [broadscalebpi, finescalebpi, standardizebpi, btmslope, 
-                      statisticalaspect, classifyterrain, surfacetoplanar, 
-                      terrainruggedness, depthstatistics, runfullmodel]
+        self.tools = [
+           # Bathymetric Position Index
+            broadscalebpi, # broad scale
+            finescalebpi, # file scale
+            standardizebpi, # convert BPI values to standardized scores 
+            # Geomorphology Operations
+            btmslope, # compute slope
+            statisticalaspect, # break aspect up trignometrically
+            surfacetoplanar, # compare surface area to planar area
+            terrainruggedness, # VRM, a measure of roughness
+            # Summary statistics
+            depthstatistics, # depth summary statistics
+            # Create Classification of zones or types
+            classifyterrain, # run classification 
+            runfullmodel # run all model steps
+        ]
 
 # tools below this section, one class per tool.
 class broadscalebpi(object):
