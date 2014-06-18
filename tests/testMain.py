@@ -57,8 +57,7 @@ class TestBpi(unittest.TestCase):
             bpi_raster = os.path.join(d, raster_fn)
             bpi.main(bathy=config.bathy_raster, inner_radius=10,
                 outer_radius=30, out_raster=bpi_raster, bpi_type='broad')
-            ls = os.listdir(d)
-            print ls
+     
             self.assertTrue(raster_fn in os.listdir(d))
 
             self.assertAlmostEqual(
