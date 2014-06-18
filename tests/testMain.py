@@ -46,7 +46,7 @@ class TestBtmRaster(unittest.TestCase):
     def testRasterExists(self):
         self.assertTrue(os.path.exists(config.bathy_raster))
 
-class TestBpiScript(unittest.TestCase):
+class TestBpi(unittest.TestCase):
 
     def testBpiImport(self):
         self.assertTrue('main' in vars(bpi))
@@ -66,7 +66,7 @@ class TestBpiScript(unittest.TestCase):
             self.assertAlmostEqual(
                     utils.raster_properties(bpi_raster, "STD"), 1.65611606614)
 
-class TestStandardizeBpiGridsScript(unittest.TestCase):
+class TestStandardizeBpiGrids(unittest.TestCase):
 
     def testStdImport(self):
         self.assertTrue('main' in vars(standardize_bpi_grids))
