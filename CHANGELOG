@@ -1,3 +1,5 @@
+3.0-rc-3: robustness improvements to Suface Area to Planar Area tool, updated documentation, simplify VRM script.
+3.0-rc-2: Statistical Aspect tool, Excel-based classification dictionaries.
 3.0-beta-20: handle CSV files more robustly, provide clearer error messages, fix classify bug, add new Surface Area to Planar Area tool, improvements to VRM code, internal code cleanup, Excel support.
 3.0-beta-14: move model into a Python script over ModelBuilder, complete
 top-level unit tests.
