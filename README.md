@@ -44,6 +44,8 @@ Then, run nose from the top-level directory:
 
     $ nosetests
 
+Note that the tests run against actual data, and may take upwards of five minutes to complete on modern hardware.
+
 Citing
 ------
 
