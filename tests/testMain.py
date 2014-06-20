@@ -138,7 +138,7 @@ class TestBpiSlope(unittest.TestCase):
 
 class TestVrm(unittest.TestCase):
     """
-    ruggestness.main(InRaster=None, NeighborhoodSize=None,
+    ruggedness.main(InRaster=None, NeighborhoodSize=None,
         OutRaster=None)
     """
     def testVrmImport(self):
