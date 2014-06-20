@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import os
 import re
 import sys
@@ -29,7 +30,9 @@ def looks_like_a_backup(filename):
 
 # create a new zip file object, set it to be compressed.
 zip_file = zipfile.ZipFile(out_zip_name, 'w', zipfile.ZIP_DEFLATED)
-for filename in ('config.xml', 'README.md', 'makeaddin.py'):
+# specifically select the top-level files for inclusion
+for filename in ('config.xml', 'README.md', 'makeaddin.py', 
+        'LICENSE', 'AUTHORS', 'CHANGELOG'):
     zip_file.write(os.path.join(current_path, filename), filename)
 dirs_to_add = ['Images', 'Install']
 for directory in dirs_to_add:
