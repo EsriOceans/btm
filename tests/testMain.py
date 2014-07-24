@@ -18,6 +18,7 @@ from scripts import bpi, standardize_bpi_grids, btm_model, aspect, \
         surface_area_to_planar_area, utils as su
 
 class TestBtmDocument(unittest.TestCase):
+    """ Test our document class."""
 
     def testXmlDocumentExists(self):
         self.assertTrue(os.path.exists(config.base_xml))
@@ -46,6 +47,8 @@ class TestBtmRaster(unittest.TestCase):
     def testRasterExists(self):
         self.assertTrue(os.path.exists(config.bathy_raster))
 
+# test individual scripts
+#
 class TestBpi(unittest.TestCase):
 
     def testBpiImport(self):
@@ -158,7 +161,6 @@ class TestVrm(unittest.TestCase):
             self.assertAlmostEqual(utils.raster_properties(vrm_raster, "STD"), \
                     0.00087457748556755)
 
-
 class TestSaPa(unittest.TestCase):
     """
     surface_area_to_planar_area.main(in_raster=None, out_raster=None,
@@ -212,8 +214,6 @@ class TestSaPa(unittest.TestCase):
                 25.119343739217)
             self.assertAlmostEqual(utils.raster_properties(surf_raster, "STD"), \
                 0.14551573347447)
-
-
 
 class TestDepthStatistics(unittest.TestCase):
     """
@@ -356,7 +356,6 @@ class TestClassifyFgdb(unittest.TestCase):
             mean = utils.raster_properties(classify_raster, "MEAN")
             self.assertAlmostEqual(mean, 5.78153846153846)
 
-
 class TestRunFullModelKnownZones(unittest.TestCase):
     def setUp(self):
         self.broad_inner_rad = 1
@@ -418,8 +417,9 @@ class TestRunFullModelKnownZones(unittest.TestCase):
             for (value, count) in self.expected.items():
                 self.assertEqual(count, rat[value])
 
-# this test should be run after a fresh run of makeaddin to rebuild the .esriaddin file.
 class TestAddin(unittest.TestCase):
+    """ test should be run after a fresh run of makeaddin to
+        rebuild the .esriaddin file."""
     def setUp(self):
         self.addin_path = os.sep.join([config.local_path, '..', '..', 'btm.esriaddin'])
         self.addin_zip = zipfile.ZipFile(self.addin_path, 'r')
