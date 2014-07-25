@@ -1,3 +1,4 @@
+import locale
 import os
 import unittest
 import arcpy
@@ -47,6 +48,50 @@ class TestBtmDocument(unittest.TestCase):
 class TestBtmRaster(unittest.TestCase):
     def testRasterExists(self):
         self.assertTrue(os.path.exists(config.bathy_raster))
+
+# test utilities methods
+class TestUtilitiesMethods(unittest.TestCase):
+    
+    def setUp(self):
+        self.mean = -20.619977607194
+        self.std = 2.730680267695
+
+    def testAlternativeRadix(self):
+        """ Test a locale which uses "," as its decimal separator."""
+        # NOTE: Windows locales aren't named the same as the `man locale 1` 
+        # equivalents. For this code to be universal, it'd need to test os.name 
+        # and convert to the appropriate locale name.
+        locale.setlocale(locale.LC_ALL, "german_germany")
+
+        # two tests to make sure that radix parsing is happening as expected
+        self.assertEqual(locale.atof("-11,00"), -11.0)
+        self.assertEqual(locale.atof("-11.000,50"), -11000.5)
+
+    def testRasterProperties(self):
+        """ Test the raster properties with a US locale."""
+        # force to the US locale for radix tests
+        locale.setlocale(locale.LC_ALL, "english_us")
+        mean = su.raster_properties(config.bathy_raster, 'MEAN')
+        self.assertAlmostEqual(mean, self.mean)
+
+        std = su.raster_properties(config.bathy_raster, 'STD')
+        self.assertAlmostEqual(std, self.std)
+
+    def testRasterPropertiesAlternativeRadix(self):
+        """ Test a locale which uses "," as its decimal separator."""
+        # Windows locales are different than the locale() equivs
+        locale.setlocale(locale.LC_ALL, "german_germany")
+
+        # Changing the Python locale doesn't change the ArcGIS locale, so these will fail.
+        mean = su.raster_properties(config.bathy_raster, 'MEAN')
+        self.assertNotAlmostEqual(mean, self.mean)
+
+        std = su.raster_properties(config.bathy_raster, 'STD')
+        self.assertNotAlmostEqual(std, self.std)
+
+    def tearDown(self):
+        # reset locale
+        locale.setlocale(locale.LC_ALL, "")
 
 # test individual scripts
 #

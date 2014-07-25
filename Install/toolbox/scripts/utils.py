@@ -1,6 +1,7 @@
 # utils.py
 # Shaun Walbridge, 2012.10.4
 
+import locale
 import sys
 import traceback
 import os
@@ -9,6 +10,9 @@ from xml.dom.minidom import parse
 
 import arcpy
 import config
+
+# register the default locale
+locale.setlocale(locale.LC_ALL, '')
 
 def add_local_paths(paths):
     for path_part in paths:
@@ -345,5 +349,15 @@ def save_raster(raster, path):
 
 def raster_properties(input_raster, attribute='MEAN'):
     """ Wrapper for GetRasterProperties_management which does the right thing."""
-    attr_object = arcpy.GetRasterProperties_management(input_raster, attribute)
-    return float(attr_object.getOutput(0))
+    attr_obj = arcpy.GetRasterProperties_management(input_raster, attribute)
+    attr_val = attr_obj.getOutput(0)
+    numeric_attrs = [ 'MINIMUM', 'MAXIMUM', 'MEAN', 'STD', 'CELLSIZEX', 'CELLSIZEY']
+  
+    print locale.getlocale()
+    if attribute in numeric_attrs:
+        # convert these to locale independent floating point numbers
+        value = locale.atof(attr_val)
+    else:
+        # leave anything else untouched
+        value = attr_val
+    return value

@@ -20,6 +20,8 @@ dt = datatype.DataType()
 local_path = os.path.abspath(os.path.dirname(__file__))
 sys.path.insert(0, local_path)
 
+from scripts import utils
+
 # status messages
 MSG_INVALID_GRID = "ESRI GRIDs must >= 13 characters and contain only " \
                    "letters, numbers and the underscore ('_') character."
@@ -191,11 +193,10 @@ class broadscalebpi(object):
         bathy = parameters[cols.index('bathy')].valueAsText
 
         if outer_radius is not None and bathy is not None:
-            raster_desc = arcpy.Describe(bathy)
             # get the cellsize of the input raster; assume same in X & Y
-            cellsize = raster_desc.meanCellHeight
+            cellsize = utils.raster_properties(bathy, "CELLSIZEY")
             # calculate our 'scale factor':
-            scale_factor = math.ceil(float(cellsize) * int(outer_radius) - 0.5)
+            scale_factor = math.ceil(cellsize * int(outer_radius) - 0.5)
             # try modifying our scale factor
             parameters[cols.index('scale_factor')].value = scale_factor
 
@@ -341,11 +342,10 @@ class finescalebpi(object):
         outer_radius = parameters[cols.index('outer')].valueAsText
         bathy = parameters[cols.index('bathy')].valueAsText
         if outer_radius is not None and bathy is not None:
-            raster_desc = arcpy.Describe(bathy)
             # get the cellsize of the input raster; assume same in X & Y
-            cellsize = raster_desc.meanCellHeight
+            cellsize = utils.raster_properties(bathy, "CELLSIZEY")
             # calculate our 'scale factor':
-            scale_factor = math.ceil(float(cellsize) * int(outer_radius) - 0.5)
+            scale_factor = math.ceil(cellsize * int(outer_radius) - 0.5)
             # try modifying our scale factor
             parameters[cols.index('scale_factor')].value = scale_factor
 
@@ -504,13 +504,8 @@ class standardizebpi(object):
             try:
                 raster_desc = arcpy.Describe(input_raster)
                 if raster_desc.dataType in VALID_RASTER_TYPES:
-                    mean_res = arcpy.GetRasterProperties_management(
-                            input_raster, "MEAN")
-                    mean = float(mean_res.getOutput(0))
-                    stddev_res = arcpy.GetRasterProperties_management(
-                            input_raster, "STD")
-                    stddev = float(stddev_res.getOutput(0))
-                    result = (mean, stddev)
+                    result = (utils.raster_properties(input_raster, 'MEAN'),
+                            utils.raster_properties(input_raster, 'STD'))
             except:
                 # check for raster existence, when running as a model the 'result'
                 # may be set, but not actually exist, causing these steps to fail.

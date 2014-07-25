@@ -42,7 +42,7 @@ def main(bpi_raster=None, out_raster=None):
         utils.msg(message)
         arcpy.env.rasterStatistics = "STATISTICS"
         outRaster = Int(Plus(Times(Divide(
-                Minus(bpi_raster, float(bpi_mean)), float(bpi_std_dev)), 100), 0.5))
+                Minus(bpi_raster, bpi_mean), bpi_std_dev), 100), 0.5))
         out_raster = utils.validate_path(out_raster)
         outRaster.save(out_raster)
 
