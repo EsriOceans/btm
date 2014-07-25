@@ -1,8 +1,6 @@
 # utils.py
 # Shaun Walbridge, 2012.10.4
 
-# XML code ported from earlier work done by Jen Boulware / NOAA CSC, Oct 2011
-
 import sys
 import traceback
 import os
@@ -99,6 +97,8 @@ class BtmDocument(object):
         return self.schema.classification()
 
 class BtmXmlDocument(BtmDocument):
+    """ Create an XML class for storing document attributes. Code ported
+    from earlier work done by Jen Boulware / NOAA CSC, Oct 2011."""
     def __init__(self, filename):
         self.dom = parse(filename)
         self.node_dict = self.node_to_dict(self.dom)
@@ -117,10 +117,7 @@ class BtmXmlDocument(BtmDocument):
         return self.node_dict['ClassDict']['Classifications']['ClassRec']
 
     def get_text_from_node(self, node):
-        """
-        scans through all children of node and gathers the
-        text.
-        """
+        """ scans through all children of node and gathers the text.  """
         t = ""
         emptyNode = node.hasChildNodes()
         if emptyNode:
