@@ -56,7 +56,7 @@ class TestUtilitiesMethods(unittest.TestCase):
         self.mean = -20.619977607194
         self.std = 2.730680267695
 
-    def testAlternativeRadix(self):
+    def testAlternativeDecimalMark(self):
         """ Test a locale which uses "," as its decimal separator."""
         # NOTE: Windows locales aren't named the same as the `man locale 1` 
         # equivalents. For this code to be universal, it'd need to test os.name 
@@ -77,7 +77,7 @@ class TestUtilitiesMethods(unittest.TestCase):
         std = su.raster_properties(config.bathy_raster, 'STD')
         self.assertAlmostEqual(std, self.std)
 
-    def testRasterPropertiesAlternativeRadix(self):
+    def testRasterPropertiesAlternativeDecimalMark(self):
         """ Test a locale which uses "," as its decimal separator."""
         # Windows locales are different than the locale() equivs
         locale.setlocale(locale.LC_ALL, "german_germany")
