@@ -12,6 +12,7 @@ import utils
 # import our local directory so we can use the internal modules
 import_paths = ['../Install/toolbox', '../Install']
 utils.add_local_paths(import_paths)
+
 # now we can import our scripts
 from scripts import bpi, standardize_bpi_grids, btm_model, aspect, \
         slope, ruggedness, depth_statistics, classify, \
@@ -64,9 +65,9 @@ class TestBpi(unittest.TestCase):
             self.assertTrue(raster_fn in os.listdir(d))
 
             self.assertAlmostEqual(
-                    utils.raster_properties(bpi_raster, "MEAN"), 0.295664335664)
+                    su.raster_properties(bpi_raster, "MEAN"), 0.295664335664)
             self.assertAlmostEqual(
-                    utils.raster_properties(bpi_raster, "STD"), 1.65611606614)
+                    su.raster_properties(bpi_raster, "STD"), 1.65611606614)
 
 class TestStandardizeBpiGrids(unittest.TestCase):
 
@@ -91,9 +92,9 @@ class TestStandardizeBpiGrids(unittest.TestCase):
             self.assertTrue(os.path.exists(std_raster))
 
             self.assertAlmostEqual(
-                    utils.raster_properties(std_raster, "MEAN"), 0.671608391608)
+                    su.raster_properties(std_raster, "MEAN"), 0.671608391608)
             self.assertAlmostEqual(
-                    utils.raster_properties(std_raster, "STD"), 99.655593923183)
+                    su.raster_properties(std_raster, "STD"), 99.655593923183)
 
 class TestBpiAspect(unittest.TestCase):
 
@@ -116,9 +117,9 @@ class TestBpiAspect(unittest.TestCase):
             self.assertTrue(os.path.exists(aspect_sin_raster))
             self.assertTrue(os.path.exists(aspect_cos_raster))
 
-            self.assertAlmostEqual(utils.raster_properties(aspect_sin_raster, "MEAN"), \
+            self.assertAlmostEqual(su.raster_properties(aspect_sin_raster, "MEAN"), \
                 -0.06153140691827335)
-            self.assertAlmostEqual(utils.raster_properties(aspect_cos_raster, "MEAN"), \
+            self.assertAlmostEqual(su.raster_properties(aspect_cos_raster, "MEAN"), \
                 0.02073092622177259) 
 
 class TestBpiSlope(unittest.TestCase):
@@ -136,7 +137,7 @@ class TestBpiSlope(unittest.TestCase):
             slope.main(bathy=config.bathy_raster, out_raster=slope_raster)
             self.assertTrue(os.path.exists(slope_raster))
 
-            self.assertAlmostEqual(utils.raster_properties(slope_raster, "MEAN"), \
+            self.assertAlmostEqual(su.raster_properties(slope_raster, "MEAN"), \
                 3.802105241105673)
 
 class TestVrm(unittest.TestCase):
@@ -156,9 +157,9 @@ class TestVrm(unittest.TestCase):
             ruggedness.main(config.bathy_raster, neighborhood, vrm_raster)
             self.assertTrue(os.path.exists(vrm_raster))
 
-            self.assertAlmostEqual(utils.raster_properties(vrm_raster, "MEAN"), \
+            self.assertAlmostEqual(su.raster_properties(vrm_raster, "MEAN"), \
                     0.00062628513039036)
-            self.assertAlmostEqual(utils.raster_properties(vrm_raster, "STD"), \
+            self.assertAlmostEqual(su.raster_properties(vrm_raster, "STD"), \
                     0.00087457748556755)
 
 class TestSaPa(unittest.TestCase):
@@ -180,14 +181,14 @@ class TestSaPa(unittest.TestCase):
             self.assertTrue(os.path.exists(ratio_raster))
             self.assertTrue(os.path.exists(surf_raster))
 
-            self.assertAlmostEqual(utils.raster_properties(ratio_raster, "MEAN"), \
+            self.assertAlmostEqual(su.raster_properties(ratio_raster, "MEAN"), \
                1.0042422342676)
-            self.assertAlmostEqual(utils.raster_properties(ratio_raster, "STD"), \
+            self.assertAlmostEqual(su.raster_properties(ratio_raster, "STD"), \
                0.0058175502835692)
 
-            self.assertAlmostEqual(utils.raster_properties(surf_raster, "MEAN"), \
+            self.assertAlmostEqual(su.raster_properties(surf_raster, "MEAN"), \
                 25.119343739217)
-            self.assertAlmostEqual(utils.raster_properties(surf_raster, "STD"), \
+            self.assertAlmostEqual(su.raster_properties(surf_raster, "STD"), \
                 0.14551573347447)
 
     def testSaPaRunWithFgdbLocation(self):
@@ -205,14 +206,14 @@ class TestSaPa(unittest.TestCase):
             surface_area_to_planar_area.main(config.bathy_raster,
                     ratio_raster, surf_raster)
 
-            self.assertAlmostEqual(utils.raster_properties(ratio_raster, "MEAN"), \
+            self.assertAlmostEqual(su.raster_properties(ratio_raster, "MEAN"), \
                1.0042422342676)
-            self.assertAlmostEqual(utils.raster_properties(ratio_raster, "STD"), \
+            self.assertAlmostEqual(su.raster_properties(ratio_raster, "STD"), \
                0.0058175502835692)
 
-            self.assertAlmostEqual(utils.raster_properties(surf_raster, "MEAN"), \
+            self.assertAlmostEqual(su.raster_properties(surf_raster, "MEAN"), \
                 25.119343739217)
-            self.assertAlmostEqual(utils.raster_properties(surf_raster, "STD"), \
+            self.assertAlmostEqual(su.raster_properties(surf_raster, "STD"), \
                 0.14551573347447)
 
 class TestDepthStatistics(unittest.TestCase):
@@ -241,7 +242,7 @@ class TestDepthStatistics(unittest.TestCase):
             for (stat, mean_value) in mean_depths.items():
                 raster = os.path.join(d, stat)
                 self.assertTrue(os.path.exists(raster))
-                self.assertAlmostEqual(utils.raster_properties(raster, "MEAN"), \
+                self.assertAlmostEqual(su.raster_properties(raster, "MEAN"), \
                         mean_value)
 
 class TestRunFullModel(unittest.TestCase):
@@ -284,7 +285,7 @@ class TestRunFullModel(unittest.TestCase):
 
             self.assertTrue(os.path.exists(model_output))
 
-            self.csv_mean = utils.raster_properties(model_output, "MEAN")
+            self.csv_mean = su.raster_properties(model_output, "MEAN")
             self.assertAlmostEqual(self.csv_mean, self.true_mean)
 
             # count up the number of cells in the first class
@@ -309,7 +310,7 @@ class TestRunFullModel(unittest.TestCase):
 
             self.assertTrue(os.path.exists(model_output))
 
-            self.xml_mean = utils.raster_properties(model_output, "MEAN")
+            self.xml_mean = su.raster_properties(model_output, "MEAN")
             self.assertAlmostEqual(self.xml_mean, self.true_mean)
 
             # count up the number of cells in the first class
@@ -326,7 +327,7 @@ class TestRunFullModel(unittest.TestCase):
 
             self.assertTrue(os.path.exists(model_output))
 
-            self.excel_mean = utils.raster_properties(model_output, "MEAN")
+            self.excel_mean = su.raster_properties(model_output, "MEAN")
             self.assertAlmostEqual(self.excel_mean, self.true_mean)
 
             # count up the number of cells in the first class
@@ -353,7 +354,7 @@ class TestClassifyFgdb(unittest.TestCase):
             classify.main(config.base_xml, config.broad_std_raster, config.fine_std_raster, \
                     config.slope_raster,  config.bathy_raster, classify_raster)
             # resulting 'fixed' name
-            mean = utils.raster_properties(classify_raster, "MEAN")
+            mean = su.raster_properties(classify_raster, "MEAN")
             self.assertAlmostEqual(mean, 5.78153846153846)
 
 class TestRunFullModelKnownZones(unittest.TestCase):
@@ -390,7 +391,7 @@ class TestRunFullModelKnownZones(unittest.TestCase):
             self.assertTrue(os.path.exists(zones_output))
             arcpy.BuildRasterAttributeTable_management(zones_output)
 
-            self.xml_mean = utils.raster_properties(zones_output, "MEAN")
+            self.xml_mean = su.raster_properties(zones_output, "MEAN")
             self.xml_zones = zones_output
 
             # some asserts here for validation
@@ -410,7 +411,7 @@ class TestRunFullModelKnownZones(unittest.TestCase):
             self.assertTrue(os.path.exists(zones_output))
             arcpy.BuildRasterAttributeTable_management(zones_output)
 
-            self.excel_mean = utils.raster_properties(zones_output, "MEAN")
+            self.excel_mean = su.raster_properties(zones_output, "MEAN")
             self.excel_zones = zones_output
             # some asserts here for validation
             rat = self.extractRasterAttributeTable(self.excel_zones)
