@@ -137,7 +137,9 @@ class broadscalebpi(object):
                 A broad-scale BPI data set allows you to identify larger
                 features within the benthic landscape.""")
         self.canRunInBackground = False
-
+        # parameter names
+        self.cols = ['bathy', 'inner', 'outer', 'scale_factor', 'output']
+ 
     def getParameterInfo(self):
         # Input_bathymetric_raster
         input_raster = arcpy.Parameter()
@@ -187,10 +189,10 @@ class broadscalebpi(object):
     def updateParameters(self, parameters):
         validator = getattr(self, 'ToolValidator', None)
 
-        # parameter names
-        cols = ['bathy', 'inner', 'outer', 'scale_factor', 'output']
-        outer_radius = parameters[cols.index('outer')].valueAsText
-        bathy = parameters[cols.index('bathy')].valueAsText
+        bathy = parameters[self.cols.index('bathy')]
+        outer_radius = parameters[self.cols.index('outer')]
+        scale_factor = parameters[self.cols.index('scale_factor')]
+        ouput_param = parameters[self.cols.index('output')]
 
         if outer_radius is not None and bathy is not None:
             # get the cellsize of the input raster; assume same in X & Y
@@ -279,7 +281,9 @@ class finescalebpi(object):
                 A broad-scale BPI data set allows you to identify larger
                 features within the benthic landscape.""")
         self.canRunInBackground = False
-
+        # parameter names
+        self.cols = ['bathy', 'inner', 'outer', 'scale_factor', 'output']
+ 
     def getParameterInfo(self):
         # Input_bathymetric_raster
         input_raster = arcpy.Parameter()
@@ -337,17 +341,15 @@ class finescalebpi(object):
     def updateParameters(self, parameters):
         validator = getattr(self, 'ToolValidator', None)
 
-        # parameter names
-        cols = ['bathy', 'inner', 'outer', 'scale_factor', 'output']
-        outer_radius = parameters[cols.index('outer')].valueAsText
-        bathy = parameters[cols.index('bathy')].valueAsText
+        outer_radius = parameters[self.cols.index('outer')].valueAsText
+        bathy = parameters[self.cols.index('bathy')].valueAsText
         if outer_radius is not None and bathy is not None:
             # get the cellsize of the input raster; assume same in X & Y
             cellsize = utils.raster_properties(bathy, "CELLSIZEY")
             # calculate our 'scale factor':
             scale_factor = math.ceil(cellsize * int(outer_radius) - 0.5)
             # try modifying our scale factor
-            parameters[cols.index('scale_factor')].value = scale_factor
+            parameters[self.cols.index('scale_factor')].value = scale_factor
 
         if validator:
             return validator(parameters).updateParameters()
@@ -390,6 +392,9 @@ class standardizebpi(object):
     def __init__(self):
         self.label = u'Standardize BPIs'
         self.canRunInBackground = False
+        self.cols = ['broad_input', 'broad_mean', 'broad_stddev', 'broad_output', \
+                'fine_input', 'fine_mean', 'fine_stddev', 'fine_output']
+
 
     def getParameterInfo(self):
         # Input_BPI_raster
@@ -472,21 +477,17 @@ class standardizebpi(object):
     def updateMessages(self, parameters):
         validator = getattr(self, 'ToolValidator', None)
 
-        # parameter names
-        cols = ['broad_input', 'broad_mean', 'broad_stddev', 'broad_output', \
-                'fine_input', 'fine_mean', 'fine_stddev', 'fine_output']
-
         for label in ['broad', 'fine']:
-            input_raster = parameters[cols.index(label + '_input')].valueAsText
+            input_raster = parameters[self.cols.index(label + '_input')].valueAsText
             if input_raster is not None:
                 (mean, stddev) = self.getRasterStats(input_raster)
                 if mean is not None:
                     # try modifying our variables
-                    parameters[cols.index(label + '_mean')].value = mean
-                    parameters[cols.index(label + '_stddev')].value = stddev
+                    parameters[self.cols.index(label + '_mean')].value = mean
+                    parameters[self.cols.index(label + '_stddev')].value = stddev
 
             # Validate GRID outputs.
-            out_param = cols.index(label + '_output')
+            out_param = self.cols.index(label + '_output')
             output_raster = parameters[out_param].valueAsText
             if output_raster is not None:
                 if not valid_grid_name(output_raster):
