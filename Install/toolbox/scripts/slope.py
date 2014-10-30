@@ -15,7 +15,9 @@
 # Coastal Zone Management to a Python Script that runs in ArcGIS 10.
 
 # Import system modules
-import sys, arcpy
+import sys
+
+import arcpy
 from arcpy.sa import Slope
 
 # local imports
@@ -25,7 +27,10 @@ import config
 # Check out any necessary licenses
 arcpy.CheckOutExtension("Spatial")
 
+
 def main(bathy=None, out_raster=None):
+    """Compute raster slope in degrees."""
+
     try:
         arcpy.env.rasterStatistics = "STATISTICS"
         # Calculate the slope of the bathymetric raster

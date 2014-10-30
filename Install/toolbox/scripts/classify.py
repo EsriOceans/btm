@@ -3,23 +3,33 @@
 # Shaun Walbridge, 2012.10.07
 
 # Import system modules
-import os, sys, textwrap, arcpy
+import os
+import sys
+import textwrap
+
+import arcpy
 from arcpy.sa import Con, Raster
 
+# local imports
 import utils
 import config
 
 # Check out any necessary licenses
 arcpy.CheckOutExtension("Spatial")
 
+
 class NoValidClasses(Exception):
     def __init__(self):
         Exception.__init__(self, "No valid output classes found")
 
+
 def run_con(lower_bounds, upper_bounds, in_grid, true_val, true_alt=None):
-    # debug message:
-    #utils.msg("run_con: lb: `{}`  ub: `{}` grid: `{}`  val: `{}`, alt: `{}`".format(
-    #        lower_bounds, upper_bounds, in_grid, true_val, true_alt))
+    "Conditionally evaluate raster range within bounds."""
+
+    if config.debug:
+        utils.msg("run_con: lb: {} ub: {} grid: {}  val: {}, alt: {}".format(
+            lower_bounds, upper_bounds, in_grid, true_val, true_alt))
+
     out_grid = None
 
     # if our initial desired output value isn't set, use the backup
@@ -28,21 +38,31 @@ def run_con(lower_bounds, upper_bounds, in_grid, true_val, true_alt=None):
     # calculate our output grid
     if lower_bounds is not None:
         if upper_bounds is not None:
-            out_grid_a = Con(in_grid, true_val, 0, "VALUE < {}".format(upper_bounds))
-            out_grid = Con(in_grid, out_grid_a, 0, "VALUE > {}".format(lower_bounds))
+            out_grid_a = Con(
+                in_grid, true_val, 0, "VALUE < {}".format(upper_bounds))
+            out_grid = Con(
+                in_grid, out_grid_a, 0, "VALUE > {}".format(lower_bounds))
         else:
-            out_grid = Con(in_grid, true_val, 0, "VALUE >= {}".format(lower_bounds))
+            out_grid = Con(
+                in_grid, true_val, 0, "VALUE >= {}".format(lower_bounds))
     elif upper_bounds is not None:
-        out_grid = Con(in_grid, true_val, 0, "VALUE <= {}".format(upper_bounds))
+        out_grid = Con(
+            in_grid, true_val, 0, "VALUE <= {}".format(upper_bounds))
 
-    if type(out_grid).__name__ == 'NoneType' and type(true_val) == arcpy.sa.Raster:
+    if type(out_grid).__name__ == 'NoneType' and \
+       type(true_val) == arcpy.sa.Raster:
         out_grid = true_val
 
     return out_grid
 
-def main(classification_file, bpi_broad_std, bpi_fine_std, slope, bathy,
-    out_raster=None, mode='toolbox'):
 
+def main(classification_file, bpi_broad_std, bpi_fine_std,
+         slope, bathy, out_raster=None):
+    """
+    Perform raster classification, based on classification mappings
+    and provided raster derivatives (fine- and broad- scale BPI,
+    slope, and the original raster). Outputs a classified raster.
+    """
     try:
         # set up scratch workspace
         # FIXME: see issue #18
@@ -57,8 +77,8 @@ def main(classification_file, bpi_broad_std, bpi_fine_std, slope, bathy,
 
         arcpy.env.overwriteOutput = True
         # Create the broad-scale Bathymetric Position Index (BPI) raster
-        msg_text = "Generating the classified grid, based on the provided" + \
-                " classes in '{classes}'.".format(classes=classification_file)
+        msg_text = ("Generating the classified grid, based on the provided"
+                    " classes in '{}'.".format(classification_file))
         utils.msg(msg_text)
 
         # Read in the BTM Document; the class handles parsing a variety of inputs.
@@ -74,28 +94,33 @@ def main(classification_file, bpi_broad_std, bpi_fine_std, slope, bathy,
             utils.msg("Calculating grid for {}...".format(cur_name))
             out_con = None
             # here come the CONs:
-            out_con = run_con(item["Depth_LowerBounds"], item["Depth_UpperBounds"], \
-                    bathy, cur_class)
-            out_con2 = run_con(item["Slope_LowerBounds"], item["Slope_UpperBounds"], \
-                    slope, out_con, cur_class)
-            out_con3 = run_con(item["LSB_LowerBounds"], item["LSB_UpperBounds"], \
-                    bpi_fine_std, out_con2, cur_class)
-            out_con4 = run_con(item["SSB_LowerBounds"], item["SSB_UpperBounds"], \
-                    bpi_broad_std, out_con3, cur_class)
+            out_con = run_con(item["Depth_LowerBounds"],
+                              item["Depth_UpperBounds"],
+                              bathy, cur_class)
+            out_con2 = run_con(item["Slope_LowerBounds"],
+                               item["Slope_UpperBounds"],
+                               slope, out_con, cur_class)
+            out_con3 = run_con(item["LSB_LowerBounds"],
+                               item["LSB_UpperBounds"],
+                               bpi_fine_std, out_con2, cur_class)
+            out_con4 = run_con(item["SSB_LowerBounds"],
+                               item["SSB_UpperBounds"],
+                               bpi_broad_std, out_con3, cur_class)
 
             if type(out_con4) == arcpy.sa.Raster:
                 rast = utils.save_raster(out_con4, "con_{}.tif".format(cur_name))
                 grids.append(rast)
             else:
                 # fall-through: no valid values detected for this class.
-                warn_msg = "WARNING, no valid locations found for class" + \
-                        " {}:\n".format(cur_name)
+                warn_msg = ("WARNING, no valid locations found for class",
+                            " {}:\n".format(cur_name))
                 classifications = {
-                        'depth': (item["Depth_LowerBounds"], item["Depth_UpperBounds"]),
-                        'slope': (item["Slope_LowerBounds"], item["Slope_UpperBounds"]),
-                        'broad': (item["SSB_LowerBounds"], item["SSB_UpperBounds"]), 
-                        'fine': (item["LSB_LowerBounds"], item["LSB_UpperBounds"])}
-                for (name, vrange) in classifications.items(): 
+                    'depth': (item["Depth_LowerBounds"], item["Depth_UpperBounds"]),
+                    'slope': (item["Slope_LowerBounds"], item["Slope_UpperBounds"]),
+                    'broad': (item["SSB_LowerBounds"], item["SSB_UpperBounds"]),
+                    'fine': (item["LSB_LowerBounds"], item["LSB_UpperBounds"])
+                }
+                for (name, vrange) in classifications.items():
                     (vmin, vmax) = vrange
                     if vmin or vmax is not None:
                         if vmin is None:
@@ -135,9 +160,9 @@ def main(classification_file, bpi_broad_std, bpi_fine_std, slope, bathy,
         for grid in grids:
             arcpy.Delete_management(grid.catalogPath)
     except Exception as e:
-        # hack -- swallowing this exception, because sometimes it seems like refs are left around
-        # for these files.
-        utils.msg("WARNING: failed to delete all intermediate data.")
+        # hack -- swallowing this exception, because sometimes
+        # refs are left around for these files.
+        utils.msg("Failed to delete all intermediate data.", mtype='warning')
 
 # when executing as a standalone script get parameters from sys
 if __name__ == '__main__':

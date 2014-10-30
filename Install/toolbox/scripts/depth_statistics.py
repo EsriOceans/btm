@@ -4,7 +4,10 @@
 # Date: 9/1/2012
 
 # Import system modules
-import os, sys, arcpy
+import os
+import sys
+
+import arcpy
 from arcpy.sa import NbrRectangle, FocalStatistics, Power
 
 # local imports
@@ -14,7 +17,13 @@ import config
 # Check out any necessary licenses
 arcpy.CheckOutExtension("Spatial")
 
-def main(in_raster=None, neighborhood_size=None, out_workspace=None, out_stats_raw=None):
+
+def main(in_raster=None, neighborhood_size=None,
+         out_workspace=None, out_stats_raw=None):
+    """
+    Compute depth statisitcs, averaging values over a defined neighborhood
+    of cells. Can compute mean, standard deviation, and variance.
+    """
     out_stats = out_stats_raw.replace("'", '').split(";")
     arcpy.env.rasterStatistics = "STATISTICS"
 
@@ -23,13 +32,15 @@ def main(in_raster=None, neighborhood_size=None, out_workspace=None, out_stats_r
     std_dev_set = set(['Standard Deviation', 'Variance'])
 
     # list stats to be computed
-    utils.msg("The following stats will be computed: {}".format(";".join(out_stats)))
+    stats_msg = ("The following stats will be computed: ",
+                 "{}".format(";".join(out_stats)))
+    utils.msg(stats_msg)
 
     try:
         # initialize our neighborhood
         utils.msg("Calculating neighborhood...")
-        neighborhood = NbrRectangle(neighborhood_size,
-            neighborhood_size, "CELL")
+        neighborhood = NbrRectangle(
+            neighborhood_size, neighborhood_size, "CELL")
 
         if mean_set.intersection(out_stats):
             utils.msg("Calculating mean depth...")
@@ -61,6 +72,6 @@ def main(in_raster=None, neighborhood_size=None, out_workspace=None, out_stats_r
 if __name__ == '__main__':
     config.mode = 'script'
     main(in_raster=sys.argv[1],
-        neighborhood_size=sys.argv[2],
-        out_workspace=sys.argv[3],
-        out_stats_raw=sys.argv[4])
+         neighborhood_size=sys.argv[2],
+         out_workspace=sys.argv[3],
+         out_stats_raw=sys.argv[4])

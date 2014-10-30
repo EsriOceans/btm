@@ -9,27 +9,35 @@ import sys
 from arcpy.sa import Aspect, Sin, Cos
 
 # local imports
-import utils
-import config
+import scripts.utils as utils
+import scripts.config as config
 
 # Check out any necessary licenses
 arcpy.CheckOutExtension("Spatial")
 
+
 def main(bathy=None, out_sin_raster=None, out_cos_raster=None):
+    """
+    Calculate the statistical aspect of a raster, which
+    computes the sin(aspect) and cos(aspect). By using these two
+    variables, aspect can be accounted for as a continuous circular
+    variable. Because aspect is circular (0 and 359.9 are immediately
+    adjacent), this trigonometric transformation preserves distances
+    between elements and is the simplest transformation mechanism.
+    """
+
     try:
         arcpy.env.rasterStatistics = "STATISTICS"
-        # Calculate the aspect of the bathymetric raster. "Aspect is expressed in 
-        # positive degrees from 0 to 359.9, measured clockwise from north."
+        # Calculate the aspect of the bathymetric raster. "Aspect is expressed
+        # in positive degrees from 0 to 359.9, measured clockwise from north."
         utils.msg("Calculating aspect...")
         aspect = Aspect(bathy)
 
-        # both the sin and cos functions here expect radians, not degrees.
-        # convert our Aspect raster into radians, check that the values are in range.
+        # Both the sin and cos functions here expect radians, not degrees.
+        # convert our Aspect raster into radians, check that the values
+        # are in range.
         aspect_rad = aspect * (math.pi / 180)
 
-        # because this statistic is circular (0 and 359.9 are immediately adjacent),
-        # we need to transform this into a form which preserves distances between items.
-        # trig is the simplest mechanism.
         aspect_sin = Sin(aspect_rad)
         aspect_cos = Cos(aspect_rad)
 
@@ -40,7 +48,9 @@ def main(bathy=None, out_sin_raster=None, out_cos_raster=None):
     except Exception as e:
         utils.msg(e, mtype='error')
 
-# when executing as a standalone script get parameters from sys
+# When executing as a standalone script get parameters from sys
 if __name__ == '__main__':
     config.mode = 'script'
-    main(bathy=sys.argv[1], out_sin_raster=sys.argv[2], out_cos_raster=sys.argv[3])
+    main(bathy=sys.argv[1],
+         out_sin_raster=sys.argv[2],
+         out_cos_raster=sys.argv[3])

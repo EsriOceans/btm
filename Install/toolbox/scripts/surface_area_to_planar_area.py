@@ -15,11 +15,12 @@ import arcpy
 from arcpy.sa import Raster
 
 # local imports
-import utils
-import config
+import scripts.utils as utils
+import scripts.config as config
 
 # Check out any necessary licenses
 arcpy.CheckOutExtension("Spatial")
+
 
 def compute_edge(raster_1, raster_2, distance):
     r""" Compute edge distance between two rasters, R_1 and R_2, and adjusts
@@ -30,6 +31,7 @@ def compute_edge(raster_1, raster_2, distance):
     """
     return (((raster_1 - raster_2)**2 + distance**2) ** 0.5) / 2
 
+
 def triangle_area(side_a, side_b, side_c):
     r""" Compute triangle area.
         pp 11-12, Jenness.
@@ -37,10 +39,22 @@ def triangle_area(side_a, side_b, side_c):
     ..math:
     \mathbf{A} = \frac{a \cdot \sqrt{b^2 - \left ( \frac{(a^2 + b^2 - c^2)}{2a}\right )^{2}}}{2}
     """
-    return (side_a * \
-            (side_b**2 - ((side_a**2 + side_b**2 - side_c**2) / (side_a * 2))**2)**0.5) / 2
+    return \
+        ((side_a *
+         (side_b**2 - ((side_a**2 + side_b**2 - side_c**2) / (side_a * 2))**2)**0.5)
+         / 2)
+
 
 def main(in_raster=None, out_raster=None, area_raster=None):
+    """
+    A calculation of rugosity, based on the difference between surface
+    area and planar area, as described in Jenness, J. 2002. Surface Areas
+    and Ratios from Elevation Grid (surfgrids.avx) extension for ArcView 3.x,
+    v. 1.2. Jenness Enterprises.
+
+    NOTE: the VRM method implemented in ruggeddness is generally considered
+          superior to this method.
+    """
     out_workspace = os.path.dirname(out_raster)
     # make sure workspace exists
     utils.workspace_exists(out_workspace)
@@ -78,18 +92,18 @@ def main(in_raster=None, out_raster=None, area_raster=None):
                      (1,  0),          (-1,  0),
                      (1,  1), (0,  1), (-1,  1)]
 
-
-        corners = (1, 3, 6, 8) # dist * sqrt(2), as set in corner_dist
-        orthogonals = (2, 4, 5, 7) # von Neumann neighbors, straight dist
+        corners = (1, 3, 6, 8)      # dist * sqrt(2), as set in corner_dist
+        orthogonals = (2, 4, 5, 7)  # von Neumann neighbors, straight dist
+        shift_rasts = [None]        # offset to align numbers
         temp_rasts = []
 
-        shift_rasts = [None] # offset to align numbers
         for (n, pos) in enumerate(positions, start=1):
             utils.msg("Creating Shift Grid {} of 8...".format(n))
             # scale shift grid by cell size
             (x_shift, y_shift) = map(lambda(n): n * cell_size, pos)
 
-            # set explicit path on shift rasters, otherwise suffer inexplicable 999999 errors.
+            # set explicit path on shift rasters, otherwise suffer
+            # inexplicable 999999 errors.
             shift_out = os.path.join(out_workspace, "shift_{}.tif".format(n))
             shift_out = utils.validate_path(shift_out)
             temp_rasts.append(shift_out)
@@ -120,7 +134,8 @@ def main(in_raster=None, out_raster=None, area_raster=None):
                           (6, 4), (5, 8), (6, 7), (7, 8)]
         for (n, pair) in enumerate(adjacent_shift, start=9):
             utils.msg("Calculating Triangle Edge {} of 16...".format(n))
-            (i, j) = pair # the two shift rasters for this iteration
+            # the two shift rasters for this iteration
+            (i, j) = pair
             edge_out = os.path.join(out_workspace, "edge_{}.tif".format(n))
             edge_out = utils.validate_path(edge_out)
             temp_rasts.append(edge_out)
@@ -128,14 +143,16 @@ def main(in_raster=None, out_raster=None, area_raster=None):
             edge.save(edge_out)
             edge_rasts.append(arcpy.sa.Raster(edge_out))
 
-        areas = [] # areas of each triangle
+        # areas of each triangle
+        areas = []
         for (n, pair) in enumerate(adjacent_shift, start=1):
             utils.msg("Calculating Triangle Area {} of 8...".format(n))
-            (i, j) = pair # the two shift rasters; n has the third side
+            # the two shift rasters; n has the third side
+            (i, j) = pair
             area_out = os.path.join(out_workspace, "area_{}.tif".format(n))
             area_out = utils.validate_path(area_out)
             temp_rasts.append(area_out)
- 
+
             area = triangle_area(edge_rasts[i], edge_rasts[j], edge_rasts[n+8])
             area.save(area_out)
             areas.append(arcpy.sa.Raster(area_out))
@@ -143,7 +160,7 @@ def main(in_raster=None, out_raster=None, area_raster=None):
         utils.msg("Summing Triangle Area...")
         arcpy.env.pyramid = pyramid_orig
         arcpy.env.rasterStatistics = "STATISTICS"
-        total_area = (areas[0] + areas[1] + areas[2] + areas[3] + \
+        total_area = (areas[0] + areas[1] + areas[2] + areas[3] +
                       areas[4] + areas[5] + areas[6] + areas[7])
         if area_raster:
             utils.msg("Saving Surface Area Raster to {}.".format(area_raster))
@@ -152,7 +169,9 @@ def main(in_raster=None, out_raster=None, area_raster=None):
         area_ratio = total_area / cell_size**2
 
         out_raster = utils.validate_path(out_raster)
-        utils.msg("Saving Surface Area to Planar Area ratio to {}.".format(out_raster))
+        save_msg = ("Saving Surface Area to Planar Area ratio to ",
+                    "{}.".format(out_raster))
+        utils.msg(save_msg)
         area_ratio.save(out_raster)
 
     except Exception as e:
@@ -175,5 +194,5 @@ if __name__ == '__main__':
     else:
         area = sys.argv[3]
     main(in_raster=sys.argv[1],
-            out_raster=sys.argv[2],
-            area_raster=area)
+         out_raster=sys.argv[2],
+         area_raster=area)

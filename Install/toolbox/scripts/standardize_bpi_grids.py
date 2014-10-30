@@ -15,7 +15,9 @@
 # Coastal Zone Management to a Python Script that runs in ArcGIS 10.
 
 # Import system modules
-import sys, arcpy
+import sys
+
+import arcpy
 from arcpy.sa import Int, Plus, Divide, Minus, Times
 
 # local imports
@@ -25,11 +27,12 @@ import config
 # Check out any necessary licenses
 arcpy.CheckOutExtension("Spatial")
 
+
 def main(bpi_raster=None, out_raster=None):
     try:
         # Get raster properties
-        message = "Calculating properties of the Bathymetric " + \
-                "Position Index (BPI) raster..."
+        message = ("Calculating properties of the Bathymetric ",
+                   "Position Index (BPI) raster...")
         utils.msg(message)
         utils.msg("raster: {}; output: {}".format(bpi_raster, out_raster))
         bpi_mean = utils.raster_properties(bpi_raster, "MEAN")
@@ -38,11 +41,11 @@ def main(bpi_raster=None, out_raster=None):
         utils.msg("BPI raster standard deviation: {}.".format(bpi_std_dev))
 
         # Create the standardized Bathymetric Position Index (BPI) raster
-        message = "Standardizing the Bathymetric Position Index (BPI) raster..."
-        utils.msg(message)
+        std_msg = "Standardizing the Bathymetric Position Index (BPI) raster..."
+        utils.msg(std_msg)
         arcpy.env.rasterStatistics = "STATISTICS"
         outRaster = Int(Plus(Times(Divide(
-                Minus(bpi_raster, bpi_mean), bpi_std_dev), 100), 0.5))
+            Minus(bpi_raster, bpi_mean), bpi_std_dev), 100), 0.5))
         out_raster = utils.validate_path(out_raster)
         outRaster.save(out_raster)
 

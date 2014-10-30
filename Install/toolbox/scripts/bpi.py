@@ -29,24 +29,30 @@ import config
 # Check out any necessary licenses
 arcpy.CheckOutExtension("Spatial")
 
+
 def main(bathy=None, inner_radius=None, outer_radius=None,
-    out_raster=None, bpi_type='broad', mode='toolbox'):
+         out_raster=None, bpi_type='broad'):
+    """
+    Create a bathymetric position index (BPI) raster, which
+    measures the average value in a 'donut' of locations, excluding
+    cells too close to the origin point, and outside a set distance.
+    """
 
     arcpy.env.rasterStatistics = "STATISTICS"
     try:
         # Create the broad-scale Bathymetric Position Index (BPI) raster
-        msg = "Generating the {bpi_type}-scale ".format(bpi_type=bpi_type) + \
-                "Bathymetric Position Index (BPI) raster..."
+        msg = ("Generating the {bpi_type}-scale ".format(bpi_type=bpi_type),
+               "Bathymetric Position Index (BPI) raster...")
         utils.msg(msg)
         utils.msg("Calculating neighborhood...")
         neighborhood = NbrAnnulus(inner_radius, outer_radius, "CELL")
         utils.msg("Calculating FocalStatistics for {}...".format(bathy))
         out_focal_statistics = FocalStatistics(bathy, neighborhood, "MEAN")
-        outRaster = Int(Plus(Minus(bathy, out_focal_statistics), 0.5))
+        out_raster = Int(Plus(Minus(bathy, out_focal_statistics), 0.5))
 
-        out_raster = utils.validate_path(out_raster)
-        outRaster.save(out_raster)
-        utils.msg("Saved output as {}".format(out_raster))
+        out_raster_path = utils.validate_path(out_raster)
+        out_raster.save(out_raster_path)
+        utils.msg("Saved output as {}".format(out_raster_path))
     except Exception as e:
         utils.msg(e, mtype='error')
 

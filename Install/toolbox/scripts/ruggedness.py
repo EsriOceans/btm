@@ -16,9 +16,10 @@
 import math
 import os
 import sys
+
 import arcpy
-from arcpy.sa import Aspect, Cos, Sin, Slope, Con, \
-        NbrRectangle, FocalStatistics
+from arcpy.sa import \
+    Aspect, Cos, Sin, Slope, Con, NbrRectangle, FocalStatistics
 
 # local imports
 import utils
@@ -27,7 +28,16 @@ import config
 # Check out any necessary licenses
 arcpy.CheckOutExtension("Spatial")
 
+
 def main(in_raster=None, neighborhood_size=None, out_raster=None):
+    """
+    Compute terrain ruggedness, using the vector ruggedness measure (VRM),
+    as described in:
+
+        Sappington et al., 2007. Quantifying Landscape Ruggedness for
+        Animal Habitat Analysis: A Case Study Using Bighorn Sheep in the
+        Mojave Desert. Journal of Wildlife Management. 71(5): 1419 -1426.
+    """
     hood_size = int(neighborhood_size)
 
     # FIXME: expose this as an option per #18
@@ -40,7 +50,7 @@ def main(in_raster=None, neighborhood_size=None, out_raster=None):
     # TODO expose as config
     pyramid_orig = arcpy.env.pyramid
     arcpy.env.pyramid = "NONE"
-     # TODO: currently set to automatically overwrite, expose this as option
+    # TODO: currently set to automatically overwrite, expose this as option
     arcpy.env.overwriteOutput = True
 
     try:
@@ -89,5 +99,6 @@ def main(in_raster=None, neighborhood_size=None, out_raster=None):
 # when executing as a standalone script get parameters from sys
 if __name__ == '__main__':
     config.mode = 'script'
-    main(in_raster=sys.argv[1], neighborhood_size=sys.argv[2],
-            out_raster=sys.argv[3])
+    main(in_raster=sys.argv[1],
+         neighborhood_size=sys.argv[2],
+         out_raster=sys.argv[3])
