@@ -9,9 +9,6 @@ import textwrap
 
 import arcpy
 
-import xml.etree.cElementTree as et
-import glob
-
 # import our datatype conversion submodule
 from datatype import datatype
 dt = datatype.DataType()
@@ -22,12 +19,23 @@ sys.path.insert(0, local_path)
 
 from scripts import utils
 
+# Check out any necessary licenses
+arcpy.CheckOutExtension("Spatial")
+
 # status messages
 MSG_INVALID_GRID = "ESRI GRIDs must >= 13 characters and contain only " \
                    "letters, numbers and the underscore ('_') character."
 MSG_INVALID_RADIUS = "Outer radius must exceed inner radius."
 
 def raster_is_grid(raster_path):
+    """Detect if the raster path is a file backed GRID file.
+
+    Arguments:
+        raster_path -- raster path name to test
+
+    Returns:
+        True if is a GRID file, False otherwise
+    """
     is_grid = False
     ext = os.path.splitext(raster_path)[1]
     temp_dir = tempfile.gettempdir()
@@ -42,9 +50,19 @@ def raster_is_grid(raster_path):
             is_grid = False
     return is_grid
 
-# Validate ESRI GRID filenames. The file doesn't exist, so use naming to
-# validate a potential name.
+
 def valid_grid_name(raster_path):
+    """
+    Validate ESRI GRID filenames. The file doesn't exist, so use
+    naming to validate a potential name.
+
+    Arguments:
+        raster_path -- raster path name to validate
+
+    Returns:
+        valid raster boolean
+    """
+
     valid = True
     # GRIDs are the default for any file without a trailing extension.
     if raster_is_grid(raster_path):
@@ -62,12 +80,11 @@ def valid_grid_name(raster_path):
 
     return valid
 
+
 def dedent(text, ending='\r\n'):
     text = text.replace('\n', ending)
     return textwrap.dedent(text)
 
-# Check out any necessary licenses
-arcpy.CheckOutExtension("Spatial")
 
 class Toolbox(object):
     """ Benthic Terrain Modeler Python toolbox metaclass."""
@@ -75,21 +92,22 @@ class Toolbox(object):
         self.label = u'Benthic Terrain Modeler'
         self.alias = 'btm'
         self.tools = [
-           # Bathymetric Position Index
-            broadscalebpi, # broad scale
-            finescalebpi, # file scale
-            standardizebpi, # convert BPI values to standardized scores 
+            # Bathymetric Position Index
+            broadscalebpi,      # broad scale
+            finescalebpi,       # file scale
+            standardizebpi,     # convert BPI values to standardized scores
             # Geomorphology Operations
-            btmslope, # compute slope
-            statisticalaspect, # break aspect up trignometrically
-            surfacetoplanar, # compare surface area to planar area
-            terrainruggedness, # VRM, a measure of roughness
-            # Summary statistics
-            depthstatistics, # depth summary statistics
-            # Create Classification of zones or types
-            classifyterrain, # run classification 
-            runfullmodel # run all model steps
+            btmslope,           # compute slope
+            statisticalaspect,  # break aspect up trignometrically
+            surfacetoplanar,    # compare surface area to planar area
+            terrainruggedness,  # VRM, a measure of roughness
+            # Summary Statistics
+            depthstatistics,    # depth summary statistics
+            # Create Classification of Zones/Types
+            classifyterrain,    # run classification
+            runfullmodel        # run all model steps
         ]
+
 
 # tools below this section, one class per tool.
 class broadscalebpi(object):
@@ -139,7 +157,7 @@ class broadscalebpi(object):
         self.canRunInBackground = False
         # parameter names
         self.cols = ['bathy', 'inner', 'outer', 'scale_factor', 'output']
- 
+
     def getParameterInfo(self):
         # Input_bathymetric_raster
         input_raster = arcpy.Parameter()
@@ -180,8 +198,10 @@ class broadscalebpi(object):
         output_raster.parameterType = 'Required'
         output_raster.direction = 'Output'
         output_raster.datatype = dt.format('Raster Dataset')
+        # output_raster.value = os.path.join(arcpy.env.workspace, 'broad_bpi')
 
-        return [input_raster, inner_radius, outer_radius, scale_factor, output_raster]
+        return [input_raster, inner_radius, outer_radius,
+                scale_factor, output_raster]
 
     def isLicensed(self):
         return True
@@ -193,14 +213,13 @@ class broadscalebpi(object):
         outer_radius = parameters[self.cols.index('outer')]
         scale_factor = parameters[self.cols.index('scale_factor')]
         ouput_param = parameters[self.cols.index('output')]
+        bathy_path = bathy.valueAsText
 
-        if outer_radius is not None and bathy is not None:
+        if outer_radius.valueAsText is not None and bathy_path is not None:
             # get the cellsize of the input raster; assume same in X & Y
-            cellsize = utils.raster_properties(bathy, "CELLSIZEY")
-            # calculate our 'scale factor':
-            scale_factor = math.ceil(cellsize * int(outer_radius) - 0.5)
-            # try modifying our scale factor
-            parameters[cols.index('scale_factor')].value = scale_factor
+            cellsize = utils.raster_properties(bathy_path, "CELLSIZEY")
+            # calculate our 'scale factor', modify the param
+            scale_factor.value = math.ceil(cellsize * int(outer_radius) - 0.5)
 
         if validator:
             return validator(parameters).updateParameters()
@@ -235,6 +254,7 @@ class broadscalebpi(object):
             outer_radius=parameters[2].valueAsText,
             out_raster=parameters[4].valueAsText,
             bpi_type='broad')
+
 
 class finescalebpi(object):
     """ Calculate Fine-scale Bathymetric Position Index (BPI).  """
@@ -283,7 +303,7 @@ class finescalebpi(object):
         self.canRunInBackground = False
         # parameter names
         self.cols = ['bathy', 'inner', 'outer', 'scale_factor', 'output']
- 
+
     def getParameterInfo(self):
         # Input_bathymetric_raster
         input_raster = arcpy.Parameter()
@@ -333,7 +353,8 @@ class finescalebpi(object):
         multivalue.direction = 'Input'
         multivalue.datatype = dt.format('Any Value')
 
-        return [input_raster, inner_radius, outer_radius, scale_factor, output_raster]
+        return [input_raster, inner_radius, outer_radius,
+                scale_factor, output_raster]
 
     def isLicensed(self):
         return True
@@ -382,7 +403,8 @@ class finescalebpi(object):
             inner_radius=parameters[1].valueAsText,
             outer_radius=parameters[2].valueAsText,
             out_raster=parameters[4].valueAsText,
-	        bpi_type='fine')
+            bpi_type='fine')
+
 
 class standardizebpi(object):
     """
@@ -392,9 +414,10 @@ class standardizebpi(object):
     def __init__(self):
         self.label = u'Standardize BPIs'
         self.canRunInBackground = False
-        self.cols = ['broad_input', 'broad_mean', 'broad_stddev', 'broad_output', \
-                'fine_input', 'fine_mean', 'fine_stddev', 'fine_output']
-
+        self.cols = [
+            'broad_input', 'broad_mean', 'broad_stddev', 'broad_output',
+            'fine_input', 'fine_mean', 'fine_stddev', 'fine_output'
+        ]
 
     def getParameterInfo(self):
         # Input_BPI_raster
@@ -463,7 +486,7 @@ class standardizebpi(object):
         fine_std_output.direction = 'Output'
         fine_std_output.datatype = dt.format('Raster Dataset')
 
-        return [broad_raster, broad_mean, broad_stddev, broad_std_output, \
+        return [broad_raster, broad_mean, broad_stddev, broad_std_output,
                 fine_raster, fine_mean, fine_stddev, fine_std_output]
 
     def isLicensed(self):
@@ -506,7 +529,7 @@ class standardizebpi(object):
                 raster_desc = arcpy.Describe(input_raster)
                 if raster_desc.dataType in VALID_RASTER_TYPES:
                     result = (utils.raster_properties(input_raster, 'MEAN'),
-                            utils.raster_properties(input_raster, 'STD'))
+                              utils.raster_properties(input_raster, 'STD'))
             except:
                 # check for raster existence, when running as a model the 'result'
                 # may be set, but not actually exist, causing these steps to fail.
@@ -524,6 +547,7 @@ class standardizebpi(object):
         standardize_bpi_grids.main(
             bpi_raster=parameters[4].valueAsText,
             out_raster=parameters[7].valueAsText)
+
 
 class statisticalaspect(object):
     """ Calculate statistical aspect, uses standard SA function internally."""
@@ -592,6 +616,7 @@ class statisticalaspect(object):
             out_sin_raster=parameters[1].valueAsText,
             out_cos_raster=parameters[2].valueAsText)
 
+
 class btmslope(object):
     """ Calculate slope, uses standard SA function internally."""
     def __init__(self):
@@ -643,6 +668,7 @@ class btmslope(object):
         slope.main(
             bathy=parameters[0].valueAsText,
             out_raster=parameters[1].valueAsText)
+
 
 class classifyterrain(object):
     """ Classify Benthic Terrain based on classification dictionary. """
@@ -732,14 +758,17 @@ class classifyterrain(object):
             bathy=parameters[4].valueAsText,
             out_raster=parameters[5].valueAsText)
 
+
 class runfullmodel(object):
     """ Run all model steps to classify benthic terrain. """
 
     def __init__(self):
         self.label = u'Run All Model Steps'
         self.canRunInBackground = False
-        self.cols = ['out_workspace', 'bathy', 'broad_bpi_inner', 'broad_bpi_outer', \
-                'fine_bpi_inner', 'fine_bpi_outer', 'class_dict', 'zones_raster']
+        self.cols = [
+            'out_workspace', 'bathy', 'broad_bpi_inner', 'broad_bpi_outer',
+            'fine_bpi_inner', 'fine_bpi_outer', 'class_dict', 'zones_raster'
+        ]
 
     def getParameterInfo(self):
         # Output_Workspace
@@ -811,8 +840,8 @@ class runfullmodel(object):
         # was raster dataset, but no way to control path then...
         zones_raster.datatype = dt.format('String')
 
-        return [out_workspace, bathy, broad_bpi_inner, broad_bpi_outer, fine_bpi_inner,
-                fine_bpi_outer, class_dict, zones_raster]
+        return [out_workspace, bathy, broad_bpi_inner, broad_bpi_outer,
+                fine_bpi_inner, fine_bpi_outer, class_dict, zones_raster]
 
     def isLicensed(self):
         return True
@@ -835,10 +864,11 @@ class runfullmodel(object):
         out_workspace = parameters[self.cols.index('out_workspace')].valueAsText
         zones_raster = parameters[self.cols.index('zones_raster')].valueAsText
 
-        # TODO: make this work so that if they update the output_zones, we respect it.
+        # TODO: make this work so that if they update the output_zones,
+        #       we respect it.
         if out_workspace is not None and zones_raster is None:
             parameters[self.cols.index('zones_raster')].value = \
-                    os.path.join(out_workspace, "output_zones")
+                os.path.join(out_workspace, "output_zones")
         if validator:
             return validator(parameters).updateParameters()
 
@@ -869,6 +899,7 @@ class runfullmodel(object):
             fine_bpi_outer_radius=parameters[5].valueAsText,
             classification_dict=parameters[6].valueAsText,
             output_zones=parameters[7].valueAsText)
+
 
 class structureclassification(object):
     """Classify benthic terrain based on structures."""
@@ -920,7 +951,8 @@ class structureclassification(object):
         # Slope_value__in_degrees__indicating_a_gentle_slope
         slope_gentle = arcpy.Parameter()
         slope_gentle.name = u'Slope_value__in_degrees__indicating_a_gentle_slope'
-        slope_gentle.displayName = u'Slope value (in degrees) indicating a gentle slope'
+        slope_gentle.displayName = \
+            u'Slope value (in degrees) indicating a gentle slope'
         slope_gentle.parameterType = 'Required'
         slope_gentle.direction = 'Input'
         slope_gentle.datatype = dt.format('Double')
@@ -928,7 +960,8 @@ class structureclassification(object):
         # Slope_value__in_degrees__indicating_a_steep_slope
         slope_steep = arcpy.Parameter()
         slope_steep.name = u'Slope_value__in_degrees__indicating_a_steep_slope'
-        slope_steep.displayName = u'Slope value (in degrees) indicating a steep slope'
+        slope_steep.displayName = \
+            u'Slope value (in degrees) indicating a steep slope'
         slope_steep.parameterType = 'Required'
         slope_steep.direction = 'Input'
         slope_steep.datatype = dt.format('Double')
@@ -944,7 +977,8 @@ class structureclassification(object):
         # Depth_indicating_break_between_shelf_and_broad_flat
         broad_vs_flat = arcpy.Parameter()
         broad_vs_flat.name = u'Depth_indicating_break_between_shelf_and_broad_flat'
-        broad_vs_flat.displayName = u'Depth indicating break between shelf and broad flat'
+        broad_vs_flat.displayName = \
+            u'Depth indicating break between shelf and broad flat'
         broad_vs_flat.parameterType = 'Required'
         broad_vs_flat.direction = 'Input'
         broad_vs_flat.datatype = dt.format('Double')
@@ -976,6 +1010,7 @@ class structureclassification(object):
     def execute(self, parameters, messages):
         pass
 
+
 class surfacetoplanar(object):
     """Compute Surface Area to Planar Area (ratio)."""
     class ToolValidator:
@@ -1004,9 +1039,10 @@ class surfacetoplanar(object):
 
     def __init__(self):
         self.label = u'Surface Area to Planar Area'
-        self.description = dedent("""\
-                Measure terrain ruggedness by calculating the ratio between
-                the surface area and the planar area, as described in Jenness 2002.""")
+        self.description = dedent(
+            """Measure terrain ruggedness by calculating the ratio
+            between the surface area and the planar area, as described
+            in Jenness 2002.""")
         self.canRunInBackground = False
 
     def getParameterInfo(self):
@@ -1058,9 +1094,10 @@ class surfacetoplanar(object):
         # run related python script with selected input parameters
         from scripts import surface_area_to_planar_area
         surface_area_to_planar_area.main(
-                in_raster=parameters[0].valueAsText,
-                out_raster=parameters[1].valueAsText,
-                area_raster=parameters[2].valueAsText)
+            in_raster=parameters[0].valueAsText,
+            out_raster=parameters[1].valueAsText,
+            area_raster=parameters[2].valueAsText)
+
 
 class terrainruggedness(object):
     """Compute Terrain Ruggedness Measure (VRM)."""
@@ -1145,9 +1182,10 @@ class terrainruggedness(object):
         # run related python script with selected input parameters
         from scripts import ruggedness
         ruggedness.main(
-                in_raster=parameters[0].valueAsText,
-                neighborhood_size=parameters[1].valueAsText,
-                out_raster=parameters[2].valueAsText)
+            in_raster=parameters[0].valueAsText,
+            neighborhood_size=parameters[1].valueAsText,
+            out_raster=parameters[2].valueAsText)
+
 
 class depthstatistics(object):
     """ Depth Statistics computes a suite of summary statistics. This initial
@@ -1244,7 +1282,7 @@ class depthstatistics(object):
         # run related python script with selected input parameters
         from scripts import depth_statistics
         depth_statistics.main(
-                in_raster=parameters[0].valueAsText,
-                neighborhood_size=parameters[1].valueAsText,
-                out_workspace=parameters[2].valueAsText,
-                out_stats_raw=parameters[3].valueAsText)
+            in_raster=parameters[0].valueAsText,
+            neighborhood_size=parameters[1].valueAsText,
+            out_workspace=parameters[2].valueAsText,
+            out_stats_raw=parameters[3].valueAsText)
