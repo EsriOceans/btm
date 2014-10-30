@@ -14,12 +14,13 @@ current_path = os.path.dirname(os.path.abspath(__file__))
 out_zip_name = os.path.join(current_path, "..",
                             os.path.basename(current_path) + ".esriaddin")
 backup_patterns = {
-        'PLUGIN_BACKUP_PATTERN': re.compile(r'.*_addin_[0-9]+[.]py$', re.IGNORECASE),
-        'VIM_SWAP_PATTERN': re.compile(r'.*\.sw[op]$', re.IGNORECASE),
-        'COMPLIED_PYTHON_PATTERN': re.compile(r'.*\.pyc$', re.IGNORECASE),
-        'TODO_PATTERN': re.compile('todo.txt'),
-        'OSX_DSTORE': re.compile('.DS_Store')
-    }
+    'PLUGIN_BACKUP_PATTERN': re.compile(r'.*_addin_[0-9]+[.]py$', re.IGNORECASE),
+    'VIM_SWAP_PATTERN': re.compile(r'.*\.sw[op]$', re.IGNORECASE),
+    'COMPLIED_PYTHON_PATTERN': re.compile(r'.*\.pyc$', re.IGNORECASE),
+    'TODO_PATTERN': re.compile('todo.txt'),
+    'OSX_DSTORE': re.compile('.DS_Store')
+}
+
 
 def looks_like_a_backup(filename):
     """Determine if files are ignorable."""
