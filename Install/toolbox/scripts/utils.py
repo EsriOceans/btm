@@ -190,7 +190,6 @@ class BtmXmlDocument(BtmDocument):
     from earlier work done by Jen Boulware / NOAA CSC, Oct 2011.
     """
     def __init__(self, filename):
-        super(BtmXmlDocument, self).__init__()
         self.dom = parse(filename)
         self.node_dict = self.node_to_dict(self.dom)
 
@@ -267,7 +266,6 @@ class BtmExcelDocument(BtmDocument):
     # TODO: FORCE A TEST FOR ARCGIS 10.2 INSTALLATION
 
     def __init__(self, filename):
-        super(BtmExcelDocument, self).__init__()
         self.filename = filename
         self.header = None  # filled in by parse_workbook
         self.workbook = self.parse_workbook(self.filename)
@@ -350,7 +348,6 @@ class BtmCsvDocument(BtmDocument):
     access to the formatted rows of the CSV, and header information.
     """
     def __init__(self, filename):
-        super(BtmCsvDocument, self).__init__()
         self.filename = filename
         self.header = None  # filled in by parse_csv
         self.csv = self.parse_csv(self.filename)
