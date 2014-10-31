@@ -16,8 +16,9 @@ utils.add_local_paths(import_paths)
 
 # now we can import our scripts
 from scripts import bpi, standardize_bpi_grids, btm_model, aspect, \
-        slope, ruggedness, depth_statistics, classify, \
-        surface_area_to_planar_area, utils as su
+    slope, ruggedness, depth_statistics, classify, \
+    surface_area_to_planar_area, utils as su
+
 
 class TestBtmDocument(unittest.TestCase):
     """ Test our document class."""
@@ -32,34 +33,41 @@ class TestBtmDocument(unittest.TestCase):
         self.assertTrue(os.path.exists(config.malformed_csv))
 
     def testCsvHeaderColumns(self):
-        btm_doc = su.BtmDocument(config.base_csv)
-        header = btm_doc.schema.header # CSV files contain a header element.
-        # one of the header labels was wrong previously, check that we have the 
-        # elements we expect in the correct positions.
+        """
+        One of the header labels was wrong previously, check that we have
+        the elements we expect in the correct positions.
+        """
 
-        expected_header = ['Class','Zone','BroadBPI_Lower','BroadBPI_Upper',\
-                'FineBPI_Lower','FineBPI_Upper','Slope_Lower','Slope_Upper',\
-                'Depth_Lower','Depth_Upper']
+        btm_doc = su.BtmDocument(config.base_csv)
+        header = btm_doc.schema.header   # CSV files contain a header element
+
+        expected_header = [
+            'Class', 'Zone', 'BroadBPI_Lower', 'BroadBPI_Upper',
+            'FineBPI_Lower', 'FineBPI_Upper', 'Slope_Lower', 'Slope_Upper',
+            'Depth_Lower', 'Depth_Upper'
+        ]
 
         for (i, label) in enumerate(header):
             self.assertTrue(label in expected_header)
             self.assertTrue(label == expected_header[i])
 
+
 class TestBtmRaster(unittest.TestCase):
     def testRasterExists(self):
         self.assertTrue(os.path.exists(config.bathy_raster))
 
+
 # test utilities methods
 class TestUtilitiesMethods(unittest.TestCase):
-    
+
     def setUp(self):
         self.mean = -20.619977607194
         self.std = 2.730680267695
 
     def testAlternativeDecimalMark(self):
         """ Test a locale which uses "," as its decimal separator."""
-        # NOTE: Windows locales aren't named the same as the `man locale 1` 
-        # equivalents. For this code to be universal, it'd need to test os.name 
+        # NOTE: Windows locales aren't named the same as the `man locale 1`
+        # equivalents. For this code to be universal, it'd need to test os.name
         # and convert to the appropriate locale name.
         locale.setlocale(locale.LC_ALL, "german_germany")
 
@@ -82,7 +90,8 @@ class TestUtilitiesMethods(unittest.TestCase):
         # Windows locales are different than the locale() equivs
         locale.setlocale(locale.LC_ALL, "german_germany")
 
-        # Changing the Python locale doesn't change the ArcGIS locale, so these will fail.
+        # Changing the Python locale doesn't change the ArcGIS locale,
+        # so these will fail.
         mean = su.raster_properties(config.bathy_raster, 'MEAN')
         self.assertNotAlmostEqual(mean, self.mean)
 
@@ -95,6 +104,8 @@ class TestUtilitiesMethods(unittest.TestCase):
 
 # test individual scripts
 #
+
+
 class TestBpi(unittest.TestCase):
 
     def testBpiImport(self):
@@ -105,14 +116,15 @@ class TestBpi(unittest.TestCase):
             raster_fn = 'test_run_bpi.tif'
             bpi_raster = os.path.join(d, raster_fn)
             bpi.main(bathy=config.bathy_raster, inner_radius=10,
-                outer_radius=30, out_raster=bpi_raster, bpi_type='broad')
-     
+                     outer_radius=30, out_raster=bpi_raster, bpi_type='broad')
+
             self.assertTrue(raster_fn in os.listdir(d))
 
             self.assertAlmostEqual(
-                    su.raster_properties(bpi_raster, "MEAN"), 0.295664335664)
+                su.raster_properties(bpi_raster, "MEAN"), 0.295664335664)
             self.assertAlmostEqual(
-                    su.raster_properties(bpi_raster, "STD"), 1.65611606614)
+                su.raster_properties(bpi_raster, "STD"), 1.65611606614)
+
 
 class TestStandardizeBpiGrids(unittest.TestCase):
 
@@ -129,7 +141,7 @@ class TestStandardizeBpiGrids(unittest.TestCase):
             # workspace is an invalid output workspace. Force the workspace to temp:
             arcpy.env.scratchWorkspace = d
             bpi.main(bathy=config.bathy_raster, inner_radius=10,
-                outer_radius=30, out_raster=in_raster, bpi_type='broad')
+                     outer_radius=30, out_raster=in_raster, bpi_type='broad')
 
             self.assertTrue(os.path.exists(in_raster))
 
@@ -137,9 +149,10 @@ class TestStandardizeBpiGrids(unittest.TestCase):
             self.assertTrue(os.path.exists(std_raster))
 
             self.assertAlmostEqual(
-                    su.raster_properties(std_raster, "MEAN"), 0.671608391608)
+                su.raster_properties(std_raster, "MEAN"), 0.671608391608)
             self.assertAlmostEqual(
-                    su.raster_properties(std_raster, "STD"), 99.655593923183)
+                su.raster_properties(std_raster, "STD"), 99.655593923183)
+
 
 class TestBpiAspect(unittest.TestCase):
 
@@ -156,16 +169,21 @@ class TestBpiAspect(unittest.TestCase):
             aspect_cos_raster = os.path.join(d, 'test_aspect_cos.tif')
             arcpy.env.scratchWorkspace = d
 
-            aspect.main(bathy=config.bathy_raster, out_sin_raster=aspect_sin_raster, \
-                    out_cos_raster=aspect_cos_raster)
+            aspect.main(
+                bathy=config.bathy_raster,
+                out_sin_raster=aspect_sin_raster,
+                out_cos_raster=aspect_cos_raster)
 
             self.assertTrue(os.path.exists(aspect_sin_raster))
             self.assertTrue(os.path.exists(aspect_cos_raster))
 
-            self.assertAlmostEqual(su.raster_properties(aspect_sin_raster, "MEAN"), \
+            self.assertAlmostEqual(
+                su.raster_properties(aspect_sin_raster, "MEAN"),
                 -0.06153140691827335)
-            self.assertAlmostEqual(su.raster_properties(aspect_cos_raster, "MEAN"), \
-                0.02073092622177259) 
+            self.assertAlmostEqual(
+                su.raster_properties(aspect_cos_raster, "MEAN"),
+                0.02073092622177259)
+
 
 class TestBpiSlope(unittest.TestCase):
 
@@ -182,8 +200,9 @@ class TestBpiSlope(unittest.TestCase):
             slope.main(bathy=config.bathy_raster, out_raster=slope_raster)
             self.assertTrue(os.path.exists(slope_raster))
 
-            self.assertAlmostEqual(su.raster_properties(slope_raster, "MEAN"), \
-                3.802105241105673)
+            self.assertAlmostEqual(
+                su.raster_properties(slope_raster, "MEAN"), 3.802105241105673)
+
 
 class TestVrm(unittest.TestCase):
     """
@@ -195,17 +214,18 @@ class TestVrm(unittest.TestCase):
 
     def testVrmRun(self):
         with TempDir() as d:
-            neighborhood = 3 # 3x3 neighborhood
+            neighborhood = 3    # 3x3 neighborhood
             vrm_raster = os.path.join(d, 'test_vrm.tif')
 
             arcpy.env.scratchWorkspace = d
             ruggedness.main(config.bathy_raster, neighborhood, vrm_raster)
             self.assertTrue(os.path.exists(vrm_raster))
 
-            self.assertAlmostEqual(su.raster_properties(vrm_raster, "MEAN"), \
-                    0.00062628513039036)
-            self.assertAlmostEqual(su.raster_properties(vrm_raster, "STD"), \
-                    0.00087457748556755)
+            self.assertAlmostEqual(
+                su.raster_properties(vrm_raster, "MEAN"), 0.00062628513039036)
+            self.assertAlmostEqual(
+                su.raster_properties(vrm_raster, "STD"), 0.00087457748556755)
+
 
 class TestSaPa(unittest.TestCase):
     """
@@ -221,20 +241,21 @@ class TestSaPa(unittest.TestCase):
             surf_raster = os.path.join(d, 'test_surface_area.tif')
 
             arcpy.env.scratchWorkspace = d
-            surface_area_to_planar_area.main(config.bathy_raster,
-                    ratio_raster, surf_raster)
+            surface_area_to_planar_area.main(
+                config.bathy_raster, ratio_raster, surf_raster)
+
             self.assertTrue(os.path.exists(ratio_raster))
             self.assertTrue(os.path.exists(surf_raster))
 
-            self.assertAlmostEqual(su.raster_properties(ratio_raster, "MEAN"), \
-               1.0042422342676)
-            self.assertAlmostEqual(su.raster_properties(ratio_raster, "STD"), \
-               0.0058175502835692)
+            self.assertAlmostEqual(
+                su.raster_properties(ratio_raster, "MEAN"), 1.0042422342676)
+            self.assertAlmostEqual(
+                su.raster_properties(ratio_raster, "STD"), 0.0058175502835692)
 
-            self.assertAlmostEqual(su.raster_properties(surf_raster, "MEAN"), \
-                25.119343739217)
-            self.assertAlmostEqual(su.raster_properties(surf_raster, "STD"), \
-                0.14551573347447)
+            self.assertAlmostEqual(
+                su.raster_properties(surf_raster, "MEAN"), 25.119343739217)
+            self.assertAlmostEqual(
+                su.raster_properties(surf_raster, "STD"), 0.14551573347447)
 
     def testSaPaRunWithFgdbLocation(self):
         with TempDir() as d:
@@ -248,18 +269,19 @@ class TestSaPa(unittest.TestCase):
             surf_raster = os.path.join(fgdb_workspace, 'test_sapa_area')
 
             arcpy.env.scratchWorkspace = d
-            surface_area_to_planar_area.main(config.bathy_raster,
-                    ratio_raster, surf_raster)
+            surface_area_to_planar_area.main(
+                config.bathy_raster, ratio_raster, surf_raster)
 
-            self.assertAlmostEqual(su.raster_properties(ratio_raster, "MEAN"), \
-               1.0042422342676)
-            self.assertAlmostEqual(su.raster_properties(ratio_raster, "STD"), \
-               0.0058175502835692)
+            self.assertAlmostEqual(
+                su.raster_properties(ratio_raster, "MEAN"), 1.0042422342676)
+            self.assertAlmostEqual(
+                su.raster_properties(ratio_raster, "STD"), 0.0058175502835692)
 
-            self.assertAlmostEqual(su.raster_properties(surf_raster, "MEAN"), \
-                25.119343739217)
-            self.assertAlmostEqual(su.raster_properties(surf_raster, "STD"), \
-                0.14551573347447)
+            self.assertAlmostEqual(
+                su.raster_properties(surf_raster, "MEAN"), 25.119343739217)
+            self.assertAlmostEqual(
+                su.raster_properties(surf_raster, "STD"), 0.14551573347447)
+
 
 class TestDepthStatistics(unittest.TestCase):
     """
@@ -271,24 +293,26 @@ class TestDepthStatistics(unittest.TestCase):
 
     def testDepthStatisticsRun(self):
         with TempDir() as d:
-            neighborhood = 3 # 3x3 neighborhood
+            neighborhood = 3    # 3x3 neighborhood
             arcpy.env.scratchWorkspace = d
             out_workspace = d
             stats = "Mean Depth;Variance;Standard Deviation"
-            depth_statistics.main(config.bathy_raster, neighborhood,
-                    out_workspace, stats)
+            depth_statistics.main(
+                config.bathy_raster, neighborhood, out_workspace, stats)
 
             # mean of depth summary rasters
             mean_depths = {
                 'meandepth': -20.56248074571827,
                 'stdevdepth': 0.2946229406453136,
-                'vardepth': 0.1281792675921596}
+                'vardepth': 0.1281792675921596
+            }
 
             for (stat, mean_value) in mean_depths.items():
                 raster = os.path.join(d, stat)
                 self.assertTrue(os.path.exists(raster))
-                self.assertAlmostEqual(su.raster_properties(raster, "MEAN"), \
-                        mean_value)
+                self.assertAlmostEqual(
+                    su.raster_properties(raster, "MEAN"), mean_value)
+
 
 class TestRunFullModel(unittest.TestCase):
 
@@ -324,9 +348,10 @@ class TestRunFullModel(unittest.TestCase):
             model_output = os.path.join(d, 'output_zones.tif')
             arcpy.env.scratchWorkspace = d
 
-            btm_model.main(d, config.bathy_raster, self.broad_inner_rad, \
-                    self.broad_outer_rad, self.fine_inner_rad, self.fine_outer_rad, \
-                    config.base_csv, model_output)
+            btm_model.main(
+                d, config.bathy_raster, self.broad_inner_rad,
+                self.broad_outer_rad, self.fine_inner_rad, self.fine_outer_rad,
+                config.base_csv, model_output)
 
             self.assertTrue(os.path.exists(model_output))
 
@@ -340,18 +365,20 @@ class TestRunFullModel(unittest.TestCase):
     def testModelExecuteWithMalformedCsv(self):
         with TempDir() as d:
             # raises a ValueError when the malformed line is encountered.
-            classify.main(config.malformed_csv, 'null.tif', \
-                    'null.tif', 'null.tif', 'null.tif', config.bathy_raster, \
-                     os.path.join(d, 'null.tif'))
+            classify.main(
+                config.malformed_csv, 'null.tif',
+                'null.tif', 'null.tif', 'null.tif', config.bathy_raster,
+                os.path.join(d, 'null.tif'))
 
     def testModelExecuteWithXml(self):
         with TempDir() as d:
             model_output = os.path.join(d, 'output_zones.tif')
             arcpy.env.scratchWorkspace = d
 
-            btm_model.main(d, config.bathy_raster, self.broad_inner_rad, \
-                    self.broad_outer_rad, self.fine_inner_rad, self.fine_outer_rad, \
-                    config.base_xml, model_output)
+            btm_model.main(
+                d, config.bathy_raster, self.broad_inner_rad,
+                self.broad_outer_rad, self.fine_inner_rad, self.fine_outer_rad,
+                config.base_xml, model_output)
 
             self.assertTrue(os.path.exists(model_output))
 
@@ -366,9 +393,10 @@ class TestRunFullModel(unittest.TestCase):
             model_output = os.path.join(d, 'output_zones.tif')
             arcpy.env.scratchWorkspace = d
 
-            btm_model.main(d, config.bathy_raster, self.broad_inner_rad, \
-                    self.broad_outer_rad, self.fine_inner_rad, self.fine_outer_rad, \
-                    config.base_excel, model_output)
+            btm_model.main(
+                d, config.bathy_raster, self.broad_inner_rad,
+                self.broad_outer_rad, self.fine_inner_rad, self.fine_outer_rad,
+                config.base_excel, model_output)
 
             self.assertTrue(os.path.exists(model_output))
 
@@ -384,6 +412,7 @@ class TestRunFullModel(unittest.TestCase):
         self.assertEqual(self.csv_mean, self.xml_mean)
         self.assertEqual(self.excel_mean, self.xml_mean)
 
+
 class TestClassifyFgdb(unittest.TestCase):
 
     def testClassifyWithFgdbLocation(self):
@@ -393,14 +422,17 @@ class TestClassifyFgdb(unittest.TestCase):
             # create a temporary File Geodatabase location
             arcpy.CreateFileGDB_management(d, fgdb_name)
             self.assertTrue(os.path.exists(fgdb_workspace))
-            # TODO: this currently hacks up the path to be a valid name, but should probably
-            # instead throw an error and let the user correct the output name.
+            # TODO: this currently hacks up the path to be a valid name,
+            # but should probably instead throw an error and let the user
+            # correct the output name.
             classify_raster = os.path.join(fgdb_workspace, 'output_in_fgdb')
-            classify.main(config.base_xml, config.broad_std_raster, config.fine_std_raster, \
-                    config.slope_raster,  config.bathy_raster, classify_raster)
+            classify.main(
+                config.base_xml, config.broad_std_raster, config.fine_std_raster,
+                config.slope_raster, config.bathy_raster, classify_raster)
             # resulting 'fixed' name
             mean = su.raster_properties(classify_raster, "MEAN")
             self.assertAlmostEqual(mean, 5.78153846153846)
+
 
 class TestRunFullModelKnownZones(unittest.TestCase):
     def setUp(self):
@@ -413,7 +445,13 @@ class TestRunFullModelKnownZones(unittest.TestCase):
         self.toolbox = None
         self.xml_zones = None
         self.excel_zones = None
-        self.expected = {1: 433, 2: 6, 3: 2428, 4: 708} # one cell differs from v1.
+
+        self.expected = {  # one cell differs from v1.
+            1: 433,
+            2: 6,
+            3: 2428,
+            4: 708
+        }
 
     def extractRasterAttributeTable(self, raster_path):
         rat = {}
@@ -429,9 +467,10 @@ class TestRunFullModelKnownZones(unittest.TestCase):
             zones_output = os.path.join(d, 'output_zones.tif')
             arcpy.env.scratchWorkspace = d
 
-            btm_model.main(d, config.bathy_raster, self.broad_inner_rad, \
-                    self.broad_outer_rad, self.fine_inner_rad, self.fine_outer_rad, \
-                    config.zones_xml, zones_output)
+            btm_model.main(
+                d, config.bathy_raster, self.broad_inner_rad,
+                self.broad_outer_rad, self.fine_inner_rad, self.fine_outer_rad,
+                config.zones_xml, zones_output)
 
             self.assertTrue(os.path.exists(zones_output))
             arcpy.BuildRasterAttributeTable_management(zones_output)
@@ -449,9 +488,10 @@ class TestRunFullModelKnownZones(unittest.TestCase):
             zones_output = os.path.join(d, 'output_zones.tif')
             arcpy.env.scratchWorkspace = d
 
-            btm_model.main(d, config.bathy_raster, self.broad_inner_rad, \
-                    self.broad_outer_rad, self.fine_inner_rad, self.fine_outer_rad, \
-                    config.zones_excel, zones_output)
+            btm_model.main(
+                d, config.bathy_raster, self.broad_inner_rad,
+                self.broad_outer_rad, self.fine_inner_rad,
+                self.fine_outer_rad, config.zones_excel, zones_output)
 
             self.assertTrue(os.path.exists(zones_output))
             arcpy.BuildRasterAttributeTable_management(zones_output)
@@ -463,11 +503,13 @@ class TestRunFullModelKnownZones(unittest.TestCase):
             for (value, count) in self.expected.items():
                 self.assertEqual(count, rat[value])
 
+
 class TestAddin(unittest.TestCase):
     """ test should be run after a fresh run of makeaddin to
         rebuild the .esriaddin file."""
     def setUp(self):
-        self.addin_path = os.sep.join([config.local_path, '..', '..', 'btm.esriaddin'])
+        self.addin_path = os.path.join(
+            config.local_path, '..', '..', 'btm.esriaddin')
         self.addin_zip = zipfile.ZipFile(self.addin_path, 'r')
 
     def testToolboxIsPresent(self):
@@ -475,8 +517,10 @@ class TestAddin(unittest.TestCase):
         self.assertTrue(toolbox_path in self.addin_zip.namelist())
 
     def testModelNameIsValid(self):
-        """ the signing process changes names to to URL encoded; make sure
-         our model remains invariant."""
+        """
+        The signing process changes names to to URL encoded,
+        make sure our model remains invariant.
+        """
         model_name = 'Install/toolbox/btm_model.tbx'
         self.assertTrue(model_name in self.addin_zip.namelist())
 

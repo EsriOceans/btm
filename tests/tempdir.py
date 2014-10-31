@@ -1,5 +1,7 @@
-""" tempdir.py: a contextual wrapper around tempfile. 'tempdir' on PyPI; inlined here for packaging reasons.
-   https://bitbucket.org/another_thomas/tempdir/src/fa6a07ad0024f0d96d1cedab63792931e9b744a4/tempdir.py?at=default
+""" tempdir.py: a contextual wrapper around tempfile. 'tempdir' on PyPI;
+                inlined here for packaging reasons.
+
+   https://bitbucket.org/another_thomas/tempdir/src/
 
    Author: Thomas Fenzl
    License: MIT
@@ -13,6 +15,7 @@ import time
 import shutil
 from functools import wraps
 from contextlib import contextmanager
+
 
 class TempDir(object):
     """ class for temporary directories
@@ -69,6 +72,7 @@ def in_tempdir(*args, **kwargs):
             yield t
     finally:
         os.chdir(old_path)
+
 
 def run_in_tempdir(*args, **kwargs):
     """Make a function execute in a new tempdir.

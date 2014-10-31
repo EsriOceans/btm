@@ -5,11 +5,13 @@ import arcpy
 
 from config import local_path
 
+
 def add_local_paths(paths):
     for path_part in paths:
         base_path = os.path.join(local_path, path_part)
         abs_path = os.path.abspath(base_path)
         sys.path.insert(0, abs_path)
+
 
 class Rast(object):
     def __init__(self, raster=None):
