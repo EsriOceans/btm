@@ -367,7 +367,7 @@ class TestRunFullModel(unittest.TestCase):
             # raises a ValueError when the malformed line is encountered.
             classify.main(
                 config.malformed_csv, 'null.tif',
-                'null.tif', 'null.tif', 'null.tif', config.bathy_raster,
+                'null.tif', 'null.tif', config.bathy_raster,
                 os.path.join(d, 'null.tif'))
 
     def testModelExecuteWithXml(self):
