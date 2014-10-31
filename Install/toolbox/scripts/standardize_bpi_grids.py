@@ -31,10 +31,11 @@ arcpy.CheckOutExtension("Spatial")
 def main(bpi_raster=None, out_raster=None):
     try:
         # Get raster properties
-        message = ("Calculating properties of the Bathymetric ",
+        message = ("Calculating properties of the Bathymetric "
                    "Position Index (BPI) raster...")
         utils.msg(message)
-        utils.msg("raster: {}; output: {}".format(bpi_raster, out_raster))
+        utils.msg("  input raster: {}\n   output: {}".format(
+            bpi_raster, out_raster))
         bpi_mean = utils.raster_properties(bpi_raster, "MEAN")
         utils.msg("BPI raster mean: {}.".format(bpi_mean))
         bpi_std_dev = utils.raster_properties(bpi_raster, "STD")

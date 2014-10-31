@@ -32,7 +32,7 @@ def main(in_raster=None, neighborhood_size=None,
     std_dev_set = set(['Standard Deviation', 'Variance'])
 
     # list stats to be computed
-    stats_msg = ("The following stats will be computed: ",
+    stats_msg = ("The following stats will be computed: "
                  "{}".format(";".join(out_stats)))
     utils.msg(stats_msg)
 

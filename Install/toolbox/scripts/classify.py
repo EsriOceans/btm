@@ -112,7 +112,7 @@ def main(classification_file, bpi_broad_std, bpi_fine_std,
                 grids.append(rast)
             else:
                 # fall-through: no valid values detected for this class.
-                warn_msg = ("WARNING, no valid locations found for class",
+                warn_msg = ("WARNING, no valid locations found for class"
                             " {}:\n".format(cur_name))
                 classifications = {
                     'depth': (item["Depth_LowerBounds"], item["Depth_UpperBounds"]),
