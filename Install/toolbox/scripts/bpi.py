@@ -41,17 +41,18 @@ def main(bathy=None, inner_radius=None, outer_radius=None,
     arcpy.env.rasterStatistics = "STATISTICS"
     try:
         # Create the broad-scale Bathymetric Position Index (BPI) raster
-        msg = ("Generating the {bpi_type}-scale ".format(bpi_type=bpi_type),
-               "Bathymetric Position Index (BPI) raster...")
+        msg = ("Generating the {bpi_type}-scale Bathymetric"
+               "Position Index (BPI) raster...".format(bpi_type=bpi_type))
+
         utils.msg(msg)
         utils.msg("Calculating neighborhood...")
         neighborhood = NbrAnnulus(inner_radius, outer_radius, "CELL")
         utils.msg("Calculating FocalStatistics for {}...".format(bathy))
         out_focal_statistics = FocalStatistics(bathy, neighborhood, "MEAN")
-        out_raster = Int(Plus(Minus(bathy, out_focal_statistics), 0.5))
+        result_raster = Int(Plus(Minus(bathy, out_focal_statistics), 0.5))
 
         out_raster_path = utils.validate_path(out_raster)
-        out_raster.save(out_raster_path)
+        result_raster.save(out_raster_path)
         utils.msg("Saved output as {}".format(out_raster_path))
     except Exception as e:
         utils.msg(e, mtype='error')
