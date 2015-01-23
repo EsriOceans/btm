@@ -27,8 +27,13 @@ MSG_INVALID_GRID = "ESRI GRIDs must >= 13 characters and contain only " \
                    "letters, numbers and the underscore ('_') character."
 MSG_INVALID_RADIUS = "Outer radius must exceed inner radius."
 
+arcpy.env.scratchWorkspace = r'C:\workspace'
+arcpy.env.workspace = r'C:\workspace'
+
+
 def raster_is_grid(raster_path):
-    """Detect if the raster path is a file backed GRID file.
+    """
+    Detect if the raster path is a file backed GRID file.
 
     Arguments:
         raster_path -- raster path name to test
@@ -87,7 +92,7 @@ def dedent(text, ending='\r\n'):
 
 
 class Toolbox(object):
-    """ Benthic Terrain Modeler Python toolbox metaclass."""
+    """Benthic Terrain Modeler Python toolbox metaclass."""
     def __init__(self):
         self.label = u'Benthic Terrain Modeler'
         self.alias = 'btm'
@@ -105,7 +110,9 @@ class Toolbox(object):
             depthstatistics,    # depth summary statistics
             # Create Classification of Zones/Types
             classifyterrain,    # run classification
-            runfullmodel        # run all model steps
+            runfullmodel,       # run all model steps
+            # Settings
+            settings            # control settings
         ]
 
 
@@ -344,6 +351,7 @@ class finescalebpi(object):
         output_raster.parameterType = 'Required'
         output_raster.direction = 'Output'
         output_raster.datatype = dt.format('Raster Dataset')
+        output_raster.value = r'C:\workspace\test_bpi.tif'
 
         # TODO: implement mutlvalue support
         multivalue = arcpy.Parameter()
@@ -1286,3 +1294,53 @@ class depthstatistics(object):
             neighborhood_size=parameters[1].valueAsText,
             out_workspace=parameters[2].valueAsText,
             out_stats_raw=parameters[3].valueAsText)
+
+
+class settings(object):
+    """ Manage settings."""
+
+    def __init__(self):
+        self.label = u'Workspace Settings'
+        self.canRunInBackground = False
+        self.cols = {
+            'workspace': 0,
+            'overwrite': 1
+        }
+
+    def getParameterInfo(self):
+        # Workspace
+        workspace= arcpy.Parameter()
+        workspace.name = u'Workspace'
+        workspace.displayName = u'Workspace'
+        workspace.parameterType = 'Required'
+        workspace.direction = 'Input'
+        workspace.datatype = dt.format('Workspace')
+
+        """
+        # overwrite enabled
+        overwrite = arcpy.Parameter()
+        overwrite.name = 'Allow_Overwrite'
+        overwrite.displayName = 'Allow Overwrite'
+        overwrite.direction = 'Input'
+        overwrite.parameterType = 'Required'
+        overwrite.datatype = dt.format('Boolean')
+        """
+        return [workspace]
+
+    def isLicensed(self):
+        return True
+
+    def updateParameters(self, parameters):
+        workspace_param = parameters[self.cols['workspace']]
+
+        # TODO read current settings values
+        return
+
+    def updateMessages(self, parameters):
+        return
+
+    def execute(self, parameters, messages):
+        workspace_param = parameters[self.cols['workspace']]
+
+        # TODO update settings values as needed
+        return
