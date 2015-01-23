@@ -524,5 +524,9 @@ class TestAddin(unittest.TestCase):
         model_name = 'Install/toolbox/btm_model.tbx'
         self.assertTrue(model_name in self.addin_zip.namelist())
 
+    def testDataTypesModuleIsPresent(self):
+        datatype_path = 'Install/toolbox/datatype/datatype.py'
+        self.assertTrue(datatype_path in self.addin_zip.namelist())
+
 if __name__ == '__main__':
     unittest.main()
