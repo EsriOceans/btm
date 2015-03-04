@@ -15,9 +15,10 @@ dt = datatype.DataType()
 
 # import our local directory so we can import internal modules
 local_path = os.path.abspath(os.path.dirname(__file__))
-sys.path.insert(0, local_path)
+scripts_path = os.path.join(local_path, "scripts")
+sys.path.insert(0, scripts_path)
 
-from scripts import utils
+import scripts.utils as utils
 
 # Check out any necessary licenses
 arcpy.CheckOutExtension("Spatial")
@@ -85,6 +86,16 @@ def dedent(text, ending='\r\n'):
     text = text.replace('\n', ending)
     return textwrap.dedent(text)
 
+def force_path():
+    """
+    Ensure Path environment is correctly initialized for our classes.
+
+    Based on some research, it seems that while the standard imports
+    come in fine, anything which alters the sys.path after initialization
+    won't be respected by the subsequent `class` calls, and re-initialized
+    to its initial state.
+    """
+    sys.path.insert(0, scripts_path)
 
 class Toolbox(object):
     """ Benthic Terrain Modeler Python toolbox metaclass."""
@@ -138,6 +149,7 @@ class broadscalebpi(object):
             return
 
     def __init__(self):
+        force_path()
         self.label = u'Build Broad Scale BPI'
         self.description = dedent("""\
                 The concept of bathymetric position is central to the benthic
@@ -247,7 +259,7 @@ class broadscalebpi(object):
 
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
-        from scripts import bpi
+        import bpi
         bpi.main(
             bathy=parameters[0].valueAsText,
             inner_radius=parameters[1].valueAsText,
@@ -284,6 +296,7 @@ class finescalebpi(object):
             return
 
     def __init__(self):
+        force_path()
         self.label = u'Build Fine Scale BPI'
         self.description = dedent("""\
                 The concept of bathymetric position is central to the benthic
@@ -397,7 +410,7 @@ class finescalebpi(object):
 
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
-        from scripts import bpi
+        import bpi
         bpi.main(
             bathy=parameters[0].valueAsText,
             inner_radius=parameters[1].valueAsText,
@@ -412,6 +425,7 @@ class standardizebpi(object):
     """
 
     def __init__(self):
+        force_path()
         self.label = u'Standardize BPIs'
         self.canRunInBackground = False
         self.cols = [
@@ -515,30 +529,31 @@ class standardizebpi(object):
             if output_raster is not None:
                 if not valid_grid_name(output_raster):
                     parameters[out_param].setErrorMessage(MSG_INVALID_GRID)
-
         if validator:
             return validator(parameters).updateMessages()
 
     def getRasterStats(self, input_raster=None):
         # What kinds of inputs can we expect to compute statistics on?
+        #TODO add Mosaic Dataset, Mosaic Layer
         VALID_RASTER_TYPES = ['RasterDataset', 'RasterLayer']
-
         result = (None, None)
         if input_raster is not None:
             try:
                 raster_desc = arcpy.Describe(input_raster)
                 if raster_desc.dataType in VALID_RASTER_TYPES:
-                    result = (utils.raster_properties(input_raster, 'MEAN'),
-                              utils.raster_properties(input_raster, 'STD'))
+                    raster_path = raster_desc.catalogPath
+                    result = (utils.raster_properties(raster_path, 'MEAN'),
+                              utils.raster_properties(raster_path, 'STD'))
             except:
                 # check for raster existence, when running as a model the 'result'
                 # may be set, but not actually exist, causing these steps to fail.
                 pass
+                #f.write("\n\nFULLEXEC: {}\n".format(sys.exc_info()))
         return result
 
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
-        from scripts import standardize_bpi_grids
+        import standardize_bpi_grids
         # run for broad raster...
         standardize_bpi_grids.main(
             bpi_raster=parameters[0].valueAsText,
@@ -552,6 +567,7 @@ class standardizebpi(object):
 class statisticalaspect(object):
     """ Calculate statistical aspect, uses standard SA function internally."""
     def __init__(self):
+        force_path()
         self.label = u'Calculate Statistical Aspect'
         self.canRunInBackground = False
 
@@ -610,7 +626,7 @@ class statisticalaspect(object):
 
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
-        from scripts import aspect
+        import aspect
         aspect.main(
             bathy=parameters[0].valueAsText,
             out_sin_raster=parameters[1].valueAsText,
@@ -620,6 +636,7 @@ class statisticalaspect(object):
 class btmslope(object):
     """ Calculate slope, uses standard SA function internally."""
     def __init__(self):
+        force_path()
         self.label = u'Calculate Slope'
         self.canRunInBackground = False
 
@@ -664,7 +681,7 @@ class btmslope(object):
 
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
-        from scripts import slope
+        import slope
         slope.main(
             bathy=parameters[0].valueAsText,
             out_raster=parameters[1].valueAsText)
@@ -673,6 +690,7 @@ class btmslope(object):
 class classifyterrain(object):
     """ Classify Benthic Terrain based on classification dictionary. """
     def __init__(self):
+        force_path()
         self.label = u'Classify Benthic Terrain'
         self.canRunInBackground = False
 
@@ -749,7 +767,7 @@ class classifyterrain(object):
             return validator(parameters).updateMessages()
 
     def execute(self, parameters, messages):
-        from scripts import classify
+        import classify
         classify.main(
             classification_file=parameters[0].valueAsText,
             bpi_broad_std=parameters[1].valueAsText,
@@ -763,6 +781,7 @@ class runfullmodel(object):
     """ Run all model steps to classify benthic terrain. """
 
     def __init__(self):
+        force_path()
         self.label = u'Run All Model Steps'
         self.canRunInBackground = False
         self.cols = [
@@ -889,7 +908,7 @@ class runfullmodel(object):
             return validator(parameters).updateMessages()
 
     def execute(self, parameters, messages):
-        from scripts import btm_model
+        import btm_model
         btm_model.main(
             out_workspace=parameters[0].valueAsText,
             input_bathymetry=parameters[1].valueAsText,
@@ -904,6 +923,7 @@ class runfullmodel(object):
 class structureclassification(object):
     """Classify benthic terrain based on structures."""
     def __init__(self):
+        force_path()
         self.label = u'Structure Classification Builder'
         self.canRunInBackground = False
 
@@ -1038,6 +1058,7 @@ class surfacetoplanar(object):
             return
 
     def __init__(self):
+        force_path()
         self.label = u'Surface Area to Planar Area'
         self.description = dedent(
             """Measure terrain ruggedness by calculating the ratio
@@ -1092,7 +1113,7 @@ class surfacetoplanar(object):
 
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
-        from scripts import surface_area_to_planar_area
+        import surface_area_to_planar_area
         surface_area_to_planar_area.main(
             in_raster=parameters[0].valueAsText,
             out_raster=parameters[1].valueAsText,
@@ -1127,6 +1148,7 @@ class terrainruggedness(object):
             return
 
     def __init__(self):
+        force_path()
         self.label = u'Terrain Ruggedness (VRM)'
         self.description = dedent("""\
                 Measure terrain ruggedness by calculating the vecotr ruggedness
@@ -1180,7 +1202,7 @@ class terrainruggedness(object):
 
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
-        from scripts import ruggedness
+        import ruggedness
         ruggedness.main(
             in_raster=parameters[0].valueAsText,
             neighborhood_size=parameters[1].valueAsText,
@@ -1225,6 +1247,7 @@ class depthstatistics(object):
             return
 
     def __init__(self):
+        force_path()
         self.label = u'Depth Statistics'
         self.canRunInBackground = False
 
@@ -1280,7 +1303,7 @@ class depthstatistics(object):
 
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
-        from scripts import depth_statistics
+        import depth_statistics
         depth_statistics.main(
             in_raster=parameters[0].valueAsText,
             neighborhood_size=parameters[1].valueAsText,
