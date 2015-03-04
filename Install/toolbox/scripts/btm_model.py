@@ -37,10 +37,6 @@ def main(out_workspace, input_bathymetry, broad_bpi_inner_radius,
     spreadsheet) to bathymetry derivatives: standardized
     fine- and broad- scale BPI and slope.
     """
-    # Load required toolboxes
-    local_path = os.path.dirname(__file__)
-    btm_toolbox = os.path.abspath(os.path.join(local_path, '..', 'btm.pyt'))
-    arcpy.ImportToolbox(btm_toolbox)
 
     # local variables:
     broad_bpi = os.path.join(out_workspace, "broad_bpi")
@@ -70,8 +66,8 @@ def main(out_workspace, input_bathymetry, broad_bpi_inner_radius,
 
         # Process: Standardize BPIs
         utils.msg("Standardizing BPI rasters...")
-        arcpy.standardizebpi_btm(
-            broad_bpi, "0", "0", broad_std, fine_bpi, "0", "0", fine_std)
+        standardize_bpi.main(broad_bpi, broad_std)
+        standardize_bpi.main(fine_bpi, fine_std)
 
         # Process: Calculate Slope
         slope.main(input_bathymetry, slope_rast)
