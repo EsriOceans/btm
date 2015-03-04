@@ -6,7 +6,7 @@ import arcpy
 import pythonaddins
 
 # enable local imports
-local_path = os.path.dirname(__file__)
+local_path = os.path.abspath(os.path.dirname(__file__))
 btm_toolbox = os.path.join(local_path, "toolbox", "btm.pyt")
 
 
@@ -43,10 +43,9 @@ class ButtonRunBTMSteps(object):
 
     def onClick(self):
         tool_dialog(btm_toolbox, 'runfullmodel')
-        # XXX: trying to call multiple tools just kills ArcMap.
+        # TODO: trying to call multiple tools kills ArcMap.
         # adding a sleep() just slows down the train wreck. Not yet sure
         # of the best approach to actually get this to work.
-        # Still broken at 10.3
         # tool_dialog(btm_toolbox, 'finescalebpi')
         # tool_dialog(btm_toolbox, 'standardizebpi')
         # update: this bug is documented in NIM085804; no current plans to fix it.
