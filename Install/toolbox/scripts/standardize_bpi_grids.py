@@ -36,9 +36,13 @@ def main(bpi_raster=None, out_raster=None):
         utils.msg(message)
         utils.msg("  input raster: {}\n   output: {}".format(
             bpi_raster, out_raster))
-        bpi_mean = utils.raster_properties(bpi_raster, "MEAN")
+        # convert to a path
+        desc = arcpy.Describe(bpi_raster)
+        bpi_raster_path = desc.catalogPath
+
+        bpi_mean = utils.raster_properties(bpi_raster_path, "MEAN")
         utils.msg("BPI raster mean: {}.".format(bpi_mean))
-        bpi_std_dev = utils.raster_properties(bpi_raster, "STD")
+        bpi_std_dev = utils.raster_properties(bpi_raster_path, "STD")
         utils.msg("BPI raster standard deviation: {}.".format(bpi_std_dev))
 
         # Create the standardized Bathymetric Position Index (BPI) raster
@@ -46,7 +50,7 @@ def main(bpi_raster=None, out_raster=None):
         utils.msg(std_msg)
         arcpy.env.rasterStatistics = "STATISTICS"
         outRaster = Int(Plus(Times(Divide(
-            Minus(bpi_raster, bpi_mean), bpi_std_dev), 100), 0.5))
+            Minus(bpi_raster_path, bpi_mean), bpi_std_dev), 100), 0.5))
         out_raster = utils.validate_path(out_raster)
         outRaster.save(out_raster)
 

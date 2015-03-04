@@ -106,6 +106,11 @@ def save_raster(raster, path):
 
 def raster_properties(input_raster, attribute='MEAN'):
     """ Wrapper for GetRasterProperties_management which does the right thing."""
+
+    # make sure statistics exist, set them if they don't.
+    arcpy.CalculateStatistics_management(
+        input_raster, "1", "1", "#", "SKIP_EXISTING")
+
     attr_obj = arcpy.GetRasterProperties_management(input_raster, attribute)
     attr_val = attr_obj.getOutput(0)
     numeric_attrs = ['MINIMUM', 'MAXIMUM', 'MEAN', 'STD', 'CELLSIZEX', 'CELLSIZEY']
