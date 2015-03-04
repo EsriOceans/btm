@@ -11,8 +11,8 @@ import arcpy
 from arcpy.sa import NbrRectangle, FocalStatistics, Power
 
 # local imports
-import utils
-import config
+import scripts.utils as utils
+import scripts.config as config
 
 # Check out any necessary licenses
 arcpy.CheckOutExtension("Spatial")
@@ -32,9 +32,8 @@ def main(in_raster=None, neighborhood_size=None,
     std_dev_set = set(['Standard Deviation', 'Variance'])
 
     # list stats to be computed
-    stats_msg = ("The following stats will be computed: "
-                 "{}".format(";".join(out_stats)))
-    utils.msg(stats_msg)
+    utils.msg("The following stats will be computed: " + \
+        "{}".format(";".join(out_stats)))
 
     try:
         # initialize our neighborhood

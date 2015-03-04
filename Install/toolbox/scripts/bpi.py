@@ -23,8 +23,8 @@ import arcpy
 from arcpy.sa import NbrAnnulus, Int, Plus, Minus, FocalStatistics
 
 # local imports
-import utils
-import config
+import scripts.utils as utils
+import scripts.config as config
 
 # Check out any necessary licenses
 arcpy.CheckOutExtension("Spatial")

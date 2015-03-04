@@ -13,7 +13,7 @@ import csv
 from xml.dom.minidom import parse
 
 import arcpy
-import config
+import scripts.config as config
 
 # register the default locale
 locale.setlocale(locale.LC_ALL, '')
@@ -278,9 +278,8 @@ class BtmExcelDocument(BtmDocument):
         return None
 
     def classification(self):
-        in_workbook = self.workbook
         result_rows = []
-        for row in in_workbook:
+        for row in self.workbook:
             # replace empty strings with Nones
             row_clean = [None if x == '' else x for x in row]
 
@@ -293,17 +292,18 @@ class BtmExcelDocument(BtmDocument):
              slope_lower, slope_upper, depth_lower, depth_upper) = row_clean
 
             # for now: fake the format used by the XML documents.
-            res_row = {'Class': str(int(class_code)),
-                       'Zone': zone,
-                       'SSB_LowerBounds': broad_lower,
-                       'SSB_UpperBounds': broad_upper,
-                       'LSB_LowerBounds': fine_lower,
-                       'LSB_UpperBounds': fine_upper,
-                       'Slope_LowerBounds': slope_lower,
-                       'Slope_UpperBounds': slope_upper,
-                       'Depth_LowerBounds': depth_lower,
-                       'Depth_UpperBounds': depth_upper}
-            result_rows.append(res_row)
+            result_rows.append({
+                'Class': str(int(class_code)),
+                'Zone': zone,
+                'SSB_LowerBounds': broad_lower,
+                'SSB_UpperBounds': broad_upper,
+                'LSB_LowerBounds': fine_lower,
+                'LSB_UpperBounds': fine_upper,
+                'Slope_LowerBounds': slope_lower,
+                'Slope_UpperBounds': slope_upper,
+                'Depth_LowerBounds': depth_lower,
+                'Depth_UpperBounds': depth_upper
+            })
         return result_rows
 
     def parse_workbook(self, filename):
@@ -360,9 +360,8 @@ class BtmCsvDocument(BtmDocument):
         return None
 
     def classification(self):
-        in_csv = self.csv
         result_rows = []
-        for row in in_csv:
+        for row in self.csv:
             # replace empty strings with Nones
             row_clean = [None if x == '' else x for x in row]
 
@@ -375,7 +374,7 @@ class BtmCsvDocument(BtmDocument):
              slope_lower, slope_upper, depth_lower, depth_upper) = row_clean
 
             # for now: fake the format used by the XML documents.
-            res_row = {
+            result_rows.append({
                 'Class': class_code,
                 'Zone': zone,
                 'SSB_LowerBounds': broad_lower,
@@ -386,8 +385,7 @@ class BtmCsvDocument(BtmDocument):
                 'Slope_UpperBounds': slope_upper,
                 'Depth_LowerBounds': depth_lower,
                 'Depth_UpperBounds': depth_upper
-            }
-            result_rows.append(res_row)
+            })
         return result_rows
 
     def parse_csv(self, filename):

@@ -37,7 +37,8 @@ def triangle_area(side_a, side_b, side_c):
         pp 11-12, Jenness.
 
     ..math:
-    \mathbf{A} = \frac{a \cdot \sqrt{b^2 - \left ( \frac{(a^2 + b^2 - c^2)}{2a}\right )^{2}}}{2}
+    \mathbf{A} = \frac{a \cdot \sqrt{b^2 - \left (
+      \frac{(a^2 + b^2 - c^2)}{2a}\right )^{2}}}{2}
     """
     return \
         ((side_a *
@@ -79,15 +80,14 @@ def main(in_raster=None, out_raster=None, area_raster=None):
     utils.msg("Cell size: {}\nFlat area: {}".format(cell_size, flat_area))
 
     try:
-        """
-        Create a set of shifted grids, with offets n from the origin X:
+        # Create a set of shifted grids, with offets n from the origin X:
 
-                 8 | 7 | 6
-                 --|---|---
-                 5 | X | 4
-                 --|---|---
-                 3 | 2 | 1
-        """
+        #        8 | 7 | 6
+        #        --|---|---
+        #        5 | X | 4
+        #        --|---|---
+        #        3 | 2 | 1
+
         positions = [(1, -1), (0, -1), (-1, -1),
                      (1,  0),          (-1,  0),
                      (1,  1), (0,  1), (-1,  1)]
@@ -163,14 +163,16 @@ def main(in_raster=None, out_raster=None, area_raster=None):
         total_area = (areas[0] + areas[1] + areas[2] + areas[3] +
                       areas[4] + areas[5] + areas[6] + areas[7])
         if area_raster:
-            utils.msg("Saving Surface Area Raster to {}.".format(area_raster))
+            save_msg = "Saving Surface Area Raster to " + \
+                "{}.".format(area_raster)
+            utils.msg(save_msg)
             total_area.save(area_raster)
 
         area_ratio = total_area / cell_size**2
 
         out_raster = utils.validate_path(out_raster)
-        save_msg = ("Saving Surface Area to Planar Area ratio to ",
-                    "{}.".format(out_raster))
+        save_msg = "Saving Surface Area to Planar Area ratio to " + \
+            "{}.".format(out_raster)
         utils.msg(save_msg)
         area_ratio.save(out_raster)
 
@@ -190,9 +192,9 @@ def main(in_raster=None, out_raster=None, area_raster=None):
 if __name__ == '__main__':
     config.mode = 'script'
     if len(sys.argv) == 3:
-        area = None
+        area_param = None
     else:
-        area = sys.argv[3]
+        area_param = sys.argv[3]
     main(in_raster=sys.argv[1],
          out_raster=sys.argv[2],
-         area_raster=area)
+         area_raster=area_param)

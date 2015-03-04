@@ -16,12 +16,13 @@ import os
 import sys
 
 # local imports
-import utils
-import config
+import scripts.utils as utils
+import scripts.config as config
 
-import bpi
-import classify
-import slope
+import scripts.bpi as bpi
+import scripts.classify as classify
+import scripts.slope as slope
+import scripts.standardize_bpi_grids as standardize_bpi
 
 # Check out any necessary licenses
 arcpy.CheckOutExtension("Spatial")
