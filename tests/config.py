@@ -19,5 +19,8 @@ slope_raster = os.path.abspath(os.path.join(data_path, 'slope.tif'))
 broad_std_raster = os.path.abspath(os.path.join(data_path, 'broad_std.tif'))
 fine_std_raster = os.path.abspath(os.path.join(data_path, 'fine_std.tif'))
 
+# an MXD with two bpi layers
+bpi_grids_mxd = os.path.abspath(os.path.join(data_path, 'bpi_grids.mxd'))
+
 pyt_file = os.path.abspath(
     os.path.join(local_path, '..', 'Install', 'toolbox', 'btm.pyt'))

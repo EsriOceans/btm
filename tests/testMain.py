@@ -131,6 +131,53 @@ class TestStandardizeBpiGrids(unittest.TestCase):
     def testStdImport(self):
         self.assertTrue('main' in vars(standardize_bpi_grids))
 
+    def testToolboxImport(self):
+        toolbox = arcpy.ImportToolbox(config.pyt_file)
+        self.assertTrue('standardizebpi' in vars(toolbox))
+
+    def testToolboxRunWithLayers(self):
+        """ Test running the tool against the toolbox version
+        using Layer files."""
+        with TempDir() as d:
+
+            broad_std_raster = os.path.join(d, 'test_broad_std_bpi.tif')
+            fine_std_raster = os.path.join(d, 'test_fine_std_bpi.tif')
+
+            arcpy.env.scratchWorkspace = d
+            arcpy.ImportToolbox(config.pyt_file)
+
+            mxd = arcpy.mapping.MapDocument(config.bpi_grids_mxd)
+            df = arcpy.mapping.ListDataFrames(mxd)[0]
+            layers = arcpy.mapping.ListLayers(df)
+            layer_names = [l.name for l in layers]
+
+            broad_lyr = layers[layer_names.index('broad_bpi')]
+            fine_lyr = layers[layer_names.index('fine_bpi')]
+
+            arcpy.standardizebpi_btm(
+                broad_lyr.dataSource, "0", "0", broad_std_raster,
+                fine_lyr.dataSource, "0", "0", fine_std_raster)
+
+            self.assertTrue(os.path.exists(broad_std_raster))
+            self.assertTrue(os.path.exists(fine_std_raster))
+
+            # Compare to known rasters
+            self.assertAlmostEqual(
+                su.raster_properties(broad_std_raster, "MEAN"),
+                su.raster_properties(config.broad_std_raster, "MEAN"))
+            self.assertAlmostEqual(
+                su.raster_properties(broad_std_raster, "STD"),
+                su.raster_properties(config.broad_std_raster, "STD"))
+
+            self.assertAlmostEqual(
+                su.raster_properties(fine_std_raster, "MEAN"),
+                su.raster_properties(config.fine_std_raster, "MEAN"))
+            self.assertAlmostEqual(
+                su.raster_properties(fine_std_raster, "STD"),
+                su.raster_properties(config.fine_std_raster, "STD"))
+
+            del layers, df, mxd
+
     def testStdRun(self):
         with TempDir() as d:
             in_raster = os.path.join(d, 'test_bpi.tif')
@@ -138,14 +185,15 @@ class TestStandardizeBpiGrids(unittest.TestCase):
 
             # was encountering this: ERROR 000875: Output raster:
             # c:\Users\shau7031\AppData\Local\Temp\tmp8co8nk\FocalSt_bath1's
-            # workspace is an invalid output workspace. Force the workspace to temp:
+            # workspace is an invalid workspace. Force workspace to temp:
             arcpy.env.scratchWorkspace = d
             bpi.main(bathy=config.bathy_raster, inner_radius=10,
                      outer_radius=30, out_raster=in_raster, bpi_type='broad')
 
             self.assertTrue(os.path.exists(in_raster))
 
-            standardize_bpi_grids.main(bpi_raster=in_raster, out_raster=std_raster)
+            standardize_bpi_grids.main(
+                bpi_raster=in_raster, out_raster=std_raster)
             self.assertTrue(os.path.exists(std_raster))
 
             self.assertAlmostEqual(
@@ -154,7 +202,7 @@ class TestStandardizeBpiGrids(unittest.TestCase):
                 su.raster_properties(std_raster, "STD"), 99.655593923183)
 
 
-class TestBpiAspect(unittest.TestCase):
+class TestBpiStatisticalAspect(unittest.TestCase):
 
     """
     aspect.main(bathy=None, out_sin_raster=None, out_cos_raster=None)
@@ -162,6 +210,10 @@ class TestBpiAspect(unittest.TestCase):
 
     def testAspectImport(self):
         self.assertTrue('main' in vars(aspect))
+
+    def testToolboxImport(self):
+        toolbox = arcpy.ImportToolbox(config.pyt_file)
+        self.assertTrue('statisticalaspect' in vars(toolbox))
 
     def testAspectRun(self):
         with TempDir() as d:
@@ -193,6 +245,10 @@ class TestBpiSlope(unittest.TestCase):
     def testSlopeImport(self):
         self.assertTrue('main' in vars(slope))
 
+    def testToolboxImport(self):
+        toolbox = arcpy.ImportToolbox(config.pyt_file)
+        self.assertTrue('btmslope' in vars(toolbox))
+
     def testSlopeRun(self):
         with TempDir() as d:
             slope_raster = os.path.join(d, 'test_slope.tif')
@@ -211,6 +267,10 @@ class TestVrm(unittest.TestCase):
     """
     def testVrmImport(self):
         self.assertTrue('main' in vars(ruggedness))
+
+    def testToolboxImport(self):
+        toolbox = arcpy.ImportToolbox(config.pyt_file)
+        self.assertTrue('terrainruggedness' in vars(toolbox))
 
     def testVrmRun(self):
         with TempDir() as d:
@@ -234,6 +294,10 @@ class TestSaPa(unittest.TestCase):
     """
     def testSaPaImport(self):
         self.assertTrue('main' in vars(surface_area_to_planar_area))
+
+    def testToolboxImport(self):
+        toolbox = arcpy.ImportToolbox(config.pyt_file)
+        self.assertTrue('surfacetoplanar' in vars(toolbox))
 
     def testSaPaRun(self):
         with TempDir() as d:
@@ -291,6 +355,10 @@ class TestDepthStatistics(unittest.TestCase):
     def testDepthStatisticsImport(self):
         self.assertTrue('main' in vars(depth_statistics))
 
+    def testToolboxImport(self):
+        toolbox = arcpy.ImportToolbox(config.pyt_file)
+        self.assertTrue('depthstatistics' in vars(toolbox))
+
     def testDepthStatisticsRun(self):
         with TempDir() as d:
             neighborhood = 3    # 3x3 neighborhood
@@ -331,7 +399,8 @@ class TestRunFullModel(unittest.TestCase):
         # Extract and sum only the first class from the input raster
         #   (raster values of 1).
         remap = arcpy.sa.RemapValue([[1, 1]])
-        remappedRaster = arcpy.sa.Reclassify(in_raster, "Value", remap, "NODATA")
+        remappedRaster = arcpy.sa.Reclassify(
+            in_raster, "Value", remap, "NODATA")
         remapped_numpy = arcpy.RasterToNumPyArray(remappedRaster)
         del remappedRaster
         return remapped_numpy.sum()
@@ -349,6 +418,25 @@ class TestRunFullModel(unittest.TestCase):
             arcpy.env.scratchWorkspace = d
 
             btm_model.main(
+                d, config.bathy_raster, self.broad_inner_rad,
+                self.broad_outer_rad, self.fine_inner_rad, self.fine_outer_rad,
+                config.base_csv, model_output)
+
+            self.assertTrue(os.path.exists(model_output))
+
+            self.csv_mean = su.raster_properties(model_output, "MEAN")
+            self.assertAlmostEqual(self.csv_mean, self.true_mean)
+
+            # count up the number of cells in the first class
+            self.assertEqual(self.sumFirstClass(model_output), 88)
+
+    def testModelExecuteWithCsvFromToolbox(self):
+        with TempDir() as d:
+            model_output = os.path.join(d, 'output_zones.tif')
+            arcpy.env.scratchWorkspace = d
+
+            arcpy.ImportToolbox(config.pyt_file)
+            arcpy.runfullmodel_btm(
                 d, config.bathy_raster, self.broad_inner_rad,
                 self.broad_outer_rad, self.fine_inner_rad, self.fine_outer_rad,
                 config.base_csv, model_output)
@@ -427,8 +515,9 @@ class TestClassifyFgdb(unittest.TestCase):
             # correct the output name.
             classify_raster = os.path.join(fgdb_workspace, 'output_in_fgdb')
             classify.main(
-                config.base_xml, config.broad_std_raster, config.fine_std_raster,
-                config.slope_raster, config.bathy_raster, classify_raster)
+                config.base_xml, config.broad_std_raster,
+                config.fine_std_raster, config.slope_raster,
+                config.bathy_raster, classify_raster)
             # resulting 'fixed' name
             mean = su.raster_properties(classify_raster, "MEAN")
             self.assertAlmostEqual(mean, 5.78153846153846)
