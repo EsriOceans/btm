@@ -107,23 +107,44 @@ def save_raster(raster, path):
 def raster_properties(input_raster, attribute='MEAN'):
     """ Wrapper for GetRasterProperties_management which does the right thing."""
 
-    # make sure statistics exist, set them if they don't.
-    arcpy.CalculateStatistics_management(
-        input_raster, "1", "1", "#", "SKIP_EXISTING")
+    #f = open('C:/temp/btm.log', 'w')
+    # What kinds of inputs can we expect to compute statistics on?
+    #TODO add Mosaic Dataset, Mosaic Layer
+    VALID_RASTER_TYPES = ['RasterDataset', 'RasterLayer']
+    input_raster_path = None
+    if input_raster is not None:
+        try:
+            raster_desc = arcpy.Describe(input_raster)
+            raster_type = raster_desc.dataType
+            #f.write("raster type: {}\n".format(raster_type))
+            if raster_desc.dataType in VALID_RASTER_TYPES:
+                input_raster_path = raster_desc.catalogPath
+                #f.write("got raster path {}\n".format(input_raster_path))
+        except:
+            value = None
 
-    attr_obj = arcpy.GetRasterProperties_management(input_raster, attribute)
-    attr_val = attr_obj.getOutput(0)
-    numeric_attrs = ['MINIMUM', 'MAXIMUM', 'MEAN', 'STD', 'CELLSIZEX', 'CELLSIZEY']
+    if input_raster_path:
+        # make sure statistics exist, set them if they don't.
+        arcpy.CalculateStatistics_management(
+            input_raster_path, "1", "1", "#", "SKIP_EXISTING")
 
-    if config.debug:
-        msg(locale.getlocale())
+        attr_obj = arcpy.GetRasterProperties_management(input_raster_path, attribute)
+        #f.write("asked raster {} for {}, returned {}\n".format(
+        #    input_raster_path, attribute, attr_obj))
+        attr_val = attr_obj.getOutput(0)
+        numeric_attrs = ['MINIMUM', 'MAXIMUM', 'MEAN', 'STD', 'CELLSIZEX', 'CELLSIZEY']
+        #f.write(".".join(locale.getlocale()) + "\n")
+        if config.debug:
+            msg(locale.getlocale())
 
-    if attribute in numeric_attrs:
-        # convert these to locale independent floating point numbers
-        value = locale.atof(attr_val)
-    else:
-        # leave anything else untouched
-        value = attr_val
+        if attribute.upper() in numeric_attrs:
+            # convert these to locale independent floating point numbers
+            value = locale.atof(attr_val)
+        else:
+            # leave anything else untouched
+            value = attr_val
+    #f.write("final value: {}\n".format(value))
+    #f.close()
     return value
 
 
