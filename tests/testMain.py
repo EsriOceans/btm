@@ -1,6 +1,7 @@
 import locale
 import os
 import unittest
+import sys
 import arcpy
 import zipfile
 
@@ -63,6 +64,7 @@ class TestUtilitiesMethods(unittest.TestCase):
     def setUp(self):
         self.mean = -20.619977607194
         self.std = 2.730680267695
+        self.sys_path = sys.path
 
     def testAlternativeDecimalMark(self):
         """ Test a locale which uses "," as its decimal separator."""
@@ -98,9 +100,19 @@ class TestUtilitiesMethods(unittest.TestCase):
         std = su.raster_properties(config.bathy_raster, 'STD')
         self.assertNotAlmostEqual(std, self.std)
 
+    def testAddPaths(self):
+        """An added path should be the first entry in sys.path,
+           and be normalized."""
+        # paths relative to 'Install/toolbox/scripts'
+        images_dir = "../../../Images"
+        su.add_local_paths([images_dir])
+        added_path = sys.path[0]
+        self.assertEqual(os.path.abspath("../Images"), added_path)
+
     def tearDown(self):
         # reset locale
         locale.setlocale(locale.LC_ALL, "")
+        sys.path = self.sys_path
 
 # test individual scripts
 #
