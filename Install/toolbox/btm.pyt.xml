@@ -10,9 +10,9 @@
 			<maxScale>5000</maxScale>
 		</scaleRange>
 		<ArcGISProfile>ItemDescription</ArcGISProfile>
-		<ModDate>20140618</ModDate><ModTime>014117</ModTime></Esri>
+		<ModDate>20150305</ModDate><ModTime>235116</ModTime></Esri>
 	<toolbox alias="btm" name="btm">
-		<arcToolboxHelpPath>c:\apps\arcgis\desktop10.2\Help\gp</arcToolboxHelpPath>
+		<arcToolboxHelpPath>c:\program files (x86)\arcgis\desktop10.3\Help\gp</arcToolboxHelpPath>
 		<toolsets/>
 	</toolbox>
 	<dataIdInfo>
