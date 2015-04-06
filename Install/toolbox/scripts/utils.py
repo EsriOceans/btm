@@ -34,10 +34,17 @@ def msg(output, mtype='message'):
     to standard out. Can handle errors, warnings and messages (default).
     """
     if mtype == 'error':
-        exception_message = "{}: {}".format(type(output).__name__, output)
+        output_type = type(output).__name__
+        if output_type == 'str':
+            exception_message = output
+        else:
+            exception_message = "{}: {}".format(type(output).__name__, output)
         arcpy_messages = arcpy.GetMessages()
         full_traceback = sys.exc_info()[2]
-        tbinfo = traceback.format_tb(full_traceback)[0]
+        if full_traceback:
+            tbinfo = traceback.format_tb(full_traceback)[0]
+        else:
+            tbinfo = '(None)'
         if config.mode == 'script':
             # print the raw exception
             print exception_message
