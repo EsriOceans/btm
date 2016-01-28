@@ -40,7 +40,8 @@ else
 fi
 
 # export the 'clean repository' to get rid of anything which is git ignored
-git archive -o tmp.zip master
+# using third-party git-archive-all, otherwise we miss the datatypes submodule
+git-archive-all tmp.zip
 mkdir tmp
 unzip tmp.zip -d tmp
 

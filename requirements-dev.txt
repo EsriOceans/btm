@@ -1,2 +1,4 @@
 # external libaries used only for tests
 nose
+# used for packaging
+git-archive-all
