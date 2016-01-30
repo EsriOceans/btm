@@ -411,10 +411,10 @@ class TestRunFullModel(unittest.TestCase):
         # Extract and sum only the first class from the input raster
         #   (raster values of 1).
         remap = arcpy.sa.RemapValue([[1, 1]])
-        remappedRaster = arcpy.sa.Reclassify(
+        remapped_raster = arcpy.sa.Reclassify(
             in_raster, "Value", remap, "NODATA")
-        remapped_numpy = arcpy.RasterToNumPyArray(remappedRaster)
-        del remappedRaster
+        remapped_numpy = arcpy.RasterToNumPyArray(remapped_raster)
+        del remapped_raster
         return remapped_numpy.sum()
 
     def testToolboxImport(self):
