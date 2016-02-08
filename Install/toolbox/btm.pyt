@@ -114,6 +114,7 @@ class Toolbox(object):
             terrainruggedness,  # VRM, a measure of roughness
             # Summary Statistics
             depthstatistics,    # depth summary statistics
+            depthstatistics_multiple,
             # Create Classification of Zones/Types
             classifyterrain,    # run classification
             runfullmodel        # run all model steps
@@ -1309,3 +1310,81 @@ class depthstatistics(object):
             neighborhood_size=parameters[1].valueAsText,
             out_workspace=parameters[2].valueAsText,
             out_stats_raw=parameters[3].valueAsText)
+
+class depthstatistics_multiple(object):
+    """ Depth Statistics computes a suite of summary statistics. This initial
+        version works on a set of window sizes.
+    """
+
+    def __init__(self):
+        force_path()
+        self.label = u'Depth Statistics (Multiple)'
+        self.canRunInBackground = False
+
+    def getParameterInfo(self):
+        # Bathymetry_Raster
+        input_raster = arcpy.Parameter()
+        input_raster.name = u'Bathymetry_Raster'
+        input_raster.displayName = u'Bathymetry Raster'
+        input_raster.parameterType = 'Required'
+        input_raster.direction = 'Input'
+        input_raster.datatype = dt.format('Raster Layer')
+
+        # Neighborhood_Size
+        min_neighborhood = arcpy.Parameter()
+        min_neighborhood.name = u'Min_Neighborhood_Size'
+        min_neighborhood.displayName = u'Neighborhood Size (Minimum)'
+        min_neighborhood.parameterType = 'Required'
+        min_neighborhood.direction = 'Input'
+        min_neighborhood.datatype = dt.format('Long')
+
+        max_neighborhood = arcpy.Parameter()
+        max_neighborhood.name = u'Max_Neighborhood_Size'
+        max_neighborhood.displayName = u'Neighborhood Size (Maximum)'
+        max_neighborhood.parameterType = 'Required'
+        max_neighborhood.direction = 'Input'
+        max_neighborhood.datatype = dt.format('Long')
+
+        # Output_Workspace
+        out_workspace = arcpy.Parameter()
+        out_workspace.name = u'Output_Workspace'
+        out_workspace.displayName = u'Output Workspace'
+        out_workspace.parameterType = 'Required'
+        out_workspace.direction = 'Input'
+        out_workspace.datatype = dt.format('Workspace')
+
+        # Statistics to Compute
+        statistics = arcpy.Parameter()
+        statistics.name = u'Statistics_Computed'
+        statistics.displayName = u'Statistics to Compute'
+        statistics.parameterType = 'Required'
+        statistics.direction = 'Input'
+        statistics.datatype = dt.format('String')
+        statistics.multiValue = True
+        statistics.filter.list = ['Mean Depth', 'Variance', 'Standard Deviation']
+
+        return [input_raster, min_neighborhood, max_neighborhood,
+                out_workspace, statistics]
+
+    def isLicensed(self):
+        return True
+
+    def updateParameters(self, parameters):
+        validator = getattr(self, 'ToolValidator', None)
+        if validator:
+            return validator(parameters).updateParameters()
+
+    def updateMessages(self, parameters):
+        validator = getattr(self, 'ToolValidator', None)
+        if validator:
+            return validator(parameters).updateMessages()
+
+    def execute(self, parameters, messages):
+        # run related python script with selected input parameters
+        import depth_statistics_multiple
+        depth_statistics_multiple.main(
+            in_raster=parameters[0].valueAsText,
+            neighborhood_min=parameters[1].valueAsText,
+            neighborhood_max=parameters[2].valueAsText,
+            out_workspace=parameters[3].valueAsText,
+            out_stats_raw=parameters[4].valueAsText)

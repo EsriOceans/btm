@@ -111,6 +111,31 @@ def save_raster(raster, path):
     return arcpy.sa.Raster(path)
 
 
+def check_window_size(neighborhood_min=None, neighborhood_max=None):
+    """Check input neighborhood size. Raster sizes must meet certain criteria."""
+
+    if not isinstance(neighborhood_min, int):
+        n_min = int(neighborhood_min)
+    elif not isinstance(neighborhood_max, int):
+        n_max = int(neighborhood_max)
+    else:
+        n_min = neighborhood_min
+        n_max = neighborhood_max
+
+    input_err = None
+    if n_min < 3:
+        input_err = True
+        err_msg = "Minimum window size is 3."
+
+    if n_max and n_max <= n_min:
+        input_err = True
+        err_msg = "Maximum window size must be greater than minimum."
+
+    if input_err:
+        msg(err_msg, mtype='error')
+        sys.exit()
+
+
 def raster_properties(input_raster, attribute='MEAN'):
     """ Wrapper for GetRasterProperties_management which does the right thing."""
 
