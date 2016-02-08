@@ -18,6 +18,10 @@ import scripts.config as config
 # register the default locale
 locale.setlocale(locale.LC_ALL, '')
 
+# What kinds of inputs can we expect to compute statistics on?
+# TODO add Mosaic Dataset, Mosaic Layer
+VALID_RASTER_TYPES = ['RasterDataset', 'RasterLayer']
+
 
 def add_local_paths(paths):
     """Add a list of paths to the current import path."""
@@ -114,19 +118,16 @@ def save_raster(raster, path):
 def raster_properties(input_raster, attribute='MEAN'):
     """ Wrapper for GetRasterProperties_management which does the right thing."""
 
-    #f = open('C:/temp/btm.log', 'w')
-    # What kinds of inputs can we expect to compute statistics on?
-    #TODO add Mosaic Dataset, Mosaic Layer
-    VALID_RASTER_TYPES = ['RasterDataset', 'RasterLayer']
     input_raster_path = None
     if input_raster is not None:
         try:
             raster_desc = arcpy.Describe(input_raster)
-            raster_type = raster_desc.dataType
-            #f.write("raster type: {}\n".format(raster_type))
+            if config.debug:
+                msg("raster type: {}\n".format(raster_desc.dataType))
             if raster_desc.dataType in VALID_RASTER_TYPES:
                 input_raster_path = raster_desc.catalogPath
-                #f.write("got raster path {}\n".format(input_raster_path))
+                if config.debug:
+                    msg("raster path {}\n".format(input_raster_path))
         except:
             value = None
 
@@ -135,23 +136,42 @@ def raster_properties(input_raster, attribute='MEAN'):
         arcpy.CalculateStatistics_management(
             input_raster_path, "1", "1", "#", "SKIP_EXISTING")
 
-        attr_obj = arcpy.GetRasterProperties_management(input_raster_path, attribute)
-        #f.write("asked raster {} for {}, returned {}\n".format(
-        #    input_raster_path, attribute, attr_obj))
+        attr_obj = arcpy.GetRasterProperties_management(
+            input_raster_path, attribute)
+        """
+        if config.debug:
+            with open("C:\\temp\\btm.log", 'w') as f:
+                f.write("{}:{}\n".format(input_raster_path, attribute))
+                f.write("{}\n".format(attr_obj))
+                f.write("{}\n".format(locale.getlocale()))
+                pr = str(attr_obj.getOutput(0))
+                f.write("{}\n".format(pr))
+                try:
+                    f.write("{}\n".format(locale.atof(pr)))
+                except:
+                    f.write("atof caused exception.")
+        """
         attr_val = attr_obj.getOutput(0)
-        numeric_attrs = ['MINIMUM', 'MAXIMUM', 'MEAN', 'STD', 'CELLSIZEX', 'CELLSIZEY']
-        #f.write(".".join(locale.getlocale()) + "\n")
+        numeric_attrs = ['MINIMUM', 'MAXIMUM', 'MEAN',
+                         'STD', 'CELLSIZEX', 'CELLSIZEY']
         if config.debug:
             msg(locale.getlocale())
 
         if attribute.upper() in numeric_attrs:
             # convert these to locale independent floating point numbers
+
+            if sys.version_info < (3, 0):
+                # py2 locale.* doesn't actually support Unicode. convert.
+                attr_val = str(attr_val)
+
             value = locale.atof(attr_val)
+
         else:
             # leave anything else untouched
             value = attr_val
-    #f.write("final value: {}\n".format(value))
-    #f.close()
+    if config.debug:
+        msg("final raster value: {}\n".format(value))
+
     return value
 
 
@@ -169,9 +189,25 @@ class BtmDocument(object):
     a consistent method to access the data regardless of the input file type.
     """
     def __init__(self, filename):
-        self.filename = filename
-        self.doctype = self._doctype()
-        self.schema = self._get_schema()
+        self._filename = filename
+        self._doctype = self._doctype()
+        self._schema = self._get_schema()
+
+    @property
+    def filename(self):
+        return self._filename
+
+    @filename.setter
+    def filename(self, val):
+        self._filename = val
+
+    @property
+    def doctype(self):
+        return self._doctype
+
+    @property
+    def schema(self):
+        return self._schema
 
     def _doctype(self):
         """Map of 'known' extensions to filetypes."""
@@ -223,8 +259,16 @@ class BtmXmlDocument(BtmDocument):
     from earlier work done by Jen Boulware / NOAA CSC, Oct 2011.
     """
     def __init__(self, filename):
-        self.dom = parse(filename)
-        self.node_dict = self.node_to_dict(self.dom)
+        self._dom = parse(filename)
+        self._node_dict = self._node_to_dict(self.dom)
+
+    @property
+    def dom(self):
+        return self._dom
+
+    @property
+    def node_dict(self):
+        return self._node_dict
 
     def name(self):
         return self.node_dict['ClassDict']['PrjName']
@@ -239,7 +283,7 @@ class BtmXmlDocument(BtmDocument):
         # from the header
         return self.node_dict['ClassDict']['Classifications']['ClassRec']
 
-    def get_text_from_node(self, node):
+    def _get_text_from_node(self, node):
         """ Scans through all children of node and gathers the text."""
         text = ""
         empty_node = node.hasChildNodes()
@@ -253,7 +297,7 @@ class BtmXmlDocument(BtmDocument):
             text = None
         return text
 
-    def node_to_dict(self, node):
+    def _node_to_dict(self, node):
         """ Map node elements to a dictionary of actual values."""
         mapped_nodes = {}
         # holds temporary lists where there are multiple children
@@ -270,16 +314,16 @@ class BtmXmlDocument(BtmDocument):
                     multlist[n.nodeName] = []
             try:
                 # text node
-                text = self.get_text_from_node(n)
+                text = self._get_text_from_node(n)
             except NotTextNodeError:
                 if multiple:
                     # append to our list
-                    multlist[n.nodeName].append(self.node_to_dict(n))
+                    multlist[n.nodeName].append(self._node_to_dict(n))
                     mapped_nodes.update({n.nodeName: multlist[n.nodeName]})
                     continue
                 else:
                     # 'normal' node
-                    mapped_nodes.update({n.nodeName: self.node_to_dict(n)})
+                    mapped_nodes.update({n.nodeName: self._node_to_dict(n)})
                     continue
             # text node
             if multiple:
@@ -371,7 +415,8 @@ class BtmExcelDocument(BtmDocument):
                     break
                 # we have an expected row of classes.
                 else:
-                    result.append([sheet.cell(row, col).value for col in range(10)])
+                    result.append(
+                        [sheet.cell(row, col).value for col in range(10)])
         return result
 
 

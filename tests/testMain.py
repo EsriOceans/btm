@@ -92,13 +92,12 @@ class TestUtilitiesMethods(unittest.TestCase):
         # Windows locales are different than the locale() equivs
         locale.setlocale(locale.LC_ALL, "german_germany")
 
-        # Changing the Python locale doesn't change the ArcGIS locale,
-        # so these will fail.
+        # Fixed the issue properly, these should succeed.
         mean = su.raster_properties(config.bathy_raster, 'MEAN')
-        self.assertNotAlmostEqual(mean, self.mean)
+        self.assertAlmostEqual(mean, self.mean)
 
         std = su.raster_properties(config.bathy_raster, 'STD')
-        self.assertNotAlmostEqual(std, self.std)
+        self.assertAlmostEqual(std, self.std)
 
     def testAddPaths(self):
         """An added path should be the first entry in sys.path,

@@ -533,17 +533,11 @@ class standardizebpi(object):
             return validator(parameters).updateMessages()
 
     def getRasterStats(self, input_raster=None):
-        # What kinds of inputs can we expect to compute statistics on?
-        #TODO add Mosaic Dataset, Mosaic Layer
-        VALID_RASTER_TYPES = ['RasterDataset', 'RasterLayer']
         result = (None, None)
         if input_raster is not None:
             try:
-                raster_desc = arcpy.Describe(input_raster)
-                if raster_desc.dataType in VALID_RASTER_TYPES:
-                    raster_path = raster_desc.catalogPath
-                    result = (utils.raster_properties(raster_path, 'MEAN'),
-                              utils.raster_properties(raster_path, 'STD'))
+                result = (utils.raster_properties(input_raster, 'MEAN'),
+                          utils.raster_properties(input_raster, 'STD'))
             except:
                 # check for raster existence, when running as a model the 'result'
                 # may be set, but not actually exist, causing these steps to fail.
