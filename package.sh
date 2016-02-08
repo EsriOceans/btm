@@ -1,7 +1,9 @@
 #!/bin/env bash
 
 # build and ship a new release of the software
-# tools required: bash, pandoc, zip
+# tools required: bash, pandoc, zip. To install:
+#   choco install -y git pandoc zip
+# then start from within a git bash shell.
 
 # TODO: make this more generic and less tied to BTM exclusively and to
 # promote reuse for other projects.
@@ -41,9 +43,9 @@ fi
 
 # export the 'clean repository' to get rid of anything which is git ignored
 # using third-party git-archive-all, otherwise we miss the datatypes submodule
+# NOTE: only runs in Py3 on Windows, requires os.readlink. Added Py3 env to path.
 git-archive-all tmp.zip
-mkdir tmp
-unzip tmp.zip -d tmp
+unzip tmp.zip
 
 # copy in our toolbox elements to the release so it's usable from the 
 # catalog view.
@@ -58,6 +60,7 @@ cp -p ../btm-tutorial/*.pdf ${TUTORIAL_DIR}/
 cp -Rp ../btm-tutorial/sample_data ${TUTORIAL_DIR}/
 
 # add readme, plain and HTML
+echo "converting documentation to HTML..."
 cp README.md ${RELEASE_DIR}/README.txt
 pandoc -t html README.md > ${RELEASE_DIR}/README.html
 
