@@ -105,8 +105,9 @@ class TestUtilitiesMethods(unittest.TestCase):
         # paths relative to 'Install/toolbox/scripts'
         images_dir = "../../../Images"
         su.add_local_paths([images_dir])
-        added_path = sys.path[0]
-        self.assertEqual(os.path.abspath("../Images"), added_path)
+        added_path = sys.path[0].lower()
+        image_abs_path = os.path.abspath("../Images").lower()
+        self.assertEqual(image_abs_path, added_path)
 
     def tearDown(self):
         # reset locale
