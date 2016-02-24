@@ -28,6 +28,7 @@ MSG_INVALID_GRID = "ESRI GRIDs must >= 13 characters and contain only " \
                    "letters, numbers and the underscore ('_') character."
 MSG_INVALID_RADIUS = "Outer radius must exceed inner radius."
 
+
 def raster_is_grid(raster_path):
     """Detect if the raster path is a file backed GRID file.
 
@@ -86,6 +87,7 @@ def dedent(text, ending='\r\n'):
     text = text.replace('\n', ending)
     return textwrap.dedent(text)
 
+
 def force_path():
     """
     Ensure Path environment is correctly initialized for our classes.
@@ -96,6 +98,7 @@ def force_path():
     to its initial state.
     """
     sys.path.insert(0, scripts_path)
+
 
 class Toolbox(object):
     """ Benthic Terrain Modeler Python toolbox metaclass."""
@@ -541,7 +544,7 @@ class standardizebpi(object):
                 # check for raster existence, when running as a model the 'result'
                 # may be set, but not actually exist, causing these steps to fail.
                 pass
-                #f.write("\n\nFULLEXEC: {}\n".format(sys.exc_info()))
+                # f.write("\n\nFULLEXEC: {}\n".format(sys.exc_info()))
         return result
 
     def execute(self, parameters, messages):
