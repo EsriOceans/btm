@@ -219,17 +219,16 @@ class broadscalebpi(object):
         return True
 
     def updateParameters(self, parameters):
+
         validator = getattr(self, 'ToolValidator', None)
 
-        bathy = parameters[self.cols.index('bathy')]
-        outer_radius = parameters[self.cols.index('outer')]
+        bathy = parameters[self.cols.index('bathy')].valueAsText
+        outer_radius = parameters[self.cols.index('outer')].valueAsText
         scale_factor = parameters[self.cols.index('scale_factor')]
-        ouput_param = parameters[self.cols.index('output')]
-        bathy_path = bathy.valueAsText
 
-        if outer_radius.valueAsText is not None and bathy_path is not None:
+        if outer_radius is not None and bathy is not None:
             # get the cellsize of the input raster; assume same in X & Y
-            cellsize = utils.raster_properties(bathy_path, "CELLSIZEY")
+            cellsize = utils.raster_properties(bathy, "CELLSIZEY")
             # calculate our 'scale factor', modify the param
             scale_factor.value = math.ceil(cellsize * int(outer_radius) - 0.5)
 
@@ -375,15 +374,15 @@ class finescalebpi(object):
     def updateParameters(self, parameters):
         validator = getattr(self, 'ToolValidator', None)
 
-        outer_radius = parameters[self.cols.index('outer')].valueAsText
         bathy = parameters[self.cols.index('bathy')].valueAsText
+        outer_radius = parameters[self.cols.index('outer')].valueAsText
+        scale_factor = parameters[self.cols.index('scale_factor')]
+
         if outer_radius is not None and bathy is not None:
             # get the cellsize of the input raster; assume same in X & Y
             cellsize = utils.raster_properties(bathy, "CELLSIZEY")
-            # calculate our 'scale factor':
-            scale_factor = math.ceil(cellsize * int(outer_radius) - 0.5)
-            # try modifying our scale factor
-            parameters[self.cols.index('scale_factor')].value = scale_factor
+            # calculate our 'scale factor', modify the param
+            scale_factor.value = math.ceil(cellsize * int(outer_radius) - 0.5)
 
         if validator:
             return validator(parameters).updateParameters()
