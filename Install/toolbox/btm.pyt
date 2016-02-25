@@ -127,30 +127,6 @@ class Toolbox(object):
 class broadscalebpi(object):
     """ Calculate Broad-scale Bathymetric Position Index (BPI).  """
 
-    class ToolValidator:
-        """Class for validating a tool's parameter values and controlling
-        the behavior of the tool's dialog."""
-
-        def __init__(self, parameters):
-            """Setup arcpy and the list of tool parameters."""
-            self.params = parameters
-
-        def initializeParameters(self):
-            """Refine the properties of a tool's parameters.  This method is
-            called when the tool is opened."""
-            return
-
-        def updateParameters(self):
-            """Modify the values and properties of parameters before internal
-            validation is performed.  This method is called whenever a parmater
-            has been changed."""
-            return
-
-        def updateMessages(self):
-            """Modify the messages created by internal validation for each tool
-            parameter.  This method is called after internal validation."""
-            return
-
     def __init__(self):
         force_path()
         self.label = u'Build Broad Scale BPI'
@@ -223,8 +199,6 @@ class broadscalebpi(object):
 
     def updateParameters(self, parameters):
 
-        validator = getattr(self, 'ToolValidator', None)
-
         bathy = parameters[self.cols.index('bathy')].valueAsText
         outer_radius = parameters[self.cols.index('outer')].valueAsText
         scale_factor = parameters[self.cols.index('scale_factor')]
@@ -235,11 +209,9 @@ class broadscalebpi(object):
             # calculate our 'scale factor', modify the param
             scale_factor.value = math.ceil(cellsize * int(outer_radius) - 0.5)
 
-        if validator:
-            return validator(parameters).updateParameters()
+        return
 
     def updateMessages(self, parameters):
-        validator = getattr(self, 'ToolValidator', None)
         inner_radius = parameters[1].valueAsText
         outer_radius = parameters[2].valueAsText
         output = parameters[4].valueAsText
@@ -256,8 +228,7 @@ class broadscalebpi(object):
             if not valid_grid_name(output):
                 parameters[4].setErrorMessage(MSG_INVALID_GRID)
 
-        if validator:
-            return validator(parameters).updateMessages()
+        return
 
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
@@ -272,30 +243,6 @@ class broadscalebpi(object):
 
 class finescalebpi(object):
     """ Calculate Fine-scale Bathymetric Position Index (BPI).  """
-
-    class ToolValidator:
-        """Class for validating a tool's parameter values and controlling
-        the behavior of the tool's dialog."""
-
-        def __init__(self, parameters):
-            """Setup arcpy and the list of tool parameters."""
-            self.params = parameters
-
-        def initializeParameters(self):
-            """Refine the properties of a tool's parameters.  This method is
-            called when the tool is opened."""
-            return
-
-        def updateParameters(self):
-            """Modify the values and properties of parameters before internal
-            validation is performed.  This method is called whenever a parmater
-            has been changed."""
-            return
-
-        def updateMessages(self):
-            """Modify the messages created by internal validation for each tool
-            parameter.  This method is called after internal validation."""
-            return
 
     def __init__(self):
         force_path()
@@ -375,7 +322,6 @@ class finescalebpi(object):
         return True
 
     def updateParameters(self, parameters):
-        validator = getattr(self, 'ToolValidator', None)
 
         bathy = parameters[self.cols.index('bathy')].valueAsText
         outer_radius = parameters[self.cols.index('outer')].valueAsText
@@ -387,11 +333,9 @@ class finescalebpi(object):
             # calculate our 'scale factor', modify the param
             scale_factor.value = math.ceil(cellsize * int(outer_radius) - 0.5)
 
-        if validator:
-            return validator(parameters).updateParameters()
+        return
 
     def updateMessages(self, parameters):
-        validator = getattr(self, 'ToolValidator', None)
         inner_radius = parameters[1].valueAsText
         outer_radius = parameters[2].valueAsText
         output = parameters[4].valueAsText
@@ -407,8 +351,7 @@ class finescalebpi(object):
             if not valid_grid_name(output):
                 parameters[4].setErrorMessage(MSG_INVALID_GRID)
 
-        if validator:
-            return validator(parameters).updateMessages()
+        return
 
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
@@ -509,12 +452,9 @@ class standardizebpi(object):
         return True
 
     def updateParameters(self, parameters):
-        validator = getattr(self, 'ToolValidator', None)
-        if validator:
-            return validator(parameters).updateParameters()
+        return
 
     def updateMessages(self, parameters):
-        validator = getattr(self, 'ToolValidator', None)
 
         for label in ['broad', 'fine']:
             input_raster = parameters[self.cols.index(label + '_input')].valueAsText
@@ -531,8 +471,7 @@ class standardizebpi(object):
             if output_raster is not None:
                 if not valid_grid_name(output_raster):
                     parameters[out_param].setErrorMessage(MSG_INVALID_GRID)
-        if validator:
-            return validator(parameters).updateMessages()
+        return
 
     def getRasterStats(self, input_raster=None):
         result = (None, None)
@@ -598,13 +537,9 @@ class statisticalaspect(object):
         return True
 
     def updateParameters(self, parameters):
-        validator = getattr(self, 'ToolValidator', None)
-        if validator:
-            return validator(parameters).updateParameters()
+        return
 
     def updateMessages(self, parameters):
-        validator = getattr(self, 'ToolValidator', None)
-
         output_sin = parameters[1].valueAsText
         output_cos = parameters[2].valueAsText
 
@@ -616,9 +551,7 @@ class statisticalaspect(object):
         if output_cos is not None:
             if not valid_grid_name(output_cos):
                 parameters[2].setErrorMessage(MSG_INVALID_GRID)
-
-        if validator:
-            return validator(parameters).updateMessages()
+        return
 
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
@@ -659,21 +592,16 @@ class btmslope(object):
         return True
 
     def updateParameters(self, parameters):
-        validator = getattr(self, 'ToolValidator', None)
-        if validator:
-            return validator(parameters).updateParameters()
+        return
 
     def updateMessages(self, parameters):
-        validator = getattr(self, 'ToolValidator', None)
-
         output = parameters[1].valueAsText
         # validate the output GRID name
         if output is not None:
             if not valid_grid_name(output):
                 parameters[1].setErrorMessage(MSG_INVALID_GRID)
 
-        if validator:
-            return validator(parameters).updateMessages()
+        return
 
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
@@ -747,20 +675,15 @@ class classifyterrain(object):
         return True
 
     def updateParameters(self, parameters):
-        validator = getattr(self, 'ToolValidator', None)
-        if validator:
-            return validator(parameters).updateParameters()
+        return
 
     def updateMessages(self, parameters):
-        validator = getattr(self, 'ToolValidator', None)
         output = parameters[5].valueAsText
         # validate the output GRID name
         if output is not None:
             if not valid_grid_name(output):
                 parameters[5].setErrorMessage(MSG_INVALID_GRID)
-
-        if validator:
-            return validator(parameters).updateMessages()
+        return
 
     def execute(self, parameters, messages):
         import classify
@@ -875,7 +798,6 @@ class runfullmodel(object):
         return is_valid
 
     def updateParameters(self, parameters):
-        validator = getattr(self, 'ToolValidator', None)
         out_workspace = parameters[self.cols.index('out_workspace')].valueAsText
         zones_raster = parameters[self.cols.index('zones_raster')].valueAsText
 
@@ -884,12 +806,9 @@ class runfullmodel(object):
         if out_workspace is not None and zones_raster is None:
             parameters[self.cols.index('zones_raster')].value = \
                 os.path.join(out_workspace, "output_zones")
-        if validator:
-            return validator(parameters).updateParameters()
+        return
 
     def updateMessages(self, parameters):
-        validator = getattr(self, 'ToolValidator', None)
-
         broad_inner = parameters[self.cols.index('broad_bpi_inner')]
         broad_outer = parameters[self.cols.index('broad_bpi_outer')]
         if not self.validateRadius(broad_inner, broad_outer):
@@ -900,8 +819,7 @@ class runfullmodel(object):
         if not self.validateRadius(fine_inner, fine_outer):
             fine_inner.setErrorMessage(MSG_INVALID_RADIUS)
 
-        if validator:
-            return validator(parameters).updateMessages()
+        return
 
     def execute(self, parameters, messages):
         import btm_model
@@ -1014,14 +932,10 @@ class structureclassification(object):
         return True
 
     def updateParameters(self, parameters):
-        validator = getattr(self, 'ToolValidator', None)
-        if validator:
-            return validator(parameters).updateParameters()
+        return
 
     def updateMessages(self, parameters):
-        validator = getattr(self, 'ToolValidator', None)
-        if validator:
-            return validator(parameters).updateMessages()
+        return
 
     def execute(self, parameters, messages):
         pass
@@ -1029,29 +943,6 @@ class structureclassification(object):
 
 class surfacetoplanar(object):
     """Compute Surface Area to Planar Area (ratio)."""
-    class ToolValidator:
-        """Class for validating a tool's parameter values and controlling
-        the behavior of the tool's dialog."""
-
-        def __init__(self, parameters):
-            """Setup arcpy and the list of tool parameters."""
-            self.params = parameters
-
-        def initializeParameters(self):
-            """Refine the properties of a tool's parameters.  This method is
-            called when the tool is opened."""
-            return
-
-        def updateParameters(self):
-            """Modify the values and properties of parameters before internal
-            validation is performed.  This method is called whenever a parmater
-            has been changed."""
-            return
-
-        def updateMessages(self):
-            """Modify the messages created by internal validation for each tool
-            parameter.  This method is called after internal validation."""
-            return
 
     def __init__(self):
         force_path()
@@ -1093,19 +984,15 @@ class surfacetoplanar(object):
         return True
 
     def updateParameters(self, parameters):
-        validator = getattr(self, 'ToolValidator', None)
-        if validator:
-            return validator(parameters).updateParameters()
+        return
 
     def updateMessages(self, parameters):
-        validator = getattr(self, 'ToolValidator', None)
         output = parameters[1].valueAsText
         # validate the output GRID name
         if output is not None:
             if not valid_grid_name(output):
                 parameters[1].setErrorMessage(MSG_INVALID_GRID)
-        if validator:
-            return validator(parameters).updateMessages()
+        return
 
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
@@ -1118,30 +1005,6 @@ class surfacetoplanar(object):
 
 class terrainruggedness(object):
     """Compute Terrain Ruggedness Measure (VRM)."""
-
-    class ToolValidator:
-        """Class for validating a tool's parameter values and controlling
-        the behavior of the tool's dialog."""
-
-        def __init__(self, parameters):
-            """Setup arcpy and the list of tool parameters."""
-            self.params = parameters
-
-        def initializeParameters(self):
-            """Refine the properties of a tool's parameters.  This method is
-            called when the tool is opened."""
-            return
-
-        def updateParameters(self):
-            """Modify the values and properties of parameters before internal
-            validation is performed.  This method is called whenever a parmater
-            has been changed."""
-            return
-
-        def updateMessages(self):
-            """Modify the messages created by internal validation for each tool
-            parameter.  This method is called after internal validation."""
-            return
 
     def __init__(self):
         force_path()
@@ -1182,19 +1045,15 @@ class terrainruggedness(object):
         return True
 
     def updateParameters(self, parameters):
-        validator = getattr(self, 'ToolValidator', None)
-        if validator:
-            return validator(parameters).updateParameters()
+        return
 
     def updateMessages(self, parameters):
-        validator = getattr(self, 'ToolValidator', None)
         output = parameters[2].valueAsText
         # validate the output GRID name
         if output is not None:
             if not valid_grid_name(output):
                 parameters[2].setErrorMessage(MSG_INVALID_GRID)
-        if validator:
-            return validator(parameters).updateMessages()
+        return
 
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
@@ -1217,30 +1076,6 @@ class depthstatistics(object):
         blocks within the data. see 'rugosity.py' script an example of this
         approach, can use NumPyArrayToRaster and vice versa.
     """
-
-    class ToolValidator:
-        """Class for validating a tool's parameter values and controlling
-        the behavior of the tool's dialog."""
-
-        def __init__(self, parameters):
-            """Setup arcpy and the list of tool parameters."""
-            self.params = parameters
-
-        def initializeParameters(self):
-            """Refine the properties of a tool's parameters.  This method is
-            called when the tool is opened."""
-            return
-
-        def updateParameters(self):
-            """Modify the values and properties of parameters before internal
-            validation is performed.  This method is called whenever a parmater
-            has been changed."""
-            return
-
-        def updateMessages(self):
-            """Modify the messages created by internal validation for each tool
-            parameter.  This method is called after internal validation."""
-            return
 
     def __init__(self):
         force_path()
@@ -1288,14 +1123,10 @@ class depthstatistics(object):
         return True
 
     def updateParameters(self, parameters):
-        validator = getattr(self, 'ToolValidator', None)
-        if validator:
-            return validator(parameters).updateParameters()
+        return
 
     def updateMessages(self, parameters):
-        validator = getattr(self, 'ToolValidator', None)
-        if validator:
-            return validator(parameters).updateMessages()
+        return
 
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
