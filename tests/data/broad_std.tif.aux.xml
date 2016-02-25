@@ -6,6 +6,16 @@
     <MDI key="PyramidResamplingType">NEAREST</MDI>
   </Metadata>
   <PAMRasterBand band="1">
+    <Histograms>
+      <HistItem>
+        <HistMin>-198</HistMin>
+        <HistMax>284</HistMax>
+        <BucketCount>256</BucketCount>
+        <IncludeOutOfRange>1</IncludeOutOfRange>
+        <Approximate>0</Approximate>
+        <HistCounts>93|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|321|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|667|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|1280|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|457|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|286|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|301|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|137|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|33</HistCounts>
+      </HistItem>
+    </Histograms>
     <GDALRasterAttributeTable>
       <FieldDefn index="0">
         <Name>Rowid</Name>
@@ -69,13 +79,14 @@
       </Row>
     </GDALRasterAttributeTable>
     <Metadata>
-      <MDI key="STATISTICS_MINIMUM">-198</MDI>
+      <MDI key="STATISTICS_COVARIANCES">9931.237400182357</MDI>
+      <MDI key="STATISTICS_EXCLUDEDVALUES"></MDI>
       <MDI key="STATISTICS_MAXIMUM">284</MDI>
       <MDI key="STATISTICS_MEAN">0.67160839160839</MDI>
-      <MDI key="STATISTICS_STDDEV">99.655593923183</MDI>
+      <MDI key="STATISTICS_MINIMUM">-198</MDI>
       <MDI key="STATISTICS_SKIPFACTORX">1</MDI>
       <MDI key="STATISTICS_SKIPFACTORY">1</MDI>
-      <MDI key="STATISTICS_EXCLUDEDVALUES"></MDI>
+      <MDI key="STATISTICS_STDDEV">99.655593923183</MDI>
     </Metadata>
   </PAMRasterBand>
 </PAMDataset>
