@@ -73,6 +73,13 @@ class TestUtilitiesMethods(unittest.TestCase):
         # and convert to the appropriate locale name.
         locale.setlocale(locale.LC_ALL, "german_germany")
 
+        decimal_pt = locale.localeconv()['decimal_point']
+        self.assertEqual(decimal_pt, ',')
+
+        lc = locale.getlocale()
+        self.assertEqual(lc[0], 'de_DE')
+        self.assertEqual(lc[1], 'cp1252')
+
         # two tests to make sure that radix parsing is happening as expected
         self.assertEqual(locale.atof("-11,00"), -11.0)
         self.assertEqual(locale.atof("-11.000,50"), -11000.5)
@@ -92,7 +99,10 @@ class TestUtilitiesMethods(unittest.TestCase):
         # Windows locales are different than the locale() equivs
         locale.setlocale(locale.LC_ALL, "german_germany")
 
-        # Fixed the issue properly, these should succeed.
+        # force reload utils after locale is set; otherwise it'll set it
+        # internally.
+        reload(su)
+
         mean = su.raster_properties(config.bathy_raster, 'MEAN')
         self.assertAlmostEqual(mean, self.mean)
 
@@ -389,7 +399,7 @@ class TestDepthStatistics(unittest.TestCase):
 
             for (prefix, expected_value) in mean_depths.items():
                 raster_path = os.path.join(
-                        d, "{0}_{1:03d}.tif".format(prefix, neighborhood))
+                    d, "{0}_{1:03d}.tif".format(prefix, neighborhood))
                 self.assertTrue(os.path.exists(raster_path))
                 self.assertAlmostEqual(
                     su.raster_properties(raster_path, 'MEAN'), expected_value)
