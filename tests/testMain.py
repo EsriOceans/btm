@@ -383,15 +383,16 @@ class TestDepthStatistics(unittest.TestCase):
             # mean of depth summary rasters
             mean_depths = {
                 'meandepth': -20.56248074571827,
-                'stdevdepth': 0.2946229406453136,
+                'stddevdepth': 0.2946229406453136,
                 'vardepth': 0.1281792675921596
             }
 
-            for (stat, mean_value) in mean_depths.items():
-                raster = os.path.join(d, stat)
-                self.assertTrue(os.path.exists(raster))
+            for (prefix, expected_value) in mean_depths.items():
+                raster_path = os.path.join(
+                        d, "{0}_{1:03d}.tif".format(prefix, neighborhood))
+                self.assertTrue(os.path.exists(raster_path))
                 self.assertAlmostEqual(
-                    su.raster_properties(raster, "MEAN"), mean_value)
+                    su.raster_properties(raster_path, 'MEAN'), expected_value)
 
 
 class TestRunFullModel(unittest.TestCase):

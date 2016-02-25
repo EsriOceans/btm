@@ -43,7 +43,7 @@ def main(in_raster=None, neighborhood_size=None,
             utils.msg("Calculating neighborhood...")
         neighborhood = NbrRectangle(
             neighborhood_size, neighborhood_size, "CELL")
-        n_label = "{0:03d}".format(neighborhood_size)
+        n_label = "{:03d}".format(int(neighborhood_size))
 
         if mean_set.intersection(out_stats):
             if verbose:
