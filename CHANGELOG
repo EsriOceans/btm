@@ -1,3 +1,4 @@
+3.0-rc-6: fix broad-scale validation error, locale issue, remove unused validator.
 3.0-rc-5: fix locale issues.
 3.0-rc-4: fix missing datatypes module in Python toolbox.
 3.0-rc-3: robustness improvements to Suface Area to Planar Area tool, updated documentation, simplify VRM script.
