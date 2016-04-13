@@ -112,7 +112,7 @@ class Toolbox(object):
             standardizebpi,     # convert BPI values to standardized scores
             # Geomorphology Operations
             btmslope,           # compute slope
-            statisticalaspect,  # break aspect up trignometrically
+            statisticalaspect,  # break aspect up trigonometrically
             surfacetoplanar,    # compare surface area to planar area
             terrainruggedness,  # VRM, a measure of roughness
             # Summary Statistics
@@ -132,7 +132,7 @@ class broadscalebpi(object):
         self.label = u'Build Broad Scale BPI'
         self.description = dedent("""\
                 The concept of bathymetric position is central to the benthic
-                terrain classification process that is utilized by the BTM.
+                terrain classification process that is utilized by BTM.
                 Bathymetric Position Index (BPI) is a measure of where a
                 referenced location is relative to the locations surrounding it.
                 BPI is derived from an input bathymetric data set and itself is
@@ -1010,7 +1010,7 @@ class terrainruggedness(object):
         force_path()
         self.label = u'Terrain Ruggedness (VRM)'
         self.description = dedent("""\
-                Measure terrain ruggedness by calculating the vecotr ruggedness
+                Measure terrain ruggedness by calculating the vector ruggedness
                 measure (VRM), as described in Sappington et al, 2007.""")
         self.canRunInBackground = False
 
