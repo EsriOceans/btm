@@ -970,6 +970,14 @@ class surfacetoplanar(object):
         output_raster.direction = 'Output'
         output_raster.datatype = dt.format('Raster Dataset')
 
+        #ACR Correction
+        acr_correction = arcpy.Parameter()
+        output_raster.name = u'ACR_Correction'
+        output_raster.displayName = u'Correct Planar Area for Slope'
+        output_raster.parameterType = 'Required'
+        output_raster.direction = 'Input'
+        output_raster.datatype = dt.format('Boolean')
+
         # Area_Raster
         area_raster = arcpy.Parameter()
         area_raster.name = u'Area_Raster'
@@ -978,7 +986,7 @@ class surfacetoplanar(object):
         area_raster.direction = 'Output'
         area_raster.datatype = dt.format('Raster Dataset')
 
-        return [input_raster, output_raster, area_raster]
+        return [input_raster, output_raster, acr_correction, area_raster]
 
     def isLicensed(self):
         return True
@@ -1000,7 +1008,8 @@ class surfacetoplanar(object):
         surface_area_to_planar_area.main(
             in_raster=parameters[0].valueAsText,
             out_raster=parameters[1].valueAsText,
-            area_raster=parameters[2].valueAsText)
+            acr_correction=parameters[2].valueAsText,
+            area_raster=parameters[3].valueAsText)
 
 
 class terrainruggedness(object):
