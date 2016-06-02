@@ -1005,6 +1005,7 @@ class surfacetoplanar(object):
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
         import surface_area_to_planar_area
+        reload(surface_area_to_planar_area)
         surface_area_to_planar_area.main(
             in_raster=parameters[0].valueAsText,
             out_raster=parameters[1].valueAsText,
