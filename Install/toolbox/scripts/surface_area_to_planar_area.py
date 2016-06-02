@@ -169,9 +169,11 @@ def main(in_raster=None, out_raster=None, acr_correction = None, area_raster=Non
             total_area.save(area_raster)
 
         if not acr_correction:
+            utils.msg("Calculating ratio with uncorrected planar area.")
             area_ratio = total_area / cell_size**2
 
         elif acr_correction:
+            utils.msg("Calculating ratio with slope-corrected planar area.")
             slope_raster = arcpy.sa.Slope(in_raster, "DEGREE", "1")
             planar_area = Divide((cell_size**2),Cos(Times(slope_raster,0.01745)))
             area_ratio = total_area / planar_area
