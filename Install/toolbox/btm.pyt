@@ -972,11 +972,11 @@ class surfacetoplanar(object):
 
         #ACR Correction
         acr_correction = arcpy.Parameter()
-        output_raster.name = u'ACR_Correction'
-        output_raster.displayName = u'Correct Planar Area for Slope'
-        output_raster.parameterType = 'Required'
-        output_raster.direction = 'Input'
-        output_raster.datatype = dt.format('Boolean')
+        acr_correction.name = u'ACR_Correction'
+        acr_correction.displayName = u'Correct Planar Area for Slope'
+        acr_correction.parameterType = 'Required'
+        acr_correction.direction = 'Input'
+        acr_correction.datatype = dt.format('Boolean')
 
         # Area_Raster
         area_raster = arcpy.Parameter()
