@@ -974,7 +974,7 @@ class surfacetoplanar(object):
         acr_correction = arcpy.Parameter()
         acr_correction.name = u'ACR_Correction'
         acr_correction.displayName = u'Correct Planar Area for Slope'
-        acr_correction.parameterType = 'Required'
+        acr_correction.parameterType = 'Optional'
         acr_correction.direction = 'Input'
         acr_correction.datatype = dt.format('Boolean')
 
