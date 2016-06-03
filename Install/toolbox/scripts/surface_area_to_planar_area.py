@@ -175,9 +175,8 @@ def main(in_raster=None, out_raster=None, acr_correction = None, area_raster=Non
         elif acr_correction:
             utils.msg("Calculating ratio with slope-corrected planar area.")
             slope_raster = arcpy.sa.Slope(in_raster, "DEGREE", "1")
-            denom = Cos(slope_raster*0.01745)
-            planar_area = (cell_size**2)/(denom)
-            area_ratio = total_area / planar_area
+            planar_area = Divide(float(cell_size**2),Cos(Times(slope_raster,0.01745))) 
+            area_ratio = Divide(total_area, planar_area)
 
         out_raster = utils.validate_path(out_raster)
         save_msg = "Saving Surface Area to Planar Area ratio to " + \
