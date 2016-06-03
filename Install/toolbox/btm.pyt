@@ -1063,6 +1063,15 @@ class terrainruggedness(object):
         if output is not None:
             if not valid_grid_name(output):
                 parameters[2].setErrorMessage(MSG_INVALID_GRID)
+
+        n_size = parameters[1].valueAsText
+        if n_size is not None:
+            if float(n_size)%2 == 0:
+                parameters[1].setWarningMessage( 
+                    "If an even neighborhood size is used, neighborhood"\
+                    " coordinates will be computed using truncation."\
+                    " Use an odd neighborhood size to avoid unexpected results.")
+            
         return
 
     def execute(self, parameters, messages):
