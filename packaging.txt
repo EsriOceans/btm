@@ -1,0 +1,31 @@
+Need to make sure the config.xml gets updated correctly.
+
+
+Add a new Git tag.
+
+PUSH the new tag to the site:
+
+$ git push --tags origin master
+
+
+Make a release:
+https://developer.github.com/v3/repos/releases/#create-a-release
+
+{
+  "tag_name": "v1.0.0",
+  "target_commitish": "master",
+  "name": "v1.0.0",
+  "body": "Description of what was updated."
+  "draft": false,
+  "prerelease": false
+}
+
+http://www.barrykooij.com/create-github-releases-via-command-line/
+
+Can also link to:
+  https://github.com/EsriOceans/btm/releases/latest
+
+to get the 'latest release', but it's probably better to push it to AGOL.
+
+
+SEE the implementation in r-arcgis-install for how to check releases from GitHub.
