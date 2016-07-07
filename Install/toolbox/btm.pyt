@@ -1236,10 +1236,10 @@ class scalecomparison(object):
 
 
 class multiplescales(object):
-    """ Compute metrics at multiple scales. """
+    """ Calculate metrics at multiple scales. """
     def __init__(self):
         force_path()
-        self.label = u'Compute Metrics At Multiple Scales'
+        self.label = u'Calculate Metrics At Multiple Scales'
         self.canRunInBackground = False
         
     def getParameterInfo(self):
