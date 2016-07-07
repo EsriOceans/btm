@@ -118,6 +118,7 @@ class Toolbox(object):
             # Summary Statistics
             depthstatistics,    # depth summary statistics
             scalecomparison,    # compare scales of analysis
+            multiplescales,      # run tools at multiple scales
             # Create Classification of Zones/Types
             classifyterrain,    # run classification
             runfullmodel        # run all model steps
@@ -1214,9 +1215,6 @@ class scalecomparison(object):
         return [bathy, imgfilter, percentile, minneighborhood,
                 maxneighborhood, out_file]
 
-    def isLicensed(self):
-        return True
-
     def updateParameters(self, parameters):
         if parameters[1].valueAsText.lower() == 'percentile':
             parameters[2].enabled = True
@@ -1235,3 +1233,84 @@ class scalecomparison(object):
             in_raster=parameters[0].valueAsText, img_filter=parameters[1].valueAsText,
             percentile=parameters[2].valueAsText, min_nbhs=parameters[3].valueAsText,
             max_nbhs=parameters[4].valueAsText, out_file=parameters[5].valueAsText)
+
+
+class multiplescales(object):
+    """ Compute metrics at multiple scales. """
+    def __init__(self):
+        force_path()
+        self.label = u'Compute Metrics At Multiple Scales'
+        self.canRunInBackground = False
+        
+    def getParameterInfo(self):
+
+        # Bathymetry raster
+        bathy = arcpy.Parameter()
+        bathy.name = u'Bathymetry_raster'
+        bathy.displayName = u'Bathymetry raster'
+        bathy.parameterType = 'Required'
+        bathy.direction = 'Input'
+        bathy.datatype = dt.format('Raster Layer')
+
+	
+        # Neighborhood_Sizes
+        nbh_sizes = arcpy.Parameter()
+        nbh_sizes.name = u'Neighborhood_Size'
+        nbh_sizes.displayName = u'Neighborhood Size'
+        nbh_sizes.parameterType = 'Required'
+        nbh_sizes.direction = 'Input'
+        nbh_sizes.datatype = dt.format('Long')
+        nbh_sizes.multiValue = True
+	
+        # Metrics to Compute
+        metrics = arcpy.Parameter()
+        metrics.name = u'Statistics_Computed'
+        metrics.displayName = u'Statistics to Compute'
+        metrics.parameterType = 'Required'
+        metrics.direction = 'Input'
+        metrics.datatype = dt.format('String')
+        metrics.multiValue = True
+        metrics.filter.list = ['Mean Depth', 'Variance', 'Standard Deviation',
+                               'Terrain Ruggedness (VRM)']
+
+        # Output Workspace
+        out_workspace = arcpy.Parameter()
+        out_workspace.name = u'Output_Workspace'
+        out_workspace.displayName = u'Output Workspace'
+        out_workspace.parameterType = 'Required'
+        out_workspace.direction = 'Input'
+        out_workspace.datatype = dt.format('Workspace')
+
+        return [bathy, nbh_sizes, metrics, out_workspace]
+        
+    def isLicensed(self):
+        return True
+
+    def updateParameters(self, parameters):
+        return
+
+    def updateMessages(self, parameters):
+        return 
+
+    def execute(self, parameters, messages):
+        import depth_statistics
+        import ruggedness
+     
+        nbh_lst = parameters[1].valueAsText.split(";")
+        metrics_lst = parameters[2].valueAsText.replace("'", '').split(";")
+        stats_set = set(['Mean Depth','Standard Deviation', 'Variance'])
+        vrm_set = set(['Terrain Ruggedness (VRM)'])
+
+        for each in nbh_lst:
+            utils.msg("Computing metrics for neighborhood size {}...".format(each))
+            if stats_set.intersection(metrics_lst):
+                depth_statistics.main(in_raster=parameters[0].valueAsText,
+                                      neighborhood_size=each,
+                                      out_workspace=parameters[3].valueAsText,
+                                      out_stats_raw=parameters[2].valueAsText)
+            if vrm_set.intersection(metrics_lst):
+                n_label = "{:03d}".format(int(each))
+                out_file = "{}\\ruggedness_{}.tif".format(parameters[3].valueAsText, n_label)
+                ruggedness.main(in_raster=parameters[0].valueAsText,
+                                neighborhood_size=each, out_raster=out_file)                    
+        return

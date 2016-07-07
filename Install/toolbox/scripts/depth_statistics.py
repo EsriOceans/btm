@@ -25,6 +25,7 @@ def main(in_raster=None, neighborhood_size=None,
     of cells. Can compute mean, standard deviation, and variance.
     """
     out_stats = out_stats_raw.replace("'", '').split(";")
+    out_stats = list(set(out_stats)-set(['Terrain Ruggedness (VRM)'])) 
     arcpy.env.rasterStatistics = "STATISTICS"
     arcpy.env.compression = 'LZW'  # compress output rasters
 
