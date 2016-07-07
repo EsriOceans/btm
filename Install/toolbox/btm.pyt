@@ -1173,8 +1173,8 @@ class scalecomparison(object):
         imgfilter.parameterType = 'Required'
         imgfilter.direction = 'Input'
         imgfilter.datatype = dt.format('String')
-        imgfilter.value = 'median'
-        imgfilter.filter.list = ['median', 'minimum', 'maximum', 'percentile']
+        imgfilter.value = 'Median'
+        imgfilter.filter.list = ['Median', 'Minimum', 'Maximum', 'Percentile']
 
         # Percentile
         percentile = arcpy.Parameter()
@@ -1218,7 +1218,7 @@ class scalecomparison(object):
         return True
 
     def updateParameters(self, parameters):
-        if parameters[1].valueAsText == 'percentile':
+        if parameters[1].valueAsText.lower() == 'percentile':
             parameters[2].enabled = True
             parameters[2].parameterType = 'Required'
         else:
