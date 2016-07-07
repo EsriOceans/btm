@@ -117,7 +117,7 @@ class Toolbox(object):
             terrainruggedness,  # VRM, a measure of roughness
             # Summary Statistics
             depthstatistics,    # depth summary statistics
-	    scalecomparison, #compare scales of analysis
+            scalecomparison,    # compare scales of analysis
             # Create Classification of Zones/Types
             classifyterrain,    # run classification
             runfullmodel        # run all model steps
@@ -1149,7 +1149,8 @@ class depthstatistics(object):
 
 
 class scalecomparison(object):
-    """ Create a visual aid for easy comparison between statistics computed at different scales """
+    """ Create a visual aid for easy comparison between statistics
+        computed at different scales """
     def __init__(self):
         force_path()
         self.label = u'Compare Scales of Analysis'
@@ -1165,27 +1166,27 @@ class scalecomparison(object):
         bathy.direction = 'Input'
         bathy.datatype = dt.format('Raster Layer')
 
-	# Image Filter
+        # Image Filter
         imgfilter = arcpy.Parameter()
         imgfilter.name = u'Filter'
         imgfilter.displayName = u'Filter'
         imgfilter.parameterType = 'Required'
         imgfilter.direction = 'Input'
         imgfilter.datatype = dt.format('String')
-	imgfilter.value = 'median'
+        imgfilter.value = 'median'
         imgfilter.filter.list = ['median', 'minimum', 'maximum', 'percentile']
 
-	# Percentile
+        # Percentile
         percentile = arcpy.Parameter()
         percentile.name = u'Percentile'
         percentile.displayName = u'Percentile'
         percentile.parameterType = 'Optional'
-	percentile.value = None
+        percentile.value = None
         percentile.direction = 'Input'
         percentile.datatype = dt.format('Long')
-	percentile.enabled = False
-	
-	# Minimum Neighborhood_Size
+        percentile.enabled = False
+
+        # Minimum Neighborhood_Size
         minneighborhood = arcpy.Parameter()
         minneighborhood.name = u'Minimum Neighborhood_Size'
         minneighborhood.displayName = u'Minimum Neighborhood Size'
@@ -1193,44 +1194,44 @@ class scalecomparison(object):
         minneighborhood.direction = 'Input'
         minneighborhood.datatype = dt.format('Long')
 
-	# Maximum Neighborhood_Size
+        # Maximum Neighborhood_Size
         maxneighborhood = arcpy.Parameter()
         maxneighborhood.name = u'Maximum Neighborhood_Size'
         maxneighborhood.displayName = u'Maximum Neighborhood Size'
         maxneighborhood.parameterType = 'Required'
         maxneighborhood.direction = 'Input'
         maxneighborhood.datatype = dt.format('Long')
-	
-	# Output File Name
+
+        # Output File Name
         out_file = arcpy.Parameter()
         out_file.name = u'Output Filename'
         out_file.displayName = u'Output Filename'
         out_file.direction = 'Output'
         out_file.datatype = dt.format('File')
         out_file.parameterType = 'Required'
+        out_file.filter.list = ['pdf', 'png', 'ps', 'svg']
 
-  
-        return [bathy, imgfilter, percentile, minneighborhood, maxneighborhood, out_file]
-        
+        return [bathy, imgfilter, percentile, minneighborhood,
+                maxneighborhood, out_file]
+
     def isLicensed(self):
         return True
 
     def updateParameters(self, parameters):
-	if parameters[1].valueAsText == 'percentile':
-		parameters[2].enabled = True
-		parameters[2].parameterType = 'Required'
-	else:
-		parameters[2].enabled = False
-		parameters[2].parameterType = 'Optional'
+        if parameters[1].valueAsText == 'percentile':
+            parameters[2].enabled = True
+            parameters[2].parameterType = 'Required'
+        else:
+            parameters[2].enabled = False
+            parameters[2].parameterType = 'Optional'
         return
 
-    def updateMessages(self, parameters):           
+    def updateMessages(self, parameters):
         return
-
 
     def execute(self, parameters, messages):
         import scale_comparison
-	scale_comparison.main(
-		in_raster=parameters[0].valueAsText, img_filter=parameters[1].valueAsText,
-		percentile=parameters[2].valueAsText, min_nbhs=parameters[3].valueAsText,
-		max_nbhs=parameters[4].valueAsText, out_file=parameters[5].valueAsText)
+        scale_comparison.main(
+            in_raster=parameters[0].valueAsText, img_filter=parameters[1].valueAsText,
+            percentile=parameters[2].valueAsText, min_nbhs=parameters[3].valueAsText,
+            max_nbhs=parameters[4].valueAsText, out_file=parameters[5].valueAsText)
