@@ -57,11 +57,12 @@ def main(in_raster=None, neighborhood_size=None,
 
         # compute stdev in ths case
         if std_dev_set.intersection(out_stats):
-            if verbose:
+            std_dev = 'Standard Deviation' in out_stats
+            if verbose and std_dev:
                 utils.msg("Calculating depth standard deviation...")
             std_dev_depth = FocalStatistics(in_raster, neighborhood, "STD", "NODATA")
             std_dev_raster = os.path.join(out_workspace, "stddevdepth_{}.tif".format(n_label))
-            if verbose:
+            if verbose and std_dev:
                 utils.msg("saving standard deviation depth to {}".format(std_dev_raster))
             arcpy.CopyRaster_management(std_dev_depth, std_dev_raster)
 
@@ -74,6 +75,8 @@ def main(in_raster=None, neighborhood_size=None,
                 if verbose:
                     utils.msg("saving depth variance to {}".format(var_raster))
                 arcpy.CopyRaster_management(var_depth, var_raster)
+                if not std_dev:
+                    arcpy.Delete_management(std_dev_raster)
 
     except Exception as e:
         utils.msg(e, mtype='error')
