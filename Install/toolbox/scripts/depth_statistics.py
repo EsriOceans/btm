@@ -25,7 +25,7 @@ def main(in_raster=None, neighborhood_size=None,
     of cells. Can compute mean, standard deviation, and variance.
     """
     out_stats = out_stats_raw.replace("'", '').split(";")
-    out_stats = list(set(out_stats)-set(['Terrain Ruggedness (VRM)'])) 
+    out_stats = list(set(out_stats)-set(['Terrain Ruggedness (VRM)']))
     arcpy.env.rasterStatistics = "STATISTICS"
     arcpy.env.compression = 'LZW'  # compress output rasters
 
@@ -35,8 +35,8 @@ def main(in_raster=None, neighborhood_size=None,
 
     # list stats to be computed
     if verbose:
-        utils.msg("The following stats will be computed: " + \
-            "{}".format(";".join(out_stats)))
+        utils.msg("The following stats will be computed: " +
+                  "{}".format(";".join(out_stats)))
 
     try:
         # initialize our neighborhood
@@ -49,8 +49,10 @@ def main(in_raster=None, neighborhood_size=None,
         if mean_set.intersection(out_stats):
             if verbose:
                 utils.msg("Calculating mean depth...")
-            mean_depth = FocalStatistics(in_raster, neighborhood, "MEAN", "NODATA")
-            mean_raster = os.path.join(out_workspace, "meandepth_{}.tif".format(n_label))
+            mean_depth = FocalStatistics(in_raster, neighborhood,
+                                         "MEAN", "NODATA")
+            mean_raster = os.path.join(out_workspace,
+                                       "meandepth_{}.tif".format(n_label))
             if verbose:
                 utils.msg("saving mean depth to {}".format(mean_raster))
             arcpy.CopyRaster_management(mean_depth, mean_raster)
@@ -60,10 +62,13 @@ def main(in_raster=None, neighborhood_size=None,
             std_dev = 'Standard Deviation' in out_stats
             if verbose and std_dev:
                 utils.msg("Calculating depth standard deviation...")
-            std_dev_depth = FocalStatistics(in_raster, neighborhood, "STD", "NODATA")
-            std_dev_raster = os.path.join(out_workspace, "stddevdepth_{}.tif".format(n_label))
+            std_dev_depth = FocalStatistics(in_raster, neighborhood,
+                                            "STD", "NODATA")
+            std_dev_raster = os.path.join(out_workspace,
+                                          "stddevdepth_{}.tif".format(n_label))
             if verbose and std_dev:
-                utils.msg("saving standard deviation depth to {}".format(std_dev_raster))
+                utils.msg("saving standard deviation depth to \
+                          {}".format(std_dev_raster))
             arcpy.CopyRaster_management(std_dev_depth, std_dev_raster)
 
             # no direct variance focal stat, have to stdev^2
@@ -71,7 +76,8 @@ def main(in_raster=None, neighborhood_size=None,
                 if verbose:
                     utils.msg("Calculating depth variance...")
                 var_depth = Power(std_dev_depth, 2)
-                var_raster = os.path.join(out_workspace, "vardepth_{}.tif".format(n_label))
+                var_raster = os.path.join(out_workspace,
+                                          "vardepth_{}.tif".format(n_label))
                 if verbose:
                     utils.msg("saving depth variance to {}".format(var_raster))
                 arcpy.CopyRaster_management(var_depth, var_raster)
