@@ -1209,7 +1209,7 @@ class scalecomparison(object):
         out_file.direction = 'Output'
         out_file.datatype = dt.format('File')
         out_file.parameterType = 'Required'
-        out_file.filter.list = ['pdf', 'png', 'ps', 'svg']
+        out_file.filter.list = ['png', 'pdf', 'ps', 'svg']
 
         return [bathy, imgfilter, percentile, minneighborhood,
                 maxneighborhood, out_file]
