@@ -1264,8 +1264,8 @@ class multiplescales(object):
 	
         # Metrics to Compute
         metrics = arcpy.Parameter()
-        metrics.name = u'Statistics_Computed'
-        metrics.displayName = u'Statistics to Compute'
+        metrics.name = u'Metrics_Computed'
+        metrics.displayName = u'Metrics to Compute'
         metrics.parameterType = 'Required'
         metrics.direction = 'Input'
         metrics.datatype = dt.format('String')
