@@ -1058,12 +1058,12 @@ class terrainruggedness(object):
 
         n_size = parameters[1].valueAsText
         if n_size is not None:
-            if float(n_size)%2 == 0:
-                parameters[1].setWarningMessage( 
+            if float(n_size) % 2 == 0:
+                parameters[1].setWarningMessage(
                     "If an even neighborhood size is used, neighborhood"\
                     " coordinates will be computed using truncation."\
                     " Use an odd neighborhood size to avoid unexpected results.")
-            
+
         return
 
     def execute(self, parameters, messages):
@@ -1237,11 +1237,12 @@ class scalecomparison(object):
 
 class multiplescales(object):
     """ Calculate metrics at multiple scales. """
+
     def __init__(self):
         force_path()
         self.label = u'Calculate Metrics At Multiple Scales'
         self.canRunInBackground = False
-        
+
     def getParameterInfo(self):
 
         # Bathymetry raster
@@ -1252,7 +1253,6 @@ class multiplescales(object):
         bathy.direction = 'Input'
         bathy.datatype = dt.format('Raster Layer')
 
-	
         # Neighborhood_Sizes
         nbh_sizes = arcpy.Parameter()
         nbh_sizes.name = u'Neighborhood_Size'
@@ -1261,7 +1261,7 @@ class multiplescales(object):
         nbh_sizes.direction = 'Input'
         nbh_sizes.datatype = dt.format('Long')
         nbh_sizes.multiValue = True
-	
+
         # Metrics to Compute
         metrics = arcpy.Parameter()
         metrics.name = u'Metrics_Computed'
@@ -1282,7 +1282,7 @@ class multiplescales(object):
         out_workspace.datatype = dt.format('Workspace')
 
         return [bathy, nbh_sizes, metrics, out_workspace]
-        
+
     def isLicensed(self):
         return True
 
@@ -1290,15 +1290,15 @@ class multiplescales(object):
         return
 
     def updateMessages(self, parameters):
-        return 
+        return
 
     def execute(self, parameters, messages):
         import depth_statistics
         import ruggedness
-     
+
         nbh_lst = parameters[1].valueAsText.split(";")
         metrics_lst = parameters[2].valueAsText.replace("'", '').split(";")
-        stats_set = set(['Mean Depth','Standard Deviation', 'Variance'])
+        stats_set = set(['Mean Depth', 'Standard Deviation', 'Variance'])
         vrm_set = set(['Terrain Ruggedness (VRM)'])
 
         for each in nbh_lst:
@@ -1312,5 +1312,5 @@ class multiplescales(object):
                 n_label = "{:03d}".format(int(each))
                 out_file = "{}\\ruggedness_{}.tif".format(parameters[3].valueAsText, n_label)
                 ruggedness.main(in_raster=parameters[0].valueAsText,
-                                neighborhood_size=each, out_raster=out_file)                    
+                                neighborhood_size=each, out_raster=out_file)
         return
