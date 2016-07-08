@@ -24,7 +24,7 @@ def main(in_raster=None, img_filter=None, percentile=None,
         perc = ""
         if percentile is not None:
             perc = "{},".format(percentile)
-        filterexec = "nd.{}_filter(r,{}{})".format(img_filter, perc, size)
+        filterexec = "nd.{}_filter(r,{}{})".format(img_filter.lower(), perc, size)
         med = eval(filterexec)
 
         a = fig.add_subplot(5, 5, i+1)
