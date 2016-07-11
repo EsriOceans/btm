@@ -977,6 +977,7 @@ class surfacetoplanar(object):
         acr_correction.parameterType = 'Optional'
         acr_correction.direction = 'Input'
         acr_correction.datatype = dt.format('Boolean')
+        acr_correction.value = 'True'
 
         # Area_Raster
         area_raster = arcpy.Parameter()
