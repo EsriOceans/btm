@@ -1,94 +1,48 @@
 <?xml version="1.0"?>
-<metadata xml:lang="en">
-	<Esri>
-		<CreaDate>20120901</CreaDate>
-		<CreaTime>02190400</CreaTime>
-		<ArcGISFormat>1.0</ArcGISFormat>
-		<SyncOnce>TRUE</SyncOnce>
-		<scaleRange>
-			<minScale>150000000</minScale>
-			<maxScale>5000</maxScale>
-		</scaleRange>
-		<ArcGISProfile>ItemDescription</ArcGISProfile>
-		<ModDate>20160707</ModDate><ModTime>174416</ModTime></Esri>
-	<toolbox alias="btm" name="btm">
-		<arcToolboxHelpPath>c:\program files (x86)\arcgis\desktop10.4\Help\gp</arcToolboxHelpPath>
-		<toolsets/>
-	</toolbox>
-	<dataIdInfo>
-		<idCitation>
-			<resTitle>btm</resTitle>
-		</idCitation>
-		<idPurp>Tools for classifying and understanding benthic
-    terrain.</idPurp>
-		<searchKeys>
-			<keyword>benthic</keyword>
-			<keyword>terrain</keyword>
-			<keyword>model</keyword>
-			<keyword>science</keyword>
-			<keyword>geomorphology</keyword>
-			<keyword>btm</keyword>
-		</searchKeys>
-	</dataIdInfo>
-	<distInfo>
-		<distributor>
-			<distorFormat>
-				<formatName>ArcToolbox Toolbox</formatName>
-			</distorFormat>
-		</distributor>
-	</distInfo>
-	<mdHrLv>
-		<ScopeCd value="005"/>
-	</mdHrLv>
-	<Binary>
-		<Thumbnail>
-			<Data EsriPropertyType="PictureX">
-      /9j/4AAQSkZJRgABAQEAlgCWAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsK
-      CwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQU
-      FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCABAAEADASIA
-      AhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQA
-      AAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3
-      ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWm
-      p6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEA
-      AwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSEx
-      BhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElK
-      U1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3
-      uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD81vhg
-      szeLIRErMPLbeF/u/wD68Ua/4o1mxv8AUdNkkVJFnZGdFw3HHB7dP1r0PQ/2YPiHputafdWseneZ
-      FOrtJ9qDLCBzucYyV4xgZNfSvww/Z/0rRdfPifxG9rr3i6eTzl2whILf02R+2B87ZNOklVSlF6dz
-      7DB8KZpia3sqtJ00t3JWt6Ld/wBXaPmbwD+zH4g16yg1TxLc/wDCK6Fc4ZTOpa5uB1+SL9cvj15r
-      2bwf8PPAXguyhnXwhJq5TPl6lf8A7+RyOjGPhR9MV6x8Rtlz4o0O03xTPh3aIyZYFiFOR0H1r2Tw
-      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</Data>
-		</Thumbnail>
-	</Binary>
-</metadata>
+<metadata xml:lang="en"><Esri><CreaDate>20120901</CreaDate><CreaTime>02190400</CreaTime><ArcGISFormat>1.0</ArcGISFormat><SyncOnce>TRUE</SyncOnce><scaleRange><minScale>150000000</minScale><maxScale>5000</maxScale></scaleRange><ArcGISProfile>ItemDescription</ArcGISProfile><ModDate>20160712</ModDate><ModTime>153131</ModTime></Esri><toolbox alias="Benthic Terrain Modeler" name="btm"><arcToolboxHelpPath>c:\program files (x86)\arcgis\desktop10.4\Help\gp</arcToolboxHelpPath><toolsets><toolset name="Bathymetric Position Index (BPI)"/><toolset name="Multi-Scale Analysis"/><toolset name="Rugosity"/><toolset name="Surface Derivatives and Statistics"/><toolset name="Terrain Classification"/></toolsets></toolbox><dataIdInfo><idCitation><resTitle>btm</resTitle></idCitation><idPurp>The BTM toolbox for ArcGIS creates a user-defined classification system of benthic terrain. The BTM scripts transform digital elevation data into a classified product for use in research or natural resource management. However, the principles behind the tool are general enough to be used on any digital elevation data. The inclusion of flexible and customizable terrain classifications allows investigators and managers to create terrain maps in a variety of environments. To learn more about the original tool development and its applications in natural resource mapping and coastal management please refer to the BTM document located at the link below.
+</idPurp><searchKeys><keyword>benthic</keyword><keyword>terrain</keyword><keyword>model</keyword><keyword>science</keyword><keyword>geomorphology</keyword><keyword>btm</keyword></searchKeys><idCredit>Wright, D.J., Pendleton, M., Boulware, J., Walbridge, S., Gerlt, B., Eslinger, D., Sampson, D., and Huntley, E. 2012. ArcGIS Benthic Terrain Modeler (BTM), v. 3.0, Environmental Systems Research Institute, NOAA Coastal Services Center, Massachusetts Office of Coastal Zone Management. Available online at http://esriurl.com/5754.</idCredit><idAbs>&lt;DIV STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;The Benthic Terrain Modeler (BTM) toolbox for ArcGIS v10.1 &amp;amp; 10.2 is a collection of Esri® ArcGIS®-based tools that coastal and marine resource managers can use in concert with bathymetric data sets to examine and classify the benthic environment. The BTM toolbox contains a set of customized scripts that allow users to create grids of bathymetric position index (BPI), standardized BPI’s, slope, rugosity, and other geomorphometric measurements from an input bathymetric data set. Additionally, a terrain classification script gives users the freedom to create their own zone and structure classifications and define the relationships that characterize them.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;</idAbs><resConst><Consts><useLimit>&lt;DIV STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;This is an open-source extension for ArcGIS. For technical assistance please contact: Shaun Walbridge swalbridge@esri.com. Licensed under the MPL.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</useLimit></Consts></resConst></dataIdInfo><distInfo><distributor><distorFormat><formatName>ArcToolbox Toolbox</formatName></distorFormat></distributor></distInfo><mdHrLv><ScopeCd value="005"/></mdHrLv><Binary><Thumbnail><Data EsriPropertyType="PictureX">/9j/4AAQSkZJRgABAQEAlgCWAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsK
+CwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQU
+FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCABAAEADASIA
+AhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQA
+AAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3
+ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWm
+p6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEA
+AwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSEx
+BhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElK
+U1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3
+uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD81vhg
+szeLIRErMPLbeF/u/wD68Ua/4o1mxv8AUdNkkVJFnZGdFw3HHB7dP1r0PQ/2YPiHputafdWseneZ
+FOrtJ9qDLCBzucYyV4xgZNfSvww/Z/0rRdfPifxG9rr3i6eTzl2whILf02R+2B87ZNOklVSlF6dz
+7DB8KZpia3sqtJ00t3JWt6Ld/wBXaPmbwD+zH4g16yg1TxLc/wDCK6Fc4ZTOpa5uB1+SL9cvj15r
+2bwf8PPAXguyhnXwhJq5TPl6lf8A7+RyOjGPhR9MV6x8Rtlz4o0O03xTPh3aIyZYFiFOR0H1r2Tw
+l4E0630eP7Svl2bFm8tgu5wO5Y+/TFfn3E3FLyGuqNON2fqH9mZJwxhliK8FOX80tfw2X+XU8P0e
+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</Data></Thumbnail></Binary></metadata>
