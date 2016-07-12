@@ -12,7 +12,7 @@ import math
 import os
 import sys
 import arcpy
-from arcpy.sa import Raster
+from arcpy.sa import Raster, Divide, Cos, Times
 
 # local imports
 import scripts.utils as utils
@@ -46,7 +46,7 @@ def triangle_area(side_a, side_b, side_c):
          / 2)
 
 
-def main(in_raster=None, out_raster=None, area_raster=None):
+def main(in_raster=None, out_raster=None, acr_correction = None, area_raster=None):
     """
     A calculation of rugosity, based on the difference between surface
     area and planar area, as described in Jenness, J. 2002. Surface Areas
@@ -168,7 +168,15 @@ def main(in_raster=None, out_raster=None, area_raster=None):
             utils.msg(save_msg)
             total_area.save(area_raster)
 
-        area_ratio = total_area / cell_size**2
+        if not acr_correction:
+            utils.msg("Calculating ratio with uncorrected planar area.")
+            area_ratio = total_area / cell_size**2
+
+        elif acr_correction:
+            utils.msg("Calculating ratio with slope-corrected planar area.")
+            slope_raster = arcpy.sa.Slope(in_raster, "DEGREE", "1")
+            planar_area = Divide(float(cell_size**2), Cos(Times(slope_raster, 0.01745)))
+            area_ratio = Divide(total_area, planar_area)
 
         out_raster = utils.validate_path(out_raster)
         save_msg = "Saving Surface Area to Planar Area ratio to " + \
