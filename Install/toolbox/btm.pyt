@@ -146,6 +146,7 @@ class broadscalebpi(object):
 
                 A broad-scale BPI data set allows you to identify larger
                 features within the benthic landscape.""")
+        self.category = 'Bathymetric Position Index (BPI)'
         self.canRunInBackground = False
         # parameter names
         self.cols = ['bathy', 'inner', 'outer', 'scale_factor', 'output']
@@ -264,6 +265,7 @@ class finescalebpi(object):
                 A broad-scale BPI data set allows you to identify larger
                 features within the benthic landscape.""")
         self.canRunInBackground = False
+        self.category = 'Bathymetric Position Index (BPI)'
         # parameter names
         self.cols = ['bathy', 'inner', 'outer', 'scale_factor', 'output']
 
@@ -374,6 +376,7 @@ class standardizebpi(object):
         force_path()
         self.label = u'Standardize BPIs'
         self.canRunInBackground = False
+        self.category = 'Bathymetric Position Index (BPI)'
         self.cols = [
             'broad_input', 'broad_mean', 'broad_stddev', 'broad_output',
             'fine_input', 'fine_mean', 'fine_stddev', 'fine_output'
@@ -506,6 +509,7 @@ class statisticalaspect(object):
         force_path()
         self.label = u'Calculate Statistical Aspect'
         self.canRunInBackground = False
+        self.category = 'Surface Derivatives and Statistics'
 
     def getParameterInfo(self):
         # Input_bathymetric_raster
@@ -569,6 +573,7 @@ class btmslope(object):
         force_path()
         self.label = u'Calculate Slope'
         self.canRunInBackground = False
+        self.category = 'Surface Derivatives and Statistics'
 
     def getParameterInfo(self):
         # Input_bathymetric_raster
@@ -618,6 +623,7 @@ class classifyterrain(object):
         force_path()
         self.label = u'Classify Benthic Terrain'
         self.canRunInBackground = False
+        self.category = 'Terrain Classification'
 
     def getParameterInfo(self):
         # Classification Dictionary
@@ -704,6 +710,7 @@ class runfullmodel(object):
         force_path()
         self.label = u'Run All Model Steps'
         self.canRunInBackground = False
+        self.category = 'Terrain Classification'
         self.cols = [
             'out_workspace', 'bathy', 'broad_bpi_inner', 'broad_bpi_outer',
             'fine_bpi_inner', 'fine_bpi_outer', 'class_dict', 'zones_raster'
@@ -841,6 +848,7 @@ class structureclassification(object):
         force_path()
         self.label = u'Structure Classification Builder'
         self.canRunInBackground = False
+        self.category = 'Terrain Classification'
 
     def getParameterInfo(self):
         # Standardized_broad-scale_BPI_raster
@@ -953,6 +961,7 @@ class surfacetoplanar(object):
             between the surface area and the planar area, as described
             in Jenness 2002.""")
         self.canRunInBackground = False
+        self.category = 'Rugosity'
 
     def getParameterInfo(self):
         # Bathymetry_Raster
@@ -1025,6 +1034,7 @@ class terrainruggedness(object):
                 Measure terrain ruggedness by calculating the vector ruggedness
                 measure (VRM), as described in Sappington et al, 2007.""")
         self.canRunInBackground = False
+        self.category = 'Rugosity'
 
     def getParameterInfo(self):
         # Bathymetry_Raster
@@ -1102,6 +1112,7 @@ class depthstatistics(object):
         force_path()
         self.label = u'Depth Statistics'
         self.canRunInBackground = False
+        self.category = 'Surface Derivatives and Statistics'
 
     def getParameterInfo(self):
         # Bathymetry_Raster
@@ -1166,6 +1177,7 @@ class scalecomparison(object):
         force_path()
         self.label = u'Compare Scales of Analysis'
         self.canRunInBackground = False
+        self.category = 'Multi-Scale Analysis'
 
     def getParameterInfo(self):
 
@@ -1252,6 +1264,7 @@ class multiplescales(object):
         force_path()
         self.label = u'Calculate Metrics At Multiple Scales'
         self.canRunInBackground = False
+        self.category = 'Multi-Scale Analysis'
 
     def getParameterInfo(self):
 
