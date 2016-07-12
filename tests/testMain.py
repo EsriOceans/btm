@@ -663,5 +663,45 @@ class TestScaleComparison(unittest.TestCase):
             self.assertTrue(os.path.exists(out_file))
 
 
+class TestMultipleScales(unittest.TestCase):
+    def setUp(self):
+        self.in_raster = config.bathy_raster
+        self.nbh_sizes = '3;13'
+        self.metrics = "'Mean Depth';Variance;"\
+                       "'Standard Deviation';'Terrain Ruggedness (VRM)'"
+
+    def testResultRastersProduced(self):
+        with TempDir() as d:
+            arcpy.ImportToolbox(config.pyt_file)
+            arcpy.multiplescales_btm(self.in_raster,
+                                     self.nbh_sizes, self.metrics, d)
+
+            depth_stats = {
+                'meandepth': -20.56248074571827,
+                'stddevdepth': 0.2946229406453136,
+                'vardepth': 0.1281792675921596
+            }
+
+            for (prefix, expected_value) in depth_stats.items():
+                raster_path = os.path.join(
+                    d, "{0}_{1:03d}.tif".format(prefix, 3))
+                self.assertAlmostEqual(
+                    su.raster_properties(raster_path, 'MEAN'), expected_value)
+
+            vrm_raster = os.path.join(d, 'ruggedness_003.tif')
+            self.assertAlmostEqual(
+                su.raster_properties(vrm_raster, "MEAN"), 0.00062628513039036)
+            self.assertAlmostEqual(
+                su.raster_properties(vrm_raster, "STD"), 0.00087457748556755)
+
+            rast_names = ['meandepth_003.tif', 'stddevdepth_003.tif',
+                          'vardepth_003.tif', 'ruggedness_003.tif',
+                          'meandepth_013.tif', 'stddevdepth_013.tif',
+                          'vardepth_013.tif', 'ruggedness_013.tif']
+
+            for each in rast_names:
+                file_name = os.path.join(d, each)
+                self.assertTrue(os.path.exists(file_name))
+
 if __name__ == '__main__':
     unittest.main()
