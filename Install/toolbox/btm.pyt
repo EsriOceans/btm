@@ -31,8 +31,10 @@ MSG_INVALID_RADIUS = "Outer radius must exceed inner radius."
 
 def raster_is_grid(raster_path):
     """Detect if the raster path is a file backed GRID file.
+
     Arguments:
         raster_path -- raster path name to test
+    
     Returns:
         True if is a GRID file, False otherwise
     """
@@ -56,7 +58,9 @@ def valid_grid_name(raster_path):
     Validate ESRI GRID filenames. The file doesn't exist, so use
     naming to validate a potential name.
     Arguments:
+
         raster_path -- raster path name to validate
+
     Returns:
         valid raster boolean
     """
@@ -87,6 +91,7 @@ def dedent(text, ending='\r\n'):
 def force_path():
     """
     Ensure Path environment is correctly initialized for our classes.
+
     Based on some research, it seems that while the standard imports
     come in fine, anything which alters the sys.path after initialization
     won't be respected by the subsequent `class` calls, and re-initialized
@@ -139,6 +144,7 @@ class broadscalebpi(object):
                 developed by Andrew Weiss during his study of terrestrial
                 watersheds in Central Oregon (Weiss 2001). These applications
                 can be carried into the benthic environment through BPI.
+
                 A broad-scale BPI data set allows you to identify larger
                 features within the benthic landscape.""")
         self.canRunInBackground = False
@@ -255,6 +261,7 @@ class finescalebpi(object):
                 developed by Andrew Weiss during his study of terrestrial
                 watersheds in Central Oregon (Weiss 2001). These applications
                 can be carried into the benthic environment through BPI.
+
                 A broad-scale BPI data set allows you to identify larger
                 features within the benthic landscape.""")
         self.canRunInBackground = False
@@ -1084,6 +1091,7 @@ class depthstatistics(object):
         version works on a fixed window size, but user feedback has indicated
         a more general version which supported multiple window sizes,
         including vector-based ones, would be preferable.
+
         Also, this current version uses focal tools, but could be computed in
         one pass using numpy instead, but memory considerations would need
         to be taken into account, or the algorithm would need to operate on
