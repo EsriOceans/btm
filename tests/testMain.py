@@ -640,5 +640,28 @@ class TestAddin(unittest.TestCase):
         datatype_path = 'Install/toolbox/datatype/datatype.py'
         self.assertTrue(datatype_path in self.addin_zip.namelist())
 
+
+class TestScaleComparison(unittest.TestCase):
+    def setUp(self):
+        self.percentile = 75
+        self.min_nbhs = 3
+        self.max_nbhs = 99
+
+    def testPercentileMakesImage(self):
+        with TempDir() as d:
+            out_file = os.path.join(d, 'contact_sheet_per.png')
+            scale_comparison.main(config.bathy_raster, 'percentile',
+                                  self.percentile, self.min_nbhs,
+                                  self.max_nbhs, out_file)
+            self.assertTrue(os.path.exists(out_file))
+
+    def testMedianMakesImage(self):
+        with TempDir() as d:
+            out_file = os.path.join(d, 'contact_sheet_med.png')
+            scale_comparison.main(config.bathy_raster, 'median', None,
+                                  self.min_nbhs, self.max_nbhs, out_file)
+            self.assertTrue(os.path.exists(out_file))
+
+
 if __name__ == '__main__':
     unittest.main()
