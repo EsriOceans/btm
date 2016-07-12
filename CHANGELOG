@@ -9,3 +9,4 @@
 top-level unit tests.
 3.0-beta-13:
  - fix regression with "classify benthic terrain" step in model; renamed from zoneclassification to classify @aa49aad.
+ - Added option in Surface Area to Planar Area to use slope-corrected Planar Area as described in DuPreez (2014) 
