@@ -321,14 +321,14 @@ class TestSaPa(unittest.TestCase):
         toolbox = arcpy.ImportToolbox(config.pyt_file)
         self.assertTrue('surfacetoplanar' in vars(toolbox))
 
-    def testSaPaRun(self):
+    def testSaPaRunNoCorrection(self):
         with TempDir() as d:
             ratio_raster = os.path.join(d, 'test_sapa_ratio.tif')
             surf_raster = os.path.join(d, 'test_surface_area.tif')
 
             arcpy.env.scratchWorkspace = d
             surface_area_to_planar_area.main(
-                config.bathy_raster, ratio_raster, surf_raster)
+                config.bathy_raster, ratio_raster, False, surf_raster)
 
             self.assertTrue(os.path.exists(ratio_raster))
             self.assertTrue(os.path.exists(surf_raster))
@@ -343,6 +343,28 @@ class TestSaPa(unittest.TestCase):
             self.assertAlmostEqual(
                 su.raster_properties(surf_raster, "STD"), 0.14551573347447)
 
+    def testSaPaRunCorrection(self):
+        with TempDir() as d:
+            ratio_raster = os.path.join(d, 'test_sapa_ratio.tif')
+            surf_raster = os.path.join(d, 'test_surface_area.tif')
+
+            arcpy.env.scratchWorkspace = d
+            surface_area_to_planar_area.main(
+                config.bathy_raster, ratio_raster, True, surf_raster)
+
+            self.assertTrue(os.path.exists(ratio_raster))
+            self.assertTrue(os.path.exists(surf_raster))
+
+            self.assertAlmostEqual(
+                su.raster_properties(ratio_raster, "MEAN"), 1.000616701751028)
+            self.assertAlmostEqual(
+                su.raster_properties(ratio_raster, "STD"), 0.0008445980914179108)
+
+            self.assertAlmostEqual(
+                su.raster_properties(surf_raster, "MEAN"), 25.119343091857)
+            self.assertAlmostEqual(
+                su.raster_properties(surf_raster, "STD"), 0.14551570953239)
+
     def testSaPaRunWithFgdbLocation(self):
         with TempDir() as d:
             fgdb_name = "sapa.gdb"
@@ -356,7 +378,7 @@ class TestSaPa(unittest.TestCase):
 
             arcpy.env.scratchWorkspace = d
             surface_area_to_planar_area.main(
-                config.bathy_raster, ratio_raster, surf_raster)
+                config.bathy_raster, ratio_raster, False, surf_raster)
 
             self.assertAlmostEqual(
                 su.raster_properties(ratio_raster, "MEAN"), 1.0042422342676)
