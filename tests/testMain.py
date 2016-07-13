@@ -18,7 +18,7 @@ utils.add_local_paths(import_paths)
 # now we can import our scripts
 from scripts import bpi, standardize_bpi_grids, btm_model, aspect, \
     slope, ruggedness, depth_statistics, classify, \
-    surface_area_to_planar_area, utils as su
+    surface_area_to_planar_area, scale_comparison, utils as su
 
 
 class TestBtmDocument(unittest.TestCase):
@@ -339,7 +339,7 @@ class TestSaPa(unittest.TestCase):
                 su.raster_properties(ratio_raster, "STD"), 0.0058175502835692)
 
             self.assertAlmostEqual(
-                su.raster_properties(surf_raster, "MEAN"), 25.119343739217)
+                su.raster_properties(surf_raster, "MEAN"), 25.119343091857)
             self.assertAlmostEqual(
                 su.raster_properties(surf_raster, "STD"), 0.14551573347447)
 
@@ -386,7 +386,7 @@ class TestSaPa(unittest.TestCase):
                 su.raster_properties(ratio_raster, "STD"), 0.0058175502835692)
 
             self.assertAlmostEqual(
-                su.raster_properties(surf_raster, "MEAN"), 25.119343739217)
+                su.raster_properties(surf_raster, "MEAN"), 25.119343091857)
             self.assertAlmostEqual(
                 su.raster_properties(surf_raster, "STD"), 0.14551573347447)
 
