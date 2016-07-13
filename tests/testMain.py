@@ -667,7 +667,7 @@ class TestScaleComparison(unittest.TestCase):
     def setUp(self):
         self.percentile = 75
         self.min_nbhs = 3
-        self.max_nbhs = 99
+        self.max_nbhs = 55
 
     def testPercentileMakesImage(self):
         with TempDir() as d:
