@@ -71,10 +71,9 @@ def main(in_raster=None, out_raster=None, acr_correction = None, area_raster=Non
     arcpy.env.overwriteOutput = True
 
     bathy = Raster(in_raster)
-    desc = arcpy.Describe(bathy)
     # get the cell size of the input raster; use same calculation as was
     # performed in BTM v1: (mean_x + mean_y) / 2
-    cell_size = (desc.meanCellWidth + desc.meanCellHeight) / 2.0
+    cell_size = (bathy.meanCellWidth + bathy.meanCellHeight) / 2.0
     corner_dist = math.sqrt(2 * cell_size ** 2)
     flat_area = cell_size ** 2
     utils.msg("Cell size: {}\nFlat area: {}".format(cell_size, flat_area))
