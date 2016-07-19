@@ -1,4 +1,5 @@
 import arcpy
+from arcpy import Raster
 import numpy as np
 import scipy.ndimage as nd
 import scripts.utils as utils
@@ -13,6 +14,8 @@ def main(in_raster=None, img_filter=None, percentile=None,
          min_nbhs=None, max_nbhs=None, out_file=True):
 
     r = arcpy.RasterToNumPyArray(in_raster, "", 200, 200, 0)
+    if r.ndim > 2:
+        r = np.squeeze(r[0,:,:])    
     min_nbhs = int(min_nbhs)
     max_nbhs = int(max_nbhs)
 
