@@ -10,9 +10,12 @@ import sys
 import traceback
 import os
 import csv
+import math
 from xml.dom.minidom import parse
+from netCDF4 import Dataset
 
 import arcpy
+from arcpy import Raster
 import scripts.config as config
 
 # register the default locale
@@ -176,6 +179,71 @@ def raster_properties(input_raster, attribute='MEAN'):
 
 
 # classes
+class BlockProcessor:
+
+    def __init__(self, fileIn):
+        self.fileIn = Raster(fileIn)
+        self.xSize = self.fileIn.meanCellWidth
+        self.ySize = self.fileIn.meanCellHeight
+        self.right = self.fileIn.extent.XMax
+        self.left = self.fileIn.extent.XMin
+        self.bottom = self.fileIn.extent.YMin
+        self.top = self.fileIn.extent.YMax
+        self.width = self.fileIn.width
+        self.height = self.fileIn.height
+        self.noData = self.fileIn.noDataValue
+        arcpy.env.outputCoordinateSystem = self.fileIn
+
+    def computeBlockStatistics(self, func, blockSize, outRast, overlap=0):
+ 
+        msg("Beginning block analysis...")
+        arcpy.env.overwriteOutput = True
+        inNetCDF = str(os.path.join(os.path.split(outRast)[0],r"blockproc_in.nc"))
+        arcpy.RasterToNetCDF_md(self.fileIn, inNetCDF, r"Band1")
+        inFile = Dataset(inNetCDF, mode="a")
+        inDepth = inFile.variables['Band1']
+        outNetCDF = str(os.path.join(os.path.split(outRast)[0],r"blockproc_out.nc"))
+        arcpy.RasterToNetCDF_md(self.fileIn, outNetCDF, r"Band1")
+        outFile = Dataset(outNetCDF, mode="a")
+        outDepth = outFile.variables['Band1']
+        bnum = 0
+        total_blocks = int((math.ceil(((self.right-self.left)/
+                                       self.xSize)/blockSize))*
+                           (math.ceil(((self.top-self.bottom)/
+                                       self.ySize)/blockSize)))
+        x = 0
+        while x < self.width:
+            y = 0
+            while y < self.height:
+                msg("Processing block {} of {} in {}...".format(bnum+1,
+                                                                  total_blocks,
+                                                                  self.fileIn.name))
+                ncols = blockSize + overlap*2
+                nrows = blockSize + overlap*2
+                if (x+ncols)>= self.width:
+                    ncols = self.width-x
+                if (y+nrows)>= self.height:         
+                    nrows = self.height-y
+                syh = y + nrows
+                sxh = x + ncols
+                iyl = y + overlap
+                iyh = y + nrows - overlap
+                ixl = x + overlap
+                ixh = x + ncols - overlap
+                block = inDepth[y:syh,x:sxh]
+                block = func(block, overlap)
+                outDepth[iyl:iyh,ixl:ixh] = block
+                bnum += 1
+                y += blockSize
+            x += blockSize 
+        outDepth[:overlap,:], outDepth[-overlap:,:],\
+                              outDepth[:,:overlap], \
+                              outDepth[:,-overlap:] = (self.noData,)*4
+        msg("Creating result raster...")
+        inFile.close()
+        arcpy.MakeNetCDFRasterLayer_md(outNetCDF, 'Band1', 'x', 'y', outRast) 
+        outFile.close()              
+
 class NotTextNodeError(Exception):
     """Override default handling of 'not text' by minidom."""
     def __init__(self):

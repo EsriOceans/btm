@@ -6,7 +6,9 @@
 # Import system modules
 import os
 import sys
-
+import numpy as np
+import scipy
+from scipy import stats
 import arcpy
 from arcpy.sa import NbrRectangle, FocalStatistics, Power
 
@@ -17,7 +19,28 @@ import scripts.config as config
 # Check out any necessary licenses
 arcpy.CheckOutExtension("Spatial")
 
+def iqr(in_array, overlap):
+    s = in_array.shape
+    nbh_list = []
+    for r in range(0,(overlap*2)+1):
+        for c in range(0,(overlap*2)+1):
+            nbh_list.append(in_array[r:(s[0]-(overlap*2)+r),
+                                     c:(s[1]-(overlap*2)+c)])
+    iqr_array = np.array(nbh_list)
+    iqr_array = np.percentile(iqr_array,75,axis=0) - np.percentile(iqr_array,25,axis=0)
+    return iqr_array
 
+def kurtosis(in_array, nbh):
+    s = in_array.shape
+    nbh_list = []
+    for r in range(0,(overlap*2)+1):
+        for c in range(0,(overlap*2)+1):
+            nbh_list.append(in_array[r:(s[0]-(overlap*2)+r),
+                                     c:(s[1]-(overlap*2)+c)])
+    kurt_array = np.array(nbh_list)
+    kurt_array = scipy.stats.kurtosis(iqr_array,axis=0)
+    return kurt_array
+ 
 def main(in_raster=None, neighborhood_size=None,
          out_workspace=None, out_stats_raw=None, verbose=True):
     """
@@ -32,6 +55,8 @@ def main(in_raster=None, neighborhood_size=None,
     # convert our data to sets for easy comparison
     mean_set = set(['Mean Depth'])
     std_dev_set = set(['Standard Deviation', 'Variance'])
+    iqr_set = set(['Inner-Quartile Range'])
+    kurt_set = set(['Kurtosis'])
 
     # list stats to be computed
     if verbose:
@@ -45,6 +70,7 @@ def main(in_raster=None, neighborhood_size=None,
         neighborhood = NbrRectangle(
             neighborhood_size, neighborhood_size, "CELL")
         n_label = "{:03d}".format(int(neighborhood_size))
+        overlap = int((int(neighborhood_size)/2.0)-0.5)
 
         if mean_set.intersection(out_stats):
             if verbose:
@@ -83,6 +109,23 @@ def main(in_raster=None, neighborhood_size=None,
                 arcpy.CopyRaster_management(var_depth, var_raster)
                 if not std_dev:
                     arcpy.Delete_management(std_dev_raster)
+
+        if iqr_set.intersection(out_stats):
+            if verbose:
+                utils.msg("Calculating depth inner-quartile range...")
+            iqr_raster = os.path.join(out_workspace,
+                                       "iqrdepth_{}.tif".format(n_label))
+            bp = utils.BlockProcessor(in_raster)
+            bp.computeBlockStatistics(iqr, 500, iqr_raster, overlap)
+
+        if kurt_set.intersection(out_stats):
+            if verbose:
+                utils.msg("Calculating depth kurtosis...")
+            kurt_raster = os.path.join(out_workspace,
+                                       "kurtosisdepth_{}.tif".format(n_label))
+            bp = utils.BlockProcessor(in_raster)
+            bp.computeBlockStatistics(kurtosis, 500, kurt_raster, overlap)
+            
 
     except Exception as e:
         utils.msg(e, mtype='error')

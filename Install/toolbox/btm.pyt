@@ -1038,7 +1038,9 @@ class depthstatistics(object):
         statistics.direction = 'Input'
         statistics.datatype = dt.format('String')
         statistics.multiValue = True
-        statistics.filter.list = ['Mean Depth', 'Variance', 'Standard Deviation']
+        statistics.filter.list = ['Mean Depth', 'Variance',
+                                  'Standard Deviation', 'Inner-Quartile Range',
+                                  'Kurtosis']
 
         return [input_raster, neighborhood, out_workspace, statistics]
 
@@ -1052,8 +1054,11 @@ class depthstatistics(object):
         return
 
     def execute(self, parameters, messages):
+        import imp
         # run related python script with selected input parameters
         import depth_statistics
+        imp.reload(utils)
+        imp.reload(depth_statistics)
         depth_statistics.main(
             in_raster=parameters[0].valueAsText,
             neighborhood_size=parameters[1].valueAsText,
