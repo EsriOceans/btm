@@ -241,7 +241,9 @@ class BlockProcessor:
                               outDepth[:,-overlap:] = (self.noData,)*4
         msg("Creating result raster...")
         inFile.close()
-        arcpy.MakeNetCDFRasterLayer_md(outNetCDF, 'Band1', 'x', 'y', outRast) 
+        outFeat = os.path.join(os.path.split(outRast)[0],r"feat.lyr")
+        arcpy.MakeNetCDFFeatureLayer_md(outNetCDF, 'Band1', 'x', 'y', outFeat)
+        arcpy.FeatureToRaster_conversion(outFeat,'Band1',outRast, self.xSize)
         outFile.close()              
 
 class NotTextNodeError(Exception):

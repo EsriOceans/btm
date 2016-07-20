@@ -30,7 +30,7 @@ def iqr(in_array, overlap):
     iqr_array = np.percentile(iqr_array,75,axis=0) - np.percentile(iqr_array,25,axis=0)
     return iqr_array
 
-def kurtosis(in_array, nbh):
+def kurtosis(in_array, overlap):
     s = in_array.shape
     nbh_list = []
     for r in range(0,(overlap*2)+1):
@@ -38,7 +38,7 @@ def kurtosis(in_array, nbh):
             nbh_list.append(in_array[r:(s[0]-(overlap*2)+r),
                                      c:(s[1]-(overlap*2)+c)])
     kurt_array = np.array(nbh_list)
-    kurt_array = scipy.stats.kurtosis(iqr_array,axis=0)
+    kurt_array = scipy.stats.kurtosis(kurt_array,axis=0)
     return kurt_array
  
 def main(in_raster=None, neighborhood_size=None,
