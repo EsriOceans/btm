@@ -6,6 +6,7 @@
 # Import system modules
 import os
 import sys
+import math
 import numpy as np
 import scipy
 from scipy import stats
@@ -116,7 +117,9 @@ def main(in_raster=None, neighborhood_size=None,
             iqr_raster = os.path.join(out_workspace,
                                        "iqrdepth_{}.tif".format(n_label))
             bp = utils.BlockProcessor(in_raster)
-            bp.computeBlockStatistics(iqr, 1000, iqr_raster, overlap)
+            #limit 3D blocks to 10^8 elements (.4GB)
+            blocksize = int(math.sqrt((10**8)/(int(neighborhood_size)**2))-overlap*2)
+            bp.computeBlockStatistics(iqr, blocksize, iqr_raster, overlap)
 
         if kurt_set.intersection(out_stats):
             if verbose:
@@ -124,7 +127,9 @@ def main(in_raster=None, neighborhood_size=None,
             kurt_raster = os.path.join(out_workspace,
                                        "kurtosisdepth_{}.tif".format(n_label))
             bp = utils.BlockProcessor(in_raster)
-            bp.computeBlockStatistics(kurtosis, 500, kurt_raster, overlap)
+            #limit 3D blocks to 10^8 elements (.4GB)
+            blocksize = int(math.sqrt((10**8)/(int(neighborhood_size)**2))-overlap*2)
+            bp.computeBlockStatistics(kurtosis, blocksize, kurt_raster, overlap)
             
 
     except Exception as e:
