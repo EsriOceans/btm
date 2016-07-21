@@ -193,19 +193,21 @@ class BlockProcessor:
         self.height = self.fileIn.height
         self.noData = self.fileIn.noDataValue
         arcpy.env.outputCoordinateSystem = self.fileIn
+        arcpy.env.overwriteOutput = True
 
     def computeBlockStatistics(self, func, blockSize, outRast, overlap=0):
  
         msg("Beginning block analysis...")
-        arcpy.env.overwriteOutput = True
-        inNetCDF = str(os.path.join(os.path.split(outRast)[0],r"blockproc_in.nc"))
+        inNetCDF = os.path.splitext(outRast)[0] + '_in.nc'
         arcpy.RasterToNetCDF_md(self.fileIn, inNetCDF, r"Band1")
         inFile = Dataset(inNetCDF, mode="a")
         inDepth = inFile.variables['Band1']
-        outNetCDF = str(os.path.join(os.path.split(outRast)[0],r"blockproc_out.nc"))
+        
+        outNetCDF = os.path.splitext(outRast)[0] + '_out.nc'
         arcpy.RasterToNetCDF_md(self.fileIn, outNetCDF, r"Band1")
         outFile = Dataset(outNetCDF, mode="a")
         outDepth = outFile.variables['Band1']
+
         bnum = 0
         total_blocks = int((math.ceil(((self.right-self.left)/
                                        self.xSize)/blockSize))*
@@ -213,11 +215,12 @@ class BlockProcessor:
                                        self.ySize)/blockSize)))
         x = 0
         while x < self.width:
+            
             y = 0
             while y < self.height:
-                msg("Processing block {} of {} in {}...".format(bnum+1,
-                                                                  total_blocks,
-                                                                  self.fileIn.name))
+                
+                msg("Processing block {} of {} in {}..."\
+                    .format(bnum+1,total_blocks,self.fileIn.name))
                 ncols = blockSize + overlap*2
                 nrows = blockSize + overlap*2
                 if (x+ncols)>= self.width:
@@ -235,16 +238,19 @@ class BlockProcessor:
                 outDepth[iyl:iyh,ixl:ixh] = block
                 bnum += 1
                 y += blockSize
-            x += blockSize 
+                
+            x += blockSize
+            
         outDepth[:overlap,:], outDepth[-overlap:,:],\
-                              outDepth[:,:overlap], \
-                              outDepth[:,-overlap:] = (self.noData,)*4
-        msg("Creating result raster...")
+        outDepth[:,:overlap], outDepth[:,-overlap:] = (self.noData,)*4
+        msg("Creating result raster layer...")
         inFile.close()
-        outFeat = os.path.join(os.path.split(outRast)[0],r"feat.lyr")
-        arcpy.MakeNetCDFFeatureLayer_md(outNetCDF, 'Band1', 'x', 'y', outFeat)
-        arcpy.FeatureToRaster_conversion(outFeat,'Band1',outRast, self.xSize)
-        outFile.close()              
+        layerName = os.path.splitext(os.path.split(outRast)[1])[0]
+        arcpy.MakeNetCDFRasterLayer_md(outNetCDF, 'Band1', 'x', 'y', layerName)
+        msg("Saving result layer to {}...".format(outRast))
+        arcpy.CopyRaster_management(layerName, outRast)
+        outFile.close()
+
 
 class NotTextNodeError(Exception):
     """Override default handling of 'not text' by minidom."""

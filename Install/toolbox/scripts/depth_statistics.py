@@ -116,7 +116,7 @@ def main(in_raster=None, neighborhood_size=None,
             iqr_raster = os.path.join(out_workspace,
                                        "iqrdepth_{}.tif".format(n_label))
             bp = utils.BlockProcessor(in_raster)
-            bp.computeBlockStatistics(iqr, 500, iqr_raster, overlap)
+            bp.computeBlockStatistics(iqr, 1000, iqr_raster, overlap)
 
         if kurt_set.intersection(out_stats):
             if verbose:
