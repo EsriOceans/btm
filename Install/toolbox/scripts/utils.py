@@ -192,16 +192,16 @@ class BlockProcessor:
 
     def computeBlockStatistics(self, func, blockSize, outRast, overlap=0):
 
-        total_blocks = int(math.ceil(float(self.width)/blockSize)*
-                           math.ceil(float(self.height)/blockSize))
-        verbose = total_blocks>1
+        total_blocks = int(math.ceil(float(self.width) / blockSize) *
+                           math.ceil(float(self.height) / blockSize))
+        verbose = total_blocks > 1
         if verbose:
             msg("Beginning block analysis...")
         inNetCDF = os.path.splitext(outRast)[0] + '{}.nc'.format(random.random())
         arcpy.RasterToNetCDF_md(self.fileIn, inNetCDF, r"Band1")
         inFile = Dataset(inNetCDF, mode="a")
         inDepth = inFile.variables['Band1']
-        
+
         outNetCDF = os.path.splitext(outRast)[0] + '{}.nc'.format(random.random())
         arcpy.RasterToNetCDF_md(self.fileIn, outNetCDF, r"Band1")
         outFile = Dataset(outNetCDF, mode="a")
@@ -210,39 +210,39 @@ class BlockProcessor:
         bnum = 0
 
         x = 0
-        while x < self.width:        
+        while x < self.width:
             y = 0
             while y < self.height:
                 if verbose:
-                    msg("Processing block {} of {} in {}..."\
-                    .format(bnum+1,total_blocks,self.fileIn.name))
+                    msg("Processing block {} of {} in {}..."
+                        .format(bnum+1, total_blocks, self.fileIn.name))
                 ncols = blockSize + overlap*2
                 nrows = blockSize + overlap*2
-                if (x+ncols)>= self.width:
-                    ncols = self.width-x
-                if (y+nrows)>= self.height:         
-                    nrows = self.height-y
+                if (x+ncols) >= self.width:
+                    ncols = self.width - x
+                if (y+nrows) >= self.height:
+                    nrows = self.height - y
                 syh = y + nrows
                 sxh = x + ncols
                 iyl = y + overlap
                 iyh = y + nrows - overlap
                 ixl = x + overlap
                 ixh = x + ncols - overlap
-                block = inDepth[y:syh,x:sxh]
+                block = inDepth[y:syh, x:sxh]
                 block = func(block, overlap)
-                outDepth[iyl:iyh,ixl:ixh] = block
+                outDepth[iyl:iyh, ixl:ixh] = block
                 bnum += 1
-                y += blockSize                
+                y += blockSize
             x += blockSize
-            
-        outDepth[:overlap,:], outDepth[-overlap:,:],\
-        outDepth[:,:overlap], outDepth[:,-overlap:] = (self.noData,)*4
+
+        outDepth[:overlap, :], outDepth[-overlap:, :], \
+            outDepth[:, :overlap], outDepth[:, -overlap:] = (self.noData, ) * 4
         msg("Creating result raster layer...")
         layerName = os.path.splitext(os.path.split(outRast)[1])[0]
         arcpy.MakeNetCDFRasterLayer_md(outNetCDF, 'Band1', 'x', 'y', layerName)
         msg("Saving result layer to {}...".format(outRast))
         arcpy.CopyRaster_management(layerName, outRast)
-        #TODO: Figure out way to delete netCDF files once finished
+        # TODO: Figure out way to delete netCDF files once finished
         inFile.close()
         outFile.close()
 

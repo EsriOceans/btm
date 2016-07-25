@@ -20,28 +20,32 @@ import scripts.config as config
 # Check out any necessary licenses
 arcpy.CheckOutExtension("Spatial")
 
+
 def iqr(in_array, overlap):
     s = in_array.shape
     nbh_list = []
-    for r in range(0,(overlap*2)+1):
-        for c in range(0,(overlap*2)+1):
+    for r in range(0, (overlap*2)+1):
+        for c in range(0, (overlap*2)+1):
             nbh_list.append(in_array[r:(s[0]-(overlap*2)+r),
                                      c:(s[1]-(overlap*2)+c)])
     iqr_array = np.array(nbh_list)
-    iqr_array = np.percentile(iqr_array,75,axis=0) - np.percentile(iqr_array,25,axis=0)
+    iqr_array = np.percentile(iqr_array, 75, axis=0) - \
+                np.percentile(iqr_array, 25, axis=0)
     return iqr_array
+
 
 def kurtosis(in_array, overlap):
     s = in_array.shape
     nbh_list = []
-    for r in range(0,(overlap*2)+1):
-        for c in range(0,(overlap*2)+1):
+    for r in range(0, (overlap*2)+1):
+        for c in range(0, (overlap*2)+1):
             nbh_list.append(in_array[r:(s[0]-(overlap*2)+r),
                                      c:(s[1]-(overlap*2)+c)])
     kurt_array = np.array(nbh_list)
-    kurt_array = scipy.stats.kurtosis(kurt_array,axis=0)
+    kurt_array = scipy.stats.kurtosis(kurt_array, axis=0)
     return kurt_array
- 
+
+
 def main(in_raster=None, neighborhood_size=None,
          out_workspace=None, out_stats_raw=None, verbose=True):
     """
@@ -115,10 +119,11 @@ def main(in_raster=None, neighborhood_size=None,
             if verbose:
                 utils.msg("Calculating depth inner-quartile range...")
             iqr_raster = os.path.join(out_workspace,
-                                       "iqrdepth_{}.tif".format(n_label))
+                                      "iqrdepth_{}.tif".format(n_label))
             bp = utils.BlockProcessor(in_raster)
-            #limit 3D blocks to 10^8 elements (.4GB)
-            blocksize = int(math.sqrt((10**8)/(int(neighborhood_size)**2))-overlap*2)
+            # limit 3D blocks to 10^8 elements (.4GB)
+            blocksize = int(math.sqrt((10**8) /
+                                      (int(neighborhood_size)**2)) - overlap*2)
             bp.computeBlockStatistics(iqr, blocksize, iqr_raster, overlap)
 
         if kurt_set.intersection(out_stats):
@@ -127,10 +132,11 @@ def main(in_raster=None, neighborhood_size=None,
             kurt_raster = os.path.join(out_workspace,
                                        "kurtosisdepth_{}.tif".format(n_label))
             bp = utils.BlockProcessor(in_raster)
-            #limit 3D blocks to 10^8 elements (.4GB)
-            blocksize = int(math.sqrt((10**8)/(int(neighborhood_size)**2))-overlap*2)
-            bp.computeBlockStatistics(kurtosis, blocksize, kurt_raster, overlap)
-            
+            # limit 3D blocks to 10^9 elements (.4GB)
+            blocksize = int(math.sqrt((10**8) /
+                                      (int(neighborhood_size)**2)) - overlap*2)
+            bp.computeBlockStatistics(kurtosis, blocksize,
+                                      kurt_raster, overlap)
 
     except Exception as e:
         utils.msg(e, mtype='error')

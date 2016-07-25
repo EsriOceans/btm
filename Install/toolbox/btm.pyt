@@ -1054,11 +1054,8 @@ class depthstatistics(object):
         return
 
     def execute(self, parameters, messages):
-        import imp
         # run related python script with selected input parameters
         import depth_statistics
-        imp.reload(utils)
-        imp.reload(depth_statistics)
         depth_statistics.main(
             in_raster=parameters[0].valueAsText,
             neighborhood_size=parameters[1].valueAsText,
