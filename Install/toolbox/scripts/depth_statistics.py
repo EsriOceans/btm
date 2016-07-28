@@ -132,7 +132,7 @@ def main(in_raster=None, neighborhood_size=None,
             kurt_raster = os.path.join(out_workspace,
                                        "kurtosisdepth_{}.tif".format(n_label))
             bp = utils.BlockProcessor(in_raster)
-            # limit 3D blocks to 10^9 elements (.4GB)
+            # limit 3D blocks to 10^8 elements (.4GB)
             blocksize = int(math.sqrt((10**8) /
                                       (int(neighborhood_size)**2)) - overlap*2)
             bp.computeBlockStatistics(kurtosis, blocksize,

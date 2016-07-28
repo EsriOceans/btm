@@ -6,7 +6,6 @@ import arcpy
 import zipfile
 
 from nose.tools import raises
-from tempdir import TempDir
 
 import config
 import utils
@@ -20,6 +19,7 @@ from scripts import bpi, standardize_bpi_grids, btm_model, aspect, \
     slope, ruggedness, depth_statistics, classify, \
     surface_area_to_planar_area, scale_comparison, utils as su
 
+from scripts.tempdir import TempDir
 
 class TestBtmDocument(unittest.TestCase):
     """ Test our document class."""
