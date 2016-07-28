@@ -60,7 +60,7 @@ def main(in_raster=None, neighborhood_size=None,
     # convert our data to sets for easy comparison
     mean_set = set(['Mean Depth'])
     std_dev_set = set(['Standard Deviation', 'Variance'])
-    iqr_set = set(['Inner-Quartile Range'])
+    iqr_set = set(['Interquartile Range'])
     kurt_set = set(['Kurtosis'])
 
     # list stats to be computed
@@ -117,13 +117,13 @@ def main(in_raster=None, neighborhood_size=None,
 
         if iqr_set.intersection(out_stats):
             if verbose:
-                utils.msg("Calculating depth inner-quartile range...")
+                utils.msg("Calculating depth interquartile range...")
             iqr_raster = os.path.join(out_workspace,
                                       "iqrdepth_{}.tif".format(n_label))
             bp = utils.BlockProcessor(in_raster)
             # limit 3D blocks to 10^8 elements (.4GB)
             blocksize = int(math.sqrt((10**8) /
-                                      (int(neighborhood_size)**2)) - overlap*2)
+                                      (int(neighborhood_size)**2))**2)
             bp.computeBlockStatistics(iqr, blocksize, iqr_raster, overlap)
 
         if kurt_set.intersection(out_stats):

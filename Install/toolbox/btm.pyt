@@ -1039,7 +1039,7 @@ class depthstatistics(object):
         statistics.datatype = dt.format('String')
         statistics.multiValue = True
         statistics.filter.list = ['Mean Depth', 'Variance',
-                                  'Standard Deviation', 'Inner-Quartile Range',
+                                  'Standard Deviation', 'Interquartile Range',
                                   'Kurtosis']
 
         return [input_raster, neighborhood, out_workspace, statistics]
@@ -1187,6 +1187,7 @@ class multiplescales(object):
         metrics.datatype = dt.format('String')
         metrics.multiValue = True
         metrics.filter.list = ['Mean Depth', 'Variance', 'Standard Deviation',
+                               'Interquartile Range', 'Kurtosis',
                                'Terrain Ruggedness (VRM)']
 
         # Output Workspace
@@ -1214,8 +1215,10 @@ class multiplescales(object):
 
         nbh_lst = parameters[1].valueAsText.split(";")
         metrics_lst = parameters[2].valueAsText.replace("'", '').split(";")
-        stats_set = set(['Mean Depth', 'Standard Deviation', 'Variance'])
+        stats_set = set(['Mean Depth', 'Standard Deviation', 'Variance',
+                         'Interquartile Range', 'Kurtosis'])
         vrm_set = set(['Terrain Ruggedness (VRM)'])
+        
 
         for each in nbh_lst:
             utils.msg("Computing metrics for neighborhood size {}...".format(each))
