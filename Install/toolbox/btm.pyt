@@ -114,7 +114,7 @@ class Toolbox(object):
             statisticalaspect,  # break aspect up trigonometrically
             surfacetoplanar,    # compare surface area to planar area
             terrainruggedness,  # VRM, a measure of roughness
-            acr_model2,         # ACR rugosity index
+            arcchordratio,         # ACR rugosity index
             
             # Summary Statistics
             depthstatistics,    # depth summary statistics
@@ -986,7 +986,7 @@ class terrainruggedness(object):
             neighborhood_size=parameters[1].valueAsText,
             out_raster=parameters[2].valueAsText)
 
-class acr_model2(object):
+class arcchordratio(object):
 
     def __init__(self):
         force_path()
@@ -1011,6 +1011,7 @@ class acr_model2(object):
         areaOfInterest.displayName = u'Area of Interest'
         areaOfInterest.parameterType = 'Required'
         areaOfInterest.direction = 'Input'
+        areaOfInterest.multiValue = True
         areaOfInterest.datatype = dt.format('Shapefile')
 
         #Save TINs
@@ -1036,6 +1037,8 @@ class acr_model2(object):
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
         import acr
+        import imp
+        imp.reload(acr)
         acr.main(
             in_raster=parameters[0].valueAsText,
             areaOfInterest=parameters[1].valueAsText,
