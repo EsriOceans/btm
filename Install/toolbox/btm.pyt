@@ -114,6 +114,8 @@ class Toolbox(object):
             statisticalaspect,  # break aspect up trigonometrically
             surfacetoplanar,    # compare surface area to planar area
             terrainruggedness,  # VRM, a measure of roughness
+            acr_model2,         # ACR rugosity index
+            
             # Summary Statistics
             depthstatistics,    # depth summary statistics
             scalecomparison,    # compare scales of analysis
@@ -718,7 +720,6 @@ class runfullmodel(object):
 
     def getParameterInfo(self):
         # Output_Workspace
-
         out_workspace = arcpy.Parameter()
         out_workspace.name = u'Output_Workspace'
         out_workspace.displayName = u'Output Workspace'
@@ -984,6 +985,61 @@ class terrainruggedness(object):
             in_raster=parameters[0].valueAsText,
             neighborhood_size=parameters[1].valueAsText,
             out_raster=parameters[2].valueAsText)
+
+class acr_model2(object):
+
+    def __init__(self):
+        force_path()
+        self.label = u'Arc-Chord Ratio'
+        self.description = dedent("""\
+               Arc-cord ratio (Model 2) as described by Du Preez (2014)""")
+        self.canRunInBackground = False
+        self.category = 'Rugosity'
+
+    def getParameterInfo(self):
+        # Bathymetry_Raster
+        input_raster = arcpy.Parameter()
+        input_raster.name = u'Bathymetry_Raster'
+        input_raster.displayName = u'Bathymetry Raster'
+        input_raster.parameterType = 'Required'
+        input_raster.direction = 'Input'
+        input_raster.datatype = dt.format('Raster Layer')
+
+        # Area of Interest
+        areaOfInterest = arcpy.Parameter()
+        areaOfInterest.name = u'Area of Interest'
+        areaOfInterest.displayName = u'Area of Interest'
+        areaOfInterest.parameterType = 'Required'
+        areaOfInterest.direction = 'Input'
+        areaOfInterest.datatype = dt.format('Shapefile')
+
+        #Save TINs
+        saveTINs = arcpy.Parameter()
+        saveTINs.name = u'Save TINs'
+        saveTINs.displayName = u'Save Output Contoured and Planar TINs'
+        saveTINs.parameterType = 'Optional'
+        saveTINs.direction = 'Input'
+        saveTINs.datatype = dt.format('Boolean')
+        saveTINs.value = 'False'
+
+        return [input_raster, areaOfInterest, saveTINs]
+
+    def isLicensed(self):
+        return True
+
+    def updateParameters(self, parameters):
+        return
+
+    def updateMessages(self, parameters):
+        return
+
+    def execute(self, parameters, messages):
+        # run related python script with selected input parameters
+        import acr
+        acr.main(
+            in_raster=parameters[0].valueAsText,
+            areaOfInterest=parameters[1].valueAsText,
+            saveTINs=parameters[2].valueAsText)
 
 
 class depthstatistics(object):
