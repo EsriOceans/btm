@@ -1011,7 +1011,6 @@ class arcchordratio(object):
         areaOfInterest.displayName = u'Area of Interest'
         areaOfInterest.parameterType = 'Required'
         areaOfInterest.direction = 'Input'
-        areaOfInterest.multiValue = True
         areaOfInterest.datatype = dt.format('Shapefile')
 
         #Save TINs
