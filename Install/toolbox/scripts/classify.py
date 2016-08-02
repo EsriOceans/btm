@@ -145,13 +145,13 @@ def main(classification_file, bpi_broad_std, bpi_fine_std,
         arcpy.AddField_management(merge_grid, 'Zone', 'TEXT')
         rows = arcpy.UpdateCursor(merge_grid)
         for row in rows:
-            if str(row.getValue('VALUE')) in key:
-                row.setValue('Zone',key[str(row.getValue('VALUE'))])
+            val = str(row.getValue('VALUE'))
+            if val in key:
+                row.setValue('Zone',key[val])
                 rows.updateRow(row)
             else:
                 row.setValue('Zone','No Matching Zone')
                 rows.updateRow(row)
-            
         arcpy.env.rasterStatistics = "STATISTICS"
         # validate the output raster path
         out_raster = utils.validate_path(out_raster)
