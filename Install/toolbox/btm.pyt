@@ -146,6 +146,7 @@ class broadscalebpi(object):
 
                 A broad-scale BPI data set allows you to identify larger
                 features within the benthic landscape.""")
+        self.category = 'Bathymetric Position Index (BPI)'
         self.canRunInBackground = False
         # parameter names
         self.cols = ['bathy', 'inner', 'outer', 'scale_factor', 'output']
@@ -264,6 +265,7 @@ class finescalebpi(object):
                 A broad-scale BPI data set allows you to identify larger
                 features within the benthic landscape.""")
         self.canRunInBackground = False
+        self.category = 'Bathymetric Position Index (BPI)'
         # parameter names
         self.cols = ['bathy', 'inner', 'outer', 'scale_factor', 'output']
 
@@ -374,6 +376,7 @@ class standardizebpi(object):
         force_path()
         self.label = u'Standardize BPIs'
         self.canRunInBackground = False
+        self.category = 'Bathymetric Position Index (BPI)'
         self.cols = [
             'broad_input', 'broad_mean', 'broad_stddev', 'broad_output',
             'fine_input', 'fine_mean', 'fine_stddev', 'fine_output'
@@ -506,6 +509,7 @@ class statisticalaspect(object):
         force_path()
         self.label = u'Calculate Statistical Aspect'
         self.canRunInBackground = False
+        self.category = 'Surface Derivatives and Statistics'
 
     def getParameterInfo(self):
         # Input_bathymetric_raster
@@ -569,6 +573,7 @@ class btmslope(object):
         force_path()
         self.label = u'Calculate Slope'
         self.canRunInBackground = False
+        self.category = 'Surface Derivatives and Statistics'
 
     def getParameterInfo(self):
         # Input_bathymetric_raster
@@ -618,6 +623,7 @@ class classifyterrain(object):
         force_path()
         self.label = u'Classify Benthic Terrain'
         self.canRunInBackground = False
+        self.category = 'Terrain Classification'
 
     def getParameterInfo(self):
         # Classification Dictionary
@@ -704,6 +710,7 @@ class runfullmodel(object):
         force_path()
         self.label = u'Run All Model Steps'
         self.canRunInBackground = False
+        self.category = 'Terrain Classification'
         self.cols = [
             'out_workspace', 'bathy', 'broad_bpi_inner', 'broad_bpi_outer',
             'fine_bpi_inner', 'fine_bpi_outer', 'class_dict', 'zones_raster'
@@ -834,114 +841,6 @@ class runfullmodel(object):
             classification_dict=parameters[6].valueAsText,
             output_zones=parameters[7].valueAsText)
 
-
-class structureclassification(object):
-    """Classify benthic terrain based on structures."""
-    def __init__(self):
-        force_path()
-        self.label = u'Structure Classification Builder'
-        self.canRunInBackground = False
-
-    def getParameterInfo(self):
-        # Standardized_broad-scale_BPI_raster
-        broad_bpi = arcpy.Parameter()
-        broad_bpi.name = u'Standardized_broad-scale_BPI_raster'
-        broad_bpi.displayName = u'Standardized broad-scale BPI raster'
-        broad_bpi.parameterType = 'Required'
-        broad_bpi.direction = 'Input'
-        broad_bpi.datatype = dt.format('Raster Layer')
-
-        # Broad-scale_BPI_standard_deviation_break
-        broad_stddev = arcpy.Parameter()
-        broad_stddev.name = u'Broad-scale_BPI_standard_deviation_break'
-        broad_stddev.displayName = u'Broad-scale BPI standard deviation break'
-        broad_stddev.parameterType = 'Required'
-        broad_stddev.direction = 'Input'
-        broad_stddev.datatype = dt.format('Double')
-
-        # Standardized_fine-scale_BPI_raster
-        fine_bpi = arcpy.Parameter()
-        fine_bpi.name = u'Standardized_fine-scale_BPI_raster'
-        fine_bpi.displayName = u'Standardized fine-scale BPI raster'
-        fine_bpi.parameterType = 'Required'
-        fine_bpi.direction = 'Input'
-        fine_bpi.datatype = dt.format('Raster Layer')
-
-        # Fine-scale_BPI_standard_deviation_break
-        fine_stddev = arcpy.Parameter()
-        fine_stddev.name = u'Fine-scale_BPI_standard_deviation_break'
-        fine_stddev.displayName = u'Fine-scale BPI standard deviation break'
-        fine_stddev.parameterType = 'Required'
-        fine_stddev.direction = 'Input'
-        fine_stddev.datatype = dt.format('Double')
-
-        # Slope_raster
-        slope = arcpy.Parameter()
-        slope.name = u'Slope_raster'
-        slope.displayName = u'Slope raster'
-        slope.parameterType = 'Required'
-        slope.direction = 'Input'
-        slope.datatype = dt.format('Raster Layer')
-
-        # Slope_value__in_degrees__indicating_a_gentle_slope
-        slope_gentle = arcpy.Parameter()
-        slope_gentle.name = u'Slope_value__in_degrees__indicating_a_gentle_slope'
-        slope_gentle.displayName = \
-            u'Slope value (in degrees) indicating a gentle slope'
-        slope_gentle.parameterType = 'Required'
-        slope_gentle.direction = 'Input'
-        slope_gentle.datatype = dt.format('Double')
-
-        # Slope_value__in_degrees__indicating_a_steep_slope
-        slope_steep = arcpy.Parameter()
-        slope_steep.name = u'Slope_value__in_degrees__indicating_a_steep_slope'
-        slope_steep.displayName = \
-            u'Slope value (in degrees) indicating a steep slope'
-        slope_steep.parameterType = 'Required'
-        slope_steep.direction = 'Input'
-        slope_steep.datatype = dt.format('Double')
-
-        # Bathymetric_raster
-        bathy = arcpy.Parameter()
-        bathy.name = u'Bathymetric_raster'
-        bathy.displayName = u'Bathymetric raster'
-        bathy.parameterType = 'Required'
-        bathy.direction = 'Input'
-        bathy.datatype = dt.format('Raster Layer')
-
-        # Depth_indicating_break_between_shelf_and_broad_flat
-        broad_vs_flat = arcpy.Parameter()
-        broad_vs_flat.name = u'Depth_indicating_break_between_shelf_and_broad_flat'
-        broad_vs_flat.displayName = \
-            u'Depth indicating break between shelf and broad flat'
-        broad_vs_flat.parameterType = 'Required'
-        broad_vs_flat.direction = 'Input'
-        broad_vs_flat.datatype = dt.format('Double')
-
-        # Output_raster
-        output_raster = arcpy.Parameter()
-        output_raster.name = u'Output_raster'
-        output_raster.displayName = u'Output raster'
-        output_raster.parameterType = 'Required'
-        output_raster.direction = 'Output'
-        output_raster.datatype = dt.format('Raster Dataset')
-
-        return [broad_bpi, broad_stddev, fine_bpi, fine_stddev, slope, slope_gentle,
-                slope_steep, bathy, broad_vs_flat, output_raster]
-
-    def isLicensed(self):
-        return True
-
-    def updateParameters(self, parameters):
-        return
-
-    def updateMessages(self, parameters):
-        return
-
-    def execute(self, parameters, messages):
-        pass
-
-
 class surfacetoplanar(object):
     """Compute Surface Area to Planar Area (ratio)."""
 
@@ -953,6 +852,7 @@ class surfacetoplanar(object):
             between the surface area and the planar area, as described
             in Jenness 2002.""")
         self.canRunInBackground = False
+        self.category = 'Rugosity'
 
     def getParameterInfo(self):
         # Bathymetry_Raster
@@ -974,7 +874,7 @@ class surfacetoplanar(object):
         #ACR Correction
         acr_correction = arcpy.Parameter()
         acr_correction.name = u'ACR_Correction'
-        acr_correction.displayName = u'Correct Planar Area for Slope'
+        acr_correction.displayName = u'Correct Planar Area for Slope (Arc-Chord Ratio Rugosity)'
         acr_correction.parameterType = 'Optional'
         acr_correction.direction = 'Input'
         acr_correction.datatype = dt.format('Boolean')
@@ -1025,6 +925,7 @@ class terrainruggedness(object):
                 Measure terrain ruggedness by calculating the vector ruggedness
                 measure (VRM), as described in Sappington et al, 2007.""")
         self.canRunInBackground = False
+        self.category = 'Rugosity'
 
     def getParameterInfo(self):
         # Bathymetry_Raster
@@ -1102,6 +1003,7 @@ class depthstatistics(object):
         force_path()
         self.label = u'Depth Statistics'
         self.canRunInBackground = False
+        self.category = 'Surface Derivatives and Statistics'
 
     def getParameterInfo(self):
         # Bathymetry_Raster
@@ -1166,6 +1068,7 @@ class scalecomparison(object):
         force_path()
         self.label = u'Compare Scales of Analysis'
         self.canRunInBackground = False
+        self.category = 'Multi-Scale Analysis'
 
     def getParameterInfo(self):
 
@@ -1252,6 +1155,7 @@ class multiplescales(object):
         force_path()
         self.label = u'Calculate Metrics At Multiple Scales'
         self.canRunInBackground = False
+        self.category = 'Multi-Scale Analysis'
 
     def getParameterInfo(self):
 

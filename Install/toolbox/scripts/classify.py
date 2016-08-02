@@ -88,10 +88,12 @@ def main(classification_file, bpi_broad_std, bpi_fine_std,
             btm_doc.doctype, len(classes)))
 
         grids = []
+        key = {'0':'None'}
         for item in classes:
             cur_class = str(item["Class"])
             cur_name = str(item["Zone"])
             utils.msg("Calculating grid for {}...".format(cur_name))
+            key[cur_class]=cur_name
             out_con = None
             # here come the CONs:
             out_con = run_con(item["Depth_LowerBounds"],
@@ -107,6 +109,7 @@ def main(classification_file, bpi_broad_std, bpi_fine_std,
                                item["SSB_UpperBounds"],
                                bpi_broad_std, out_con3, cur_class)
 
+        
             if type(out_con4) == arcpy.sa.Raster:
                 rast = utils.save_raster(out_con4, "con_{}.tif".format(cur_name))
                 grids.append(rast)
@@ -139,12 +142,22 @@ def main(classification_file, bpi_broad_std, bpi_fine_std,
         for i in range(1, len(grids)):
             utils.msg("{} of {}".format(i, len(grids)-1))
             merge_grid = Con(merge_grid, grids[i], merge_grid, "VALUE = 0")
-
+        arcpy.AddField_management(merge_grid, 'Zone', 'TEXT')
+        rows = arcpy.UpdateCursor(merge_grid)
+        for row in rows:
+            if str(row.getValue('VALUE')) in key:
+                row.setValue('Zone',key[str(row.getValue('VALUE'))])
+                rows.updateRow(row)
+            else:
+                row.setValue('Zone','No Matching Zone')
+                rows.updateRow(row)
+            
         arcpy.env.rasterStatistics = "STATISTICS"
         # validate the output raster path
         out_raster = utils.validate_path(out_raster)
         utils.msg("Saving Output to {}".format(out_raster))
-        merge_grid.save(out_raster)
+        merge_grid.save(out_raster)    
+
         utils.msg("Complete.")
 
     except NoValidClasses as e:

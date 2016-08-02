@@ -18,7 +18,7 @@ utils.add_local_paths(import_paths)
 # now we can import our scripts
 from scripts import bpi, standardize_bpi_grids, btm_model, aspect, \
     slope, ruggedness, depth_statistics, classify, \
-    surface_area_to_planar_area, utils as su
+    surface_area_to_planar_area, scale_comparison, utils as su
 
 
 class TestBtmDocument(unittest.TestCase):
@@ -321,14 +321,14 @@ class TestSaPa(unittest.TestCase):
         toolbox = arcpy.ImportToolbox(config.pyt_file)
         self.assertTrue('surfacetoplanar' in vars(toolbox))
 
-    def testSaPaRun(self):
+    def testSaPaRunNoCorrection(self):
         with TempDir() as d:
             ratio_raster = os.path.join(d, 'test_sapa_ratio.tif')
             surf_raster = os.path.join(d, 'test_surface_area.tif')
 
             arcpy.env.scratchWorkspace = d
             surface_area_to_planar_area.main(
-                config.bathy_raster, ratio_raster, surf_raster)
+                config.bathy_raster, ratio_raster, False, surf_raster)
 
             self.assertTrue(os.path.exists(ratio_raster))
             self.assertTrue(os.path.exists(surf_raster))
@@ -339,9 +339,31 @@ class TestSaPa(unittest.TestCase):
                 su.raster_properties(ratio_raster, "STD"), 0.0058175502835692)
 
             self.assertAlmostEqual(
-                su.raster_properties(surf_raster, "MEAN"), 25.119343739217)
+                su.raster_properties(surf_raster, "MEAN"), 25.119343091857)
             self.assertAlmostEqual(
                 su.raster_properties(surf_raster, "STD"), 0.14551573347447)
+
+    def testSaPaRunCorrection(self):
+        with TempDir() as d:
+            ratio_raster = os.path.join(d, 'test_sapa_ratio.tif')
+            surf_raster = os.path.join(d, 'test_surface_area.tif')
+
+            arcpy.env.scratchWorkspace = d
+            surface_area_to_planar_area.main(
+                config.bathy_raster, ratio_raster, True, surf_raster)
+
+            self.assertTrue(os.path.exists(ratio_raster))
+            self.assertTrue(os.path.exists(surf_raster))
+
+            self.assertAlmostEqual(
+                su.raster_properties(ratio_raster, "MEAN"), 1.000616701751028)
+            self.assertAlmostEqual(
+                su.raster_properties(ratio_raster, "STD"), 0.0008445980914179108)
+
+            self.assertAlmostEqual(
+                su.raster_properties(surf_raster, "MEAN"), 25.119343091857)
+            self.assertAlmostEqual(
+                su.raster_properties(surf_raster, "STD"), 0.14551570953239)
 
     def testSaPaRunWithFgdbLocation(self):
         with TempDir() as d:
@@ -356,7 +378,7 @@ class TestSaPa(unittest.TestCase):
 
             arcpy.env.scratchWorkspace = d
             surface_area_to_planar_area.main(
-                config.bathy_raster, ratio_raster, surf_raster)
+                config.bathy_raster, ratio_raster, False, surf_raster)
 
             self.assertAlmostEqual(
                 su.raster_properties(ratio_raster, "MEAN"), 1.0042422342676)
@@ -364,7 +386,7 @@ class TestSaPa(unittest.TestCase):
                 su.raster_properties(ratio_raster, "STD"), 0.0058175502835692)
 
             self.assertAlmostEqual(
-                su.raster_properties(surf_raster, "MEAN"), 25.119343739217)
+                su.raster_properties(surf_raster, "MEAN"), 25.119343091857)
             self.assertAlmostEqual(
                 su.raster_properties(surf_raster, "STD"), 0.14551573347447)
 
@@ -645,7 +667,7 @@ class TestScaleComparison(unittest.TestCase):
     def setUp(self):
         self.percentile = 75
         self.min_nbhs = 3
-        self.max_nbhs = 99
+        self.max_nbhs = 55
 
     def testPercentileMakesImage(self):
         with TempDir() as d:
@@ -662,6 +684,46 @@ class TestScaleComparison(unittest.TestCase):
                                   self.min_nbhs, self.max_nbhs, out_file)
             self.assertTrue(os.path.exists(out_file))
 
+
+class TestMultipleScales(unittest.TestCase):
+    def setUp(self):
+        self.in_raster = config.bathy_raster
+        self.nbh_sizes = '3;13'
+        self.metrics = "'Mean Depth';Variance;"\
+                       "'Standard Deviation';'Terrain Ruggedness (VRM)'"
+
+    def testResultRastersProduced(self):
+        with TempDir() as d:
+            arcpy.ImportToolbox(config.pyt_file)
+            arcpy.multiplescales_btm(self.in_raster,
+                                     self.nbh_sizes, self.metrics, d)
+
+            depth_stats = {
+                'meandepth': -20.56248074571827,
+                'stddevdepth': 0.2946229406453136,
+                'vardepth': 0.1281792675921596
+            }
+
+            for (prefix, expected_value) in depth_stats.items():
+                raster_path = os.path.join(
+                    d, "{0}_{1:03d}.tif".format(prefix, 3))
+                self.assertAlmostEqual(
+                    su.raster_properties(raster_path, 'MEAN'), expected_value)
+
+            vrm_raster = os.path.join(d, 'ruggedness_003.tif')
+            self.assertAlmostEqual(
+                su.raster_properties(vrm_raster, "MEAN"), 0.00062628513039036)
+            self.assertAlmostEqual(
+                su.raster_properties(vrm_raster, "STD"), 0.00087457748556755)
+
+            rast_names = ['meandepth_003.tif', 'stddevdepth_003.tif',
+                          'vardepth_003.tif', 'ruggedness_003.tif',
+                          'meandepth_013.tif', 'stddevdepth_013.tif',
+                          'vardepth_013.tif', 'ruggedness_013.tif']
+
+            for each in rast_names:
+                file_name = os.path.join(d, each)
+                self.assertTrue(os.path.exists(file_name))
 
 if __name__ == '__main__':
     unittest.main()

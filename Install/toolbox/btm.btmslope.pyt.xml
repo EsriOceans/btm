@@ -1,232 +1,155 @@
-<metadata xml:lang="en">
-	<Esri>
-		<CreaDate>20120904</CreaDate>
-		<CreaTime>22003300</CreaTime>
-		<ArcGISFormat>1.0</ArcGISFormat>
-		<SyncOnce>TRUE</SyncOnce>
-		<scaleRange>
-			<minScale>150000000</minScale>
-			<maxScale>5000</maxScale>
-		</scaleRange>
-		<ArcGISProfile>ItemDescription</ArcGISProfile>
-	</Esri>
-	<dataIdInfo>
-		<idCitation>
-			<resTitle>Calculate Slope</resTitle>
-		</idCitation>
-		<idAbs>&lt;DIV STYLE="text-align:Left;"&gt;&lt;P
-    STYLE="font-size:16ptmargin:7 0 7 0;"&gt;&lt;SPAN&gt;Identifies
-    the slope (gradient, or rate of maximum change in z-value) from
-    each cell of a raster surface. This tool assumes that the depth
-    or elevation units are the same as the X and Y units (i.e. a
-    z-factor of 1), and outputs the resulting raster in
-    &lt;/SPAN&gt;&lt;SPAN STYLE="font-weight:bold;"&gt;degree
-    &lt;/SPAN&gt;&lt;SPAN&gt;units.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;</idAbs>
-		<searchKeys>
-			<keyword>slope geomorphometry raster analysis btm</keyword>
-		</searchKeys>
-	</dataIdInfo>
-	<distInfo>
-		<distributor>
-			<distorFormat>
-				<formatName>ArcToolbox Tool</formatName>
-			</distorFormat>
-		</distributor>
-	</distInfo>
-	<tool displayname="Calculate Slope" name="btmslope" toolboxalias="btm">
-		<parameters>
-			<param datatype="Raster Layer" direction="Input" displayname="Input bathymetric raster" expression="Input_bathymetric_raster" name="Input_bathymetric_raster" type="Required">
-				<dialogReference>&lt;DIV
-        STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Input
-        surface
-        raster.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</dialogReference>
-				<pythonReference>&lt;DIV
-        STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Input
-        surface
-        raster.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</pythonReference>
-			</param>
-			<param datatype="Raster Dataset" direction="Output" displayname="Output raster" expression="Output_raster" name="Output_raster" type="Required">
-				<dialogReference>&lt;DIV
-        STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Output
-        slope raster, in units of
-        degrees.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</dialogReference>
-				<pythonReference>&lt;DIV
-        STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Output
-        slope raster, in units of
-        degrees.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</pythonReference>
-			</param>
-		</parameters>
-		<summary>&lt;DIV STYLE="text-align:Left;"&gt;&lt;P
-    STYLE="font-size:16ptmargin:7 0 7 0;"&gt;&lt;SPAN&gt;Identifies
-    the slope (gradient, or rate of maximum change in z-value) from
-    each cell of a raster surface. This tool assumes that the depth
-    or elevation units are the same as the X and Y units (i.e. a
-    z-factor of 1), and outputs the resulting raster in
-    &lt;/SPAN&gt;&lt;SPAN STYLE="font-weight:bold;"&gt;degree
-    &lt;/SPAN&gt;&lt;SPAN&gt;units.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;</summary>
-	</tool>
-	<Binary>
-		<Thumbnail>
-			<Data EsriPropertyType="PictureX">
-      /9j/4AAQSkZJRgABAQEAXQBdAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsK
-      CwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQU
-      FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCABlAIADASIA
-      AhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQA
-      AAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3
-      ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWm
-      p6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEA
-      AwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSEx
-      BhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElK
-      U1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3
-      uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD9U6KK
-      KACiiigAooooAKKKKACvHvjx+1B4T+BkkWjXDtrfjq/s3u9L8L2e7zrlQ4QSSyBSttDuJzJJjIjl
-      2LIyFKxf2pP2o7f4G2Ft4f8AD1pB4i+JuswmTS9FkY+TaxZKm+vSpylujAgAENKwKJjDvH8QaB4d
-      uLPUdU13W9Tn8R+L9al+06vr16B513LgAAAcRxqAFSNQFRVVQAAK+fzXNqeXQ5Y61Hsu3m/61PDz
-      PM4YGHLHWb2X6v8ArUl8S6Rd/EnxVL4x8cXZ1nxnLNFcRalatJb/ANl+U++CGwKtvt44mOVKtvLZ
-      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
-      01D8X/mTLM8XJWc/wX+R/9k=</Data>
-		</Thumbnail>
-		<Enclosure rel="side-panel-help">
-			<Data EsriPropertyType="Image" OriginalFileName="thumbnail.jpg">
-      /9j/4AAQSkZJRgABAQEAXQBdAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsK
-      CwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQU
-      FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCABlAIADASIA
-      AhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQA
-      AAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3
-      ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWm
-      p6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEA
-      AwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSEx
-      BhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElK
-      U1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3
-      uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD9U6KK
-      KACiiigAooooAKKKKACvHvjx+1B4T+BkkWjXDtrfjq/s3u9L8L2e7zrlQ4QSSyBSttDuJzJJjIjl
-      2LIyFKxf2pP2o7f4G2Ft4f8AD1pB4i+JuswmTS9FkY+TaxZKm+vSpylujAgAENKwKJjDvH8QaB4d
-      uLPUdU13W9Tn8R+L9al+06vr16B513LgAAAcRxqAFSNQFRVVQAAK+fzXNqeXQ5Y61Hsu3m/61PDz
-      PM4YGHLHWb2X6v8ArUl8S6Rd/EnxVL4x8cXZ1nxnLNFcRalatJb/ANl+U++CGwKtvt44mOVKtvLZ
-      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
-      01D8X/mTLM8XJWc/wX+R/9k=</Data>
-		</Enclosure>
-	</Binary>
-</metadata>
+<metadata xml:lang="en"><Esri><CreaDate>20120904</CreaDate><CreaTime>22003300</CreaTime><ArcGISFormat>1.0</ArcGISFormat><SyncOnce>TRUE</SyncOnce><scaleRange><minScale>150000000</minScale><maxScale>5000</maxScale></scaleRange><ArcGISProfile>ItemDescription</ArcGISProfile><ModDate>20160712</ModDate><ModTime>14412000</ModTime></Esri><dataIdInfo><idCitation><resTitle>Calculate Slope</resTitle></idCitation><idAbs>&lt;DIV STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;This tool calculates the slope (gradient, or rate of maximum change in z-value) from each cell of a surface raster in &lt;/SPAN&gt;&lt;SPAN STYLE="font-weight:bold;"&gt;degree &lt;/SPAN&gt;&lt;SPAN&gt;units. The tool assumes that the depth or elevation units of the surface raster are the same as the x and y units (i.e. a z-factor of 1). &lt;/SPAN&gt;&lt;/P&gt;&lt;P STYLE="margin:1 1 1 0;"&gt;&lt;SPAN&gt;Here, slope is calculated using a 3x3 scanning window of grid cells. The center cell of the window and its eight neighbors are used to find the average gradient in the horizontal (dz/dx) and vertical (dz/dy) directions at each location in the surface raster. A single slope value is then found for each cell in the raster by calculating the inverse tangent of the hypotenuse of the horizontal and vertical gradients. For a more in-depth description of how slope is calculated, including references and example calculations, please see &lt;/SPAN&gt;&lt;A href="http://desktop.arcgis.com/en/arcmap/10.3/tools/3d-analyst-toolbox/how-slope-works.htm"&gt;&lt;SPAN&gt;How Slope Works&lt;/SPAN&gt;&lt;/A&gt;&lt;SPAN&gt;. &lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;</idAbs><searchKeys><keyword>slope geomorphometry raster analysis btm</keyword></searchKeys><dataExt><geoEle xmlns=""><GeoBndBox esriExtentType="search"/></geoEle></dataExt></dataIdInfo><distInfo><distributor><distorFormat><formatName>ArcToolbox Tool</formatName></distorFormat></distributor></distInfo><tool displayname="Calculate Slope" name="btmslope" toolboxalias="btm" xmlns=""><parameters><param datatype="Raster Layer" direction="Input" displayname="Input bathymetric raster" expression="Input_bathymetric_raster" name="Input_bathymetric_raster" type="Required"><dialogReference>&lt;DIV STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Input surface raster.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;</dialogReference><pythonReference>&lt;DIV STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Input surface raster.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;</pythonReference></param><param datatype="Raster Dataset" direction="Output" displayname="Output raster" expression="Output_raster" name="Output_raster" type="Required"><dialogReference>&lt;DIV STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Output slope raster, in units of degrees.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;</dialogReference><pythonReference>&lt;DIV STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Output slope raster, in units of degrees.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;</pythonReference></param></parameters><summary>&lt;DIV STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;This tool calculates the slope (gradient, or rate of maximum change in z-value) from each cell of a surface raster in &lt;/SPAN&gt;&lt;SPAN STYLE="font-weight:bold;"&gt;degree &lt;/SPAN&gt;&lt;SPAN&gt;units. The tool assumes that the depth or elevation units of the surface raster are the same as the x and y units (i.e. a z-factor of 1). &lt;/SPAN&gt;&lt;/P&gt;&lt;P STYLE="margin:1 1 1 0;"&gt;&lt;SPAN&gt;Here, slope is calculated using a 3x3 scanning window of grid cells. The center cell of the window and its eight neighbors are used to find the average gradient in the horizontal (dz/dx) and vertical (dz/dy) directions at each location in the surface raster. A single slope value is then found for each cell in the raster by calculating the inverse tangent of the hypotenuse of the horizontal and vertical gradients. For a more in-depth description of how slope is calculated, including references and example calculations, please see &lt;/SPAN&gt;&lt;A href="http://desktop.arcgis.com/en/arcmap/10.3/tools/3d-analyst-toolbox/how-slope-works.htm"&gt;&lt;SPAN&gt;How Slope Works&lt;/SPAN&gt;&lt;/A&gt;&lt;SPAN&gt;. &lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;</summary><arcToolboxHelpPath>c:\program files (x86)\arcgis\desktop10.4\Help\gp</arcToolboxHelpPath></tool><Binary><Thumbnail><Data EsriPropertyType="PictureX">/9j/4AAQSkZJRgABAQEAXQBdAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsK
+CwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQU
+FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCABlAIADASIA
+AhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQA
+AAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3
+ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWm
+p6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEA
+AwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSEx
+BhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElK
+U1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3
+uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD9U6KK
+KACiiigAooooAKKKKACvHvjx+1B4T+BkkWjXDtrfjq/s3u9L8L2e7zrlQ4QSSyBSttDuJzJJjIjl
+2LIyFKxf2pP2o7f4G2Ft4f8AD1pB4i+JuswmTS9FkY+TaxZKm+vSpylujAgAENKwKJjDvH8QaB4d
+uLPUdU13W9Tn8R+L9al+06vr16B513LgAAAcRxqAFSNQFRVVQAAK+fzXNqeXQ5Y61Hsu3m/61PDz
+PM4YGHLHWb2X6v8ArUl8S6Rd/EnxVL4x8cXZ1nxnLNFcRalatJb/ANl+U++CGwKtvt44mOVKtvLZ
+d2Z2Jrvvhn8fPiv8HCttDrx+Jfh1dx/srxfcsL+PPmsfK1JVZzl5EyJ0mwsaopjHNcxRX5zSzfG0
+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
+01D8X/mTLM8XJWc/wX+R/9k=</Data></Thumbnail><Enclosure rel="side-panel-help"><Data EsriPropertyType="Image" OriginalFileName="thumbnail.jpg">/9j/4AAQSkZJRgABAQEAXQBdAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsK
+CwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQU
+FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCABlAIADASIA
+AhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQA
+AAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3
+ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWm
+p6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEA
+AwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSEx
+BhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElK
+U1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3
+uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD9U6KK
+KACiiigAooooAKKKKACvHvjx+1B4T+BkkWjXDtrfjq/s3u9L8L2e7zrlQ4QSSyBSttDuJzJJjIjl
+2LIyFKxf2pP2o7f4G2Ft4f8AD1pB4i+JuswmTS9FkY+TaxZKm+vSpylujAgAENKwKJjDvH8QaB4d
+uLPUdU13W9Tn8R+L9al+06vr16B513LgAAAcRxqAFSNQFRVVQAAK+fzXNqeXQ5Y61Hsu3m/61PDz
+PM4YGHLHWb2X6v8ArUl8S6Rd/EnxVL4x8cXZ1nxnLNFcRalatJb/ANl+U++CGwKtvt44mOVKtvLZ
+d2Z2Jrvvhn8fPiv8HCttDrx+Jfh1dx/srxfcsL+PPmsfK1JVZzl5EyJ0mwsaopjHNcxRX5zSzfG0
+qjqRqO73vqvu/wAj4KnmmLpVHUVR3e99V9x9V+AP29vhvrsWn2fjaS5+F3iG4Jie08SLtsfMWASy
+NHqCg25jzvRWkeJ2Kf6tSyg/Sdfl5dWsN9bSW9zDHcQSKVeKVQyuD2IPBFO8F6n4p+FN7Z3HgDxd
+qfhm1tchdBkka70WRGnWaRDZSHZHvYNl4DFIBI+HBYk/W4TienK0cVG3mtV92/5n1GF4ihL3cTG3
+mtvu3/M/UGivjLwL+3xq+gW8dr8U/BEzsZ44/wDhIPBCG6tAjyuGkmtJH8+FYo/KJ8s3Bb5yAuFU
+/Uvw5+J/hT4ueGYfEHg3X7HxDpMm1TPZShjC5jSTypU+9FKFkQtHIFddw3KDX2FDE0cVHmoyUl5H
+1NHEUsRHmpSTXkdRRRRXSdAUUUUAFFFFABXh37S/7Stv8FdPg0TQba3134i6rCZNO0qVj5FrFkqb
+28KnKQKwICghpWUomMO8fJ/tPftfzfDLxHB4B+HlpYeIfiGxiuNRe/Dvp+hWrYYNdeWys00i/wCr
+gVlbDeYxC7BL8qwW1xJqGo6rqd/cazr2qTfadR1a8IM93LgAFsABVVQFRFAVFVVUAACvms3ziGAj
+7OnrUf4eb/yPn80zWOCj7OGs3+Hm/wDIq6VpE8GoanrOrajca/4n1ib7Vq2t3uPPvJcADgcJGqgK
+kS4VFAVQAK06KK/K6lWdabqVHdvqfmtSpOrJzm7thRRRWZAUUVFeXkGn2k1zdTR29tChkkmlYKiK
+BksSeAAO9CV9ECV9EOnnjtYJJppEihjUu8kjBVVQMkknoAO9cZpvhnSte8aeCfifq0Fj4e8O6B4o
+0S9g1i9RIJbqMajbq9xLI+PLtljLMCxBbG75VA39R4X8E3HxNuINU123ktfCUbCSz0idCr6kwOVm
+uFPIi6FYjy3DOOiiX9r6Pf8As3eNxjpbRH8p4zX0uW0nhsRTk/ibXyV/z/L12/ZeHuFJYehLMMcr
+S5W4x7abvz7L7z9R6KKK/WDoCiiigAr5g/ar/amu/BF1N8PPhzNBcfEO4iVr7VJIxNbeG7dxlZpV
+PyyXLqcxQHjkSSDZtWV/7Rf7WMOhR3Xg74Z6nY6p4yZpLe/1eBkubXw9tdo5PMAyr3YZWVbc/cI3
+ygKFSX5O0TRLfQrWSKFpp5Z5Xubm7upWluLudzukmmkbLSSOxJZickmvls4zmOCTo0dan5evn5fe
+fN5rm0cGnSpaz/L/AIPkV/DPhi08LWMsNu891cXEz3V5f3spmur24c7pJ5pG+aSR2JJY9Sa16KK/
+LpzlUk5zd2z84nOVSTlJ3bCiiioJCiiqesaxZ6Bps9/qFwttaQDc8jZPfAAA5JJIAAySSAASaaTk
+7LccYuTSSu2P1PU7TRtPnvr64jtbSBC8s0rYVFHcmpvB/ge68bXVvrniS0ktNHidZtP0O4XDyMDl
+bi5U984KRH7vDN8+AjvA3gC98Uaja+JvFdq1rBA4m0rw/Nj/AEcj7txcjo03dU5Efu/K+s17VGiq
+Gr1l+Xp5+f3dz924V4RWE5cdmEb1N4x/l835/l67FeS/tYp5n7OvjkelkD+UiGvWq8s/akj8z9nv
+x2PTTXP5EGu7DaV6fqvzP0/Fa0Kno/yP05ooor9UPyYK+Lf2q/2p9T8Q6vqnwt+FeqSWM9s7Wvij
+xpZtzpp6PY2Tjrd9pJRxbg4H77/U3v2pP2nNQ1nUNS+G3w11OSxlgdrXxH4usnw1gRw9lZOP+Xrt
+JKOIOQMzf6r530LQtP8ADOkWul6Xax2VhaoI4oIhgKP6k9STySSTXyOc52sInQw7vPq+3/B/I+Xz
+XN1hk6NB3n1fb/gkXhrwzpng/RLXSdItI7Kwtl2xxRj8yT3J7k9a06KK/MZScm5Sd2z87lJybcnd
+hRRRSEFFFZniLxFZ+GdP+1XZkcu6wwW0CGSa5lbhIokHLux6AfU4AJFRi5tRirtlQhKpJQgrt7Il
+1vW7Pw9p73l7KY4VIVVVSzyOThURRyzMSAFAJJOBVL4LrpvxN1e98QapcRyapoV7Jax+G3+9pEys
+y+ZMp+9O2Gw4yqjIQk7mPUfD34cXh1CHxR4tjjbXACbLTEcSQ6UjDBAPR5yDhpOgyVT5cl+WvPgp
+p3gz426h8Sftj2Ntqk8CSG1n+zC3crtYy5YI8cjhMhgx3MMDPNfRYXD0qUZKT9+2j/Rf5/Jab/u/
+DnC0sr5Mbi4qVR9H9hd/X8vxPdKKKKzP1cK81/aVi874B+PEHU6TN/KvSq8//aCj834IeOF9dJuP
+/QDW+Hdq0PVfmc+IV6M15P8AI/SavhT4y/tlaz8UPEGq+FvhVeR2PgWCOSy1DxxAW+038+4B00tw
+wCRqA6G6wxYuTDt2JK2Z+0x+0ZcftB3N94G8E38lr8L4ma31rxBaSFX8RsDh7S1ccizzlZJh/r+U
+Q+VuaXzmysoNOtIbW1hjt7aFBHHDEoVUUDAAA6AV9FnOdqhfD4Z+91fb08/y9T+d82zhUL0MO/e6
+vt6ef5eozS9LtNF0+3sbC3jtLO3QRxQxLhUUdgKs0UV+bttu7Pz9tt3YUUUUgCiisfxJ4li0BLWG
+O3l1HVr6Qw2GmW2DNdSYzhc8BQOWc4VRkkirhCVSSjFXbNKVKdeap01eT0SXUk8Q+Irbw5aRySpL
+c3NxIILWytl3z3Up+7HGvcnBPYAAkkAEjpfh18Nbmx1FfFHinyrnxM6MltbRNvt9KibrHEf4pCPv
+y4y3QYUAVP8ADr4aSaDdN4g8Qyxaj4quIyhkiyYLCI8mC3B5A4G5zhnIycAKq+gV7VKnGgrR1k93
++i/z6+h/Q3C/CsMqisViles/uj6efd/cFVtTsE1TTrqzkaRI7iNoi0UjRuoIxlWUhlI6gqQQeQQa
+s0Vadj9FavoY3g/VZNY8O2s87I93HvtrkxlCPOicxycLJIF+dG+XexXoTkGtmuf8Kzf8THxLbGYy
+tBqR+VpS5QPBFIBzNIVHznAIi46R4w79BVzVpaEwfuq4Vw3x0Tf8GPHA/wCoNdn8omNdzXGfGtd/
+wc8dD00K+P5QOaqj/Ej6oitrSl6P8j2j4j/sF6XG93qnwn1f/hCr5zJMfDl6GudDuJD5zkImfMsy
+0kkYzCTGiR4WAmvmHxRqF98N/GT+E/HelXHhLWzNJDaS3Yb7BqoQITJZXRVUnXEsWR8rqXCuisCo
+/U+srxP4U0TxvodzoviLR7DX9Hudhn07VLVLm3l2uHXdG4KthlVhkcFQeor7rHZLhcdeTXLLuv1X
+X8/M/CMblGGxl5Ncsu6/XufmtRXvPjn9gibw6Bc/CPxEdPtV2r/winim4mubEKPJTEF5h7iDCrK5
+DicMzgARqOPmpfFDab4mfwv4m0q/8G+LowS2ia5F5Msqh3j8yB/uXERaOQLJEzKwUkHFfnuOybFY
+G8muaPdfr2PhcZlOJwd5Nc0e6/XsblFFYHiPxPLp15a6RpNmdY8S34P2PTUbb8o4Msrf8s4lzy5+
+gBJArxqdOVWShBXZ5tChVxNSNGjFyk9EkP8AE3igaG1pZWdpJq+vagxi0/SbdgJLhwOSSeEjUcvI
+eFHqSAe4+GnwyPhJ59a1q5j1bxffxhLq+RSIrePORbWynlIlP/AnI3NzgK/4a/DGPwUtxqeo3I1f
+xVqCgX2qMm0BQciCFf8AlnCp6L1J+ZiSa7mvbp040I8sNW9338l5fn16Jf0XwzwvTyaCr1/erPr0
+j5L9WFFFFM++CiiuP+LvxIt/hH8PtT8WXdnLqFrp7QebbwsFcpJPHESueMgPuwcZxjIzkVCDqSUI
+7vQic404uctlqXfCFwb2+8TT72dDqjRplyygRwxRkD52A+ZWyAF5zlc5J6OuD+B3iJPF3wz0rWkt
+by2XUDLdZvY9jyGSRnLgFmOwlvlyfugY4wT3lXVTjNxfTT7iKUlKCkuuv3hXHfGcZ+D3jr/sA3//
+AKTvXY1x/wAZRn4QeOf+wFff+k70Uv4kfVBW/hy9GfotRRRX6wfkQVy3xH+F3hP4veGZvD/jPw/Y
++ItIk3MIL6IMYXMbx+bE/wB6KULI4WSMq67jtYGiigD89P23fhi/7F3ge28aeGNcu/EHh7UtUGlw
+eHdeHnS2Mskd3OHjvAQ7woIo4xFKrvgEmbJ4+Q/ht+25Z+ALO4lbwE+r6/fkPqWs3GshZblx0AAt
+yI41yQkY4UepJYlFeTPLMI5Sl7NJve11+QsFCGArSr4aKjJ9bL9dvkdoP+Ckmf8Amnf/AJW//uel
+/wCHkX/VO/8Ayt//AHPRRWX9lYP+T8X/AJnu/wBr43/n5+C/yF/4eQf9U8/8rf8A9z0f8PIP+qef
++Vv/AO56KKP7Kwf8n4v/ADH/AGvjf+fn4L/ID/wUedvu/D5R9daz/wC29cl8Tv23V+JnhY+Hb/wN
+Eml3V1byXcf9pljNFFKspiz5Q27iignngn1yCiqjlmEhJSjDVeb/AMyZZpi5xcZT0fkv8jp4f+Ch
+11BCkUPgK1hijUKiLqRCqAMAACLgU7/h4fqJ6eCbUfXUW/8AjdFFZvLMJ/J+L/zLWaYz+f8ABf5D
+W/4KHaoBx4Ls/wAb9/8A4isTxj+3jqvinwlrWiv4Rs7dNSsp7NplvHYoJI2QsBt5xuziiiqjluEi
+01D8X/mTLM8XJWc/wX+R/9k=</Data></Enclosure></Binary><mdHrLv><ScopeCd value="005"/></mdHrLv></metadata>
