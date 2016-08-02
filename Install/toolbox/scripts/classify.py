@@ -152,6 +152,10 @@ def main(classification_file, bpi_broad_std, bpi_fine_std,
             else:
                 row.setValue('Zone','No Matching Zone')
                 rows.updateRow(row)
+        # writing Python like it's C
+        del(rows)
+        del(row)
+
         arcpy.env.rasterStatistics = "STATISTICS"
         # validate the output raster path
         out_raster = utils.validate_path(out_raster)
