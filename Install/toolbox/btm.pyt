@@ -871,7 +871,7 @@ class surfacetoplanar(object):
         output_raster.direction = 'Output'
         output_raster.datatype = dt.format('Raster Dataset')
 
-        #ACR Correction
+        # ACR Correction
         acr_correction = arcpy.Parameter()
         acr_correction.name = u'ACR_Correction'
         acr_correction.displayName = u'Correct Planar Area for Slope (Arc-Chord Ratio Rugosity)'

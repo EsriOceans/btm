@@ -46,7 +46,7 @@ def triangle_area(side_a, side_b, side_c):
          / 2)
 
 
-def main(in_raster=None, out_raster=None, acr_correction = None, area_raster=None):
+def main(in_raster=None, out_raster=None, acr_correction=True, area_raster=None):
     """
     A calculation of rugosity, based on the difference between surface
     area and planar area, as described in Jenness, J. 2002. Surface Areas
@@ -56,6 +56,11 @@ def main(in_raster=None, out_raster=None, acr_correction = None, area_raster=Non
     NOTE: the VRM method implemented in ruggeddness is generally considered
           superior to this method.
     """
+
+    # sanitize acr input
+    if isinstance(acr_correction, unicode) and acr_correction.lower() == 'false':
+        acr_correction = False
+
     out_workspace = os.path.dirname(out_raster)
     # make sure workspace exists
     utils.workspace_exists(out_workspace)
@@ -167,11 +172,10 @@ def main(in_raster=None, out_raster=None, acr_correction = None, area_raster=Non
             utils.msg(save_msg)
             total_area.save(area_raster)
 
-        if acr_correction == 'false':
+        if not acr_correction:
             utils.msg("Calculating ratio with uncorrected planar area.")
             area_ratio = total_area / cell_size**2
-
-        elif acr_correction == 'true':
+        else:
             utils.msg("Calculating ratio with slope-corrected planar area.")
             slope_raster = arcpy.sa.Slope(in_raster, "DEGREE", "1")
             planar_area = Divide(float(cell_size**2), Cos(Times(slope_raster, 0.01745)))
@@ -198,10 +202,11 @@ def main(in_raster=None, out_raster=None, acr_correction = None, area_raster=Non
 # when executing as a standalone script get parameters from sys
 if __name__ == '__main__':
     config.mode = 'script'
-    if len(sys.argv) == 3:
+    if len(sys.argv) == 4:
         area_param = None
     else:
-        area_param = sys.argv[3]
+        area_param = sys.argv[4]
     main(in_raster=sys.argv[1],
          out_raster=sys.argv[2],
+         acr_correction=sys.argv[3],
          area_raster=area_param)

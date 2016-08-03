@@ -312,7 +312,7 @@ class TestVrm(unittest.TestCase):
 class TestSaPa(unittest.TestCase):
     """
     surface_area_to_planar_area.main(in_raster=None, out_raster=None,
-        area_raster=None)
+        acr_correction=False, area_raster=None)
     """
     def testSaPaImport(self):
         self.assertTrue('main' in vars(surface_area_to_planar_area))
