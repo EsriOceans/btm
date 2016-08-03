@@ -1,2 +1,4 @@
 xlrd
 numpy
+scipy
+netCDF4
