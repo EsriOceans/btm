@@ -26,6 +26,10 @@ pip-log.txt
 .tox
 nosetests.xml
 
+# ignore test metadata
+tests/data/log
+tests/data/*.tif.xml
+
 # Translations
 *.mo
 
