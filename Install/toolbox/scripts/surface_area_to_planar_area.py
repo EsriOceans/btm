@@ -202,10 +202,11 @@ def main(in_raster=None, out_raster=None, acr_correction=True, area_raster=None)
 # when executing as a standalone script get parameters from sys
 if __name__ == '__main__':
     config.mode = 'script'
-    if len(sys.argv) == 3:
+    if len(sys.argv) == 4:
         area_param = None
     else:
-        area_param = sys.argv[3]
+        area_param = sys.argv[4]
     main(in_raster=sys.argv[1],
          out_raster=sys.argv[2],
+         acr_correction=sys.argv[3],
          area_raster=area_param)
