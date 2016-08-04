@@ -80,9 +80,9 @@ def main(in_raster=None, neighborhood_size=None,
             return
 
         if 'Kurtosis' in out_stats and not utils.SCIPY_EXISTS:
-            utils.msg("This tool requires the SciPy library is installed.",
-                      "SciPy is included in ArcGIS 10.4 and later versions.",
-                      "error")
+            utils.msg("The kurtosis calculation requires the SciPy library "
+                      "is installed. SciPy is included in ArcGIS 10.4 and "
+                      "later versions.", "error")
             return
     try:
         # initialize our neighborhood

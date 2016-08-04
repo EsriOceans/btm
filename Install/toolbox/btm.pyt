@@ -1051,6 +1051,22 @@ class depthstatistics(object):
         return
 
     def updateMessages(self, parameters):
+        stats = []
+        if parameters[3].value:
+            stats = parameters[3].valueAsText.split(";")
+
+        if not utils.NETCDF4_EXISTS and ('Kurtosis' in stats or \
+                'Interquartile Range' in stats):
+            parameters[3].setWarningMessage(
+                    "The interquartile range and kurtosis tools require "
+                    "the NetCDF4 Python library is installed. NetCDF4 "
+                    "is included in ArcGIS 10.3 and later.")
+
+        if not utils.SCIPY_EXISTS and 'Kurtosis' in stats:
+            parameters[3].setWarningMessage(
+                "The kurtosis calculation requires the SciPy library "
+                "is installed. SciPy is included in ArcGIS 10.4 and "
+                "later versions.")
         return
 
     def execute(self, parameters, messages):
@@ -1140,6 +1156,11 @@ class scalecomparison(object):
         return
 
     def updateMessages(self, parameters):
+        if not utils.SCIPY_EXISTS:
+            parameters[0].setWarningMessage(
+                "This tool requires the SciPy module is "
+                "installed. SciPy is included in ArcGIS 10.4 "
+                "and later versions.")
         return
 
     def execute(self, parameters, messages):
@@ -1207,6 +1228,22 @@ class multiplescales(object):
         return
 
     def updateMessages(self, parameters):
+        stats = []
+        if parameters[2].value:
+            stats = parameters[2].valueAsText.split(";")
+
+        if not utils.NETCDF4_EXISTS and ('Kurtosis' in stats or \
+                'Interquartile Range' in stats):
+            parameters[2].setWarningMessage(
+                    "The interquartile range and kurtosis tools require "
+                    "the NetCDF4 Python library is installed. NetCDF4 "
+                    "is included in ArcGIS 10.3 and later.")
+
+        if not utils.SCIPY_EXISTS and 'Kurtosis' in stats:
+            parameters[2].setWarningMessage(
+                "The kurtosis calculation requires the SciPy library "
+                "is installed. SciPy is included in ArcGIS 10.4 and "
+                "later versions.")
         return
 
     def execute(self, parameters, messages):
