@@ -21,6 +21,7 @@ from scripts import bpi, standardize_bpi_grids, btm_model, aspect, \
 
 from scripts.tempdir import TempDir
 
+
 class TestBtmDocument(unittest.TestCase):
     """ Test our document class."""
 
@@ -101,7 +102,12 @@ class TestUtilitiesMethods(unittest.TestCase):
 
         # force reload utils after locale is set; otherwise it'll set it
         # internally.
-        reload(su)
+        try:
+            reload(su)
+        except NameError:
+            # py3, assume 3.4+
+            import importlib
+            importlib.reload(su)
 
         mean = su.raster_properties(config.bathy_raster, 'MEAN')
         self.assertAlmostEqual(mean, self.mean)
@@ -312,7 +318,7 @@ class TestVrm(unittest.TestCase):
 class TestSaPa(unittest.TestCase):
     """
     surface_area_to_planar_area.main(in_raster=None, out_raster=None,
-        area_raster=None)
+        acr_correction=False, area_raster=None)
     """
     def testSaPaImport(self):
         self.assertTrue('main' in vars(surface_area_to_planar_area))

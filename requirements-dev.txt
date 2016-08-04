@@ -1,4 +1,7 @@
+# add release requirements
+-r requirements.txt
 # used for tests
 nose
+pep8
 # used for packaging
 git-archive-all

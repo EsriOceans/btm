@@ -13,7 +13,16 @@ import csv
 import math
 import random
 from xml.dom.minidom import parse
-from netCDF4 import Dataset
+try:
+    from netCDF4 import Dataset
+    NETCDF4_EXISTS = True
+except ImportError:
+    NETCDF4_EXISTS = False
+try:
+    import scipy
+    SCIPY_EXISTS = True
+except ImportError:
+    SCIPY_EXISTS = False
 
 import arcpy
 from arcpy import Raster
@@ -56,17 +65,17 @@ def msg(output, mtype='message'):
             tbinfo = '(None)'
         if config.mode == 'script':
             # print the raw exception
-            print exception_message
+            print(exception_message)
             # Arcpy and Python stuff, hopefully also helpful
             err_msg = "ArcPy Error: {msg_text}\nPython Error: ${tbinfo}".format(
                 msg_text=arcpy_messages, tbinfo=tbinfo)
-            print err_msg
+            print(err_msg)
         else:
             arcpy.AddError(exception_message)
             arcpy.AddError(arcpy_messages)
             arcpy.AddMessage("Python Error: {tbinfo}".format(tbinfo=tbinfo))
     elif config.mode == 'script':
-        print output
+        print(output)
     else:
         if mtype == 'message':
             arcpy.AddMessage(output)
@@ -192,6 +201,9 @@ class BlockProcessor:
         arcpy.env.overwriteOutput = True
 
     def computeBlockStatistics(self, func, blockSize, outRast, overlap=0):
+        # immediately fail if we don't have a netCDF4 backend available:
+        if not NETCDF4_EXISTS:
+            return None
 
         total_blocks = int(math.ceil(float(self.width) / blockSize) *
                            math.ceil(float(self.height) / blockSize))
@@ -199,12 +211,12 @@ class BlockProcessor:
         if verbose:
             msg("Beginning block analysis...")
         with TempDir() as d:
-            inNetCDF = os.path.join(d,'{}.nc'.format(random.random()))
+            inNetCDF = os.path.join(d, '{}.nc'.format(random.random()))
             arcpy.RasterToNetCDF_md(self.fileIn, inNetCDF, r"Band1")
             inFile = Dataset(inNetCDF, mode="a")
             inDepth = inFile.variables['Band1']
 
-            outNetCDF = os.path.join(d,'{}.nc'.format(random.random()))
+            outNetCDF = os.path.join(d, '{}.nc'.format(random.random()))
             arcpy.RasterToNetCDF_md(self.fileIn, outNetCDF, r"Band1")
             outFile = Dataset(outNetCDF, mode="a")
             outDepth = outFile.variables['Band1']

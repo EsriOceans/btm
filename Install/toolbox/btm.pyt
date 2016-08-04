@@ -842,6 +842,7 @@ class runfullmodel(object):
             classification_dict=parameters[6].valueAsText,
             output_zones=parameters[7].valueAsText)
 
+
 class surfacetoplanar(object):
     """Compute Surface Area to Planar Area (ratio)."""
 
@@ -872,10 +873,11 @@ class surfacetoplanar(object):
         output_raster.direction = 'Output'
         output_raster.datatype = dt.format('Raster Dataset')
 
-        #ACR Correction
+        # ACR Correction
         acr_correction = arcpy.Parameter()
         acr_correction.name = u'ACR_Correction'
-        acr_correction.displayName = u'Correct Planar Area for Slope'
+        acr_correction.displayName = u'Correct Planar Area for Slope ' + \
+                                     u'(Arc-Chord Ratio Rugosity)'
         acr_correction.parameterType = 'Optional'
         acr_correction.direction = 'Input'
         acr_correction.datatype = dt.format('Boolean')
@@ -972,8 +974,8 @@ class terrainruggedness(object):
         if n_size is not None:
             if float(n_size) % 2 == 0:
                 parameters[1].setWarningMessage(
-                    "If an even neighborhood size is used, neighborhood"\
-                    " coordinates will be computed using truncation."\
+                    "If an even neighborhood size is used, neighborhood"
+                    " coordinates will be computed using truncation."
                     " Use an odd neighborhood size to avoid unexpected results.")
 
         return
@@ -1109,6 +1111,22 @@ class depthstatistics(object):
         return
 
     def updateMessages(self, parameters):
+        stats = []
+        if parameters[3].value:
+            stats = parameters[3].valueAsText.split(";")
+
+        if not utils.NETCDF4_EXISTS and ('Kurtosis' in stats or
+                                         'Interquartile Range' in stats):
+            parameters[3].setWarningMessage(
+                "The interquartile range and kurtosis tools require "
+                "the NetCDF4 Python library is installed. NetCDF4 "
+                "is included in ArcGIS 10.3 and later.")
+
+        if not utils.SCIPY_EXISTS and 'Kurtosis' in stats:
+            parameters[3].setWarningMessage(
+                "The kurtosis calculation requires the SciPy library "
+                "is installed. SciPy is included in ArcGIS 10.4 and "
+                "later versions.")
         return
 
     def execute(self, parameters, messages):
@@ -1198,14 +1216,22 @@ class scalecomparison(object):
         return
 
     def updateMessages(self, parameters):
+        if not utils.SCIPY_EXISTS:
+            parameters[0].setWarningMessage(
+                "This tool requires the SciPy module is "
+                "installed. SciPy is included in ArcGIS 10.4 "
+                "and later versions.")
         return
 
     def execute(self, parameters, messages):
         import scale_comparison
         scale_comparison.main(
-            in_raster=parameters[0].valueAsText, img_filter=parameters[1].valueAsText,
-            percentile=parameters[2].valueAsText, min_nbhs=parameters[3].valueAsText,
-            max_nbhs=parameters[4].valueAsText, out_file=parameters[5].valueAsText)
+            in_raster=parameters[0].valueAsText,
+            img_filter=parameters[1].valueAsText,
+            percentile=parameters[2].valueAsText,
+            min_nbhs=parameters[3].valueAsText,
+            max_nbhs=parameters[4].valueAsText,
+            out_file=parameters[5].valueAsText)
 
 
 class multiplescales(object):
@@ -1265,6 +1291,22 @@ class multiplescales(object):
         return
 
     def updateMessages(self, parameters):
+        stats = []
+        if parameters[2].value:
+            stats = parameters[2].valueAsText.split(";")
+
+        if not utils.NETCDF4_EXISTS and ('Kurtosis' in stats or
+                                         'Interquartile Range' in stats):
+            parameters[2].setWarningMessage(
+                "The interquartile range and kurtosis tools require "
+                "the NetCDF4 Python library is installed. NetCDF4 "
+                "is included in ArcGIS 10.3 and later.")
+
+        if not utils.SCIPY_EXISTS and 'Kurtosis' in stats:
+            parameters[2].setWarningMessage(
+                "The kurtosis calculation requires the SciPy library "
+                "is installed. SciPy is included in ArcGIS 10.4 and "
+                "later versions.")
         return
 
     def execute(self, parameters, messages):
@@ -1276,7 +1318,6 @@ class multiplescales(object):
         stats_set = set(['Mean Depth', 'Standard Deviation', 'Variance',
                          'Interquartile Range', 'Kurtosis'])
         vrm_set = set(['Terrain Ruggedness (VRM)'])
-        
 
         for each in nbh_lst:
             utils.msg("Computing metrics for neighborhood size {}...".format(each))
@@ -1287,7 +1328,8 @@ class multiplescales(object):
                                       out_stats_raw=parameters[2].valueAsText)
             if vrm_set.intersection(metrics_lst):
                 n_label = "{:03d}".format(int(each))
-                out_file = "{}\\ruggedness_{}.tif".format(parameters[3].valueAsText, n_label)
+                out_file = "{}\\ruggedness_{}.tif".format(parameters[3].valueAsText,
+                                                          n_label)
                 ruggedness.main(in_raster=parameters[0].valueAsText,
                                 neighborhood_size=each, out_raster=out_file)
         return
