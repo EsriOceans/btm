@@ -19,7 +19,7 @@ def main(in_raster=None, img_filter=None, percentile=None,
 
     r = arcpy.RasterToNumPyArray(in_raster, "", 200, 200, 0)
     if r.ndim > 2:
-        r = np.squeeze(r[0,:,:])    
+        r = np.squeeze(r[0, :, :])
     min_nbhs = int(min_nbhs)
     max_nbhs = int(max_nbhs)
 
@@ -39,7 +39,6 @@ def main(in_raster=None, img_filter=None, percentile=None,
         a.set_title('{}x{}'.format(size, size), fontsize=8)
         plt.axis('off')
         plt.subplots_adjust(hspace=0.01, wspace=0.09)
-        prev = med
         i += 1
 
     plt.savefig(out_file, bbox_inches='tight')

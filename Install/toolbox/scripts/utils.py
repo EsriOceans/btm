@@ -65,17 +65,17 @@ def msg(output, mtype='message'):
             tbinfo = '(None)'
         if config.mode == 'script':
             # print the raw exception
-            print exception_message
+            print(exception_message)
             # Arcpy and Python stuff, hopefully also helpful
             err_msg = "ArcPy Error: {msg_text}\nPython Error: ${tbinfo}".format(
                 msg_text=arcpy_messages, tbinfo=tbinfo)
-            print err_msg
+            print(err_msg)
         else:
             arcpy.AddError(exception_message)
             arcpy.AddError(arcpy_messages)
             arcpy.AddMessage("Python Error: {tbinfo}".format(tbinfo=tbinfo))
     elif config.mode == 'script':
-        print output
+        print(output)
     else:
         if mtype == 'message':
             arcpy.AddMessage(output)
@@ -211,12 +211,12 @@ class BlockProcessor:
         if verbose:
             msg("Beginning block analysis...")
         with TempDir() as d:
-            inNetCDF = os.path.join(d,'{}.nc'.format(random.random()))
+            inNetCDF = os.path.join(d, '{}.nc'.format(random.random()))
             arcpy.RasterToNetCDF_md(self.fileIn, inNetCDF, r"Band1")
             inFile = Dataset(inNetCDF, mode="a")
             inDepth = inFile.variables['Band1']
 
-            outNetCDF = os.path.join(d,'{}.nc'.format(random.random()))
+            outNetCDF = os.path.join(d, '{}.nc'.format(random.random()))
             arcpy.RasterToNetCDF_md(self.fileIn, outNetCDF, r"Band1")
             outFile = Dataset(outNetCDF, mode="a")
             outDepth = outFile.variables['Band1']
