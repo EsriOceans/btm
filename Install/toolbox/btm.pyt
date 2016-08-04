@@ -1057,12 +1057,12 @@ class depthstatistics(object):
         if parameters[3].value:
             stats = parameters[3].valueAsText.split(";")
 
-        if not utils.NETCDF4_EXISTS and ('Kurtosis' in stats or \
-                'Interquartile Range' in stats):
+        if not utils.NETCDF4_EXISTS and ('Kurtosis' in stats or
+                                         'Interquartile Range' in stats):
             parameters[3].setWarningMessage(
-                    "The interquartile range and kurtosis tools require "
-                    "the NetCDF4 Python library is installed. NetCDF4 "
-                    "is included in ArcGIS 10.3 and later.")
+                "The interquartile range and kurtosis tools require "
+                "the NetCDF4 Python library is installed. NetCDF4 "
+                "is included in ArcGIS 10.3 and later.")
 
         if not utils.SCIPY_EXISTS and 'Kurtosis' in stats:
             parameters[3].setWarningMessage(
@@ -1237,12 +1237,12 @@ class multiplescales(object):
         if parameters[2].value:
             stats = parameters[2].valueAsText.split(";")
 
-        if not utils.NETCDF4_EXISTS and ('Kurtosis' in stats or \
-                'Interquartile Range' in stats):
+        if not utils.NETCDF4_EXISTS and ('Kurtosis' in stats or
+                                         'Interquartile Range' in stats):
             parameters[2].setWarningMessage(
-                    "The interquartile range and kurtosis tools require "
-                    "the NetCDF4 Python library is installed. NetCDF4 "
-                    "is included in ArcGIS 10.3 and later.")
+                "The interquartile range and kurtosis tools require "
+                "the NetCDF4 Python library is installed. NetCDF4 "
+                "is included in ArcGIS 10.3 and later.")
 
         if not utils.SCIPY_EXISTS and 'Kurtosis' in stats:
             parameters[2].setWarningMessage(

@@ -23,6 +23,7 @@ backup_patterns = {
     'OSX_DSTORE': re.compile('.DS_Store')
 }
 
+
 def looks_like_a_backup(filename):
     is_backup = False
     for (name, pattern) in backup_patterns.items():
@@ -42,7 +43,7 @@ for directory in dirs_to_add:
         for fn in (f for f in files if not looks_like_a_backup(f)):
             archive_file = os.path.join(archive_path, fn)
             if VERBOSE_MODE:
-                print archive_file
+                print(archive_file)
             zip_file.write(os.path.join(path, fn), archive_file)
             found_file = True
         if not found_file:
