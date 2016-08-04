@@ -13,7 +13,16 @@ import csv
 import math
 import random
 from xml.dom.minidom import parse
-from netCDF4 import Dataset
+try:
+    from netCDF4 import Dataset
+    NETCDF4_EXISTS = True
+except ImportError:
+    NETCDF4_EXISTS = False
+try:
+    import scipy
+    SCIPY_EXISTS = True
+except ImportError:
+    SCIPY_EXISTS = False
 
 import arcpy
 from arcpy import Raster
@@ -192,6 +201,9 @@ class BlockProcessor:
         arcpy.env.overwriteOutput = True
 
     def computeBlockStatistics(self, func, blockSize, outRast, overlap=0):
+        # immediately fail if we don't have a netCDF4 backend available:
+        if not NETCDF4_EXISTS:
+            return None
 
         total_blocks = int(math.ceil(float(self.width) / blockSize) *
                            math.ceil(float(self.height) / blockSize))

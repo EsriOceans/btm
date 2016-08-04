@@ -8,8 +8,11 @@ import os
 import sys
 import math
 import numpy as np
-import scipy
-from scipy import stats
+try:
+    import scipy
+    from scipy import stats
+except ImportError:
+    pass    # error generated inline
 import arcpy
 from arcpy.sa import NbrRectangle, FocalStatistics, Power
 
@@ -68,6 +71,19 @@ def main(in_raster=None, neighborhood_size=None,
         utils.msg("The following stats will be computed: " +
                   "{}".format(";".join(out_stats)))
 
+    # these two tools both use block processing which requires NetCDF4
+    if 'Interquartile Range' in out_stats or 'Kurtosis' in out_stats:
+        if not utils.NETCDF4_EXISTS:
+            utils.msg("The interquartile range and kurtosis tools require "
+                      "the NetCDF4 Python library is installed. NetCDF4 "
+                      "is included in ArcGIS 10.3 and later.", "error")
+            return
+
+        if 'Kurtosis' in out_stats and not utils.SCIPY_EXISTS:
+            utils.msg("This tool requires the SciPy library is installed.",
+                      "SciPy is included in ArcGIS 10.4 and later versions.",
+                      "error")
+            return
     try:
         # initialize our neighborhood
         if verbose:

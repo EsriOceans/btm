@@ -1,13 +1,17 @@
 import arcpy
-from arcpy import Raster
 import numpy as np
-import scipy.ndimage as nd
+import sys
+import scripts.config as config
 import scripts.utils as utils
 from matplotlib import pyplot as plt
 
-import math
-
-import scripts.utils as utils
+if not utils.SCIPY_EXISTS:
+    utils.msg("This tool requires the SciPy module to be " +
+              "installed. SciPy is included in ArcGIS 10.4 " +
+              "and later versions.", "error")
+    sys.exit()
+else:
+    import scipy.ndimage as nd
 
 
 def main(in_raster=None, img_filter=None, percentile=None,
