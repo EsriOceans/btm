@@ -3,6 +3,7 @@ import os
 import unittest
 import sys
 import arcpy
+from arcpy import Raster
 import zipfile
 
 from nose.tools import raises
@@ -696,7 +697,8 @@ class TestMultipleScales(unittest.TestCase):
         self.in_raster = config.bathy_raster
         self.nbh_sizes = '3;13'
         self.metrics = "'Mean Depth';Variance;"\
-                       "'Standard Deviation';'Terrain Ruggedness (VRM)'"
+                       "'Standard Deviation';'Terrain Ruggedness (VRM)';"\
+                       "'Interquartile Range';Kurtosis"
 
     def testResultRastersProduced(self):
         with TempDir() as d:
@@ -707,7 +709,9 @@ class TestMultipleScales(unittest.TestCase):
             depth_stats = {
                 'meandepth': -20.56248074571827,
                 'stddevdepth': 0.2946229406453136,
-                'vardepth': 0.1281792675921596
+                'vardepth': 0.1281792675921596,
+                'iqrdepth': 0.44891918233769,
+                'kurtosisdepth': -0.91233563683704
             }
 
             for (prefix, expected_value) in depth_stats.items():
@@ -725,11 +729,28 @@ class TestMultipleScales(unittest.TestCase):
             rast_names = ['meandepth_003.tif', 'stddevdepth_003.tif',
                           'vardepth_003.tif', 'ruggedness_003.tif',
                           'meandepth_013.tif', 'stddevdepth_013.tif',
-                          'vardepth_013.tif', 'ruggedness_013.tif']
+                          'vardepth_013.tif', 'ruggedness_013.tif',
+                          'iqrdepth_003.tif', 'kurtosisdepth_003.tif',
+                          'iqrdepth_013.tif', 'kurtosisdepth_013.tif']
 
             for each in rast_names:
                 file_name = os.path.join(d, each)
                 self.assertTrue(os.path.exists(file_name))
+
+    def testLZWCompression(self):
+        with TempDir() as d:
+            arcpy.ImportToolbox(config.pyt_file)
+            arcpy.multiplescales_btm(self.in_raster,
+                                     self.nbh_sizes, self.metrics, d)
+            rast_names = ['meandepth_003.tif', 'stddevdepth_003.tif',
+                          'vardepth_003.tif', 'ruggedness_003.tif',
+                          'meandepth_013.tif', 'stddevdepth_013.tif',
+                          'vardepth_013.tif', 'ruggedness_013.tif',
+                          'iqrdepth_003.tif', 'kurtosisdepth_003.tif',
+                          'iqrdepth_013.tif', 'kurtosisdepth_013.tif']
+            for each in rast_names:
+                file_name = os.path.join(d, each)
+                self.assertEqual(str(Raster(file_name).compressionType), 'LZW')
 
 
 class TestACRModel2(unittest.TestCase):
