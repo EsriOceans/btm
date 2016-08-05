@@ -8,6 +8,9 @@ import scripts.utils as utils
 from scripts.tempdir import TempDir
 
 arcpy.env.overwriteOutput = True
+arcpy.CheckOutExtension("Spatial")
+arcpy.CheckOutExtension("3D")
+arcpy.CheckOutExtension("GeoStats")
 
 
 def main(in_raster=None, areaOfInterest=None, saveTINs=False):
@@ -70,7 +73,7 @@ def main(in_raster=None, areaOfInterest=None, saveTINs=False):
         pobfs = []
         i = 0
         for each in splitFiles:
-            utils.msg("Calculating ACR Rugosity for Area"
+            utils.msg("Calculating ACR Rugosity for Area "
                       "{} of {}...".format(i+1, len(splitFiles)))
             # Create POBF TIN
             arcpy.Buffer_analysis(each, boundaryBuffer,

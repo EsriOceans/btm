@@ -115,7 +115,6 @@ class Toolbox(object):
             surfacetoplanar,    # compare surface area to planar area
             terrainruggedness,  # VRM, a measure of roughness
             arcchordratio,         # ACR rugosity index
-            
             # Summary Statistics
             depthstatistics,    # depth summary statistics
             scalecomparison,    # compare scales of analysis
@@ -988,6 +987,7 @@ class terrainruggedness(object):
             neighborhood_size=parameters[1].valueAsText,
             out_raster=parameters[2].valueAsText)
 
+
 class arcchordratio(object):
 
     def __init__(self):
@@ -1015,7 +1015,7 @@ class arcchordratio(object):
         areaOfInterest.direction = 'Input'
         areaOfInterest.datatype = dt.format('Shapefile')
 
-        #Save TINs
+        # Save TINs
         saveTINs = arcpy.Parameter()
         saveTINs.name = u'Save TINs'
         saveTINs.displayName = u'Save Output Contoured and Planar TINs'
@@ -1038,8 +1038,6 @@ class arcchordratio(object):
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
         import acr
-        import imp
-        imp.reload(acr)
         acr.main(
             in_raster=parameters[0].valueAsText,
             areaOfInterest=parameters[1].valueAsText,
@@ -1061,7 +1059,7 @@ class depthstatistics(object):
 
     def __init__(self):
         force_path()
-        self.label = u'Depth Statistics'
+        self.label = u'Calculate Metrics (Depth Statistics)'
         self.canRunInBackground = False
         self.category = 'Surface Derivatives and Statistics'
 

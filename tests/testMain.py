@@ -731,5 +731,49 @@ class TestMultipleScales(unittest.TestCase):
                 file_name = os.path.join(d, each)
                 self.assertTrue(os.path.exists(file_name))
 
+
+class TestACRModel2(unittest.TestCase):
+    def setUp(self):
+        self.in_raster = config.bathy_raster
+        self.aoi = config.aoi
+        self.aoi_multipart = config.aoi_multipart
+
+    def testSinglePartResults(self):
+        with TempDir() as d:
+            arcpy.ImportToolbox(config.pyt_file)
+            testaoi = os.path.join(d, 'testaoi.shp')
+            arcpy.CopyFeatures_management(self.aoi, testaoi)
+            arcpy.arcchordratio_btm(self.in_raster, testaoi, True)
+            planarTIN = os.path.join(d, 'bathy5m_clip_planartin0')
+            elevTIN = os.path.join(d, 'bathy5m_clip_elevationtin')
+            self.assertTrue(os.path.exists(planarTIN))
+            self.assertTrue(os.path.exists(elevTIN))
+            self.assertEqual(len(arcpy.Describe(testaoi).fields), 8)
+            with arcpy.da.SearchCursor(testaoi, '*') as cursor:
+                expected = (0, (358083.9308262255, 4678265.0709908875),
+                            0, 19972.5978495, 19917.1775893,
+                            1.00278253583, 2.32867335011, 246.842790079)
+                result = cursor.next()
+                for x in range(2, len(expected)):
+                    self.assertAlmostEqual(result[x], expected[x])
+
+    def testMultipartResults(self):
+        with TempDir() as d:
+            arcpy.ImportToolbox(config.pyt_file)
+            testaoi_mp = os.path.join(d, 'testaoi_mp.shp')
+            arcpy.CopyFeatures_management(self.aoi_multipart, testaoi_mp)
+            arcpy.arcchordratio_btm(self.in_raster, testaoi_mp, False)
+            rows = int(arcpy.GetCount_management(testaoi_mp).getOutput(0))
+            self.assertEqual(rows, 4)
+            self.assertEqual(len(arcpy.Describe(testaoi_mp).fields), 9)
+            with arcpy.da.SearchCursor(testaoi_mp, '*') as cursor:
+                expected = (0, (358124.62825836154, 4678229.791685243),
+                            0, 0, 1238.64248438, 1236.28701996,
+                            1.00190527311, 5.3937886264, 225.726428217)
+                result = cursor.next()
+                for x in range(2, len(expected)):
+                    self.assertAlmostEqual(result[x], expected[x])
+
+
 if __name__ == '__main__':
     unittest.main()
