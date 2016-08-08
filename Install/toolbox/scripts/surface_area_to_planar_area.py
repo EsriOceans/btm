@@ -164,13 +164,14 @@ def main(in_raster=None, out_raster=None, acr_correction=True, area_raster=None)
         utils.msg("Summing Triangle Area...")
         arcpy.env.pyramid = pyramid_orig
         arcpy.env.rasterStatistics = "STATISTICS"
+        arcpy.env.compression = "LZW"
         total_area = (areas[0] + areas[1] + areas[2] + areas[3] +
                       areas[4] + areas[5] + areas[6] + areas[7])
         if area_raster:
             save_msg = "Saving Surface Area Raster to " + \
                 "{}.".format(area_raster)
             utils.msg(save_msg)
-            total_area.save(area_raster)
+            arcpy.CopyRaster_management(total_area, area_raster)
 
         if not acr_correction:
             utils.msg("Calculating ratio with uncorrected planar area.")
@@ -186,7 +187,7 @@ def main(in_raster=None, out_raster=None, acr_correction=True, area_raster=None)
         save_msg = "Saving Surface Area to Planar Area ratio to " + \
             "{}.".format(out_raster)
         utils.msg(save_msg)
-        area_ratio.save(out_raster)
+        arcpy.CopyRaster_management(area_ratio, out_raster)
 
     except Exception as e:
         utils.msg(e, mtype='error')

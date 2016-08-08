@@ -89,6 +89,14 @@ def dedent(text, ending='\r\n'):
     return textwrap.dedent(text)
 
 
+def makeDefaultFilename(name):
+    if utils.get_workspace() == None:
+        return None
+    else:
+        workspace = utils.get_workspace()
+        return os.path.join(workspace, name)
+
+
 def force_path():
     """
     Ensure Path environment is correctly initialized for our classes.
@@ -132,7 +140,7 @@ class Toolbox(object):
 class setworkspace(object):
     def __init__(self):
         force_path()
-        self.label = u'Set BTM Workspace'
+        self.label = u'Set Default BTM Workspace'
         self.canRunInBackground = False
         self.description = dedent("""\
                 Save a default workspace location to disk""")
@@ -222,8 +230,7 @@ class broadscalebpi(object):
         output_raster.displayName = u'Output raster'
         output_raster.parameterType = 'Required'
         output_raster.direction = 'Output'
-        output_raster.datatype = dt.format('Raster Dataset')
-        # output_raster.value = os.path.join(arcpy.env.workspace, 'broad_bpi')
+        output_raster.datatype = dt.format('File')
 
         return [input_raster, inner_radius, outer_radius,
                 scale_factor, output_raster]
@@ -236,6 +243,13 @@ class broadscalebpi(object):
         bathy = parameters[self.cols.index('bathy')].valueAsText
         outer_radius = parameters[self.cols.index('outer')].valueAsText
         scale_factor = parameters[self.cols.index('scale_factor')]
+        output = parameters[self.cols.index('output')]
+
+        if output.value is None and bathy is not None:
+            base_name = os.path.splitext(os.path.basename(bathy))[0]
+            out_name = '{}_broadbpi.tif'.format(base_name)
+            out_path = makeDefaultFilename(out_name)
+            output.value = out_path
 
         if outer_radius is not None and bathy is not None:
             # get the cellsize of the input raster; assume same in X & Y
@@ -340,7 +354,7 @@ class finescalebpi(object):
         output_raster.displayName = u'Output raster'
         output_raster.parameterType = 'Required'
         output_raster.direction = 'Output'
-        output_raster.datatype = dt.format('Raster Dataset')
+        output_raster.datatype = dt.format('File')
 
         # TODO: implement mutlvalue support
         multivalue = arcpy.Parameter()
@@ -361,6 +375,13 @@ class finescalebpi(object):
         bathy = parameters[self.cols.index('bathy')].valueAsText
         outer_radius = parameters[self.cols.index('outer')].valueAsText
         scale_factor = parameters[self.cols.index('scale_factor')]
+        output = parameters[self.cols.index('output')]
+
+        if output.value is None and bathy is not None:
+            base_name = os.path.splitext(os.path.basename(bathy))[0]
+            out_name = '{}_finebpi.tif'.format(base_name)
+            out_path = makeDefaultFilename(out_name)
+            output.value = out_path
 
         if outer_radius is not None and bathy is not None:
             # get the cellsize of the input raster; assume same in X & Y
@@ -446,7 +467,7 @@ class standardizebpi(object):
         broad_std_output.displayName = u'Output Standardized Broad BPI raster'
         broad_std_output.parameterType = 'Required'
         broad_std_output.direction = 'Output'
-        broad_std_output.datatype = dt.format('Raster Dataset')
+        broad_std_output.datatype = dt.format('File')
 
         # Input_BPI_raster
         fine_raster = arcpy.Parameter()
@@ -479,7 +500,7 @@ class standardizebpi(object):
         fine_std_output.displayName = u'Output Standardized Fine BPI raster'
         fine_std_output.parameterType = 'Required'
         fine_std_output.direction = 'Output'
-        fine_std_output.datatype = dt.format('Raster Dataset')
+        fine_std_output.datatype = dt.format('File')
 
         return [broad_raster, broad_mean, broad_stddev, broad_std_output,
                 fine_raster, fine_mean, fine_stddev, fine_std_output]
@@ -488,6 +509,21 @@ class standardizebpi(object):
         return True
 
     def updateParameters(self, parameters):
+        fine_input = parameters[self.cols.index('fine_input')].valueAsText
+        broad_input = parameters[self.cols.index('broad_input')].valueAsText
+        fine_output = parameters[self.cols.index('fine_output')]
+        broad_output = parameters[self.cols.index('broad_output')]
+
+        if broad_output.value is None and broad_input is not None:
+            broad_base_name = os.path.splitext(os.path.basename(broad_input))[0]
+            broad_out_name = '{}_std.tif'.format(broad_base_name)
+            broad_out_path = makeDefaultFilename(broad_out_name)
+            broad_output.value = broad_out_path
+        if fine_output.value is None and fine_input is not None:
+            fine_base_name = os.path.splitext(os.path.basename(fine_input))[0]
+            fine_out_name = '{}_std.tif'.format(fine_base_name)
+            fine_out_path = makeDefaultFilename(fine_out_name)
+            fine_output.value = fine_out_path
         return
 
     def updateMessages(self, parameters):
@@ -558,7 +594,7 @@ class statisticalaspect(object):
         output_sin_raster.displayName = u'Output Sin(Aspect) raster'
         output_sin_raster.parameterType = 'Required'
         output_sin_raster.direction = 'Output'
-        output_sin_raster.datatype = dt.format('Raster Dataset')
+        output_sin_raster.datatype = dt.format('File')
 
         # Output Cos raster
         output_cos_raster = arcpy.Parameter()
@@ -566,7 +602,7 @@ class statisticalaspect(object):
         output_cos_raster.displayName = u'Output Cos(Aspect) raster'
         output_cos_raster.parameterType = 'Required'
         output_cos_raster.direction = 'Output'
-        output_cos_raster.datatype = dt.format('Raster Dataset')
+        output_cos_raster.datatype = dt.format('File')
 
         return [input_raster, output_sin_raster, output_cos_raster]
 
@@ -574,6 +610,20 @@ class statisticalaspect(object):
         return True
 
     def updateParameters(self, parameters):
+        in_raster = parameters[0].valueAsText
+        output_sin = parameters[1]
+        output_cos = parameters[2]
+
+        if output_sin.value is None and in_raster is not None:
+            sin_base_name = os.path.splitext(os.path.basename(in_raster))[0]
+            sin_out_name = '{}_sin_aspect.tif'.format(sin_base_name)
+            sin_out_path = makeDefaultFilename(sin_out_name)
+            output_sin.value = sin_out_path
+        if output_cos.value is None and in_raster is not None:
+            cos_base_name = os.path.splitext(os.path.basename(in_raster))[0]
+            cos_out_name = '{}_cos_aspect.tif'.format(cos_base_name)
+            cos_out_path = makeDefaultFilename(cos_out_name)
+            output_cos.value = cos_out_path
         return
 
     def updateMessages(self, parameters):
@@ -622,7 +672,7 @@ class btmslope(object):
         output_raster.displayName = u'Output raster'
         output_raster.parameterType = 'Required'
         output_raster.direction = 'Output'
-        output_raster.datatype = dt.format('Raster Dataset')
+        output_raster.datatype = dt.format('File')
 
         return [input_raster, output_raster]
 
@@ -630,6 +680,14 @@ class btmslope(object):
         return True
 
     def updateParameters(self, parameters):
+        in_raster = parameters[0].valueAsText
+        out_slope = parameters[1]
+        
+        if out_slope.value is None and in_raster is not None:
+            slope_base_name = os.path.splitext(os.path.basename(in_raster))[0]
+            slope_out_name = '{}_slope.tif'.format(slope_base_name)
+            slope_out_path = makeDefaultFilename(slope_out_name)
+            out_slope.value = slope_out_path
         return
 
     def updateMessages(self, parameters):
@@ -706,14 +764,22 @@ class classifyterrain(object):
         zones_raster.name = u'Output_zones_raster'
         zones_raster.displayName = u'Output Zones Raster'
         zones_raster.parameterType = 'Required'
-        zones_raster.direction = 'Output.'
-        zones_raster.datatype = dt.format('Raster Dataset')
+        zones_raster.direction = 'Output'
+        zones_raster.datatype = dt.format('File')
         return [class_dict, broad_bpi_std, fine_bpi_std, slope, bathy, zones_raster]
 
     def isLicensed(self):
         return True
 
     def updateParameters(self, parameters):
+        bathy = parameters[4].valueAsText
+        zones = parameters[5]
+        
+        if zones.value is None and bathy is not None:
+            zones_base_name = os.path.splitext(os.path.basename(bathy))[0]
+            zones_out_name = '{}_classified.tif'.format(zones_base_name)
+            zones_out_path = makeDefaultFilename(zones_out_name)
+            zones.value = zones_out_path
         return
 
     def updateMessages(self, parameters):
@@ -815,8 +881,7 @@ class runfullmodel(object):
         zones_raster.displayName = u'Output Zones Raster'
         zones_raster.parameterType = 'Required'
         zones_raster.direction = 'Output'
-        # was raster dataset, but no way to control path then...
-        zones_raster.datatype = dt.format('String')
+        zones_raster.datatype = dt.format('File')
 
         return [out_workspace, bathy, broad_bpi_inner, broad_bpi_outer,
                 fine_bpi_inner, fine_bpi_outer, class_dict, zones_raster]
@@ -838,14 +903,14 @@ class runfullmodel(object):
         return is_valid
 
     def updateParameters(self, parameters):
-        out_workspace = parameters[self.cols.index('out_workspace')].valueAsText
-        zones_raster = parameters[self.cols.index('zones_raster')].valueAsText
+        bathy = parameters[self.cols.index('bathy')].valueAsText
+        zones = parameters[self.cols.index('zones_raster')]
 
-        # TODO: make this work so that if they update the output_zones,
-        #       we respect it.
-        if out_workspace is not None and zones_raster is None:
-            parameters[self.cols.index('zones_raster')].value = \
-                os.path.join(out_workspace, "output_zones")
+        if zones.value is None and bathy is not None:
+            zones_base_name = os.path.splitext(os.path.basename(bathy))[0]
+            zones_out_name = '{}_classified.tif'.format(zones_base_name)
+            zones_out_path = makeDefaultFilename(zones_out_name)
+            zones.value = zones_out_path
         return
 
     def updateMessages(self, parameters):
@@ -902,7 +967,7 @@ class surfacetoplanar(object):
         output_raster.displayName = u'Output Raster'
         output_raster.parameterType = 'Required'
         output_raster.direction = 'Output'
-        output_raster.datatype = dt.format('Raster Dataset')
+        output_raster.datatype = dt.format('File')
 
         # ACR Correction
         acr_correction = arcpy.Parameter()
@@ -928,6 +993,14 @@ class surfacetoplanar(object):
         return True
 
     def updateParameters(self, parameters):
+        bathy = parameters[0].valueAsText
+        sapa = parameters[1]
+
+        if sapa.value is None and bathy is not None:
+            sapa_base_name = os.path.splitext(os.path.basename(bathy))[0]
+            sapa_out_name = '{}_SAtoPA.tif'.format(sapa_base_name)
+            sapa_out_path = makeDefaultFilename(sapa_out_name)
+            sapa.value = sapa_out_path
         return
 
     def updateMessages(self, parameters):
@@ -984,7 +1057,7 @@ class terrainruggedness(object):
         output_raster.displayName = u'Output Raster'
         output_raster.parameterType = 'Required'
         output_raster.direction = 'Output'
-        output_raster.datatype = dt.format('Raster Dataset')
+        output_raster.datatype = dt.format('File')
 
         return [input_raster, neighborhood, output_raster]
 
@@ -992,6 +1065,16 @@ class terrainruggedness(object):
         return True
 
     def updateParameters(self, parameters):
+        bathy = parameters[0].valueAsText
+        nbh = parameters[1].valueAsText
+        vrm = parameters[2]
+
+        if vrm.value is None and bathy is not None and nbh is not None:
+            vrm_base_name = os.path.splitext(os.path.basename(bathy))[0]
+            n_label = "{:03d}".format(int(nbh))
+            vrm_out_name = '{}_ruggedness{}.tif'.format(vrm_base_name, n_label)
+            vrm_out_path = makeDefaultFilename(vrm_out_name)
+            vrm.value = vrm_out_path
         return
 
     def updateMessages(self, parameters):
@@ -1258,12 +1341,21 @@ class scalecomparison(object):
         else:
             parameters[2].enabled = False
             parameters[2].parameterType = 'Optional'
+
+        bathy = parameters[0].valueAsText
+        out = parameters[5]
+
+        if out.value is None and bathy is not None:
+            base_name = os.path.splitext(os.path.basename(bathy))[0]
+            out_name = '{}_scalecomparison.png'.format(base_name)
+            out_path = makeDefaultFilename(out_name)
+            out.value = out_path
         return
 
     def updateMessages(self, parameters):
         if not utils.SCIPY_EXISTS:
             parameters[0].setWarningMessage(
-                "This tool requires the SciPy module is "
+                "This tool requires that the SciPy module is "
                 "installed. SciPy is included in ArcGIS 10.4 "
                 "and later versions.")
         return

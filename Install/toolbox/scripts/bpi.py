@@ -37,7 +37,7 @@ def main(bathy=None, inner_radius=None, outer_radius=None,
     measures the average value in a 'donut' of locations, excluding
     cells too close to the origin point, and outside a set distance.
     """
-
+    arcpy.env.compression = "LZW"
     arcpy.env.rasterStatistics = "STATISTICS"
     try:
         # Create the broad-scale Bathymetric Position Index (BPI) raster
@@ -52,7 +52,7 @@ def main(bathy=None, inner_radius=None, outer_radius=None,
         result_raster = Int(Plus(Minus(bathy, out_focal_statistics), 0.5))
 
         out_raster_path = utils.validate_path(out_raster)
-        result_raster.save(out_raster_path)
+        arcpy.CopyRaster_management(result_raster, out_raster_path)
         utils.msg("Saved output as {}".format(out_raster_path))
     except Exception as e:
         utils.msg(e, mtype='error')

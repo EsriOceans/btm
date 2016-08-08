@@ -142,24 +142,22 @@ def main(classification_file, bpi_broad_std, bpi_fine_std,
             utils.msg("{} of {}".format(i, len(grids)-1))
             merge_grid = Con(merge_grid, grids[i], merge_grid, "VALUE = 0")
         arcpy.AddField_management(merge_grid, 'Zone', 'TEXT')
-        rows = arcpy.UpdateCursor(merge_grid)
-        for row in rows:
-            val = str(row.getValue('VALUE'))
-            if val in key:
-                row.setValue('Zone', key[val])
-                rows.updateRow(row)
-            else:
-                row.setValue('Zone', 'No Matching Zone')
-                rows.updateRow(row)
-        # writing Python like it's C
-        del(rows)
-        del(row)
+        with arcpy.UpdateCursor(merge_grid) as cursor:
+            for row in cursor:
+                val = str(row.getValue('VALUE'))
+                if val in key:
+                    row.setValue('Zone', key[val])
+                    cursor.updateRow(row)
+                else:
+                    row.setValue('Zone', 'No Matching Zone')
+                    cursor.updateRow(row)
 
         arcpy.env.rasterStatistics = "STATISTICS"
+        arcpy.env.compression = "LZW"
         # validate the output raster path
         out_raster = utils.validate_path(out_raster)
         utils.msg("Saving Output to {}".format(out_raster))
-        merge_grid.save(out_raster)
+        arcpy.CopyRaster_management(merge_grid, out_raster)
 
         utils.msg("Complete.")
 
