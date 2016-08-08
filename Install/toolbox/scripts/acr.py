@@ -13,7 +13,7 @@ arcpy.CheckOutExtension("3D")
 arcpy.CheckOutExtension("GeoStats")
 
 
-def main(in_raster=None, areaOfInterest=None, saveTINs=False):
+def main(in_raster=None, areaOfInterest=None, saveTINs=False, workspace=None):
 
     if isinstance(saveTINs, unicode) and saveTINs.lower() == 'false':
         saveTINs = False
@@ -143,12 +143,16 @@ def main(in_raster=None, areaOfInterest=None, saveTINs=False):
 
         # Save TINs if requested
         if saveTINs:
+            if workspace == None:
+                out_dir = os.path.split(areaOfInterest)[0]
+            else:
+                out_dir = workspace
             utils.msg("Saving elevation and planar TINs to "
-                      "{}...".format(os.path.split(areaOfInterest)[0]))
+                      "{}...".format(out_dir))
             arcpy.CopyTin_3d(elevationTIN,
-                             os.path.join(os.path.split(areaOfInterest)[0],
+                             os.path.join(out_dir,
                                           '{}_elevationTIN'.format(rastName)))
             for x in range(len(pobfs)):
-                name = os.path.join(os.path.split(areaOfInterest)[0],
+                name = os.path.join(out_dir,
                                     '{}_planarTIN{}'.format(rastName, x))
                 arcpy.CopyTin_3d(pobfs[x], name)

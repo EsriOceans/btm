@@ -7,6 +7,7 @@ handling BTM classification dictionaries.
 
 import locale
 import sys
+import json
 import traceback
 import os
 import csv
@@ -188,6 +189,19 @@ def raster_properties(input_raster, attribute='MEAN'):
 
     return value
 
+
+def get_workspace():
+    """Retrieve workspace string previously saved
+       using 'Set BTM Workspace' tool"""
+    btm_dir = os.path.dirname(\
+        os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+    workspace_file = os.path.join(btm_dir, 'workspace.txt')
+    if os.path.exists(workspace_file):
+        with open(workspace_file, 'r') as readfile:    
+            workspace = json.load(readfile)
+        return workspace
+    else:
+        return None
 
 # classes
 class BlockProcessor:

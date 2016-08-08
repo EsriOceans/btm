@@ -3,6 +3,7 @@
 import os
 import math
 import sys
+import json
 import re
 import tempfile
 import textwrap
@@ -105,6 +106,8 @@ class Toolbox(object):
         self.label = u'Benthic Terrain Modeler'
         self.alias = 'btm'
         self.tools = [
+            # Utilities
+            setworkspace,       # set workspace for all tools
             # Bathymetric Position Index
             broadscalebpi,      # broad scale
             finescalebpi,       # file scale
@@ -126,6 +129,34 @@ class Toolbox(object):
 
 
 # tools below this section, one class per tool.
+class setworkspace(object):
+    def __init__(self):
+        force_path()
+        self.label = u'Set BTM Workspace'
+        self.canRunInBackground = False
+        self.description = dedent("""\
+                Save a default workspace location to disk""")
+
+    def getParameterInfo(self):
+        # Output_Workspace
+        out_workspace = arcpy.Parameter()
+        out_workspace.name = u'Output_Workspace'
+        out_workspace.displayName = u'Output Workspace'
+        out_workspace.parameterType = 'Required'
+        out_workspace.direction = 'Input'
+        out_workspace.datatype = dt.format('Workspace')
+
+        return [out_workspace]
+
+    def execute(self, parameters, messages):
+        workspace = parameters[0].valueAsText
+        btm_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+        workspace_file = os.path.join(btm_dir, 'workspace.txt') 
+        with open(workspace_file, 'w') as outfile:
+            json.dump(workspace, outfile)
+        
+
+    
 class broadscalebpi(object):
     """ Calculate Broad-scale Bathymetric Position Index (BPI).  """
 
@@ -725,6 +756,7 @@ class runfullmodel(object):
         out_workspace.parameterType = 'Required'
         out_workspace.direction = 'Input'
         out_workspace.datatype = dt.format('Workspace')
+        out_workspace.value = utils.get_workspace()
 
         # Bathymetry raster
         bathy = arcpy.Parameter()
@@ -1024,7 +1056,16 @@ class arcchordratio(object):
         saveTINs.datatype = dt.format('Boolean')
         saveTINs.value = 'False'
 
-        return [input_raster, areaOfInterest, saveTINs]
+        # Output_Workspace
+        out_workspace = arcpy.Parameter()
+        out_workspace.name = u'Output_Workspace'
+        out_workspace.displayName = u'Output Workspace'
+        out_workspace.parameterType = 'Optional'
+        out_workspace.direction = 'Input'
+        out_workspace.datatype = dt.format('Workspace')
+        out_workspace.value = utils.get_workspace()
+
+        return [input_raster, areaOfInterest, saveTINs, out_workspace]
 
     def isLicensed(self):
         return True
@@ -1038,10 +1079,13 @@ class arcchordratio(object):
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
         import acr
+        import imp
+        imp.reload(acr)
         acr.main(
             in_raster=parameters[0].valueAsText,
             areaOfInterest=parameters[1].valueAsText,
-            saveTINs=parameters[2].valueAsText)
+            saveTINs=parameters[2].valueAsText,
+            workspace=parameters[3].valueAsText)
 
 
 class depthstatistics(object):
@@ -1087,6 +1131,7 @@ class depthstatistics(object):
         out_workspace.parameterType = 'Required'
         out_workspace.direction = 'Input'
         out_workspace.datatype = dt.format('Workspace')
+        out_workspace.value = utils.get_workspace()
 
         # Statistics to Compute
         statistics = arcpy.Parameter()
@@ -1130,6 +1175,8 @@ class depthstatistics(object):
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
         import depth_statistics
+        import imp
+        imp.reload(utils)
         depth_statistics.main(
             in_raster=parameters[0].valueAsText,
             neighborhood_size=parameters[1].valueAsText,
@@ -1279,6 +1326,7 @@ class multiplescales(object):
         out_workspace.parameterType = 'Required'
         out_workspace.direction = 'Input'
         out_workspace.datatype = dt.format('Workspace')
+        out_workspace.value = utils.get_workspace()
 
         return [bathy, nbh_sizes, metrics, out_workspace]
 
