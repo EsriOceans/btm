@@ -44,3 +44,6 @@ tests/data/*.tif.xml
 
 # os x
 .DS_Store
+
+# windows
+Thumbs.db
