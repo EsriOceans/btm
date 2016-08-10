@@ -61,11 +61,13 @@ def main(in_raster=None, areaOfInterest=None, saveTINs=False, workspace=None):
             arcpy.AddField_management(areaOfInterest, "Name", "TEXT")
             splitFiles = []
             with arcpy.da.UpdateCursor(areaOfInterest,
-                                       ["FID", "Name"]) as cursor:
+                                       "Name") as cursor:
+                num = 0
                 for row in cursor:
-                    row[1] = "poly_{}".format(row[0])
-                    splitFiles.append("in_memory\poly_{}".format(row[0]))
+                    row[0] = "poly_{}".format(num)
+                    splitFiles.append("in_memory\poly_{}".format(num))
                     cursor.updateRow(row)
+                    num += 1
             arcpy.Split_analysis(areaOfInterest, areaOfInterest,
                                  'Name', 'in_memory')
 
@@ -143,7 +145,7 @@ def main(in_raster=None, areaOfInterest=None, saveTINs=False, workspace=None):
 
         # Save TINs if requested
         if saveTINs:
-            if workspace == None:
+            if workspace is None:
                 out_dir = os.path.split(areaOfInterest)[0]
             else:
                 out_dir = workspace

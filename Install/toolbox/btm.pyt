@@ -90,7 +90,7 @@ def dedent(text, ending='\r\n'):
 
 
 def makeDefaultFilename(name):
-    if utils.get_workspace() == None:
+    if utils.get_workspace() is None:
         return None
     else:
         workspace = utils.get_workspace()
@@ -159,12 +159,11 @@ class setworkspace(object):
     def execute(self, parameters, messages):
         workspace = parameters[0].valueAsText
         btm_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
-        workspace_file = os.path.join(btm_dir, 'workspace.txt') 
+        workspace_file = os.path.join(btm_dir, 'workspace.txt')
         with open(workspace_file, 'w') as outfile:
             json.dump(workspace, outfile)
-        
 
-    
+
 class broadscalebpi(object):
     """ Calculate Broad-scale Bathymetric Position Index (BPI).  """
 
@@ -172,20 +171,20 @@ class broadscalebpi(object):
         force_path()
         self.label = u'Build Broad Scale BPI'
         self.description = dedent("""\
-                The concept of bathymetric position is central to the benthic
-                terrain classification process that is utilized by BTM.
-                Bathymetric Position Index (BPI) is a measure of where a
-                referenced location is relative to the locations surrounding it.
-                BPI is derived from an input bathymetric data set and itself is
-                a modification of the topographic position index (TPI) algorithm
-                that is used in the terrestrial environment. The application of
-                TPI to develop terrain classifications was explored and
-                developed by Andrew Weiss during his study of terrestrial
-                watersheds in Central Oregon (Weiss 2001). These applications
-                can be carried into the benthic environment through BPI.
+            The concept of bathymetric position is central to the benthic
+            terrain classification process that is utilized by BTM.
+            Bathymetric Position Index (BPI) is a measure of where a
+            referenced location is relative to the locations surrounding it.
+            BPI is derived from an input bathymetric data set and itself is
+            a modification of the topographic position index (TPI) algorithm
+            that is used in the terrestrial environment. The application of
+            TPI to develop terrain classifications was explored and
+            developed by Andrew Weiss during his study of terrestrial
+            watersheds in Central Oregon (Weiss 2001). These applications
+            can be carried into the benthic environment through BPI.
 
-                A broad-scale BPI data set allows you to identify larger
-                features within the benthic landscape.""")
+            A broad-scale BPI data set allows you to identify larger
+            features within the benthic landscape.""")
         self.category = 'Bathymetric Position Index (BPI)'
         self.canRunInBackground = False
         # parameter names
@@ -296,20 +295,20 @@ class finescalebpi(object):
         force_path()
         self.label = u'Build Fine Scale BPI'
         self.description = dedent("""\
-                The concept of bathymetric position is central to the benthic
-                terrain classification process that is utilized by the BTM.
-                Bathymetric Position Index (BPI) is a measure of where a
-                referenced location is relative to the locations surrounding it.
-                BPI is derived from an input bathymetric data set and itself is
-                a modification of the topographic position index (TPI) algorithm
-                that is used in the terrestrial environment. The application of
-                TPI to develop terrain classifications was explored and
-                developed by Andrew Weiss during his study of terrestrial
-                watersheds in Central Oregon (Weiss 2001). These applications
-                can be carried into the benthic environment through BPI.
+            The concept of bathymetric position is central to the benthic
+            terrain classification process that is utilized by the BTM.
+            Bathymetric Position Index (BPI) is a measure of where a
+            referenced location is relative to the locations surrounding it.
+            BPI is derived from an input bathymetric data set and itself is
+            a modification of the topographic position index (TPI) algorithm
+            that is used in the terrestrial environment. The application of
+            TPI to develop terrain classifications was explored and
+            developed by Andrew Weiss during his study of terrestrial
+            watersheds in Central Oregon (Weiss 2001). These applications
+            can be carried into the benthic environment through BPI.
 
-                A broad-scale BPI data set allows you to identify larger
-                features within the benthic landscape.""")
+            A broad-scale BPI data set allows you to identify larger
+            features within the benthic landscape.""")
         self.canRunInBackground = False
         self.category = 'Bathymetric Position Index (BPI)'
         # parameter names
@@ -515,7 +514,8 @@ class standardizebpi(object):
         broad_output = parameters[self.cols.index('broad_output')]
 
         if broad_output.value is None and broad_input is not None:
-            broad_base_name = os.path.splitext(os.path.basename(broad_input))[0]
+            broad_base_name = os.path.splitext(
+                os.path.basename(broad_input))[0]
             broad_out_name = '{}_std.tif'.format(broad_base_name)
             broad_out_path = makeDefaultFilename(broad_out_name)
             broad_output.value = broad_out_path
@@ -529,13 +529,16 @@ class standardizebpi(object):
     def updateMessages(self, parameters):
 
         for label in ['broad', 'fine']:
-            input_raster = parameters[self.cols.index(label + '_input')].valueAsText
+            input_raster = parameters[self.cols.index(label +
+                                                      '_input')].valueAsText
             if input_raster is not None:
                 (mean, stddev) = self.getRasterStats(input_raster)
                 if mean is not None:
                     # try modifying our variables
-                    parameters[self.cols.index(label + '_mean')].value = mean
-                    parameters[self.cols.index(label + '_stddev')].value = stddev
+                    parameters[self.cols.index(label +
+                                               '_mean')].value = mean
+                    parameters[self.cols.index(label +
+                                               '_stddev')].value = stddev
 
             # Validate GRID outputs.
             out_param = self.cols.index(label + '_output')
@@ -552,8 +555,10 @@ class standardizebpi(object):
                 result = (utils.raster_properties(input_raster, 'MEAN'),
                           utils.raster_properties(input_raster, 'STD'))
             except:
-                # check for raster existence, when running as a model the 'result'
-                # may be set, but not actually exist, causing these steps to fail.
+                # check for raster existence,
+                # when running as a model the 'result'
+                # may be set, but not actually exist,
+                # causing these steps to fail.
                 pass
                 # f.write("\n\nFULLEXEC: {}\n".format(sys.exc_info()))
         return result
@@ -682,7 +687,7 @@ class btmslope(object):
     def updateParameters(self, parameters):
         in_raster = parameters[0].valueAsText
         out_slope = parameters[1]
-        
+
         if out_slope.value is None and in_raster is not None:
             slope_base_name = os.path.splitext(os.path.basename(in_raster))[0]
             slope_out_name = '{}_slope.tif'.format(slope_base_name)
@@ -766,7 +771,8 @@ class classifyterrain(object):
         zones_raster.parameterType = 'Required'
         zones_raster.direction = 'Output'
         zones_raster.datatype = dt.format('File')
-        return [class_dict, broad_bpi_std, fine_bpi_std, slope, bathy, zones_raster]
+        return [class_dict, broad_bpi_std, fine_bpi_std,
+                slope, bathy, zones_raster]
 
     def isLicensed(self):
         return True
@@ -774,7 +780,7 @@ class classifyterrain(object):
     def updateParameters(self, parameters):
         bathy = parameters[4].valueAsText
         zones = parameters[5]
-        
+
         if zones.value is None and bathy is not None:
             zones_base_name = os.path.splitext(os.path.basename(bathy))[0]
             zones_out_name = '{}_classified.tif'.format(zones_base_name)
@@ -822,7 +828,6 @@ class runfullmodel(object):
         out_workspace.parameterType = 'Required'
         out_workspace.direction = 'Input'
         out_workspace.datatype = dt.format('Workspace')
-        out_workspace.value = utils.get_workspace()
 
         # Bathymetry raster
         bathy = arcpy.Parameter()
@@ -905,6 +910,10 @@ class runfullmodel(object):
     def updateParameters(self, parameters):
         bathy = parameters[self.cols.index('bathy')].valueAsText
         zones = parameters[self.cols.index('zones_raster')]
+        workspace = parameters[self.cols.index('out_workspace')]
+
+        if workspace.value is None:
+            workspace.value = utils.get_workspace()
 
         if zones.value is None and bathy is not None:
             zones_base_name = os.path.splitext(os.path.basename(bathy))[0]
@@ -1090,7 +1099,8 @@ class terrainruggedness(object):
                 parameters[1].setWarningMessage(
                     "If an even neighborhood size is used, neighborhood"
                     " coordinates will be computed using truncation."
-                    " Use an odd neighborhood size to avoid unexpected results.")
+                    " Use an odd neighborhood size"
+                    " to avoid unexpected results.")
 
         return
 
@@ -1128,7 +1138,7 @@ class arcchordratio(object):
         areaOfInterest.displayName = u'Area of Interest'
         areaOfInterest.parameterType = 'Required'
         areaOfInterest.direction = 'Input'
-        areaOfInterest.datatype = dt.format('Shapefile')
+        areaOfInterest.datatype = dt.format('Feature Class')
 
         # Save TINs
         saveTINs = arcpy.Parameter()
@@ -1146,7 +1156,6 @@ class arcchordratio(object):
         out_workspace.parameterType = 'Optional'
         out_workspace.direction = 'Input'
         out_workspace.datatype = dt.format('Workspace')
-        out_workspace.value = utils.get_workspace()
 
         return [input_raster, areaOfInterest, saveTINs, out_workspace]
 
@@ -1154,6 +1163,13 @@ class arcchordratio(object):
         return True
 
     def updateParameters(self, parameters):
+        workspace = parameters[3]
+        ws = arcpy.Describe(utils.get_workspace())
+        ws_type = set([ws.workspaceType])
+        db_types = ['LocalDatabase', 'RemoteDatabase']
+        if not ws_type.intersection(db_types):
+            if workspace.value is None:
+                workspace.value = utils.get_workspace()
         return
 
     def updateMessages(self, parameters):
@@ -1214,7 +1230,6 @@ class depthstatistics(object):
         out_workspace.parameterType = 'Required'
         out_workspace.direction = 'Input'
         out_workspace.datatype = dt.format('Workspace')
-        out_workspace.value = utils.get_workspace()
 
         # Statistics to Compute
         statistics = arcpy.Parameter()
@@ -1234,6 +1249,10 @@ class depthstatistics(object):
         return True
 
     def updateParameters(self, parameters):
+        workspace = parameters[2]
+
+        if workspace.value is None:
+            workspace.value = utils.get_workspace()
         return
 
     def updateMessages(self, parameters):
@@ -1259,7 +1278,7 @@ class depthstatistics(object):
         # run related python script with selected input parameters
         import depth_statistics
         import imp
-        imp.reload(utils)
+        imp.reload(depth_statistics)
         depth_statistics.main(
             in_raster=parameters[0].valueAsText,
             neighborhood_size=parameters[1].valueAsText,
@@ -1345,11 +1364,15 @@ class scalecomparison(object):
         bathy = parameters[0].valueAsText
         out = parameters[5]
 
-        if out.value is None and bathy is not None:
-            base_name = os.path.splitext(os.path.basename(bathy))[0]
-            out_name = '{}_scalecomparison.png'.format(base_name)
-            out_path = makeDefaultFilename(out_name)
-            out.value = out_path
+        ws = arcpy.Describe(utils.get_workspace())
+        ws_type = set([ws.workspaceType])
+        db_types = ['LocalDatabase', 'RemoteDatabase']
+        if not ws_type.intersection(db_types):
+            if out.value is None and bathy is not None:
+                base_name = os.path.splitext(os.path.basename(bathy))[0]
+                out_name = '{}_scalecomparison.png'.format(base_name)
+                out_path = makeDefaultFilename(out_name)
+                out.value = out_path
         return
 
     def updateMessages(self, parameters):
@@ -1418,7 +1441,6 @@ class multiplescales(object):
         out_workspace.parameterType = 'Required'
         out_workspace.direction = 'Input'
         out_workspace.datatype = dt.format('Workspace')
-        out_workspace.value = utils.get_workspace()
 
         return [bathy, nbh_sizes, metrics, out_workspace]
 
@@ -1426,6 +1448,10 @@ class multiplescales(object):
         return True
 
     def updateParameters(self, parameters):
+        workspace = parameters[3]
+
+        if workspace.value is None:
+            workspace.value = utils.get_workspace()
         return
 
     def updateMessages(self, parameters):
@@ -1456,9 +1482,11 @@ class multiplescales(object):
         stats_set = set(['Mean Depth', 'Standard Deviation', 'Variance',
                          'Interquartile Range', 'Kurtosis'])
         vrm_set = set(['Terrain Ruggedness (VRM)'])
-
+        in_base = os.path.splitext(
+            os.path.basename(parameters[0].valueAsText))[0]
         for each in nbh_lst:
-            utils.msg("Computing metrics for neighborhood size {}...".format(each))
+            utils.msg("Computing metrics for neighborhood"
+                      " size {}...".format(each))
             if stats_set.intersection(metrics_lst):
                 depth_statistics.main(in_raster=parameters[0].valueAsText,
                                       neighborhood_size=each,
@@ -1466,8 +1494,8 @@ class multiplescales(object):
                                       out_stats_raw=parameters[2].valueAsText)
             if vrm_set.intersection(metrics_lst):
                 n_label = "{:03d}".format(int(each))
-                out_file = "{}\\ruggedness_{}.tif".format(parameters[3].valueAsText,
-                                                          n_label)
+                out_file = "{0}\\{1}_vrm{2}.tif".format(
+                    parameters[3].valueAsText, in_base, n_label)
                 ruggedness.main(in_raster=parameters[0].valueAsText,
                                 neighborhood_size=each, out_raster=out_file)
         return

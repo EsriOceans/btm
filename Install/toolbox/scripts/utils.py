@@ -193,15 +193,16 @@ def raster_properties(input_raster, attribute='MEAN'):
 def get_workspace():
     """Retrieve workspace string previously saved
        using 'Set BTM Workspace' tool"""
-    btm_dir = os.path.dirname(\
+    btm_dir = os.path.dirname(
         os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
     workspace_file = os.path.join(btm_dir, 'workspace.txt')
     if os.path.exists(workspace_file):
-        with open(workspace_file, 'r') as readfile:    
+        with open(workspace_file, 'r') as readfile:
             workspace = json.load(readfile)
         return workspace
     else:
         return None
+
 
 # classes
 class BlockProcessor:
@@ -264,10 +265,12 @@ class BlockProcessor:
                 x += blockSize
 
             outDepth[:overlap, :], outDepth[-overlap:, :], \
-                outDepth[:, :overlap], outDepth[:, -overlap:] = (self.noData, ) * 4
+                outDepth[:, :overlap], \
+                outDepth[:, -overlap:] = (self.noData, ) * 4
             msg("Creating result raster layer...")
             layerName = os.path.splitext(os.path.split(outRast)[1])[0]
-            arcpy.MakeNetCDFRasterLayer_md(outNetCDF, 'Band1', 'x', 'y', layerName)
+            arcpy.MakeNetCDFRasterLayer_md(outNetCDF, 'Band1',
+                                           'x', 'y', layerName)
             msg("Saving result layer to {}...".format(outRast))
             arcpy.CopyRaster_management(layerName, outRast)
             inFile.close()
