@@ -20,6 +20,11 @@ from arcpy.sa import Raster, Divide, Cos, Times
 from . import utils
 from . import config
 
+
+# force all to str
+if sys.version_info < (3, 0):
+    str = unicode
+
 # Check out any necessary licenses
 arcpy.CheckOutExtension("Spatial")
 
@@ -60,7 +65,7 @@ def main(in_raster=None, out_raster=None, acr_correction=True, area_raster=None)
     """
 
     # sanitize acr input
-    if isinstance(acr_correction, unicode) and acr_correction.lower() == 'false':
+    if isinstance(acr_correction, str) and acr_correction.lower() == 'false':
         acr_correction = False
 
     out_workspace = os.path.dirname(out_raster)
@@ -106,7 +111,7 @@ def main(in_raster=None, out_raster=None, acr_correction=True, area_raster=None)
         for (n, pos) in enumerate(positions, start=1):
             utils.msg("Creating Shift Grid {} of 8...".format(n))
             # scale shift grid by cell size
-            (x_shift, y_shift) = map(lambda(n): n * cell_size, pos)
+            (x_shift, y_shift) = map(lambda n: n * cell_size, pos)
 
             # set explicit path on shift rasters, otherwise suffer
             # inexplicable 999999 errors.
