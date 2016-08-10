@@ -18,12 +18,11 @@ import os
 import sys
 
 import arcpy
-from arcpy.sa import \
-    Aspect, Cos, Sin, Slope, Con, NbrRectangle, FocalStatistics
+from arcpy.sa import Aspect, Cos, Sin, Slope, Con, NbrRectangle, FocalStatistics
 
 # local imports
-import scripts.utils as utils
-import scripts.config as config
+from . import utils
+from . import config
 
 # Check out any necessary licenses
 arcpy.CheckOutExtension("Spatial")

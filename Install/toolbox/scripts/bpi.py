@@ -17,14 +17,15 @@
 # Converted 9/6/2012 by Shaun Walbridge to a script that can be run from either
 # a Python addin GUI, as a standard python script or from a toolbox.
 
+from __future__ import absolute_import
 import sys
 
 import arcpy
 from arcpy.sa import NbrAnnulus, Int, Plus, Minus, FocalStatistics
 
 # local imports
-import scripts.utils as utils
-import scripts.config as config
+from . import utils
+from . import config
 
 # Check out any necessary licenses
 arcpy.CheckOutExtension("Spatial")

@@ -3,14 +3,15 @@
 # Date: 2014-02-26
 
 # Import system modules
+from __future__ import absolute_import
 import arcpy
 import math
 import sys
 from arcpy.sa import Aspect, Sin, Cos
 
 # local imports
-import scripts.utils as utils
-import scripts.config as config
+from . import utils
+from . import config
 
 # Check out any necessary licenses
 arcpy.CheckOutExtension("Spatial")

@@ -8,6 +8,8 @@
 # Requirements: Spatial Analyst
 
 # Import system modules
+from __future__ import absolute_import
+from __future__ import unicode_literals
 import math
 import os
 import sys
@@ -15,8 +17,8 @@ import arcpy
 from arcpy.sa import Raster, Divide, Cos, Times
 
 # local imports
-import scripts.utils as utils
-import scripts.config as config
+from . import utils
+from . import config
 
 # Check out any necessary licenses
 arcpy.CheckOutExtension("Spatial")

@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 import locale
 import os
 import unittest
@@ -7,12 +9,12 @@ import zipfile
 
 from nose.tools import raises
 
-import config
-import utils
+import test_config as config
+import test_utils
 
 # import our local directory so we can use the internal modules
 import_paths = ['../Install/toolbox', '../Install']
-utils.add_local_paths(import_paths)
+test_utils.add_local_paths(import_paths)
 
 # now we can import our scripts
 from scripts import bpi, standardize_bpi_grids, btm_model, aspect, \

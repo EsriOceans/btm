@@ -3,12 +3,12 @@ import sys
 
 import arcpy
 
-from config import local_path
+import test_config
 
 
 def add_local_paths(paths):
     for path_part in paths:
-        base_path = os.path.join(local_path, path_part)
+        base_path = os.path.join(test_config.local_path, path_part)
         abs_path = os.path.abspath(base_path)
         sys.path.insert(0, abs_path)
 
