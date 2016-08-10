@@ -584,7 +584,7 @@ class BtmCsvDocument(BtmDocument):
             # read in CSV, respecting the detected dialect
             in_csv = csv.reader(csv_f, dialect)
             if has_header:
-                self.header = in_csv.next()
+                self.header = next(in_csv)
             # everything but the header
             result = [r for r in in_csv]
 
