@@ -61,9 +61,13 @@ def main(bathy=None, inner_radius=None, outer_radius=None,
 # when executing as a standalone script get parameters from sys
 if __name__ == '__main__':
     config.mode = 'script'
+    if len(sys.argv) == 6:
+        bpi_type = sys.argv[5]
+    else:
+        bpi_type = 'broad'
     main(
         bathy=sys.argv[1],
         inner_radius=sys.argv[2],
         outer_radius=sys.argv[3],
         out_raster=sys.argv[4],
-        bpi_type=sys.argv[5])
+        bpi_type=bpi_type)
