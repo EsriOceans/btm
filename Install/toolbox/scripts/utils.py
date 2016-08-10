@@ -189,6 +189,20 @@ def raster_properties(input_raster, attribute='MEAN'):
     return value
 
 
+def arcgis_platform():
+    """ ArcGIS platform details used internally."""
+    info = arcpy.GetInstallInfo()
+    install_dir = info['InstallDir']
+    arc_version = info['Version']
+    if info['ProductName'] == 'ArcGISPro':
+        product = 'Pro'
+    else:
+        # there are other levels, but this is a PYT run from toolbox,
+        # so unlikely to be a non-ArcMap context
+        product = 'Desktop'
+    return (install_dir, arc_version, product)
+
+
 # classes
 class BlockProcessor:
 

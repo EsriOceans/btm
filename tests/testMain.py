@@ -174,9 +174,16 @@ class TestStandardizeBpiGrids(unittest.TestCase):
             arcpy.env.scratchWorkspace = d
             arcpy.ImportToolbox(config.pyt_file)
 
-            mxd = arcpy.mapping.MapDocument(config.bpi_grids_mxd)
-            df = arcpy.mapping.ListDataFrames(mxd)[0]
-            layers = arcpy.mapping.ListLayers(df)
+            (install_dir, arcgis_version, product) = su.arcgis_platform()
+
+            if product == 'Desktop':
+                mxd = arcpy.mapping.MapDocument(config.bpi_grids_mxd)
+                df = arcpy.mapping.ListDataFrames(mxd)[0]
+                layers = arcpy.mapping.ListLayers(df)
+            else:
+                aprx = arcpy.mp.ArcGISProject(config.bpi_grids_aprx)
+                mdoc = aprx.listMaps()[0]
+                layers = mdoc.listLayers()
             layer_names = [l.name for l in layers]
 
             broad_lyr = layers[layer_names.index('broad_bpi')]
@@ -204,7 +211,10 @@ class TestStandardizeBpiGrids(unittest.TestCase):
                 su.raster_properties(fine_std_raster, "STD"),
                 su.raster_properties(config.fine_std_raster, "STD"))
 
-            del layers, df, mxd
+            if product == 'Desktop':
+                del layers, df, mxd
+            else:
+                del layers, mdoc, aprx
 
     def testStdRun(self):
         with TempDir() as d:
