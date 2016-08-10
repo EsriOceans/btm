@@ -117,16 +117,6 @@ class TestUtilitiesMethods(unittest.TestCase):
         std = su.raster_properties(config.bathy_raster, 'STD')
         self.assertAlmostEqual(std, self.std)
 
-    def testAddPaths(self):
-        """An added path should be the first entry in sys.path,
-           and be normalized."""
-        # paths relative to 'Install/toolbox/scripts'
-        images_dir = "../../../Images"
-        su.add_local_paths([images_dir])
-        added_path = sys.path[0].lower()
-        image_abs_path = os.path.abspath("../Images").lower()
-        self.assertEqual(image_abs_path, added_path)
-
     def tearDown(self):
         # reset locale
         locale.setlocale(locale.LC_ALL, "")
