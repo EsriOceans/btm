@@ -702,6 +702,7 @@ class TestMultipleScales(unittest.TestCase):
 
     def testResultRastersProduced(self):
         with TempDir() as d:
+            arcpy.env.scratchWorkspace = d
             arcpy.ImportToolbox(config.pyt_file)
             arcpy.multiplescales_btm(self.in_raster,
                                      self.nbh_sizes, self.metrics, d)
