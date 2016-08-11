@@ -966,7 +966,6 @@ class terrainruggedness(object):
 class arcchordratio(object):
 
     def __init__(self):
-        force_path()
         self.label = u'Arc-Chord Ratio'
         self.description = dedent("""\
                Arc-cord ratio (Model 2) as described by Du Preez (2014)""")
@@ -1012,7 +1011,7 @@ class arcchordratio(object):
 
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
-        import acr
+        from scripts import acr
         acr.main(
             in_raster=parameters[0].valueAsText,
             areaOfInterest=parameters[1].valueAsText,
