@@ -3,6 +3,7 @@ import os
 import unittest
 import sys
 import arcpy
+from arcpy import Raster
 import zipfile
 
 from nose.tools import raises
@@ -696,7 +697,8 @@ class TestMultipleScales(unittest.TestCase):
         self.in_raster = config.bathy_raster
         self.nbh_sizes = '3;13'
         self.metrics = "'Mean Depth';Variance;"\
-                       "'Standard Deviation';'Terrain Ruggedness (VRM)'"
+                       "'Standard Deviation';'Terrain Ruggedness (VRM)';"\
+                       "'Interquartile Range';Kurtosis"
 
     def testResultRastersProduced(self):
         with TempDir() as d:
@@ -707,7 +709,9 @@ class TestMultipleScales(unittest.TestCase):
             depth_stats = {
                 'meandepth': -20.56248074571827,
                 'stddevdepth': 0.2946229406453136,
-                'vardepth': 0.1281792675921596
+                'vardepth': 0.1281792675921596,
+                'iqrdepth': 0.44891918233769,
+                'kurtosisdepth': -0.91233563683704
             }
 
             for (prefix, expected_value) in depth_stats.items():
@@ -725,11 +729,72 @@ class TestMultipleScales(unittest.TestCase):
             rast_names = ['meandepth_003.tif', 'stddevdepth_003.tif',
                           'vardepth_003.tif', 'ruggedness_003.tif',
                           'meandepth_013.tif', 'stddevdepth_013.tif',
-                          'vardepth_013.tif', 'ruggedness_013.tif']
+                          'vardepth_013.tif', 'ruggedness_013.tif',
+                          'iqrdepth_003.tif', 'kurtosisdepth_003.tif',
+                          'iqrdepth_013.tif', 'kurtosisdepth_013.tif']
 
             for each in rast_names:
                 file_name = os.path.join(d, each)
                 self.assertTrue(os.path.exists(file_name))
+
+    def testLZWCompression(self):
+        with TempDir() as d:
+            arcpy.ImportToolbox(config.pyt_file)
+            arcpy.multiplescales_btm(self.in_raster,
+                                     self.nbh_sizes, self.metrics, d)
+            rast_names = ['meandepth_003.tif', 'stddevdepth_003.tif',
+                          'vardepth_003.tif', 'ruggedness_003.tif',
+                          'meandepth_013.tif', 'stddevdepth_013.tif',
+                          'vardepth_013.tif', 'ruggedness_013.tif',
+                          'iqrdepth_003.tif', 'kurtosisdepth_003.tif',
+                          'iqrdepth_013.tif', 'kurtosisdepth_013.tif']
+            for each in rast_names:
+                file_name = os.path.join(d, each)
+                self.assertEqual(str(Raster(file_name).compressionType), 'LZW')
+
+
+class TestACRModel2(unittest.TestCase):
+    def setUp(self):
+        self.in_raster = config.bathy_raster
+        self.aoi = config.aoi
+        self.aoi_multipart = config.aoi_multipart
+
+    def testSinglePartResults(self):
+        with TempDir() as d:
+            arcpy.ImportToolbox(config.pyt_file)
+            testaoi = os.path.join(d, 'testaoi.shp')
+            arcpy.CopyFeatures_management(self.aoi, testaoi)
+            arcpy.arcchordratio_btm(self.in_raster, testaoi, True)
+            planarTIN = os.path.join(d, 'bathy5m_clip_planartin0')
+            elevTIN = os.path.join(d, 'bathy5m_clip_elevationtin')
+            self.assertTrue(os.path.exists(planarTIN))
+            self.assertTrue(os.path.exists(elevTIN))
+            self.assertEqual(len(arcpy.Describe(testaoi).fields), 8)
+            with arcpy.da.SearchCursor(testaoi, '*') as cursor:
+                expected = (0, (358083.9308262255, 4678265.0709908875),
+                            0, 19972.5978495, 19917.1775893,
+                            1.00278253583, 2.32867335011, 246.842790079)
+                result = cursor.next()
+                for x in range(2, len(expected)):
+                    self.assertAlmostEqual(result[x], expected[x])
+
+    def testMultipartResults(self):
+        with TempDir() as d:
+            arcpy.ImportToolbox(config.pyt_file)
+            testaoi_mp = os.path.join(d, 'testaoi_mp.shp')
+            arcpy.CopyFeatures_management(self.aoi_multipart, testaoi_mp)
+            arcpy.arcchordratio_btm(self.in_raster, testaoi_mp, False)
+            rows = int(arcpy.GetCount_management(testaoi_mp).getOutput(0))
+            self.assertEqual(rows, 4)
+            self.assertEqual(len(arcpy.Describe(testaoi_mp).fields), 9)
+            with arcpy.da.SearchCursor(testaoi_mp, '*') as cursor:
+                expected = (0, (358124.62825836154, 4678229.791685243),
+                            0, 0, 1238.64248438, 1236.28701996,
+                            1.00190527311, 5.3937886264, 225.726428217)
+                result = cursor.next()
+                for x in range(2, len(expected)):
+                    self.assertAlmostEqual(result[x], expected[x])
+
 
 if __name__ == '__main__':
     unittest.main()

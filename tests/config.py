@@ -18,6 +18,8 @@ bathy_raster = os.path.abspath(os.path.join(data_path, 'bathy5m_clip.tif'))
 slope_raster = os.path.abspath(os.path.join(data_path, 'slope.tif'))
 broad_std_raster = os.path.abspath(os.path.join(data_path, 'broad_std.tif'))
 fine_std_raster = os.path.abspath(os.path.join(data_path, 'fine_std.tif'))
+aoi = os.path.abspath(os.path.join(data_path, 'areaofinterest.shp'))
+aoi_multipart = os.path.abspath(os.path.join(data_path, 'areaofinterest_mp.shp'))
 
 # an MXD with two bpi layers
 bpi_grids_mxd = os.path.abspath(os.path.join(data_path, 'bpi_grids.mxd'))

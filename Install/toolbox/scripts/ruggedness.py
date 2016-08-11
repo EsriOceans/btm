@@ -52,6 +52,7 @@ def main(in_raster=None, neighborhood_size=None, out_raster=None):
     arcpy.env.pyramid = "NONE"
     # TODO: currently set to automatically overwrite, expose this as option
     arcpy.env.overwriteOutput = True
+    arcpy.env.compression = 'LZW'
 
     try:
         # Create Slope and Aspect rasters
@@ -91,7 +92,7 @@ def main(in_raster=None, neighborhood_size=None, out_raster=None):
 
         out_raster = utils.validate_path(out_raster)
         utils.msg("Saving ruggedness raster to to {}.".format(out_raster))
-        ruggedness.save(out_raster)
+        arcpy.CopyRaster_management(ruggedness, out_raster)
 
     except Exception as e:
         utils.msg(e, mtype='error')
