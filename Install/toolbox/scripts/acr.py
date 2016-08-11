@@ -5,6 +5,7 @@ from arcpy import Raster
 from arcpy.sa import Slope, Aspect
 import numpy as np
 import os
+import sys
 
 from . import utils
 from .tempdir import TempDir
