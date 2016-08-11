@@ -33,6 +33,16 @@ Install the Python Add-in `btm.esriaddin`, to access the graphical tools. The Py
     cd %HOME%\btm\Install\toolbox\scripts
     python bpi.py e:\\bathy5m 5 10 e:\\bpi_fine
 
+Downloading from Source
+-----------------------
+
+To download from GitHub, clone as with any other repository, with the additional step of updating the submodules to get the `datatype` package.
+
+```
+git clone https://github.com/EsriOceans/btm
+git submodule update --init --recursive
+```
+
 Testing
 -------
 
