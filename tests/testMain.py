@@ -779,7 +779,7 @@ class TestACRModel2(unittest.TestCase):
                             1.00278253583, 2.32867335011, 246.842790079)
                 result = cursor.next()
                 for x in range(2, len(expected)):
-                    self.assertAlmostEqual(result[x], expected[x])
+                    self.assertAlmostEqual(result[x], expected[x], places=2)
 
     def testMultipartResults(self):
         with TempDir() as d:
@@ -796,7 +796,7 @@ class TestACRModel2(unittest.TestCase):
                             1.00190527311, 5.3937886264, 225.726428217)
                 result = cursor.next()
                 for x in range(2, len(expected)):
-                    self.assertAlmostEqual(result[x], expected[x])
+                    self.assertAlmostEqual(result[x], expected[x], places=2)
 
 
 if __name__ == '__main__':
