@@ -62,7 +62,8 @@ def main(in_raster=None, areaOfInterest=None, saveTINs=False):
         # split into separate files to process
         splitFiles = [areaOfInterest]
         multiple = False
-        if arcpy.GetCount_management(areaOfInterest) > 1:
+        aoi_count = int(arcpy.GetCount_management(areaOfInterest).getOutput(0))
+        if aoi_count > 1:
             multiple = True
             arcpy.AddField_management(areaOfInterest, "Name", "TEXT")
             splitFiles = []
@@ -106,7 +107,8 @@ def main(in_raster=None, areaOfInterest=None, saveTINs=False):
                                    "BELOW", "Volume2", "Plan_Area")
             arcpy.AddField_management(each, "Rugosity", "DOUBLE")
             arcpy.CalculateField_management(each, "Rugosity",
-                                            "[Surf_Area] / [Plan_Area]")
+                                            "!Surf_Area! / !Plan_Area!",
+                                            "PYTHON_9.3")
             arcpy.DeleteField_management(each, "Volume2;Volume1;Name")
             # Calculate Slope and Aspect
             arcpy.AddField_management(each, "Slope", "DOUBLE")
