@@ -120,7 +120,7 @@ def main(in_raster=None, areaOfInterest=None, saveTINs=False):
             dz_dx = ((pobfArray[0, 2] + 2 * pobfArray[1, 2] +
                       pobfArray[2, 2]) -
                      (pobfArray[0, 0] + 2 * pobfArray[1, 0] +
-                      pobfArray[2, 0])) / (8.0 * pobfYSize)
+                      pobfArray[2, 0])) / (8.0 * pobfXSize)
             dz_dy = ((pobfArray[2, 0] + 2 * pobfArray[2, 1] +
                       pobfArray[2, 2]) -
                      (pobfArray[0, 0] + 2 * pobfArray[0, 1] +
