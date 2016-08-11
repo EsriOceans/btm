@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 import locale
 import os
 import unittest
@@ -7,12 +9,12 @@ import zipfile
 
 from nose.tools import raises
 
-import config
-import utils
+import test_config as config
+import test_utils
 
 # import our local directory so we can use the internal modules
 import_paths = ['../Install/toolbox', '../Install']
-utils.add_local_paths(import_paths)
+test_utils.add_local_paths(import_paths)
 
 # now we can import our scripts
 from scripts import bpi, standardize_bpi_grids, btm_model, aspect, \
@@ -115,16 +117,6 @@ class TestUtilitiesMethods(unittest.TestCase):
         std = su.raster_properties(config.bathy_raster, 'STD')
         self.assertAlmostEqual(std, self.std)
 
-    def testAddPaths(self):
-        """An added path should be the first entry in sys.path,
-           and be normalized."""
-        # paths relative to 'Install/toolbox/scripts'
-        images_dir = "../../../Images"
-        su.add_local_paths([images_dir])
-        added_path = sys.path[0].lower()
-        image_abs_path = os.path.abspath("../Images").lower()
-        self.assertEqual(image_abs_path, added_path)
-
     def tearDown(self):
         # reset locale
         locale.setlocale(locale.LC_ALL, "")
@@ -174,9 +166,16 @@ class TestStandardizeBpiGrids(unittest.TestCase):
             arcpy.env.scratchWorkspace = d
             arcpy.ImportToolbox(config.pyt_file)
 
-            mxd = arcpy.mapping.MapDocument(config.bpi_grids_mxd)
-            df = arcpy.mapping.ListDataFrames(mxd)[0]
-            layers = arcpy.mapping.ListLayers(df)
+            (install_dir, arcgis_version, product) = su.arcgis_platform()
+
+            if product == 'Desktop':
+                mxd = arcpy.mapping.MapDocument(config.bpi_grids_mxd)
+                df = arcpy.mapping.ListDataFrames(mxd)[0]
+                layers = arcpy.mapping.ListLayers(df)
+            else:
+                aprx = arcpy.mp.ArcGISProject(config.bpi_grids_aprx)
+                mdoc = aprx.listMaps()[0]
+                layers = mdoc.listLayers()
             layer_names = [l.name for l in layers]
 
             broad_lyr = layers[layer_names.index('broad_bpi')]
@@ -204,7 +203,10 @@ class TestStandardizeBpiGrids(unittest.TestCase):
                 su.raster_properties(fine_std_raster, "STD"),
                 su.raster_properties(config.fine_std_raster, "STD"))
 
-            del layers, df, mxd
+            if product == 'Desktop':
+                del layers, df, mxd
+            else:
+                del layers, mdoc, aprx
 
     def testStdRun(self):
         with TempDir() as d:
@@ -700,6 +702,7 @@ class TestMultipleScales(unittest.TestCase):
 
     def testResultRastersProduced(self):
         with TempDir() as d:
+            arcpy.env.scratchWorkspace = d
             arcpy.ImportToolbox(config.pyt_file)
             arcpy.multiplescales_btm(self.in_raster,
                                      self.nbh_sizes, self.metrics, d)

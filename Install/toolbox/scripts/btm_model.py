@@ -10,19 +10,19 @@
 # Run all steps of the BTM model.
 # ---------------------------------------------------------------------------
 
-# Import arcpy module
+from __future__ import absolute_import
 import arcpy
 import os
 import sys
 
 # local imports
-import scripts.utils as utils
-import scripts.config as config
+from . import utils
+from . import config
 
-import scripts.bpi as bpi
-import scripts.classify as classify
-import scripts.slope as slope
-import scripts.standardize_bpi_grids as standardize_bpi
+from . import bpi
+from . import classify
+from . import slope
+from . import standardize_bpi_grids as standardize_bpi
 
 # Check out any necessary licenses
 arcpy.CheckOutExtension("Spatial")
