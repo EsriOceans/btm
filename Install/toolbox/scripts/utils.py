@@ -5,6 +5,7 @@ A collection of utilities for modifying the environment, logging, and
 handling BTM classification dictionaries.
 """
 
+from __future__ import absolute_import
 import locale
 import sys
 import traceback
@@ -26,8 +27,9 @@ except ImportError:
 
 import arcpy
 from arcpy import Raster
-import scripts.config as config
-from tempdir import TempDir
+from . import config
+
+from .tempdir import TempDir
 
 # register the default locale
 locale.setlocale(locale.LC_ALL, '')
@@ -35,14 +37,6 @@ locale.setlocale(locale.LC_ALL, '')
 # What kinds of inputs can we expect to compute statistics on?
 # TODO add Mosaic Dataset, Mosaic Layer
 VALID_RASTER_TYPES = ['RasterDataset', 'RasterLayer']
-
-
-def add_local_paths(paths):
-    """Add a list of paths to the current import path."""
-    for path_part in paths:
-        base_path = os.path.join(config.local_path, path_part)
-        abs_path = os.path.abspath(base_path)
-        sys.path.insert(0, abs_path)
 
 
 def msg(output, mtype='message'):
@@ -187,6 +181,20 @@ def raster_properties(input_raster, attribute='MEAN'):
         msg("final raster value: {}\n".format(value))
 
     return value
+
+
+def arcgis_platform():
+    """ ArcGIS platform details used internally."""
+    info = arcpy.GetInstallInfo()
+    install_dir = info['InstallDir']
+    arc_version = info['Version']
+    if info['ProductName'] == 'ArcGISPro':
+        product = 'Pro'
+    else:
+        # there are other levels, but this is a PYT run from toolbox,
+        # so unlikely to be a non-ArcMap context
+        product = 'Desktop'
+    return (install_dir, arc_version, product)
 
 
 # classes
@@ -556,6 +564,7 @@ class BtmCsvDocument(BtmDocument):
         return a list of rows based on the detected CSV dialect.
         """
         result = None
+
         with open(filename, 'r') as csv_f:
             # Use the sniffer to figure out what kind of input we're getting
             sample = csv_f.read(1024)
@@ -575,7 +584,7 @@ class BtmCsvDocument(BtmDocument):
             # read in CSV, respecting the detected dialect
             in_csv = csv.reader(csv_f, dialect)
             if has_header:
-                self.header = in_csv.next()
+                self.header = next(in_csv)
             # everything but the header
             result = [r for r in in_csv]
 

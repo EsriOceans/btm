@@ -13,12 +13,8 @@ import arcpy
 from datatype import datatype
 dt = datatype.DataType()
 
-# import our local directory so we can import internal modules
-local_path = os.path.abspath(os.path.dirname(__file__))
-scripts_path = os.path.join(local_path, "scripts")
-sys.path.insert(0, scripts_path)
-
-import scripts.utils as utils
+import scripts
+from scripts import utils
 
 # Check out any necessary licenses
 arcpy.CheckOutExtension("Spatial")
@@ -88,17 +84,6 @@ def dedent(text, ending='\r\n'):
     return textwrap.dedent(text)
 
 
-def force_path():
-    """
-    Ensure Path environment is correctly initialized for our classes.
-    Based on some research, it seems that while the standard imports
-    come in fine, anything which alters the sys.path after initialization
-    won't be respected by the subsequent `class` calls, and re-initialized
-    to its initial state.
-    """
-    sys.path.insert(0, scripts_path)
-
-
 class Toolbox(object):
     """ Benthic Terrain Modeler Python toolbox metaclass."""
     def __init__(self):
@@ -130,7 +115,6 @@ class broadscalebpi(object):
     """ Calculate Broad-scale Bathymetric Position Index (BPI).  """
 
     def __init__(self):
-        force_path()
         self.label = u'Build Broad Scale BPI'
         self.description = dedent("""\
                 The concept of bathymetric position is central to the benthic
@@ -235,7 +219,7 @@ class broadscalebpi(object):
 
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
-        import bpi
+        from scripts import bpi
         bpi.main(
             bathy=parameters[0].valueAsText,
             inner_radius=parameters[1].valueAsText,
@@ -248,7 +232,6 @@ class finescalebpi(object):
     """ Calculate Fine-scale Bathymetric Position Index (BPI).  """
 
     def __init__(self):
-        force_path()
         self.label = u'Build Fine Scale BPI'
         self.description = dedent("""\
                 The concept of bathymetric position is central to the benthic
@@ -359,7 +342,7 @@ class finescalebpi(object):
 
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
-        import bpi
+        from scripts import bpi
         bpi.main(
             bathy=parameters[0].valueAsText,
             inner_radius=parameters[1].valueAsText,
@@ -374,7 +357,6 @@ class standardizebpi(object):
     """
 
     def __init__(self):
-        force_path()
         self.label = u'Standardize BPIs'
         self.canRunInBackground = False
         self.category = 'Bathymetric Position Index (BPI)'
@@ -493,7 +475,7 @@ class standardizebpi(object):
 
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
-        import standardize_bpi_grids
+        from scripts import standardize_bpi_grids
         # run for broad raster...
         standardize_bpi_grids.main(
             bpi_raster=parameters[0].valueAsText,
@@ -507,7 +489,6 @@ class standardizebpi(object):
 class statisticalaspect(object):
     """ Calculate statistical aspect, uses standard SA function internally."""
     def __init__(self):
-        force_path()
         self.label = u'Calculate Statistical Aspect'
         self.canRunInBackground = False
         self.category = 'Surface Derivatives and Statistics'
@@ -561,7 +542,7 @@ class statisticalaspect(object):
 
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
-        import aspect
+        from scripts import aspect
         aspect.main(
             bathy=parameters[0].valueAsText,
             out_sin_raster=parameters[1].valueAsText,
@@ -571,7 +552,6 @@ class statisticalaspect(object):
 class btmslope(object):
     """ Calculate slope, uses standard SA function internally."""
     def __init__(self):
-        force_path()
         self.label = u'Calculate Slope'
         self.canRunInBackground = False
         self.category = 'Surface Derivatives and Statistics'
@@ -612,7 +592,7 @@ class btmslope(object):
 
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
-        import slope
+        from scripts import slope
         slope.main(
             bathy=parameters[0].valueAsText,
             out_raster=parameters[1].valueAsText)
@@ -621,7 +601,6 @@ class btmslope(object):
 class classifyterrain(object):
     """ Classify Benthic Terrain based on classification dictionary. """
     def __init__(self):
-        force_path()
         self.label = u'Classify Benthic Terrain'
         self.canRunInBackground = False
         self.category = 'Terrain Classification'
@@ -694,7 +673,7 @@ class classifyterrain(object):
         return
 
     def execute(self, parameters, messages):
-        import classify
+        from scripts import classify
         classify.main(
             classification_file=parameters[0].valueAsText,
             bpi_broad_std=parameters[1].valueAsText,
@@ -708,7 +687,6 @@ class runfullmodel(object):
     """ Run all model steps to classify benthic terrain. """
 
     def __init__(self):
-        force_path()
         self.label = u'Run All Model Steps'
         self.canRunInBackground = False
         self.category = 'Terrain Classification'
@@ -830,7 +808,7 @@ class runfullmodel(object):
         return
 
     def execute(self, parameters, messages):
-        import btm_model
+        from scripts import btm_model
         btm_model.main(
             out_workspace=parameters[0].valueAsText,
             input_bathymetry=parameters[1].valueAsText,
@@ -846,7 +824,6 @@ class surfacetoplanar(object):
     """Compute Surface Area to Planar Area (ratio)."""
 
     def __init__(self):
-        force_path()
         self.label = u'Surface Area to Planar Area'
         self.description = dedent(
             """Measure terrain ruggedness by calculating the ratio
@@ -908,8 +885,7 @@ class surfacetoplanar(object):
 
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
-        import surface_area_to_planar_area
-        reload(surface_area_to_planar_area)
+        from scripts import surface_area_to_planar_area
         surface_area_to_planar_area.main(
             in_raster=parameters[0].valueAsText,
             out_raster=parameters[1].valueAsText,
@@ -921,7 +897,6 @@ class terrainruggedness(object):
     """Compute Terrain Ruggedness Measure (VRM)."""
 
     def __init__(self):
-        force_path()
         self.label = u'Terrain Ruggedness (VRM)'
         self.description = dedent("""\
                 Measure terrain ruggedness by calculating the vector ruggedness
@@ -981,7 +956,7 @@ class terrainruggedness(object):
 
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
-        import ruggedness
+        from scripts import ruggedness
         ruggedness.main(
             in_raster=parameters[0].valueAsText,
             neighborhood_size=parameters[1].valueAsText,
@@ -1058,7 +1033,6 @@ class depthstatistics(object):
     """
 
     def __init__(self):
-        force_path()
         self.label = u'Calculate Metrics (Depth Statistics)'
         self.canRunInBackground = False
         self.category = 'Surface Derivatives and Statistics'
@@ -1129,7 +1103,7 @@ class depthstatistics(object):
 
     def execute(self, parameters, messages):
         # run related python script with selected input parameters
-        import depth_statistics
+        from scripts import depth_statistics
         depth_statistics.main(
             in_raster=parameters[0].valueAsText,
             neighborhood_size=parameters[1].valueAsText,
@@ -1141,7 +1115,6 @@ class scalecomparison(object):
     """ Create a visual aid for easy comparison between statistics
         computed at different scales """
     def __init__(self):
-        force_path()
         self.label = u'Compare Scales of Analysis'
         self.canRunInBackground = False
         self.category = 'Multi-Scale Analysis'
@@ -1222,7 +1195,7 @@ class scalecomparison(object):
         return
 
     def execute(self, parameters, messages):
-        import scale_comparison
+        from scripts import scale_comparison
         scale_comparison.main(
             in_raster=parameters[0].valueAsText,
             img_filter=parameters[1].valueAsText,
@@ -1236,7 +1209,6 @@ class multiplescales(object):
     """ Calculate metrics at multiple scales. """
 
     def __init__(self):
-        force_path()
         self.label = u'Calculate Metrics At Multiple Scales'
         self.canRunInBackground = False
         self.category = 'Multi-Scale Analysis'
@@ -1308,8 +1280,8 @@ class multiplescales(object):
         return
 
     def execute(self, parameters, messages):
-        import depth_statistics
-        import ruggedness
+        from scripts import depth_statistics
+        from scripts import ruggedness
 
         nbh_lst = parameters[1].valueAsText.split(";")
         metrics_lst = parameters[2].valueAsText.replace("'", '').split(";")

@@ -23,6 +23,8 @@ aoi_multipart = os.path.abspath(os.path.join(data_path, 'areaofinterest_mp.shp')
 
 # an MXD with two bpi layers
 bpi_grids_mxd = os.path.abspath(os.path.join(data_path, 'bpi_grids.mxd'))
+# same as above, but as an APRX for Pro
+bpi_grids_aprx = os.path.abspath(os.path.join(data_path, 'bpi_grids.aprx'))
 
 pyt_file = os.path.abspath(
     os.path.join(local_path, '..', 'Install', 'toolbox', 'btm.pyt'))

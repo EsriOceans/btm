@@ -15,14 +15,15 @@
 # Coastal Zone Management to a Python Script that runs in ArcGIS 10.
 
 # Import system modules
+from __future__ import absolute_import
 import sys
 
 import arcpy
 from arcpy.sa import Int, Plus, Divide, Minus, Times
 
 # local imports
-import scripts.utils as utils
-import scripts.config as config
+from . import utils
+from . import config
 
 # Check out any necessary licenses
 arcpy.CheckOutExtension("Spatial")

@@ -4,21 +4,21 @@
 # Date: 9/1/2012
 
 # Import system modules
+from __future__ import absolute_import
 import os
 import sys
 import math
 import numpy as np
 try:
-    import scipy
-    from scipy import stats
+    import scipy.stats
 except ImportError:
     pass    # error generated inline
 import arcpy
 from arcpy.sa import NbrRectangle, FocalStatistics, Power
 
 # local imports
-import scripts.utils as utils
-import scripts.config as config
+from . import utils
+from . import config
 
 # Check out any necessary licenses
 arcpy.CheckOutExtension("Spatial")
@@ -32,8 +32,8 @@ def iqr(in_array, overlap):
             nbh_list.append(in_array[r:(s[0]-(overlap*2)+r),
                                      c:(s[1]-(overlap*2)+c)])
     iqr_array = np.array(nbh_list)
-    iqr_array = np.percentile(iqr_array, 75, axis=0) - \
-                np.percentile(iqr_array, 25, axis=0)
+    iqr_array = (np.percentile(iqr_array, 75, axis=0) -
+                 np.percentile(iqr_array, 25, axis=0))
     return iqr_array
 
 
