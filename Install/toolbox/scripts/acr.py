@@ -1,11 +1,17 @@
+from __future__ import absolute_import
+from __future__ import unicode_literals
 import arcpy
 from arcpy import Raster
 from arcpy.sa import Slope, Aspect
 import numpy as np
 import os
 
-import scripts.utils as utils
-from scripts.tempdir import TempDir
+from . import utils
+from .tempdir import TempDir
+
+# force all to str
+if sys.version_info < (3, 0):
+    str = unicode
 
 arcpy.env.overwriteOutput = True
 arcpy.CheckOutExtension("Spatial")
@@ -15,9 +21,9 @@ arcpy.CheckOutExtension("GeoStats")
 
 def main(in_raster=None, areaOfInterest=None, saveTINs=False):
 
-    if isinstance(saveTINs, unicode) and saveTINs.lower() == 'false':
+    if isinstance(saveTINs, str) and saveTINs.lower() == 'false':
         saveTINs = False
-    if isinstance(saveTINs, unicode) and saveTINs.lower() == 'true':
+    if isinstance(saveTINs, str) and saveTINs.lower() == 'true':
         saveTINs = True
 
     rastName = os.path.splitext(os.path.split(in_raster)[1])[0]
