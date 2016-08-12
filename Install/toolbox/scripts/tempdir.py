@@ -11,7 +11,6 @@ from __future__ import with_statement
 import gc
 import os
 import tempfile
-import time
 import shutil
 from functools import wraps
 from contextlib import contextmanager

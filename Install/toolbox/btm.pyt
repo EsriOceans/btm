@@ -12,10 +12,9 @@ import arcpy
 
 # import our datatype conversion submodule
 from datatype import datatype
-dt = datatype.DataType()
-
-import scripts
 from scripts import utils
+
+dt = datatype.DataType()
 
 # Check out any necessary licenses
 arcpy.CheckOutExtension("Spatial")

@@ -2,7 +2,6 @@ from __future__ import absolute_import
 from __future__ import unicode_literals
 import arcpy
 from arcpy import Raster
-from arcpy.sa import Slope, Aspect
 import numpy as np
 import os
 import sys
