@@ -2,7 +2,6 @@ import os
 import sys
 
 # ArcGIS specific imports
-import arcpy
 import pythonaddins
 
 # enable local imports
@@ -30,8 +29,8 @@ def tool_dialog(toolbox, tool):
         pythonaddins.GPToolDialog(toolbox, tool)
         sys.stderr = err_default
     except:
-        print "recieved exception when trying to run GPToolDialog(" + \
-            "{toolbox}, {tool}))".format(toolbox=toolbox, tool=tool)
+        print("recieved exception when trying to run GPToolDialog("
+              "{toolbox}, {tool}))".format(toolbox=toolbox, tool=tool))
     return None
 
 
