@@ -1137,12 +1137,14 @@ class arcchordratio(object):
 
     def updateParameters(self, parameters):
         workspace = parameters[3]
-        ws = arcpy.Describe(utils.get_workspace())
-        ws_type = set([ws.workspaceType])
-        db_types = ['LocalDatabase', 'RemoteDatabase']
-        if not ws_type.intersection(db_types):
-            if workspace.value is None:
-                workspace.value = utils.get_workspace()
+        current_workspace = utils.get_workspace()
+        if current_workspace:
+            ws = arcpy.Describe(current_workspace)
+            ws_type = set([ws.workspaceType])
+            db_types = ['LocalDatabase', 'RemoteDatabase']
+            if not ws_type.intersection(db_types):
+                if workspace.value is None:
+                    workspace.value = current_workspace
         return
 
     def updateMessages(self, parameters):
