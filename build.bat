@@ -34,4 +34,3 @@ GOTO end
 :installAddin
 start ../btm.esriaddin
 :end
-exit /b
