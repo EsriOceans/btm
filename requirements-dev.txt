@@ -3,5 +3,6 @@
 # used for tests
 nose
 pep8
-# used for packaging
+# used for packaging. current release isn't up to snuff, instead:
+# pip install git+https://github.com/Kentzo/git-archive-all
 git-archive-all
