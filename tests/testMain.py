@@ -676,6 +676,7 @@ class TestAddin(unittest.TestCase):
 
 
 class TestScaleComparison(unittest.TestCase):
+    @unittest.skipIf(not su.SCIPY_EXISTS, "SciPy missing")
     def setUp(self):
         self.percentile = 75
         self.min_nbhs = 3
@@ -698,6 +699,8 @@ class TestScaleComparison(unittest.TestCase):
 
 
 class TestMultipleScales(unittest.TestCase):
+    @unittest.skipIf(not su.NETCDF4_EXISTS, "NetCDF4 missing")
+    @unittest.skipIf(not su.SCIPY_EXISTS, "SciPy missing")
     def setUp(self):
         self.in_raster = config.bathy_raster
         self.nbh_sizes = '3;13'

@@ -25,8 +25,10 @@ def main(in_raster=None, img_filter=None, percentile=None,
 
     fig = plt.figure(figsize=(10, 10))
     i = 0
-    for size in np.linspace(min_nbhs, max_nbhs, num=25, endpoint=True,
-                            retstep=False, dtype=np.int32):
+    # cast with astype instead of using dtype= for Numpy 1.7 compat
+    sizes = np.linspace(min_nbhs, max_nbhs, num=25, endpoint=True,
+                        retstep=False).astype('uint32')
+    for size in sizes:
         utils.msg("Processing neighborhood size {}".format(size))
         perc = ""
         if percentile is not None:
