@@ -30,6 +30,7 @@ arcpy.CheckOutExtension("Spatial")
 
 
 def main(bpi_raster=None, out_raster=None):
+    arcpy.env.compression = "LZW"
     try:
         # Get raster properties
         message = ("Calculating properties of the Bathymetric "
@@ -53,7 +54,7 @@ def main(bpi_raster=None, out_raster=None):
         outRaster = Int(Plus(Times(Divide(
             Minus(bpi_raster_path, bpi_mean), bpi_std_dev), 100), 0.5))
         out_raster = utils.validate_path(out_raster)
-        outRaster.save(out_raster)
+        arcpy.CopyRaster_management(outRaster, out_raster)
 
     except Exception as e:
         utils.msg(e, mtype='error')

@@ -84,6 +84,16 @@ def main(in_raster=None, neighborhood_size=None,
                       "is installed. SciPy is included in ArcGIS 10.4 and "
                       "later versions.", "error")
             return
+
+    ws = arcpy.Describe(out_workspace)
+    ws_type = set([ws.workspaceType])
+    db_types = ['LocalDatabase', 'RemoteDatabase']
+    if ws_type.intersection(db_types):
+        ext = ""
+    else:
+        ext = ".tif"
+    in_base = os.path.splitext(os.path.basename(in_raster))[0]
+
     try:
         # initialize our neighborhood
         if verbose:
@@ -99,7 +109,8 @@ def main(in_raster=None, neighborhood_size=None,
             mean_depth = FocalStatistics(in_raster, neighborhood,
                                          "MEAN", "NODATA")
             mean_raster = os.path.join(out_workspace,
-                                       "meandepth_{}.tif".format(n_label))
+                                       "{}_mean{}{}"
+                                       .format(in_base, n_label, ext))
             if verbose:
                 utils.msg("saving mean depth to {}".format(mean_raster))
             arcpy.CopyRaster_management(mean_depth, mean_raster)
@@ -112,7 +123,8 @@ def main(in_raster=None, neighborhood_size=None,
             std_dev_depth = FocalStatistics(in_raster, neighborhood,
                                             "STD", "NODATA")
             std_dev_raster = os.path.join(out_workspace,
-                                          "stddevdepth_{}.tif".format(n_label))
+                                          "{}_sdev{}{}"
+                                          .format(in_base, n_label, ext))
             if verbose and std_dev:
                 utils.msg("saving standard deviation depth to \
                           {}".format(std_dev_raster))
@@ -124,7 +136,8 @@ def main(in_raster=None, neighborhood_size=None,
                     utils.msg("Calculating depth variance...")
                 var_depth = Power(std_dev_depth, 2)
                 var_raster = os.path.join(out_workspace,
-                                          "vardepth_{}.tif".format(n_label))
+                                          "{}_var{}{}"
+                                          .format(in_base, n_label, ext))
                 if verbose:
                     utils.msg("saving depth variance to {}".format(var_raster))
                 arcpy.CopyRaster_management(var_depth, var_raster)
@@ -135,7 +148,8 @@ def main(in_raster=None, neighborhood_size=None,
             if verbose:
                 utils.msg("Calculating depth interquartile range...")
             iqr_raster = os.path.join(out_workspace,
-                                      "iqrdepth_{}.tif".format(n_label))
+                                      "{}_iqr{}{}"
+                                      .format(in_base, n_label, ext))
             bp = utils.BlockProcessor(in_raster)
             # limit 3D blocks to 10^8 elements (.4GB)
             blocksize = int(math.sqrt((10**8) /
@@ -146,7 +160,8 @@ def main(in_raster=None, neighborhood_size=None,
             if verbose:
                 utils.msg("Calculating depth kurtosis...")
             kurt_raster = os.path.join(out_workspace,
-                                       "kurtosisdepth_{}.tif".format(n_label))
+                                       "{}_kurt{}{}"
+                                       .format(in_base, n_label, ext))
             bp = utils.BlockProcessor(in_raster)
             # limit 3D blocks to 10^8 elements (.4GB)
             blocksize = int(math.sqrt((10**8) /

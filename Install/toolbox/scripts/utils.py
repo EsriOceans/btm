@@ -8,6 +8,7 @@ handling BTM classification dictionaries.
 from __future__ import absolute_import
 import locale
 import sys
+import json
 import traceback
 import os
 import csv
@@ -197,6 +198,20 @@ def arcgis_platform():
     return (install_dir, arc_version, product)
 
 
+def get_workspace():
+    """Retrieve workspace string previously saved
+       using 'Set BTM Workspace' tool"""
+    btm_dir = os.path.dirname(
+        os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+    workspace_file = os.path.join(btm_dir, 'workspace.json')
+    if os.path.exists(workspace_file):
+        with open(workspace_file, 'r') as readfile:
+            workspace = json.load(readfile)
+        return workspace
+    else:
+        return None
+
+
 # classes
 class BlockProcessor:
 
@@ -258,10 +273,12 @@ class BlockProcessor:
                 x += blockSize
 
             outDepth[:overlap, :], outDepth[-overlap:, :], \
-                outDepth[:, :overlap], outDepth[:, -overlap:] = (self.noData, ) * 4
+                outDepth[:, :overlap], \
+                outDepth[:, -overlap:] = (self.noData, ) * 4
             msg("Creating result raster layer...")
             layerName = os.path.splitext(os.path.split(outRast)[1])[0]
-            arcpy.MakeNetCDFRasterLayer_md(outNetCDF, 'Band1', 'x', 'y', layerName)
+            arcpy.MakeNetCDFRasterLayer_md(outNetCDF, 'Band1',
+                                           'x', 'y', layerName)
             msg("Saving result layer to {}...".format(outRast))
             arcpy.CopyRaster_management(layerName, outRast)
             inFile.close()

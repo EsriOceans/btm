@@ -423,14 +423,17 @@ class TestDepthStatistics(unittest.TestCase):
 
             # mean of depth summary rasters
             mean_depths = {
-                'meandepth': -20.56248074571827,
-                'stddevdepth': 0.2946229406453136,
-                'vardepth': 0.1281792675921596
+                'mean': -20.56248074571827,
+                'sdev': 0.2946229406453136,
+                'var': 0.1281792675921596
             }
 
             for (prefix, expected_value) in mean_depths.items():
+                base = os.path.splitext(
+                    os.path.basename(config.bathy_raster))[0]
                 raster_path = os.path.join(
-                    d, "{0}_{1:03d}.tif".format(prefix, neighborhood))
+                    d, "{0}_{1}{2:03d}.tif".format(base,
+                                                   prefix, neighborhood))
                 self.assertTrue(os.path.exists(raster_path))
                 self.assertAlmostEqual(
                     su.raster_properties(raster_path, 'MEAN'), expected_value)
@@ -710,31 +713,31 @@ class TestMultipleScales(unittest.TestCase):
                                      self.nbh_sizes, self.metrics, d)
 
             depth_stats = {
-                'meandepth': -20.56248074571827,
-                'stddevdepth': 0.2946229406453136,
-                'vardepth': 0.1281792675921596,
-                'iqrdepth': 0.44891918233769,
-                'kurtosisdepth': -0.91233563683704
+                'mean': -20.56248074571827,
+                'sdev': 0.2946229406453136,
+                'var': 0.1281792675921596,
+                'iqr': 0.44891918233769,
+                'kurt': -0.91233563683704
             }
 
             for (prefix, expected_value) in depth_stats.items():
                 raster_path = os.path.join(
-                    d, "{0}_{1:03d}.tif".format(prefix, 3))
+                    d, "bathy5m_clip_{0}{1:03d}.tif".format(prefix, 3))
                 self.assertAlmostEqual(
                     su.raster_properties(raster_path, 'MEAN'), expected_value)
 
-            vrm_raster = os.path.join(d, 'ruggedness_003.tif')
+            vrm_raster = os.path.join(d, 'bathy5m_clip_vrm003.tif')
             self.assertAlmostEqual(
                 su.raster_properties(vrm_raster, "MEAN"), 0.00062628513039036)
             self.assertAlmostEqual(
                 su.raster_properties(vrm_raster, "STD"), 0.00087457748556755)
 
-            rast_names = ['meandepth_003.tif', 'stddevdepth_003.tif',
-                          'vardepth_003.tif', 'ruggedness_003.tif',
-                          'meandepth_013.tif', 'stddevdepth_013.tif',
-                          'vardepth_013.tif', 'ruggedness_013.tif',
-                          'iqrdepth_003.tif', 'kurtosisdepth_003.tif',
-                          'iqrdepth_013.tif', 'kurtosisdepth_013.tif']
+            rast_names = ['bathy5m_clip_mean003.tif', 'bathy5m_clip_sdev003.tif',
+                          'bathy5m_clip_var003.tif', 'bathy5m_clip_vrm003.tif',
+                          'bathy5m_clip_mean013.tif', 'bathy5m_clip_sdev013.tif',
+                          'bathy5m_clip_var013.tif', 'bathy5m_clip_vrm013.tif',
+                          'bathy5m_clip_iqr003.tif', 'bathy5m_clip_kurt003.tif',
+                          'bathy5m_clip_iqr013.tif', 'bathy5m_clip_kurt013.tif']
 
             for each in rast_names:
                 file_name = os.path.join(d, each)
@@ -745,12 +748,12 @@ class TestMultipleScales(unittest.TestCase):
             arcpy.ImportToolbox(config.pyt_file)
             arcpy.multiplescales_btm(self.in_raster,
                                      self.nbh_sizes, self.metrics, d)
-            rast_names = ['meandepth_003.tif', 'stddevdepth_003.tif',
-                          'vardepth_003.tif', 'ruggedness_003.tif',
-                          'meandepth_013.tif', 'stddevdepth_013.tif',
-                          'vardepth_013.tif', 'ruggedness_013.tif',
-                          'iqrdepth_003.tif', 'kurtosisdepth_003.tif',
-                          'iqrdepth_013.tif', 'kurtosisdepth_013.tif']
+            rast_names = ['bathy5m_clip_mean003.tif', 'bathy5m_clip_sdev003.tif',
+                          'bathy5m_clip_var003.tif', 'bathy5m_clip_vrm003.tif',
+                          'bathy5m_clip_mean013.tif', 'bathy5m_clip_sdev013.tif',
+                          'bathy5m_clip_var013.tif', 'bathy5m_clip_vrm013.tif',
+                          'bathy5m_clip_iqr003.tif', 'bathy5m_clip_kurt003.tif',
+                          'bathy5m_clip_iqr013.tif', 'bathy5m_clip_kurt013.tif']
             for each in rast_names:
                 file_name = os.path.join(d, each)
                 self.assertEqual(str(Raster(file_name).compressionType), 'LZW')
@@ -767,7 +770,7 @@ class TestACRModel2(unittest.TestCase):
             arcpy.ImportToolbox(config.pyt_file)
             testaoi = os.path.join(d, 'testaoi.shp')
             arcpy.CopyFeatures_management(self.aoi, testaoi)
-            arcpy.arcchordratio_btm(self.in_raster, testaoi, True)
+            arcpy.arcchordratio_btm(self.in_raster, testaoi, True, d)
             planarTIN = os.path.join(d, 'bathy5m_clip_planartin0')
             elevTIN = os.path.join(d, 'bathy5m_clip_elevationtin')
             self.assertTrue(os.path.exists(planarTIN))
@@ -798,6 +801,31 @@ class TestACRModel2(unittest.TestCase):
                 for x in range(2, len(expected)):
                     self.assertAlmostEqual(result[x], expected[x], places=2)
 
+
+class TestSetWorkspace(unittest.TestCase):
+
+    def testSetWorkspaceFileIO(self):
+        arcpy.ImportToolbox(config.pyt_file)
+        path = os.path.dirname(config.local_path)
+        wsfile = os.path.join(path, 'workspace.json')
+        wsfile_save = os.path.join(path, 'workspace_orig.json')
+        original = False
+        if os.path.exists(wsfile_save):
+            os.remove(wsfile_save)
+        if os.path.exists(wsfile):
+            os.rename(wsfile, wsfile_save)
+            original = True
+
+        data = su.get_workspace()
+        self.assertEqual(data, None)
+        arcpy.setworkspace_btm(path)
+        self.assertTrue(os.path.exists(wsfile))
+        data = su.get_workspace()
+        self.assertEqual(data, path)
+        os.remove(wsfile)
+
+        if original:
+            os.rename(wsfile_save, wsfile)
 
 if __name__ == '__main__':
     unittest.main()

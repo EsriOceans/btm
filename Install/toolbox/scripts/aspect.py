@@ -28,6 +28,7 @@ def main(bathy=None, out_sin_raster=None, out_cos_raster=None):
     """
 
     try:
+        arcpy.env.compression = "LZW"
         arcpy.env.rasterStatistics = "STATISTICS"
         # Calculate the aspect of the bathymetric raster. "Aspect is expressed
         # in positive degrees from 0 to 359.9, measured clockwise from north."
@@ -44,8 +45,8 @@ def main(bathy=None, out_sin_raster=None, out_cos_raster=None):
 
         out_sin_raster = utils.validate_path(out_sin_raster)
         out_cos_raster = utils.validate_path(out_cos_raster)
-        aspect_sin.save(out_sin_raster)
-        aspect_cos.save(out_cos_raster)
+        arcpy.CopyRaster_management(aspect_sin, out_sin_raster)
+        arcpy.CopyRaster_management(aspect_cos, out_cos_raster)
     except Exception as e:
         utils.msg(e, mtype='error')
 

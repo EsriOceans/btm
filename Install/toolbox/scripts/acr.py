@@ -20,7 +20,7 @@ arcpy.CheckOutExtension("3D")
 arcpy.CheckOutExtension("GeoStats")
 
 
-def main(in_raster=None, areaOfInterest=None, saveTINs=False):
+def main(in_raster=None, areaOfInterest=None, saveTINs=False, workspace=None):
 
     if isinstance(saveTINs, str) and saveTINs.lower() == 'false':
         saveTINs = False
@@ -69,11 +69,13 @@ def main(in_raster=None, areaOfInterest=None, saveTINs=False):
             arcpy.AddField_management(areaOfInterest, "Name", "TEXT")
             splitFiles = []
             with arcpy.da.UpdateCursor(areaOfInterest,
-                                       ["FID", "Name"]) as cursor:
+                                       "Name") as cursor:
+                num = 0
                 for row in cursor:
-                    row[1] = "poly_{}".format(row[0])
-                    splitFiles.append("in_memory\poly_{}".format(row[0]))
+                    row[0] = "poly_{}".format(num)
+                    splitFiles.append("in_memory\poly_{}".format(num))
                     cursor.updateRow(row)
+                    num += 1
             arcpy.Split_analysis(areaOfInterest, areaOfInterest,
                                  'Name', 'in_memory')
 
@@ -152,12 +154,16 @@ def main(in_raster=None, areaOfInterest=None, saveTINs=False):
 
         # Save TINs if requested
         if saveTINs:
+            if workspace is None:
+                out_dir = os.path.split(areaOfInterest)[0]
+            else:
+                out_dir = workspace
             utils.msg("Saving elevation and planar TINs to "
-                      "{}...".format(os.path.split(areaOfInterest)[0]))
+                      "{}...".format(out_dir))
             arcpy.CopyTin_3d(elevationTIN,
-                             os.path.join(os.path.split(areaOfInterest)[0],
+                             os.path.join(out_dir,
                                           '{}_elevationTIN'.format(rastName)))
             for x in range(len(pobfs)):
-                name = os.path.join(os.path.split(areaOfInterest)[0],
+                name = os.path.join(out_dir,
                                     '{}_planarTIN{}'.format(rastName, x))
                 arcpy.CopyTin_3d(pobfs[x], name)
