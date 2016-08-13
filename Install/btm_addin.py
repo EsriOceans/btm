@@ -2,7 +2,6 @@ import os
 import sys
 
 # ArcGIS specific imports
-import arcpy
 import pythonaddins
 
 # enable local imports
@@ -30,8 +29,8 @@ def tool_dialog(toolbox, tool):
         pythonaddins.GPToolDialog(toolbox, tool)
         sys.stderr = err_default
     except:
-        print "recieved exception when trying to run GPToolDialog(" + \
-            "{toolbox}, {tool}))".format(toolbox=toolbox, tool=tool)
+        print("recieved exception when trying to run GPToolDialog("
+              "{toolbox}, {tool}))".format(toolbox=toolbox, tool=tool))
     return None
 
 
@@ -62,6 +61,15 @@ class RunBTMSteps(object):
 
     def onClick(self):
         tool_dialog(btm_toolbox, 'runfullmodel')
+
+
+class setWorkspace(object):
+    """Allow user to choose a workspace to use with the application."""
+    def __init__(self):
+        self.enabled = True
+
+    def onClick(self):
+        tool_dialog(btm_toolbox, 'setworkspace')
 
 """Classification functions"""
 
@@ -166,8 +174,17 @@ class calculateDepthStatistics(object):
         tool_dialog(btm_toolbox, 'depthstatistics')
         # TODO: handle adding the statistics to the current map when run
 
+
 #
 # New geomorphometry functions
+class calculateArcChordRatio(object):
+    """Implementation for arcChordRatio.button (Button)"""
+    def __init__(self):
+        self.enabled = True
+        self.checked = False
+
+    def onClick(self):
+        tool_dialog(btm_toolbox, 'arcchordratio')
 
 
 class calculateSaPa(object):
@@ -198,3 +215,23 @@ class calculateSlope(object):
 
     def onClick(self):
         tool_dialog(btm_toolbox, 'btmslope')
+
+
+# multi-scale analysis menu
+class calculateMetricsMultipleScales(object):
+    """Batch generator for depth statistics that takes an input range of
+       scales for analysis."""
+    def __init__(self):
+        self.enabled = True
+
+    def onClick(self):
+        tool_dialog(btm_toolbox, 'multiplescales')
+
+
+class calculateScaleComparison(object):
+    """Compare a dataset at multiple scales, using a variety of metrics."""
+    def __init__(self):
+        self.enabled = True
+
+    def onClick(self):
+        tool_dialog(btm_toolbox, 'scalecomparison')
