@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+from __future__ import unicode_literals
 import os
 import math
 import sys
@@ -95,7 +95,7 @@ def makeDefaultFilename(name):
 class Toolbox(object):
     """ Benthic Terrain Modeler Python toolbox metaclass."""
     def __init__(self):
-        self.label = u'Benthic Terrain Modeler'
+        self.label = 'Benthic Terrain Modeler'
         self.alias = 'btm'
         self.tools = [
             # Utilities
@@ -123,7 +123,7 @@ class Toolbox(object):
 # tools below this section, one class per tool.
 class setworkspace(object):
     def __init__(self):
-        self.label = u'Set Default BTM Workspace'
+        self.label = 'Set Default BTM Workspace'
         self.canRunInBackground = False
         self.description = dedent("""\
                 Save a default workspace location to disk""")
@@ -131,8 +131,8 @@ class setworkspace(object):
     def getParameterInfo(self):
         # Output_Workspace
         out_workspace = arcpy.Parameter()
-        out_workspace.name = u'Output_Workspace'
-        out_workspace.displayName = u'Output Workspace'
+        out_workspace.name = 'Output_Workspace'
+        out_workspace.displayName = 'Output Workspace'
         out_workspace.parameterType = 'Required'
         out_workspace.direction = 'Input'
         out_workspace.datatype = dt.format('Workspace')
@@ -151,7 +151,7 @@ class broadscalebpi(object):
     """ Calculate Broad-scale Bathymetric Position Index (BPI).  """
 
     def __init__(self):
-        self.label = u'Build Broad Scale BPI'
+        self.label = 'Build Broad Scale BPI'
         self.description = dedent("""\
             The concept of bathymetric position is central to the benthic
             terrain classification process that is utilized by BTM.
@@ -175,24 +175,24 @@ class broadscalebpi(object):
     def getParameterInfo(self):
         # Input_bathymetric_raster
         input_raster = arcpy.Parameter()
-        input_raster.name = u'Input_bathymetric_raster'
-        input_raster.displayName = u'Input bathymetric raster'
+        input_raster.name = 'Input_bathymetric_raster'
+        input_raster.displayName = 'Input bathymetric raster'
         input_raster.parameterType = 'Required'
         input_raster.direction = 'Input'
         input_raster.datatype = dt.format('Raster Layer')
 
         # Inner_radius
         inner_radius = arcpy.Parameter()
-        inner_radius.name = u'Inner_radius'
-        inner_radius.displayName = u'Inner radius'
+        inner_radius.name = 'Inner_radius'
+        inner_radius.displayName = 'Inner radius'
         inner_radius.parameterType = 'Required'
         inner_radius.direction = 'Input'
         inner_radius.datatype = dt.format('Long')
 
         # Outer_radius
         outer_radius = arcpy.Parameter()
-        outer_radius.name = u'Outer_radius'
-        outer_radius.displayName = u'Outer radius'
+        outer_radius.name = 'Outer_radius'
+        outer_radius.displayName = 'Outer radius'
         outer_radius.parameterType = 'Required'
         outer_radius.direction = 'Input'
         outer_radius.datatype = dt.format('Long')
@@ -207,8 +207,8 @@ class broadscalebpi(object):
 
         # Output_raster
         output_raster = arcpy.Parameter()
-        output_raster.name = u'Output_raster'
-        output_raster.displayName = u'Output raster'
+        output_raster.name = 'Output_raster'
+        output_raster.displayName = 'Output raster'
         output_raster.parameterType = 'Required'
         output_raster.direction = 'Output'
         output_raster.datatype = dt.format('File')
@@ -274,7 +274,7 @@ class finescalebpi(object):
     """ Calculate Fine-scale Bathymetric Position Index (BPI).  """
 
     def __init__(self):
-        self.label = u'Build Fine Scale BPI'
+        self.label = 'Build Fine Scale BPI'
         self.description = dedent("""\
             The concept of bathymetric position is central to the benthic
             terrain classification process that is utilized by the BTM.
@@ -298,24 +298,24 @@ class finescalebpi(object):
     def getParameterInfo(self):
         # Input_bathymetric_raster
         input_raster = arcpy.Parameter()
-        input_raster.name = u'Input_bathymetric_raster'
-        input_raster.displayName = u'Input bathymetric raster'
+        input_raster.name = 'Input_bathymetric_raster'
+        input_raster.displayName = 'Input bathymetric raster'
         input_raster.parameterType = 'Required'
         input_raster.direction = 'Input'
         input_raster.datatype = dt.format('Raster Layer')
 
         # Inner_radius
         inner_radius = arcpy.Parameter()
-        inner_radius.name = u'Inner_radius'
-        inner_radius.displayName = u'Inner radius'
+        inner_radius.name = 'Inner_radius'
+        inner_radius.displayName = 'Inner radius'
         inner_radius.parameterType = 'Required'
         inner_radius.direction = 'Input'
         inner_radius.datatype = dt.format('Long')
 
         # Outer_radius
         outer_radius = arcpy.Parameter()
-        outer_radius.name = u'Outer_radius'
-        outer_radius.displayName = u'Outer radius'
+        outer_radius.name = 'Outer_radius'
+        outer_radius.displayName = 'Outer radius'
         outer_radius.parameterType = 'Required'
         outer_radius.direction = 'Input'
         outer_radius.datatype = dt.format('Long')
@@ -330,16 +330,16 @@ class finescalebpi(object):
 
         # Output_raster
         output_raster = arcpy.Parameter()
-        output_raster.name = u'Output_raster'
-        output_raster.displayName = u'Output raster'
+        output_raster.name = 'Output_raster'
+        output_raster.displayName = 'Output raster'
         output_raster.parameterType = 'Required'
         output_raster.direction = 'Output'
         output_raster.datatype = dt.format('File')
 
-        # TODO: implement mutlvalue support
+        # TODO: implement multivalue support
         multivalue = arcpy.Parameter()
-        multivalue.name = u'Test multi'
-        multivalue.displayName = u'Test multi'
+        multivalue.name = 'Test multi'
+        multivalue.displayName = 'Test multi'
         multivalue.parameterType = 'Optional'
         multivalue.direction = 'Input'
         multivalue.datatype = dt.format('Any Value')
@@ -406,7 +406,7 @@ class standardizebpi(object):
     """
 
     def __init__(self):
-        self.label = u'Standardize BPIs'
+        self.label = 'Standardize BPIs'
         self.canRunInBackground = False
         self.category = 'Bathymetric Position Index (BPI)'
         self.cols = [
@@ -417,8 +417,8 @@ class standardizebpi(object):
     def getParameterInfo(self):
         # Input_BPI_raster
         broad_raster = arcpy.Parameter()
-        broad_raster.name = u'Broad_BPI_raster'
-        broad_raster.displayName = u'Broad BPI raster'
+        broad_raster.name = 'Broad_BPI_raster'
+        broad_raster.displayName = 'Broad BPI raster'
         broad_raster.parameterType = 'Required'
         broad_raster.direction = 'Input'
         broad_raster.datatype = dt.format('Raster Layer')
@@ -442,16 +442,16 @@ class standardizebpi(object):
 
         # Output_raster
         broad_std_output = arcpy.Parameter()
-        broad_std_output.name = u'Output_broad_raster'
-        broad_std_output.displayName = u'Output Standardized Broad BPI raster'
+        broad_std_output.name = 'Output_broad_raster'
+        broad_std_output.displayName = 'Output Standardized Broad BPI raster'
         broad_std_output.parameterType = 'Required'
         broad_std_output.direction = 'Output'
         broad_std_output.datatype = dt.format('File')
 
         # Input_BPI_raster
         fine_raster = arcpy.Parameter()
-        fine_raster.name = u'Fine_BPI_raster'
-        fine_raster.displayName = u'Fine BPI raster'
+        fine_raster.name = 'Fine_BPI_raster'
+        fine_raster.displayName = 'Fine BPI raster'
         fine_raster.parameterType = 'Required'
         fine_raster.direction = 'Input'
         fine_raster.datatype = dt.format('Raster Layer')
@@ -475,8 +475,8 @@ class standardizebpi(object):
 
         # Output_raster
         fine_std_output = arcpy.Parameter()
-        fine_std_output.name = u'Output_fine_raster'
-        fine_std_output.displayName = u'Output Standardized Fine BPI raster'
+        fine_std_output.name = 'Output_fine_raster'
+        fine_std_output.displayName = 'Output Standardized Fine BPI raster'
         fine_std_output.parameterType = 'Required'
         fine_std_output.direction = 'Output'
         fine_std_output.datatype = dt.format('File')
@@ -559,31 +559,31 @@ class standardizebpi(object):
 class statisticalaspect(object):
     """ Calculate statistical aspect, uses standard SA function internally."""
     def __init__(self):
-        self.label = u'Calculate Statistical Aspect'
+        self.label = 'Calculate Statistical Aspect'
         self.canRunInBackground = False
         self.category = 'Surface Derivatives and Statistics'
 
     def getParameterInfo(self):
         # Input_bathymetric_raster
         input_raster = arcpy.Parameter()
-        input_raster.name = u'Input_bathymetric_raster'
-        input_raster.displayName = u'Input bathymetric raster'
+        input_raster.name = 'Input_bathymetric_raster'
+        input_raster.displayName = 'Input bathymetric raster'
         input_raster.parameterType = 'Required'
         input_raster.direction = 'Input'
         input_raster.datatype = dt.format('Raster Layer')
 
         # Output Sin raster
         output_sin_raster = arcpy.Parameter()
-        output_sin_raster.name = u'Output_sin_raster'
-        output_sin_raster.displayName = u'Output Sin(Aspect) raster'
+        output_sin_raster.name = 'Output_sin_raster'
+        output_sin_raster.displayName = 'Output Sin(Aspect) raster'
         output_sin_raster.parameterType = 'Required'
         output_sin_raster.direction = 'Output'
         output_sin_raster.datatype = dt.format('File')
 
         # Output Cos raster
         output_cos_raster = arcpy.Parameter()
-        output_cos_raster.name = u'Output_cos_raster'
-        output_cos_raster.displayName = u'Output Cos(Aspect) raster'
+        output_cos_raster.name = 'Output_cos_raster'
+        output_cos_raster.displayName = 'Output Cos(Aspect) raster'
         output_cos_raster.parameterType = 'Required'
         output_cos_raster.direction = 'Output'
         output_cos_raster.datatype = dt.format('File')
@@ -636,23 +636,23 @@ class statisticalaspect(object):
 class btmslope(object):
     """ Calculate slope, uses standard SA function internally."""
     def __init__(self):
-        self.label = u'Calculate Slope'
+        self.label = 'Calculate Slope'
         self.canRunInBackground = False
         self.category = 'Surface Derivatives and Statistics'
 
     def getParameterInfo(self):
         # Input_bathymetric_raster
         input_raster = arcpy.Parameter()
-        input_raster.name = u'Input_bathymetric_raster'
-        input_raster.displayName = u'Input bathymetric raster'
+        input_raster.name = 'Input_bathymetric_raster'
+        input_raster.displayName = 'Input bathymetric raster'
         input_raster.parameterType = 'Required'
         input_raster.direction = 'Input'
         input_raster.datatype = dt.format('Raster Layer')
 
         # Output_raster
         output_raster = arcpy.Parameter()
-        output_raster.name = u'Output_raster'
-        output_raster.displayName = u'Output raster'
+        output_raster.name = 'Output_raster'
+        output_raster.displayName = 'Output raster'
         output_raster.parameterType = 'Required'
         output_raster.direction = 'Output'
         output_raster.datatype = dt.format('File')
@@ -693,15 +693,15 @@ class btmslope(object):
 class classifyterrain(object):
     """ Classify Benthic Terrain based on classification dictionary. """
     def __init__(self):
-        self.label = u'Classify Benthic Terrain'
+        self.label = 'Classify Benthic Terrain'
         self.canRunInBackground = False
         self.category = 'Terrain Classification'
 
     def getParameterInfo(self):
         # Classification Dictionary
         class_dict = arcpy.Parameter()
-        class_dict.name = u'Classification_dictionary'
-        class_dict.displayName = u'Classification dictionary'
+        class_dict.name = 'Classification_dictionary'
+        class_dict.displayName = 'Classification dictionary'
         class_dict.direction = 'Input'
         class_dict.datatype = dt.format('File')
         class_dict.parameterType = 'Required'
@@ -711,40 +711,40 @@ class classifyterrain(object):
 
         # Standardized broad-scale BPI raster
         broad_bpi_std = arcpy.Parameter()
-        broad_bpi_std.name = u'Standardized_broad-scale_BPI_raster'
-        broad_bpi_std.displayName = u'Standardized broad-scale BPI raster'
+        broad_bpi_std.name = 'Standardized_broad-scale_BPI_raster'
+        broad_bpi_std.displayName = 'Standardized broad-scale BPI raster'
         broad_bpi_std.parameterType = 'Required'
         broad_bpi_std.direction = 'Input'
         broad_bpi_std.datatype = dt.format('Raster Layer')
 
         # Standardized fine-scale BPI raster
         fine_bpi_std = arcpy.Parameter()
-        fine_bpi_std.name = u'Standardized_fine-scale_BPI_raster'
-        fine_bpi_std.displayName = u'Standardized fine-scale BPI raster'
+        fine_bpi_std.name = 'Standardized_fine-scale_BPI_raster'
+        fine_bpi_std.displayName = 'Standardized fine-scale BPI raster'
         fine_bpi_std.parameterType = 'Required'
         fine_bpi_std.direction = 'Input'
         fine_bpi_std.datatype = dt.format('Raster Layer')
 
         # Slope_raster
         slope = arcpy.Parameter()
-        slope.name = u'Slope_raster'
-        slope.displayName = u'Slope raster'
+        slope.name = 'Slope_raster'
+        slope.displayName = 'Slope raster'
         slope.parameterType = 'Required'
         slope.direction = 'Input'
         slope.datatype = dt.format('Raster Layer')
 
         # Bathymetry raster
         bathy = arcpy.Parameter()
-        bathy.name = u'Bathymetry_raster'
-        bathy.displayName = u'Bathymetry raster'
+        bathy.name = 'Bathymetry_raster'
+        bathy.displayName = 'Bathymetry raster'
         bathy.parameterType = 'Required'
         bathy.direction = 'Input'
         bathy.datatype = dt.format('Raster Layer')
 
         # Output_raster
         zones_raster = arcpy.Parameter()
-        zones_raster.name = u'Output_zones_raster'
-        zones_raster.displayName = u'Output Zones Raster'
+        zones_raster.name = 'Output_zones_raster'
+        zones_raster.displayName = 'Output Zones Raster'
         zones_raster.parameterType = 'Required'
         zones_raster.direction = 'Output'
         zones_raster.datatype = dt.format('File')
@@ -788,7 +788,7 @@ class runfullmodel(object):
     """ Run all model steps to classify benthic terrain. """
 
     def __init__(self):
-        self.label = u'Run All Model Steps'
+        self.label = 'Run All Model Steps'
         self.canRunInBackground = False
         self.category = 'Terrain Classification'
         self.cols = [
@@ -799,56 +799,56 @@ class runfullmodel(object):
     def getParameterInfo(self):
         # Output_Workspace
         out_workspace = arcpy.Parameter()
-        out_workspace.name = u'Output_Workspace'
-        out_workspace.displayName = u'Output Workspace'
+        out_workspace.name = 'Output_Workspace'
+        out_workspace.displayName = 'Output Workspace'
         out_workspace.parameterType = 'Required'
         out_workspace.direction = 'Input'
         out_workspace.datatype = dt.format('Workspace')
 
         # Bathymetry raster
         bathy = arcpy.Parameter()
-        bathy.name = u'Bathymetry_raster'
-        bathy.displayName = u'Bathymetry raster'
+        bathy.name = 'Bathymetry_raster'
+        bathy.displayName = 'Bathymetry raster'
         bathy.parameterType = 'Required'
         bathy.direction = 'Input'
         bathy.datatype = dt.format('Raster Layer')
 
         # Broad-scale BPI raster inner radius
         broad_bpi_inner = arcpy.Parameter()
-        broad_bpi_inner.name = u'broad-scale_BPI_inner_radius'
-        broad_bpi_inner.displayName = u'broad-scale BPI inner radius'
+        broad_bpi_inner.name = 'broad-scale_BPI_inner_radius'
+        broad_bpi_inner.displayName = 'broad-scale BPI inner radius'
         broad_bpi_inner.parameterType = 'Required'
         broad_bpi_inner.direction = 'Input'
         broad_bpi_inner.datatype = dt.format('Long')
 
         # Broad-scale BPI raster inner radius
         broad_bpi_outer = arcpy.Parameter()
-        broad_bpi_outer.name = u'broad-scale_BPI_outer_radius'
-        broad_bpi_outer.displayName = u'broad-scale BPI outer radius'
+        broad_bpi_outer.name = 'broad-scale_BPI_outer_radius'
+        broad_bpi_outer.displayName = 'broad-scale BPI outer radius'
         broad_bpi_outer.parameterType = 'Required'
         broad_bpi_outer.direction = 'Input'
         broad_bpi_outer.datatype = dt.format('Long')
 
         # Fine-scale BPI raster inner radius
         fine_bpi_inner = arcpy.Parameter()
-        fine_bpi_inner.name = u'fine-scale_BPI_inner_radius'
-        fine_bpi_inner.displayName = u'fine-scale BPI inner radius'
+        fine_bpi_inner.name = 'fine-scale_BPI_inner_radius'
+        fine_bpi_inner.displayName = 'fine-scale BPI inner radius'
         fine_bpi_inner.parameterType = 'Required'
         fine_bpi_inner.direction = 'Input'
         fine_bpi_inner.datatype = dt.format('Long')
 
         # Fine-scale BPI raster inner radius
         fine_bpi_outer = arcpy.Parameter()
-        fine_bpi_outer.name = u'fine-scale_BPI_outer_radius'
-        fine_bpi_outer.displayName = u'fine-scale BPI outer radius'
+        fine_bpi_outer.name = 'fine-scale_BPI_outer_radius'
+        fine_bpi_outer.displayName = 'fine-scale BPI outer radius'
         fine_bpi_outer.parameterType = 'Required'
         fine_bpi_outer.direction = 'Input'
         fine_bpi_outer.datatype = dt.format('Long')
 
         # Classification Dictionary
         class_dict = arcpy.Parameter()
-        class_dict.name = u'Classification_dictionary'
-        class_dict.displayName = u'Classification dictionary'
+        class_dict.name = 'Classification_dictionary'
+        class_dict.displayName = 'Classification dictionary'
         class_dict.direction = 'Input'
         class_dict.datatype = dt.format('File')
         class_dict.parameterType = 'Required'
@@ -858,8 +858,8 @@ class runfullmodel(object):
 
         # Output_raster
         zones_raster = arcpy.Parameter()
-        zones_raster.name = u'Output_zones_raster'
-        zones_raster.displayName = u'Output Zones Raster'
+        zones_raster.name = 'Output_zones_raster'
+        zones_raster.displayName = 'Output Zones Raster'
         zones_raster.parameterType = 'Required'
         zones_raster.direction = 'Output'
         zones_raster.datatype = dt.format('File')
@@ -928,7 +928,7 @@ class surfacetoplanar(object):
     """Compute Surface Area to Planar Area (ratio)."""
 
     def __init__(self):
-        self.label = u'Surface Area to Planar Area'
+        self.label = 'Surface Area to Planar Area'
         self.description = dedent(
             """Measure terrain ruggedness by calculating the ratio
             between the surface area and the planar area, as described
@@ -939,25 +939,25 @@ class surfacetoplanar(object):
     def getParameterInfo(self):
         # Bathymetry_Raster
         input_raster = arcpy.Parameter()
-        input_raster.name = u'Bathymetry_Raster'
-        input_raster.displayName = u'Bathymetry Raster'
+        input_raster.name = 'Bathymetry_Raster'
+        input_raster.displayName = 'Bathymetry Raster'
         input_raster.parameterType = 'Required'
         input_raster.direction = 'Input'
         input_raster.datatype = dt.format('Raster Layer')
 
         # Output_Raster
         output_raster = arcpy.Parameter()
-        output_raster.name = u'Output_Raster'
-        output_raster.displayName = u'Output Raster'
+        output_raster.name = 'Output_Raster'
+        output_raster.displayName = 'Output Raster'
         output_raster.parameterType = 'Required'
         output_raster.direction = 'Output'
         output_raster.datatype = dt.format('File')
 
         # ACR Correction
         acr_correction = arcpy.Parameter()
-        acr_correction.name = u'ACR_Correction'
-        acr_correction.displayName = u'Correct Planar Area for Slope ' + \
-                                     u'(Arc-Chord Ratio Rugosity)'
+        acr_correction.name = 'ACR_Correction'
+        acr_correction.displayName = 'Correct Planar Area for Slope ' + \
+                                     '(Arc-Chord Ratio Rugosity)'
         acr_correction.parameterType = 'Optional'
         acr_correction.direction = 'Input'
         acr_correction.datatype = dt.format('Boolean')
@@ -965,8 +965,8 @@ class surfacetoplanar(object):
 
         # Area_Raster
         area_raster = arcpy.Parameter()
-        area_raster.name = u'Area_Raster'
-        area_raster.displayName = u'Area Raster'
+        area_raster.name = 'Area_Raster'
+        area_raster.displayName = 'Area Raster'
         area_raster.parameterType = 'Optional'
         area_raster.direction = 'Output'
         area_raster.datatype = dt.format('Raster Dataset')
@@ -1009,7 +1009,7 @@ class terrainruggedness(object):
     """Compute Terrain Ruggedness Measure (VRM)."""
 
     def __init__(self):
-        self.label = u'Terrain Ruggedness (VRM)'
+        self.label = 'Terrain Ruggedness (VRM)'
         self.description = dedent("""\
                 Measure terrain ruggedness by calculating the vector ruggedness
                 measure (VRM), as described in Sappington et al, 2007.""")
@@ -1019,24 +1019,24 @@ class terrainruggedness(object):
     def getParameterInfo(self):
         # Bathymetry_Raster
         input_raster = arcpy.Parameter()
-        input_raster.name = u'Bathymetry_Raster'
-        input_raster.displayName = u'Bathymetry Raster'
+        input_raster.name = 'Bathymetry_Raster'
+        input_raster.displayName = 'Bathymetry Raster'
         input_raster.parameterType = 'Required'
         input_raster.direction = 'Input'
         input_raster.datatype = dt.format('Raster Layer')
 
         # Neighborhood_Size
         neighborhood = arcpy.Parameter()
-        neighborhood.name = u'Neighborhood_Size'
-        neighborhood.displayName = u'Neighborhood Size'
+        neighborhood.name = 'Neighborhood_Size'
+        neighborhood.displayName = 'Neighborhood Size'
         neighborhood.parameterType = 'Required'
         neighborhood.direction = 'Input'
         neighborhood.datatype = dt.format('Long')
 
         # Output_Raster
         output_raster = arcpy.Parameter()
-        output_raster.name = u'Output_Raster'
-        output_raster.displayName = u'Output Raster'
+        output_raster.name = 'Output_Raster'
+        output_raster.displayName = 'Output Raster'
         output_raster.parameterType = 'Required'
         output_raster.direction = 'Output'
         output_raster.datatype = dt.format('File')
@@ -1089,7 +1089,7 @@ class terrainruggedness(object):
 class arcchordratio(object):
 
     def __init__(self):
-        self.label = u'Arc-Chord Ratio'
+        self.label = 'Arc-Chord Ratio'
         self.description = dedent("""\
                Arc-cord ratio (Model 2) as described by Du Preez (2014)""")
         self.canRunInBackground = False
@@ -1098,24 +1098,24 @@ class arcchordratio(object):
     def getParameterInfo(self):
         # Bathymetry_Raster
         input_raster = arcpy.Parameter()
-        input_raster.name = u'Bathymetry_Raster'
-        input_raster.displayName = u'Bathymetry Raster'
+        input_raster.name = 'Bathymetry_Raster'
+        input_raster.displayName = 'Bathymetry Raster'
         input_raster.parameterType = 'Required'
         input_raster.direction = 'Input'
         input_raster.datatype = dt.format('Raster Layer')
 
         # Area of Interest
         areaOfInterest = arcpy.Parameter()
-        areaOfInterest.name = u'Area of Interest'
-        areaOfInterest.displayName = u'Area of Interest'
+        areaOfInterest.name = 'Area of Interest'
+        areaOfInterest.displayName = 'Area of Interest'
         areaOfInterest.parameterType = 'Required'
         areaOfInterest.direction = 'Input'
         areaOfInterest.datatype = dt.format('Feature Class')
 
         # Save TINs
         saveTINs = arcpy.Parameter()
-        saveTINs.name = u'Save TINs'
-        saveTINs.displayName = u'Save Output Contoured and Planar TINs'
+        saveTINs.name = 'Save TINs'
+        saveTINs.displayName = 'Save Output Contoured and Planar TINs'
         saveTINs.parameterType = 'Optional'
         saveTINs.direction = 'Input'
         saveTINs.datatype = dt.format('Boolean')
@@ -1123,8 +1123,8 @@ class arcchordratio(object):
 
         # Output_Workspace
         out_workspace = arcpy.Parameter()
-        out_workspace.name = u'Output_Workspace'
-        out_workspace.displayName = u'Output Workspace'
+        out_workspace.name = 'Output_Workspace'
+        out_workspace.displayName = 'Output Workspace'
         out_workspace.parameterType = 'Optional'
         out_workspace.direction = 'Input'
         out_workspace.datatype = dt.format('Workspace')
@@ -1173,39 +1173,39 @@ class depthstatistics(object):
     """
 
     def __init__(self):
-        self.label = u'Calculate Metrics (Depth Statistics)'
+        self.label = 'Calculate Metrics (Depth Statistics)'
         self.canRunInBackground = False
         self.category = 'Surface Derivatives and Statistics'
 
     def getParameterInfo(self):
         # Bathymetry_Raster
         input_raster = arcpy.Parameter()
-        input_raster.name = u'Bathymetry_Raster'
-        input_raster.displayName = u'Bathymetry Raster'
+        input_raster.name = 'Bathymetry_Raster'
+        input_raster.displayName = 'Bathymetry Raster'
         input_raster.parameterType = 'Required'
         input_raster.direction = 'Input'
         input_raster.datatype = dt.format('Raster Layer')
 
         # Neighborhood_Size
         neighborhood = arcpy.Parameter()
-        neighborhood.name = u'Neighborhood_Size'
-        neighborhood.displayName = u'Neighborhood Size'
+        neighborhood.name = 'Neighborhood_Size'
+        neighborhood.displayName = 'Neighborhood Size'
         neighborhood.parameterType = 'Required'
         neighborhood.direction = 'Input'
         neighborhood.datatype = dt.format('Long')
 
         # Output_Workspace
         out_workspace = arcpy.Parameter()
-        out_workspace.name = u'Output_Workspace'
-        out_workspace.displayName = u'Output Workspace'
+        out_workspace.name = 'Output_Workspace'
+        out_workspace.displayName = 'Output Workspace'
         out_workspace.parameterType = 'Required'
         out_workspace.direction = 'Input'
         out_workspace.datatype = dt.format('Workspace')
 
         # Statistics to Compute
         statistics = arcpy.Parameter()
-        statistics.name = u'Statistics_Computed'
-        statistics.displayName = u'Statistics to Compute'
+        statistics.name = 'Statistics_Computed'
+        statistics.displayName = 'Statistics to Compute'
         statistics.parameterType = 'Required'
         statistics.direction = 'Input'
         statistics.datatype = dt.format('String')
@@ -1259,7 +1259,7 @@ class scalecomparison(object):
     """ Create a visual aid for easy comparison between statistics
         computed at different scales """
     def __init__(self):
-        self.label = u'Compare Scales of Analysis'
+        self.label = 'Compare Scales of Analysis'
         self.canRunInBackground = False
         self.category = 'Multi-Scale Analysis'
 
@@ -1267,16 +1267,16 @@ class scalecomparison(object):
 
         # Bathymetry raster
         bathy = arcpy.Parameter()
-        bathy.name = u'Bathymetry_raster'
-        bathy.displayName = u'Bathymetry raster'
+        bathy.name = 'Bathymetry_raster'
+        bathy.displayName = 'Bathymetry raster'
         bathy.parameterType = 'Required'
         bathy.direction = 'Input'
         bathy.datatype = dt.format('Raster Layer')
 
         # Image Filter
         imgfilter = arcpy.Parameter()
-        imgfilter.name = u'Filter'
-        imgfilter.displayName = u'Filter'
+        imgfilter.name = 'Filter'
+        imgfilter.displayName = 'Filter'
         imgfilter.parameterType = 'Required'
         imgfilter.direction = 'Input'
         imgfilter.datatype = dt.format('String')
@@ -1285,8 +1285,8 @@ class scalecomparison(object):
 
         # Percentile
         percentile = arcpy.Parameter()
-        percentile.name = u'Percentile'
-        percentile.displayName = u'Percentile'
+        percentile.name = 'Percentile'
+        percentile.displayName = 'Percentile'
         percentile.parameterType = 'Optional'
         percentile.value = None
         percentile.direction = 'Input'
@@ -1295,24 +1295,24 @@ class scalecomparison(object):
 
         # Minimum Neighborhood_Size
         minneighborhood = arcpy.Parameter()
-        minneighborhood.name = u'Minimum Neighborhood_Size'
-        minneighborhood.displayName = u'Minimum Neighborhood Size'
+        minneighborhood.name = 'Minimum Neighborhood_Size'
+        minneighborhood.displayName = 'Minimum Neighborhood Size'
         minneighborhood.parameterType = 'Required'
         minneighborhood.direction = 'Input'
         minneighborhood.datatype = dt.format('Long')
 
         # Maximum Neighborhood_Size
         maxneighborhood = arcpy.Parameter()
-        maxneighborhood.name = u'Maximum Neighborhood_Size'
-        maxneighborhood.displayName = u'Maximum Neighborhood Size'
+        maxneighborhood.name = 'Maximum Neighborhood_Size'
+        maxneighborhood.displayName = 'Maximum Neighborhood Size'
         maxneighborhood.parameterType = 'Required'
         maxneighborhood.direction = 'Input'
         maxneighborhood.datatype = dt.format('Long')
 
         # Output File Name
         out_file = arcpy.Parameter()
-        out_file.name = u'Output Filename'
-        out_file.displayName = u'Output Filename'
+        out_file.name = 'Output Filename'
+        out_file.displayName = 'Output Filename'
         out_file.direction = 'Output'
         out_file.datatype = dt.format('File')
         out_file.parameterType = 'Required'
@@ -1368,7 +1368,7 @@ class multiplescales(object):
     """ Calculate metrics at multiple scales. """
 
     def __init__(self):
-        self.label = u'Calculate Metrics At Multiple Scales'
+        self.label = 'Calculate Metrics At Multiple Scales'
         self.canRunInBackground = False
         self.category = 'Multi-Scale Analysis'
 
@@ -1376,16 +1376,16 @@ class multiplescales(object):
 
         # Bathymetry raster
         bathy = arcpy.Parameter()
-        bathy.name = u'Bathymetry_raster'
-        bathy.displayName = u'Bathymetry raster'
+        bathy.name = 'Bathymetry_raster'
+        bathy.displayName = 'Bathymetry raster'
         bathy.parameterType = 'Required'
         bathy.direction = 'Input'
         bathy.datatype = dt.format('Raster Layer')
 
         # Neighborhood_Sizes
         nbh_sizes = arcpy.Parameter()
-        nbh_sizes.name = u'Neighborhood_Size'
-        nbh_sizes.displayName = u'Neighborhood Size'
+        nbh_sizes.name = 'Neighborhood_Size'
+        nbh_sizes.displayName = 'Neighborhood Size'
         nbh_sizes.parameterType = 'Required'
         nbh_sizes.direction = 'Input'
         nbh_sizes.datatype = dt.format('Long')
@@ -1393,8 +1393,8 @@ class multiplescales(object):
 
         # Metrics to Compute
         metrics = arcpy.Parameter()
-        metrics.name = u'Metrics_Computed'
-        metrics.displayName = u'Metrics to Compute'
+        metrics.name = 'Metrics_Computed'
+        metrics.displayName = 'Metrics to Compute'
         metrics.parameterType = 'Required'
         metrics.direction = 'Input'
         metrics.datatype = dt.format('String')
@@ -1405,8 +1405,8 @@ class multiplescales(object):
 
         # Output Workspace
         out_workspace = arcpy.Parameter()
-        out_workspace.name = u'Output_Workspace'
-        out_workspace.displayName = u'Output Workspace'
+        out_workspace.name = 'Output_Workspace'
+        out_workspace.displayName = 'Output Workspace'
         out_workspace.parameterType = 'Required'
         out_workspace.direction = 'Input'
         out_workspace.datatype = dt.format('Workspace')
