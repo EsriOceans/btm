@@ -1332,15 +1332,17 @@ class scalecomparison(object):
         bathy = parameters[0].valueAsText
         out = parameters[5]
 
-        ws = arcpy.Describe(utils.get_workspace())
-        ws_type = set([ws.workspaceType])
-        db_types = ['LocalDatabase', 'RemoteDatabase']
-        if not ws_type.intersection(db_types):
-            if out.value is None and bathy is not None:
-                base_name = os.path.splitext(os.path.basename(bathy))[0]
-                out_name = '{}_scalecomparison.png'.format(base_name)
-                out_path = makeDefaultFilename(out_name)
-                out.value = out_path
+        current_workspace = utils.get_workspace()
+        if current_workspace:
+            ws = arcpy.Describe(current_workspace)
+            ws_type = set([ws.workspaceType])
+            db_types = ['LocalDatabase', 'RemoteDatabase']
+            if not ws_type.intersection(db_types):
+                if out.value is None and bathy is not None:
+                    base_name = os.path.splitext(os.path.basename(bathy))[0]
+                    out_name = '{}_scalecomparison.png'.format(base_name)
+                    out_path = makeDefaultFilename(out_name)
+                    out.value = out_path
         return
 
     def updateMessages(self, parameters):
