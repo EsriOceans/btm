@@ -1147,6 +1147,12 @@ class arcchordratio(object):
         return
 
     def updateMessages(self, parameters):
+        aoi = parameters[1].valueAsText
+        if aoi:
+            aoi_desc = arcpy.Describe(aoi)
+            if aoi_desc.shapeType != 'Polygon':
+                # Area of interest must be polygon data.
+                parameters[1].setIDMessage("ERROR", 344)
         return
 
     def execute(self, parameters, messages):
