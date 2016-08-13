@@ -45,7 +45,21 @@
       <Help
         heading="Run the Benthic Terrain Classification"
         >Use the generated classifications and models to produce a single classified map.</Help>
+</Button>
+
+    <Button
+      caption="Set Workspace"
+      category="Benthic Terrain Modeler (BTM)"
+      class="setWorkspace"
+      id="setWorkspace.button"
+      image="Images\settings_16x16.png"
+      message="Set a default workspace to be used with all tools. May require an ArcMap restart to take effect."
+      tip="Set a default workspace.">
+      <Help
+       heading="Set a default workspace."
+       >Set a default workspace to be used with all tools. May require an ArcMap restart to take effect.</Help>
     </Button>
+
 
     <!-- Bathymetric Position Index (BPI) -->
     <Button
@@ -88,7 +102,19 @@
     </Button>
 
     <!-- Geomorphological Parameters -->
-    
+    <Button
+      caption="Arc-Chord Ratio"
+      category="Benthic Terrain Modeler (BTM)"
+      class="calculateArcChordRatio"
+      id="calculateArcChordRatio.button"
+      image="Images\acr_16x16.png"
+      message="The ACR rugosity index is a measure of structural complexity that is independent of the slope of the surface."
+      tip="Calculate the Arc-Chord Ratio rugosity index">
+      <Help
+        heading="Calculate the Arc-Chord Ratio rugosity index"
+        >The ACR rugosity index is a meausre of structural complexity that is indepdentent of the slope of the surface.</Help>
+    </Button>
+
     <Button
       caption="Surface Area to Planar Area"
       category="Benthic Terrain Modeler (BTM)"
@@ -101,7 +127,8 @@
         heading="Calculate Surface Area to Planar Area"
         >Measures the surface roughness by comparing the ratio planar area to surface area. In older versions of BTM, this tool was labeled 'Rugosity'.</Help>
     </Button>
-    <Button
+
+   <Button
       caption="Terrain Ruggedness (VRM)"
       category="Benthic Terrain Modeler (BTM)"
       class="calculateTerrainRuggedness"
@@ -164,18 +191,44 @@
     </Button>
 
     <Button
-      caption="Depth Statistics"
+      caption="Calculate Metrics (Depth Statistics)"
       category="Benthic Terrain Modeler (BTM)"
       class="calculateDepthStatistics"
       id="calculateDepthStatistics.button"
       image="Images\depth-statistics_16x16.png"
-      message="Depth statistics include mean water depth and the standard deviation of depth."
+      message="Depth statistics include mean water depth, the standard deviation of depth, the interquartile range of depth and the kurtosis of depth."
       tip="Compute Depth Statistics">
       <Help
         heading="Compute Depth Statistics"
-        >Depth statistics include mean water depth and the standard deviation of depth.</Help>
+        >Depth statistics include mean water depth, the standard deviation of depth, the interquartile range of depth and the kurtosis of depth.</Help>
     </Button>
 
+    <!-- Multi Scale Analysis -->
+    <Button
+      caption="Calculate Metrics at Multiple Scales"
+      category="Benthic Terrain Modeler (BTM)"
+      class="calculateMetricsMultipleScales"
+      id="calculateMetricsMultipleScales.button"
+      image="Images\fib_16x16.png"
+      message="Calculates a variety of metrics at multiple scales for quick multi-scale analysis of a surface raster."
+      tip="Caclulate Metrics at Multiple Scales">
+      <Help
+        heading="Calculate Metrics at Multiple Scales"
+        >Calculates a variety of metrics at multiple scales for quick multi-scale analysis of a surface raster.</Help>
+    </Button>
+
+    <Button
+      caption="Compare Scales of Analysis"
+      category="Benthic Terrain Modeler (BTM)"
+      class="calculateScaleComparison"
+      id="calculateScaleComparison.button"
+      image="Images\scale_comparison_16x16.png"
+      message="Create a visual aid for easy comparison between statistics computed at different scales."
+      tip="Compare Scales of Analysis">
+      <Help
+        heading="Compare Scales of Analysis"
+        >Create a visual aid for easy comparison between statistics computed at different scales.</Help>
+    </Button>
 
     <Tool
       caption="Wizard"
@@ -220,8 +273,10 @@
       <Items>
         <Menu refID="bpi.menu" />
         <Menu refID="geomorphometry.menu" />
+        <Menu refID="multiscale.menu" />
         <Button refID="runBTMSteps.button" />
         <Button refID="classifyBenthicTerrain.button" />
+        <Button refID="setWorkspace.button" />
       </Items>
     </Menu>
 
@@ -238,7 +293,8 @@
         <Button refID="calculateStatisticalAspect.button" />
         <Button refID="calculateSlope.button" />
         <Button refID="calculateCurvature.button" />
-        <Button refID="calculateSaPa.button" />-->
+        <Button refID="calculateArcChordRatio.button" />
+        <Button refID="calculateSaPa.button" />
         <Button refID="calculateTerrainRuggedness.button" />
         <Button refID="calculateDepthStatistics.button" />"
       </Items>
@@ -258,6 +314,20 @@
         <Button refID="standarizeBPI.button" />
       </Items>
     </Menu>
+    <!-- menu: multi-scale tools. -->
+    <Menu
+      caption="Multi-Scale Analysis"
+      category="Benthic Terrain Modeler (BTM)"
+      id="multiscale.menu"
+      isRootMenu="false"
+      isShortcutMenu="false"
+      separator="true">
+      <Items>
+        <Button refID="calculateMetricsMultipleScales.button" />
+        <Button refID="calculateScaleComparison.button" />
+      </Items>
+    </Menu>
+
  </Menus>
 
 </ArcMap>
