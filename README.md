@@ -54,7 +54,10 @@ Then, run nose from the top-level directory:
 
     $ nosetests
 
-Note that the tests run against actual data, and may take upwards of five minutes to complete on modern hardware.
+Note that the tests run against actual data, and may take upwards of ten minutes to complete on modern hardware. Also note that when running the tests from the repository, Git will list the metadata file updates as being changes. These can safely be ignored, you can instruct Git to ignore them with the command:
+
+    git update-index --assume-unchanged tests/data/*.tif.xml
+
 
 Citing
 ------
