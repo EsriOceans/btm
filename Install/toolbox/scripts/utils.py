@@ -234,7 +234,9 @@ class Workspace(object):
         current = self.data
         if current:
             current["workspace"] = val
-            self.data = current
+        else:
+            current = {'workspace': val}
+        self.data = current
 
     @property
     def exists(self):
@@ -272,8 +274,8 @@ class Workspace(object):
                 # delete failed, cowardly pass
                 pass
 
-            with open(self.file_path, 'w') as f:
-                json.dump(val, f)
+        with open(self.file_path, 'w') as f:
+            json.dump(val, f)
 
     def default_filename(self, input_name):
         name = None
