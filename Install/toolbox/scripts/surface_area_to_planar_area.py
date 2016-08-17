@@ -68,7 +68,11 @@ def main(in_raster=None, out_raster=None, acr_correction=True, area_raster=None)
     if isinstance(acr_correction, str) and acr_correction.lower() == 'false':
         acr_correction = False
 
-    out_workspace = os.path.dirname(out_raster)
+    w = utils.Workspace()
+    if w.exists:
+        out_workspace = w.path
+    else:
+        out_workspace = os.path.dirname(out_raster)
     # make sure workspace exists
     utils.workspace_exists(out_workspace)
 

@@ -40,7 +40,11 @@ def main(in_raster=None, neighborhood_size=None, out_raster=None):
     hood_size = int(neighborhood_size)
 
     # FIXME: expose this as an option per #18
-    out_workspace = os.path.dirname(out_raster)
+    w = utils.Workspace()
+    if w.exists:
+        out_workspace = w.path
+    else:
+        out_workspace = os.path.dirname(out_raster)
     utils.workspace_exists(out_workspace)
     # force temporary stats to be computed in our output workspace
     arcpy.env.scratchWorkspace = out_workspace
