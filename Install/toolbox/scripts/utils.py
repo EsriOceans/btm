@@ -198,21 +198,93 @@ def arcgis_platform():
     return (install_dir, arc_version, product)
 
 
-def get_workspace():
-    """Retrieve workspace string previously saved
-       using 'Set BTM Workspace' tool"""
-    btm_dir = os.path.dirname(
-        os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
-    workspace_file = os.path.join(btm_dir, 'workspace.json')
-    if os.path.exists(workspace_file):
-        with open(workspace_file, 'r') as readfile:
-            workspace = json.load(readfile)
-        return workspace
-    else:
-        return None
-
-
 # classes
+class Workspace(object):
+    """Create a workspace location that can be modified with the 'set workspace'
+    tool, and allows us to use a consistent location for our results. Currently,
+    a JSON file which just stores one value, but laid out to allow later refactoring
+    to support a full set of configuration settings."""
+
+    # TODO: this is a placeholder class, it doesn't take advantage of the
+    #       utility of JSON, and requries syncing state from disk on every access.
+
+    def __init__(self, data=None):
+        if data and isinstance(data, dict):
+            self.data = data
+
+    @property
+    def file_path(self):
+        # Place output into 'toolbox' directory. This should work on both
+        # the add-in and the toolbox versions.
+        base_path = os.path.abspath(os.path.dirname(
+                os.path.dirname(os.path.abspath(__file__))))
+        return os.path.join(base_path, 'workspace.json')
+
+    @property
+    def path(self):
+        """ Path of the workspace."""
+        ws_path = None
+        d = self.data
+        if d and "workspace" in d:
+            ws_path = d["workspace"]
+        return ws_path
+
+    @path.setter
+    def path(self, val):
+        current = self.data
+        if current:
+            current["workspace"] = val
+            self.data = current
+
+    @property
+    def exists(self):
+        status = False
+        if self.path and os.path.exists(self.path):
+            status = True
+        return status
+
+    @property
+    def is_gdb(self):
+        gdb = False
+        path = self.path
+        if path and '.gdb' in path.lower():
+            gdb = True
+        return gdb
+
+    @property
+    def data(self):
+        d = None
+        if os.path.exists(self.file_path):
+            with open(self.file_path, 'r') as f:
+                try:
+                    d = json.load(f)
+                except ValueError:
+                    # no valid JSON
+                    pass
+        return d
+
+    @data.setter
+    def data(self, val):
+        if os.path.exists(self.file_path):
+            try:
+                os.remove(self.file_path)
+            except:
+                # delete failed, cowardly pass
+                pass
+
+            with open(self.file_path, 'w') as f:
+                json.dump(val, f)
+
+    def default_filename(self, input_name):
+        name = None
+        if self.exists:
+            if self.is_gdb:
+                # remove any file extension for GDB outputs
+                input_name = os.path.splitext(input_name)[0]
+            name = os.path.join(self.path, input_name)
+        return name
+
+
 class BlockProcessor:
 
     def __init__(self, fileIn):

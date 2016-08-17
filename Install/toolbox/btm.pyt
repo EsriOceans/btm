@@ -16,6 +16,8 @@ from scripts import utils
 
 dt = datatype.DataType()
 
+workspace = utils.Workspace()
+
 # Check out any necessary licenses
 arcpy.CheckOutExtension("Spatial")
 
@@ -84,14 +86,6 @@ def dedent(text, ending='\r\n'):
     return textwrap.dedent(text)
 
 
-def makeDefaultFilename(name):
-    if utils.get_workspace() is None:
-        return None
-    else:
-        workspace = utils.get_workspace()
-        return os.path.join(workspace, name)
-
-
 class Toolbox(object):
     """ Benthic Terrain Modeler Python toolbox metaclass."""
     def __init__(self):
@@ -109,11 +103,11 @@ class Toolbox(object):
             statisticalaspect,  # break aspect up trigonometrically
             surfacetoplanar,    # compare surface area to planar area
             terrainruggedness,  # VRM, a measure of roughness
-            arcchordratio,         # ACR rugosity index
+            arcchordratio,      # ACR rugosity index
             # Summary Statistics
             depthstatistics,    # depth summary statistics
             scalecomparison,    # compare scales of analysis
-            multiplescales,      # run tools at multiple scales
+            multiplescales,     # run tools at multiple scales
             # Create Classification of Zones/Types
             classifyterrain,    # run classification
             runfullmodel        # run all model steps
@@ -139,12 +133,17 @@ class setworkspace(object):
 
         return [out_workspace]
 
+    def updateParameters(self, parameters):
+        # check if the current workspace is set.
+        if not parameters[0].altered and workspace.path and \
+                os.path.exists(workspace.path):
+            parameters[0].value = workspace.path
+
     def execute(self, parameters, messages):
-        workspace = parameters[0].valueAsText
-        btm_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
-        workspace_file = os.path.join(btm_dir, 'workspace.json')
-        with open(workspace_file, 'w') as outfile:
-            json.dump(workspace, outfile)
+        out_workspace = parameters[0].valueAsText
+        arcpy.AddMessage("setting workspace path to {}".format(out_workspace))
+        # workspace = utils.Workspace({'workspace': out_workspace})
+        workspace.path = out_workspace
 
 
 class broadscalebpi(object):
@@ -229,8 +228,7 @@ class broadscalebpi(object):
         if output.value is None and bathy is not None:
             base_name = os.path.splitext(os.path.basename(bathy))[0]
             out_name = '{}_broadbpi.tif'.format(base_name)
-            out_path = makeDefaultFilename(out_name)
-            output.value = out_path
+            output.value = workspace.default_filename(out_name)
 
         if outer_radius is not None and bathy is not None:
             # get the cellsize of the input raster; assume same in X & Y
@@ -360,8 +358,7 @@ class finescalebpi(object):
         if output.value is None and bathy is not None:
             base_name = os.path.splitext(os.path.basename(bathy))[0]
             out_name = '{}_finebpi.tif'.format(base_name)
-            out_path = makeDefaultFilename(out_name)
-            output.value = out_path
+            output.value = workspace.default_filename(out_name)
 
         if outer_radius is not None and bathy is not None:
             # get the cellsize of the input raster; assume same in X & Y
@@ -497,13 +494,11 @@ class standardizebpi(object):
             broad_base_name = os.path.splitext(
                 os.path.basename(broad_input))[0]
             broad_out_name = '{}_std.tif'.format(broad_base_name)
-            broad_out_path = makeDefaultFilename(broad_out_name)
-            broad_output.value = broad_out_path
+            broad_output.value = workspace.default_filename(broad_out_name)
         if fine_output.value is None and fine_input is not None:
             fine_base_name = os.path.splitext(os.path.basename(fine_input))[0]
             fine_out_name = '{}_std.tif'.format(fine_base_name)
-            fine_out_path = makeDefaultFilename(fine_out_name)
-            fine_output.value = fine_out_path
+            fine_output.value = workspace.default_filename(fine_out_name)
         return
 
     def updateMessages(self, parameters):
@@ -601,13 +596,11 @@ class statisticalaspect(object):
         if output_sin.value is None and in_raster is not None:
             sin_base_name = os.path.splitext(os.path.basename(in_raster))[0]
             sin_out_name = '{}_sin_aspect.tif'.format(sin_base_name)
-            sin_out_path = makeDefaultFilename(sin_out_name)
-            output_sin.value = sin_out_path
+            output_sin.value = workspace.default_filename(sin_out_name)
         if output_cos.value is None and in_raster is not None:
             cos_base_name = os.path.splitext(os.path.basename(in_raster))[0]
             cos_out_name = '{}_cos_aspect.tif'.format(cos_base_name)
-            cos_out_path = makeDefaultFilename(cos_out_name)
-            output_cos.value = cos_out_path
+            output_cos.value = workspace.default_filename(cos_out_name)
         return
 
     def updateMessages(self, parameters):
@@ -669,8 +662,7 @@ class btmslope(object):
         if out_slope.value is None and in_raster is not None:
             slope_base_name = os.path.splitext(os.path.basename(in_raster))[0]
             slope_out_name = '{}_slope.tif'.format(slope_base_name)
-            slope_out_path = makeDefaultFilename(slope_out_name)
-            out_slope.value = slope_out_path
+            out_slope.value = workspace.default_filename(slope_out_name)
         return
 
     def updateMessages(self, parameters):
@@ -761,8 +753,7 @@ class classifyterrain(object):
         if zones.value is None and bathy is not None:
             zones_base_name = os.path.splitext(os.path.basename(bathy))[0]
             zones_out_name = '{}_classified.tif'.format(zones_base_name)
-            zones_out_path = makeDefaultFilename(zones_out_name)
-            zones.value = zones_out_path
+            zones.value = workspace.default_filename(zones_out_name)
         return
 
     def updateMessages(self, parameters):
@@ -886,16 +877,15 @@ class runfullmodel(object):
     def updateParameters(self, parameters):
         bathy = parameters[self.cols.index('bathy')].valueAsText
         zones = parameters[self.cols.index('zones_raster')]
-        workspace = parameters[self.cols.index('out_workspace')]
+        out_workspace = parameters[self.cols.index('out_workspace')]
 
-        if workspace.value is None:
-            workspace.value = utils.get_workspace()
+        if out_workspace.value is None:
+            out_workspace.value = workspace.path
 
         if zones.value is None and bathy is not None:
             zones_base_name = os.path.splitext(os.path.basename(bathy))[0]
             zones_out_name = '{}_classified.tif'.format(zones_base_name)
-            zones_out_path = makeDefaultFilename(zones_out_name)
-            zones.value = zones_out_path
+            zones.value = workspace.default_filename(zones_out_name)
         return
 
     def updateMessages(self, parameters):
@@ -983,8 +973,7 @@ class surfacetoplanar(object):
         if sapa.value is None and bathy is not None:
             sapa_base_name = os.path.splitext(os.path.basename(bathy))[0]
             sapa_out_name = '{}_SAtoPA.tif'.format(sapa_base_name)
-            sapa_out_path = makeDefaultFilename(sapa_out_name)
-            sapa.value = sapa_out_path
+            sapa.value = workspace.default_filename(sapa_out_name)
         return
 
     def updateMessages(self, parameters):
@@ -1055,8 +1044,7 @@ class terrainruggedness(object):
             vrm_base_name = os.path.splitext(os.path.basename(bathy))[0]
             n_label = "{:03d}".format(int(nbh))
             vrm_out_name = '{}_ruggedness{}.tif'.format(vrm_base_name, n_label)
-            vrm_out_path = makeDefaultFilename(vrm_out_name)
-            vrm.value = vrm_out_path
+            vrm.value = workspace.default_filename(vrm_out_name)
         return
 
     def updateMessages(self, parameters):
@@ -1135,15 +1123,14 @@ class arcchordratio(object):
         return True
 
     def updateParameters(self, parameters):
-        workspace = parameters[3]
-        current_workspace = utils.get_workspace()
-        if current_workspace:
-            ws = arcpy.Describe(current_workspace)
+        out_workspace = parameters[3]
+        if workspace.exists:
+            ws = arcpy.Describe(workspace.path)
             ws_type = set([ws.workspaceType])
             db_types = ['LocalDatabase', 'RemoteDatabase']
             if not ws_type.intersection(db_types):
-                if workspace.value is None:
-                    workspace.value = current_workspace
+                if out_workspace.value is None:
+                    out_workspace.value = workspace.path
         return
 
     def updateMessages(self, parameters):
@@ -1162,7 +1149,7 @@ class arcchordratio(object):
             in_raster=parameters[0].valueAsText,
             areaOfInterest=parameters[1].valueAsText,
             saveTINs=parameters[2].valueAsText,
-            workspace=parameters[3].valueAsText)
+            out_workspace=parameters[3].valueAsText)
 
 
 class depthstatistics(object):
@@ -1226,10 +1213,10 @@ class depthstatistics(object):
         return True
 
     def updateParameters(self, parameters):
-        workspace = parameters[2]
+        out_workspace = parameters[2]
 
-        if workspace.value is None:
-            workspace.value = utils.get_workspace()
+        if out_workspace.value is None:
+            workspace.value = workspace.path
         return
 
     def updateMessages(self, parameters):
@@ -1338,17 +1325,15 @@ class scalecomparison(object):
         bathy = parameters[0].valueAsText
         out = parameters[5]
 
-        current_workspace = utils.get_workspace()
-        if current_workspace:
-            ws = arcpy.Describe(current_workspace)
+        if workspace.exists:
+            ws = arcpy.Describe(workspace.path)
             ws_type = set([ws.workspaceType])
             db_types = ['LocalDatabase', 'RemoteDatabase']
             if not ws_type.intersection(db_types):
                 if out.value is None and bathy is not None:
                     base_name = os.path.splitext(os.path.basename(bathy))[0]
                     out_name = '{}_scalecomparison.png'.format(base_name)
-                    out_path = makeDefaultFilename(out_name)
-                    out.value = out_path
+                    out.value = workspace.default_filename(out_name)
         return
 
     def updateMessages(self, parameters):
@@ -1423,10 +1408,10 @@ class multiplescales(object):
         return True
 
     def updateParameters(self, parameters):
-        workspace = parameters[3]
+        out_workspace = parameters[3]
 
-        if workspace.value is None:
-            workspace.value = utils.get_workspace()
+        if out_workspace.value is None:
+            out_workspace.value = workspace.path
         return
 
     def updateMessages(self, parameters):
