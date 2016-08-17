@@ -808,27 +808,27 @@ class TestACRModel2(unittest.TestCase):
 class TestSetWorkspace(unittest.TestCase):
 
     def testSetWorkspaceFileIO(self):
-        arcpy.ImportToolbox(config.pyt_file)
-        path = os.path.dirname(config.local_path)
-        wsfile = os.path.join(path, 'workspace.json')
-        wsfile_save = os.path.join(path, 'workspace_orig.json')
-        original = False
-        if os.path.exists(wsfile_save):
-            os.remove(wsfile_save)
-        if os.path.exists(wsfile):
-            os.rename(wsfile, wsfile_save)
-            original = True
+        """Set the default workspace."""
+        with TempDir() as d:
+            arcpy.ImportToolbox(config.pyt_file)
+            path = os.path.abspath(os.path.join(config.local_path,
+                                                '..', 'Install', 'toolbox'))
+            wsfile = os.path.join(path, 'workspace.json')
+            wsfile_save = os.path.join(path, 'workspace_orig.json')
+            original = False
+            if os.path.exists(wsfile_save):
+                os.remove(wsfile_save)
+            if os.path.exists(wsfile):
+                os.rename(wsfile, wsfile_save)
+                original = True
+            w = su.Workspace()
+            arcpy.setworkspace_btm(d)
+            self.assertTrue(os.path.exists(wsfile))
+            self.assertEqual(w.path, d)
+            os.remove(wsfile)
 
-        data = su.get_workspace()
-        self.assertEqual(data, None)
-        arcpy.setworkspace_btm(path)
-        self.assertTrue(os.path.exists(wsfile))
-        data = su.get_workspace()
-        self.assertEqual(data, path)
-        os.remove(wsfile)
-
-        if original:
-            os.rename(wsfile_save, wsfile)
+            if original:
+                os.rename(wsfile_save, wsfile)
 
 if __name__ == '__main__':
     unittest.main()
