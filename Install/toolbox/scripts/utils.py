@@ -55,7 +55,7 @@ def msg(output, mtype='message'):
         arcpy_messages = arcpy.GetMessages()
         full_traceback = sys.exc_info()[2]
         if full_traceback:
-            tbinfo = traceback.format_tb(full_traceback)[0]
+            tbinfo = "".join(traceback.format_tb(full_traceback))
         else:
             tbinfo = '(None)'
         if config.mode == 'script':
