@@ -96,6 +96,11 @@ def main(in_raster=None, neighborhood_size=None,
         ext = ".tif"
     in_base = os.path.splitext(os.path.basename(in_raster))[0]
 
+    utils.workspace_exists(out_workspace)
+    # set geoprocessing environments
+    arcpy.env.scratchWorkspace = out_workspace
+    arcpy.env.workspace = out_workspace
+
     try:
         # initialize our neighborhood
         if verbose:
