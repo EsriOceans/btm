@@ -751,8 +751,8 @@ class TestMultipleScales(unittest.TestCase):
                 'mean': -20.56248074571827,
                 'sdev': 0.2946229406453136,
                 'var': 0.1281792675921596,
-                'iqr': 0.44891918233769,
-                'kurt': -0.91233563683704
+                'iqr': 0.45498055403516,
+                'kurt': -0.90668194852357
             }
 
             for (prefix, expected_value) in depth_stats.items():
