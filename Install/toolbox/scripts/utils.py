@@ -9,11 +9,11 @@ from __future__ import absolute_import
 import locale
 import sys
 import json
+import numpy as np
 import traceback
 import os
 import csv
 import math
-import random
 from xml.dom.minidom import parse
 try:
     from netCDF4 import Dataset
@@ -308,18 +308,26 @@ class BlockProcessor:
         if verbose:
             msg("Beginning block analysis...")
         with TempDir() as d:
-            inNetCDF = os.path.join(d, '{}.nc'.format(random.random()))
+            # generate random integers to prevent decimal place in name
+            # use sampling without replacement to preclude collision
+            rands = np.random.choice(2**16, size=2, replace=False)
+
+            inNetCDF = os.path.join(d, '{}.nc'.format(rands[0]))
             arcpy.RasterToNetCDF_md(self.fileIn, inNetCDF, r"Band1")
             inFile = Dataset(inNetCDF, mode="a")
             inDepth = inFile.variables['Band1']
 
-            outNetCDF = os.path.join(d, '{}.nc'.format(random.random()))
+            outNetCDF = os.path.join(d, '{}.nc'.format(rands[1]))
             arcpy.RasterToNetCDF_md(self.fileIn, outNetCDF, r"Band1")
             outFile = Dataset(outNetCDF, mode="a")
             outDepth = outFile.variables['Band1']
+            # Initialize entire output matrix to the No Data value --
+            # the blocking code will write out the blocks which it
+            # processes, setting these cells as it goes along. Doing this
+            # avoids problems with the edge cells (issue #128).
+            outDepth[:, :] = np.ones((self.width, self.height)) * self.noData
 
             bnum = 0
-
             x = 0
             while x < self.width:
                 y = 0
@@ -346,17 +354,16 @@ class BlockProcessor:
                     y += blockSize
                 x += blockSize
 
-            outDepth[:overlap, :], outDepth[-overlap:, :], \
-                outDepth[:, :overlap], \
-                outDepth[:, -overlap:] = (self.noData, ) * 4
+            outFile.close()
+            inFile.close()
+
             msg("Creating result raster layer...")
             layerName = os.path.splitext(os.path.split(outRast)[1])[0]
+
             arcpy.MakeNetCDFRasterLayer_md(outNetCDF, 'Band1',
                                            'x', 'y', layerName)
             msg("Saving result layer to {}...".format(outRast))
             arcpy.CopyRaster_management(layerName, outRast)
-            inFile.close()
-            outFile.close()
 
 
 class NotTextNodeError(Exception):
