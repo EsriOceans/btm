@@ -856,7 +856,7 @@ class TestSetWorkspace(unittest.TestCase):
             w = su.Workspace()
             arcpy.setworkspace_btm(d)
             self.assertTrue(os.path.exists(wsfile))
-            self.assertEqual(w.path, d)
+            self.assertEqual(w.path.lower(), d.lower())
             os.remove(wsfile)
 
             if original:
