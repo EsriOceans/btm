@@ -18,6 +18,9 @@ bathy_raster = os.path.abspath(os.path.join(data_path, 'bathy5m_clip.tif'))
 slope_raster = os.path.abspath(os.path.join(data_path, 'slope.tif'))
 broad_std_raster = os.path.abspath(os.path.join(data_path, 'broad_std.tif'))
 fine_std_raster = os.path.abspath(os.path.join(data_path, 'fine_std.tif'))
+# Kurtosis, stored as a NumPy array
+kurtosis_npy = os.path.abspath(os.path.join(data_path, 'kurtosis.npy'))
+# area of interest for ACR tests
 aoi = os.path.abspath(os.path.join(data_path, 'areaofinterest.shp'))
 aoi_multipart = os.path.abspath(os.path.join(data_path, 'areaofinterest_mp.shp'))
 

@@ -4,6 +4,7 @@ import locale
 import os
 import unittest
 import sys
+import numpy as np
 import arcpy
 from arcpy import Raster
 import zipfile
@@ -405,6 +406,9 @@ class TestDepthStatistics(unittest.TestCase):
     depth_statistics.main(in_raster=None, neighborhood_size=None,
         out_workspace=None, out_stats_raw=None)
     """
+    def setUp(self):
+        self.base = os.path.splitext(os.path.basename(config.bathy_raster))[0]
+
     def testDepthStatisticsImport(self):
         self.assertTrue('main' in vars(depth_statistics))
 
@@ -417,7 +421,10 @@ class TestDepthStatistics(unittest.TestCase):
             neighborhood = 3    # 3x3 neighborhood
             arcpy.env.scratchWorkspace = d
             out_workspace = d
-            stats = "Mean Depth;Variance;Standard Deviation"
+            stats = "'Mean Depth';Variance;"\
+                    "'Standard Deviation';'Terrain Ruggedness (VRM)';"\
+                    "'Interquartile Range';Kurtosis"
+
             depth_statistics.main(
                 config.bathy_raster, neighborhood, out_workspace, stats)
 
@@ -425,18 +432,43 @@ class TestDepthStatistics(unittest.TestCase):
             mean_depths = {
                 'mean': -20.56248074571827,
                 'sdev': 0.2946229406453136,
-                'var': 0.1281792675921596
+                'var': 0.1281792675921596,
+                'iqr': 0.45498055403516,
+                'kurt': -0.90668194852357
             }
 
             for (prefix, expected_value) in mean_depths.items():
-                base = os.path.splitext(
-                    os.path.basename(config.bathy_raster))[0]
                 raster_path = os.path.join(
-                    d, "{0}_{1}{2:03d}.tif".format(base,
+                    d, "{0}_{1}{2:03d}.tif".format(self.base,
                                                    prefix, neighborhood))
                 self.assertTrue(os.path.exists(raster_path))
                 self.assertAlmostEqual(
                     su.raster_properties(raster_path, 'MEAN'), expected_value)
+
+    def testDepthStatisticsKurtosisExact(self):
+        """Check for an exact raster match for kurtosis raster."""
+        with TempDir() as d:
+            neighborhood = 3    # 3x3 neighborhood
+            arcpy.env.scratchWorkspace = d
+            out_workspace = d
+            stats = "Kurtosis"
+
+            depth_statistics.main(
+                config.bathy_raster, neighborhood, out_workspace, stats)
+
+            raster_path = os.path.join(
+                    d, "{}_kurt{:03d}.tif".format(self.base, neighborhood))
+
+            self.assertTrue(os.path.exists(raster_path))
+
+            # convert output raster to a NumPy array
+            kurt_computed = arcpy.RasterToNumPyArray(raster_path)
+
+            # load the comparison array
+            kurt_known = np.load(config.kurtosis_npy)
+
+            # seeing differences on the order of 1e-7, turn down tolerance
+            self.assertTrue(np.allclose(kurt_computed, kurt_known, atol=1e-6))
 
 
 class TestRunFullModel(unittest.TestCase):
