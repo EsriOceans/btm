@@ -7,7 +7,6 @@
 from __future__ import absolute_import
 import os
 import sys
-import math
 import numpy as np
 try:
     import scipy.stats
@@ -60,6 +59,9 @@ def main(in_raster=None, neighborhood_size=None,
     arcpy.env.rasterStatistics = "STATISTICS"
     arcpy.env.compression = 'LZW'  # compress output rasters
 
+    # neighborhood is integer
+    n_size = int(neighborhood_size)
+
     # convert our data to sets for easy comparison
     mean_set = set(['Mean Depth'])
     std_dev_set = set(['Standard Deviation', 'Variance'])
@@ -98,10 +100,9 @@ def main(in_raster=None, neighborhood_size=None,
         # initialize our neighborhood
         if verbose:
             utils.msg("Calculating neighborhood...")
-        neighborhood = NbrRectangle(
-            neighborhood_size, neighborhood_size, "CELL")
-        n_label = "{:03d}".format(int(neighborhood_size))
-        overlap = int((int(neighborhood_size)/2.0)-0.5)
+        neighborhood = NbrRectangle(n_size, n_size, "CELL")
+        n_label = "{:03d}".format(n_size)
+        overlap = int((n_size / 2.0) - 0.5)
 
         if mean_set.intersection(out_stats):
             if verbose:
@@ -144,30 +145,22 @@ def main(in_raster=None, neighborhood_size=None,
                 if not std_dev:
                     arcpy.Delete_management(std_dev_raster)
 
-        if iqr_set.intersection(out_stats):
-            if verbose:
-                utils.msg("Calculating depth interquartile range...")
-            iqr_raster = os.path.join(out_workspace,
-                                      "{}_iqr{}{}"
-                                      .format(in_base, n_label, ext))
-            bp = utils.BlockProcessor(in_raster)
-            # limit 3D blocks to 10^8 elements (.4GB)
-            blocksize = int(math.sqrt((10**8) /
-                                      (int(neighborhood_size)**2))**2)
-            bp.computeBlockStatistics(iqr, blocksize, iqr_raster, overlap)
+        # limit 3D blocks to 10^8 elements (.4GB)
+        blocksize = int(np.sqrt((10**8) / (n_size**2)) - overlap*2)
+        # define numpy-based calculations
+        np_sets = ((iqr_set, "interquartile range", "iqr", iqr),
+                   (kurt_set, "kurtosis", "kurt", kurtosis))
 
-        if kurt_set.intersection(out_stats):
-            if verbose:
-                utils.msg("Calculating depth kurtosis...")
-            kurt_raster = os.path.join(out_workspace,
-                                       "{}_kurt{}{}"
-                                       .format(in_base, n_label, ext))
-            bp = utils.BlockProcessor(in_raster)
-            # limit 3D blocks to 10^8 elements (.4GB)
-            blocksize = int(math.sqrt((10**8) /
-                                      (int(neighborhood_size)**2)) - overlap*2)
-            bp.computeBlockStatistics(kurtosis, blocksize,
-                                      kurt_raster, overlap)
+        for np_set in np_sets:
+            (in_set, label, out_label, funct) = np_set
+            if in_set.intersection(out_stats):
+                if verbose:
+                    utils.msg("Calculating depth {}...".format(label))
+
+                file_name = "{}_{}{}{}".format(in_base, out_label, n_label, ext)
+                out_raster = os.path.join(out_workspace, file_name)
+                bp = utils.BlockProcessor(in_raster)
+                bp.computeBlockStatistics(funct, blocksize, out_raster, overlap)
 
     except Exception as e:
         utils.msg(e, mtype='error')
