@@ -141,8 +141,7 @@ class setworkspace(object):
 
     def execute(self, parameters, messages):
         out_workspace = parameters[0].valueAsText
-        arcpy.AddMessage("setting workspace path to {}".format(out_workspace))
-        # workspace = utils.Workspace({'workspace': out_workspace})
+        utils.msg("Setting workspace path to {}".format(out_workspace))
         workspace.path = out_workspace
 
 
@@ -1043,7 +1042,7 @@ class terrainruggedness(object):
         if vrm.value is None and bathy is not None and nbh is not None:
             vrm_base_name = os.path.splitext(os.path.basename(bathy))[0]
             n_label = "{:03d}".format(int(nbh))
-            vrm_out_name = '{}_ruggedness{}.tif'.format(vrm_base_name, n_label)
+            vrm_out_name = '{}_vrm_{}.tif'.format(vrm_base_name, n_label)
             vrm.value = workspace.default_filename(vrm_out_name)
         return
 
@@ -1454,7 +1453,7 @@ class multiplescales(object):
                                       out_stats_raw=parameters[2].valueAsText)
             if vrm_set.intersection(metrics_lst):
                 n_label = "{:03d}".format(int(each))
-                out_file = "{0}\\{1}_vrm{2}.tif".format(
+                out_file = "{0}\\{1}_vrm_{2}.tif".format(
                     parameters[3].valueAsText, in_base, n_label)
                 ruggedness.main(in_raster=parameters[0].valueAsText,
                                 neighborhood_size=each, out_raster=out_file)

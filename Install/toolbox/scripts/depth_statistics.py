@@ -115,7 +115,7 @@ def main(in_raster=None, neighborhood_size=None,
             mean_depth = FocalStatistics(in_raster, neighborhood,
                                          "MEAN", "NODATA")
             mean_raster = os.path.join(out_workspace,
-                                       "{}_mean{}{}"
+                                       "{}_mean_{}{}"
                                        .format(in_base, n_label, ext))
             if verbose:
                 utils.msg("saving mean depth to {}".format(mean_raster))
@@ -129,7 +129,7 @@ def main(in_raster=None, neighborhood_size=None,
             std_dev_depth = FocalStatistics(in_raster, neighborhood,
                                             "STD", "NODATA")
             std_dev_raster = os.path.join(out_workspace,
-                                          "{}_sdev{}{}"
+                                          "{}_sdev_{}{}"
                                           .format(in_base, n_label, ext))
             if verbose and std_dev:
                 utils.msg("saving standard deviation depth to \
@@ -142,7 +142,7 @@ def main(in_raster=None, neighborhood_size=None,
                     utils.msg("Calculating depth variance...")
                 var_depth = Power(std_dev_depth, 2)
                 var_raster = os.path.join(out_workspace,
-                                          "{}_var{}{}"
+                                          "{}_var_{}{}"
                                           .format(in_base, n_label, ext))
                 if verbose:
                     utils.msg("saving depth variance to {}".format(var_raster))
@@ -162,7 +162,7 @@ def main(in_raster=None, neighborhood_size=None,
                 if verbose:
                     utils.msg("Calculating depth {}...".format(label))
 
-                file_name = "{}_{}{}{}".format(in_base, out_label, n_label, ext)
+                file_name = "{}_{}_{}{}".format(in_base, out_label, n_label, ext)
                 out_raster = os.path.join(out_workspace, file_name)
                 bp = utils.BlockProcessor(in_raster)
                 bp.computeBlockStatistics(funct, blocksize, out_raster, overlap)

@@ -439,8 +439,8 @@ class TestDepthStatistics(unittest.TestCase):
 
             for (prefix, expected_value) in mean_depths.items():
                 raster_path = os.path.join(
-                    d, "{0}_{1}{2:03d}.tif".format(self.base,
-                                                   prefix, neighborhood))
+                    d, "{0}_{1}_{2:03d}.tif".format(self.base,
+                                                    prefix, neighborhood))
                 self.assertTrue(os.path.exists(raster_path))
                 self.assertAlmostEqual(
                     su.raster_properties(raster_path, 'MEAN'), expected_value)
@@ -457,7 +457,7 @@ class TestDepthStatistics(unittest.TestCase):
                 config.bathy_raster, neighborhood, out_workspace, stats)
 
             raster_path = os.path.join(
-                    d, "{}_kurt{:03d}.tif".format(self.base, neighborhood))
+                    d, "{}_kurt_{:03d}.tif".format(self.base, neighborhood))
 
             self.assertTrue(os.path.exists(raster_path))
 
@@ -757,22 +757,22 @@ class TestMultipleScales(unittest.TestCase):
 
             for (prefix, expected_value) in depth_stats.items():
                 raster_path = os.path.join(
-                    d, "bathy5m_clip_{0}{1:03d}.tif".format(prefix, 3))
+                    d, "bathy5m_clip_{0}_{1:03d}.tif".format(prefix, 3))
                 self.assertAlmostEqual(
                     su.raster_properties(raster_path, 'MEAN'), expected_value)
 
-            vrm_raster = os.path.join(d, 'bathy5m_clip_vrm003.tif')
+            vrm_raster = os.path.join(d, 'bathy5m_clip_vrm_003.tif')
             self.assertAlmostEqual(
                 su.raster_properties(vrm_raster, "MEAN"), 0.00062628513039036)
             self.assertAlmostEqual(
                 su.raster_properties(vrm_raster, "STD"), 0.00087457748556755)
 
-            rast_names = ['bathy5m_clip_mean003.tif', 'bathy5m_clip_sdev003.tif',
-                          'bathy5m_clip_var003.tif', 'bathy5m_clip_vrm003.tif',
-                          'bathy5m_clip_mean013.tif', 'bathy5m_clip_sdev013.tif',
-                          'bathy5m_clip_var013.tif', 'bathy5m_clip_vrm013.tif',
-                          'bathy5m_clip_iqr003.tif', 'bathy5m_clip_kurt003.tif',
-                          'bathy5m_clip_iqr013.tif', 'bathy5m_clip_kurt013.tif']
+            rast_names = ['bathy5m_clip_mean_003.tif', 'bathy5m_clip_sdev_003.tif',
+                          'bathy5m_clip_var_003.tif', 'bathy5m_clip_vrm_003.tif',
+                          'bathy5m_clip_mean_013.tif', 'bathy5m_clip_sdev_013.tif',
+                          'bathy5m_clip_var_013.tif', 'bathy5m_clip_vrm_013.tif',
+                          'bathy5m_clip_iqr_003.tif', 'bathy5m_clip_kurt_003.tif',
+                          'bathy5m_clip_iqr_013.tif', 'bathy5m_clip_kurt_013.tif']
 
             for each in rast_names:
                 file_name = os.path.join(d, each)
@@ -783,12 +783,12 @@ class TestMultipleScales(unittest.TestCase):
             arcpy.ImportToolbox(config.pyt_file)
             arcpy.multiplescales_btm(self.in_raster,
                                      self.nbh_sizes, self.metrics, d)
-            rast_names = ['bathy5m_clip_mean003.tif', 'bathy5m_clip_sdev003.tif',
-                          'bathy5m_clip_var003.tif', 'bathy5m_clip_vrm003.tif',
-                          'bathy5m_clip_mean013.tif', 'bathy5m_clip_sdev013.tif',
-                          'bathy5m_clip_var013.tif', 'bathy5m_clip_vrm013.tif',
-                          'bathy5m_clip_iqr003.tif', 'bathy5m_clip_kurt003.tif',
-                          'bathy5m_clip_iqr013.tif', 'bathy5m_clip_kurt013.tif']
+            rast_names = ['bathy5m_clip_mean_003.tif', 'bathy5m_clip_sdev_003.tif',
+                          'bathy5m_clip_var_003.tif', 'bathy5m_clip_vrm_003.tif',
+                          'bathy5m_clip_mean_013.tif', 'bathy5m_clip_sdev_013.tif',
+                          'bathy5m_clip_var_013.tif', 'bathy5m_clip_vrm_013.tif',
+                          'bathy5m_clip_iqr_003.tif', 'bathy5m_clip_kurt_003.tif',
+                          'bathy5m_clip_iqr_013.tif', 'bathy5m_clip_kurt_013.tif']
             for each in rast_names:
                 file_name = os.path.join(d, each)
                 self.assertEqual(str(Raster(file_name).compressionType), 'LZW')
