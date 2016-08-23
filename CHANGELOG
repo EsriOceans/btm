@@ -1,12 +1,21 @@
+3.0-final:
+ - ArcGIS Pro / Python 3 support added.
+ - New Compare Scales of Analysis tool provides a quick approximation of the effects of scale.
+ - Added option in Surface Area to Planar Area to use slope-corrected Planar Area as described in DuPreez (2014).
+ - New Arc Chord Ratio tool which computes metrics for an area of interest as described in DuPreez (2014).
+ - Added new depth statistics using SciPy, Kurtosis and Interquartile range.
+ - New multiple scales tool to compute depth statistics and VRM at a range of scales from within a single tool.
+ - Extensive testing on large data, includes a block-based processor for computation on larger datasets with NumPy / SciPy operations.
+ - New Set Workspace tool which propagates storage settings across all tools.
+ - Compression is enabled for all outputs.
 3.0-rc-7: add contact sheet, VRM scale validation
 3.0-rc-6: fix broad-scale validation error, locale issue, remove unused validator.
 3.0-rc-5: fix locale issues.
 3.0-rc-4: fix missing datatypes module in Python toolbox.
-3.0-rc-3: robustness improvements to Suface Area to Planar Area tool, updated documentation, simplify VRM script.
+3.0-rc-3: robustness improvements to Surface Area to Planar Area tool, updated documentation, simplify VRM script.
 3.0-rc-2: Statistical Aspect tool, Excel-based classification dictionaries.
 3.0-beta-20: handle CSV files more robustly, provide clearer error messages, fix classify bug, add new Surface Area to Planar Area tool, improvements to VRM code, internal code cleanup, Excel support.
 3.0-beta-14: move model into a Python script over ModelBuilder, complete
 top-level unit tests.
 3.0-beta-13:
  - fix regression with "classify benthic terrain" step in model; renamed from zoneclassification to classify @aa49aad.
- - Added option in Surface Area to Planar Area to use slope-corrected Planar Area as described in DuPreez (2014) 
