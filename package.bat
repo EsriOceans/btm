@@ -56,7 +56,8 @@ unzip -q tmp.zip
 REM copy in our toolbox elements to the release so it's usable from the 
 REM catalog view.
 echo Add toolbox to archive...
-xcopy tmp\Install\toolbox %RELEASE_DIR% /e /q
+set TOOLBOX_DIR=%RELEASE_DIR%\toolbox
+xcopy tmp\Install\toolbox %TOOLBOX_DIR% /e /q /i
 rmdir /q /s tmp
 del tmp.zip
 
