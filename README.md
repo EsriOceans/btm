@@ -6,7 +6,7 @@ A set of tools useful in the analysis of benthic terrain. Includes tools for geo
 Requirements
 ------------
 
-ArcGIS 10.1 or greater. ArcGIS 10.0 is also supported, but only as a toolbox, as the Python Add-in was introduced at 10.1. Spatial Analyst Extension.
+ArcGIS 10.1 or greater. ArcGIS 10.0 is also supported, but only as a toolbox, as the Python Add-in was introduced at 10.1. Spatial Analyst Extension. The Arc-Chord Ratio tool also requires Geostatistical Analyst and 3D Analyst.
 
 Installation
 ------------
