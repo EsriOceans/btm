@@ -43,7 +43,12 @@ REM export the 'clean repository' to get rid of anything which is git ignored
 REM using third-party git-archive-all, otherwise we miss the datatypes submodule
 REM NOTE: currently requires install from git:
 REM         pip install git+https://github.com/Kentzo/git-archive-all
-echo Build Git archive...
+echo Building Git archive...
+where /q git-archive-all
+IF ERRORLEVEL 1 (
+    echo git-archive-all must be installed.
+    exit /b
+)
 git-archive-all tmp.zip
 echo Extracting archive...
 unzip -q tmp.zip
