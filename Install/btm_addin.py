@@ -18,7 +18,7 @@ class DevNull:
         pass
 
 
-def tool_dialog(toolbox, tool):
+def tool_dialog(toolbox, tool=None):
     """Error-handling wrapper around pythonaddins.GPToolDialog."""
     # FIXME: either have to supress stderr here or always get an error.
     # Contacted internal resources to figure out what's going on.
@@ -26,7 +26,11 @@ def tool_dialog(toolbox, tool):
     try:
         err_default = sys.stderr
         sys.stderr = DevNull()
-        pythonaddins.GPToolDialog(toolbox, tool)
+        if not tool:
+            # assume that we're calling into a standard namespaced tool
+            pythonaddins.GPToolDialog(toolbox)
+        else:
+            pythonaddins.GPToolDialog(toolbox, tool)
         sys.stderr = err_default
     except:
         print("recieved exception when trying to run GPToolDialog("
