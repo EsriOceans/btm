@@ -145,6 +145,10 @@ def raster_properties(input_raster, attribute='MEAN'):
         arcpy.CalculateStatistics_management(
             input_raster_path, "1", "1", "#", "SKIP_EXISTING")
 
+        if not attribute:
+            # just wanted statistics, return
+            return None
+
         attr_obj = arcpy.GetRasterProperties_management(
             input_raster_path, attribute)
         """

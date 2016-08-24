@@ -53,7 +53,8 @@ def main(in_raster=None, areaOfInterest=None, saveTINs=False,
 
         # Create elevation TIN
         utils.msg("Creating elevation TIN...")
-        arcpy.CalculateStatistics_management(bathyRaster)
+        # just compute statitics
+        utils.raster_properties(bathyRaster, attribute=None)
         zTolerance = abs((bathyRaster.maximum - bathyRaster.minimum)/10)
         arcpy.RasterTin_3d(bathyRaster, elevationTIN, str(zTolerance))
         arcpy.EditTin_3d(elevationTIN, ["#", "<None>", "<None>",
