@@ -37,8 +37,7 @@ def main(in_raster=None, areaOfInterest=None, saveTINs=False,
             for row in cursor:
                 geometry = row[0]
                 if geometry.isMultipart is True:
-                    utils.msg("Converting multipart geometry"
-                              "to single parts...")
+                    utils.msg("Converting multipart geometry to single parts...")
                     singlepart = os.path.join(d, 'singlepart.shp')
                     arcpy.MultipartToSinglepart_management(areaOfInterest,
                                                            singlepart)
@@ -71,21 +70,32 @@ def main(in_raster=None, areaOfInterest=None, saveTINs=False,
             splitFiles = []
             with arcpy.da.UpdateCursor(areaOfInterest,
                                        "Name") as cursor:
-                num = 0
-                for row in cursor:
-                    row[0] = "poly_{}".format(num)
-                    splitFiles.append("in_memory\poly_{}".format(num))
+                for (i, row) in enumerate(cursor):
+                    row[0] = "poly_{}".format(i)
+                    splitFiles.append("in_memory\poly_{}".format(i))
                     cursor.updateRow(row)
-                    num += 1
             arcpy.Split_analysis(areaOfInterest, areaOfInterest,
                                  'Name', 'in_memory')
 
+        # grab an output directory, we may need it if TINs are being saved
+        if out_workspace is None or not os.path.exists(out_workspace):
+            # get full path for aoi
+            aoi_path = arcpy.Describe(areaOfInterest).catalogPath
+            out_dir = os.path.split(aoi_path)[0]
+        else:
+            out_dir = out_workspace
+
         # Calculate ACR for each polygon
         pobfs = []
-        i = 0
-        for each in splitFiles:
-            utils.msg("Calculating ACR Rugosity for Area "
-                      "{} of {}...".format(i+1, len(splitFiles)))
+        num_polys = len(splitFiles)
+        for (i, each) in enumerate(splitFiles, start=1):
+            if num_polys == 1:
+                acr_msg = "Calculating ACR Rugosity..."
+            else:
+                acr_msg = ("Calculating ACR Rugosity for Area "
+                           "{} of {}...".format(i, num_polys))
+            utils.msg(acr_msg)
+
             # Create POBF TIN
             arcpy.Buffer_analysis(each, boundaryBuffer,
                                   cellSize, "OUTSIDE_ONLY")
@@ -97,17 +107,23 @@ def main(in_raster=None, areaOfInterest=None, saveTINs=False,
             arcpy.GlobalPolynomialInterpolation_ga(boundaryPoints, "grid_code",
                                                    "#", pobfRaster, cellSize)
             arcpy.CalculateStatistics_management(pobfRaster)
-            pobfTIN = os.path.join(d, 'planarTIN{}'.format(i))
-            pobfs.append(pobfTIN)
+            if len(splitFiles) == 1:
+                basename = '{}_planarTIN'.format(rastName)
+            else:
+                basename = '{}_planarTIN_{}'.format(rastName, i)
+            pobf_temp = os.path.join(d, basename)
+            pobf_perm = os.path.join(out_dir, basename)
+            pobfs.append((pobf_temp, pobf_perm))
+
             zTolerance = abs((int(Raster(pobfRaster).maximum) -
                               int(Raster(pobfRaster).minimum))/10)
-            arcpy.RasterTin_3d(pobfRaster, pobfTIN, str(zTolerance))
-            arcpy.EditTin_3d(pobfTIN, ["#", "<None>", "<None>",
-                                       "hardclip", "false"])
+            arcpy.RasterTin_3d(pobfRaster, pobf_temp, str(zTolerance))
+            arcpy.EditTin_3d(pobf_temp, ["#", "<None>", "<None>",
+                                         "hardclip", "false"])
             # Calculate Rugosity
             arcpy.PolygonVolume_3d(elevationTIN, each, "<None>",
                                    "BELOW", "Volume1", "Surf_Area")
-            arcpy.PolygonVolume_3d(pobfTIN, each, "<None>",
+            arcpy.PolygonVolume_3d(pobf_temp, each, "<None>",
                                    "BELOW", "Volume2", "Plan_Area")
             arcpy.AddField_management(each, "Rugosity", "DOUBLE")
             arcpy.CalculateField_management(each, "Rugosity",
@@ -147,7 +163,6 @@ def main(in_raster=None, areaOfInterest=None, saveTINs=False,
                                                 dz_dy**2))*(180/np.pi)
                     rows[1] = aspect
                     cursor.updateRow(rows)
-            i += 1
 
         # Merge split files and save to input file location
         if multiple:
@@ -155,16 +170,11 @@ def main(in_raster=None, areaOfInterest=None, saveTINs=False,
 
         # Save TINs if requested
         if saveTINs:
-            if out_workspace is None or not os.path.exists(out_workspace):
-                out_dir = os.path.split(areaOfInterest)[0]
-            else:
-                out_dir = out_workspace
             utils.msg("Saving elevation and planar TINs to "
                       "{}...".format(out_dir))
             arcpy.CopyTin_3d(elevationTIN,
                              os.path.join(out_dir,
                                           '{}_elevationTIN'.format(rastName)))
-            for x in range(len(pobfs)):
-                name = os.path.join(out_dir,
-                                    '{}_planarTIN{}'.format(rastName, x))
-                arcpy.CopyTin_3d(pobfs[x], name)
+
+            for (pobf_temp, pobf_perm) in pobfs:
+                arcpy.CopyTin_3d(pobf_temp, pobf_perm)

@@ -806,7 +806,7 @@ class TestACRModel2(unittest.TestCase):
             testaoi = os.path.join(d, 'testaoi.shp')
             arcpy.CopyFeatures_management(self.aoi, testaoi)
             arcpy.arcchordratio_btm(self.in_raster, testaoi, True, d)
-            planarTIN = os.path.join(d, 'bathy5m_clip_planartin0')
+            planarTIN = os.path.join(d, 'bathy5m_clip_planartin')
             elevTIN = os.path.join(d, 'bathy5m_clip_elevationtin')
             self.assertTrue(os.path.exists(planarTIN))
             self.assertTrue(os.path.exists(elevTIN))
@@ -824,7 +824,11 @@ class TestACRModel2(unittest.TestCase):
             arcpy.ImportToolbox(config.pyt_file)
             testaoi_mp = os.path.join(d, 'testaoi_mp.shp')
             arcpy.CopyFeatures_management(self.aoi_multipart, testaoi_mp)
-            arcpy.arcchordratio_btm(self.in_raster, testaoi_mp, False)
+            arcpy.arcchordratio_btm(self.in_raster, testaoi_mp, True, d)
+
+            planarTIN = os.path.join(d, 'bathy5m_clip_planartin_4')
+            self.assertTrue(os.path.exists(planarTIN))
+
             rows = int(arcpy.GetCount_management(testaoi_mp).getOutput(0))
             self.assertEqual(rows, 4)
             self.assertEqual(len(arcpy.Describe(testaoi_mp).fields), 9)
