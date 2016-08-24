@@ -1097,7 +1097,7 @@ class arcchordratio(object):
         areaOfInterest.displayName = 'Area of Interest'
         areaOfInterest.parameterType = 'Required'
         areaOfInterest.direction = 'Input'
-        areaOfInterest.datatype = dt.format('Feature Class')
+        areaOfInterest.datatype = dt.format('Feature Layer')
 
         # Save TINs
         saveTINs = arcpy.Parameter()
