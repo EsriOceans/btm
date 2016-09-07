@@ -3,6 +3,5 @@
 # used for tests
 nose
 pep8
-# used for packaging. current release isn't up to snuff, instead:
-# pip install git+https://github.com/Kentzo/git-archive-all
+# used for packaging, only works on Python 3 because of os.readlink use
 git-archive-all
