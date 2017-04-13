@@ -555,7 +555,7 @@ class BtmExcelDocument(BtmDocument):
             row_clean = [None if x == '' else x for x in row]
 
             if len(row_clean) != 10:
-                message = ("Encountered malformed row which requires ",
+                message = ("Encountered malformed row which requires "
                            "correction: \"{}\"".format(",".join(row)))
                 raise ValueError(message)
             # don't parse the header, assume columns are in expected order.
