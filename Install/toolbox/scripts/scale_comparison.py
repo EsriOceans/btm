@@ -15,9 +15,20 @@ else:
 
 
 def main(in_raster=None, img_filter=None, percentile=None,
-         min_nbhs=None, max_nbhs=None, out_file=True):
+         min_nbhs=None, max_nbhs=None, position=None, out_file=True):
 
-    r = arcpy.RasterToNumPyArray(in_raster, "", 200, 200, 0)
+    point = None
+    if position:
+        try:
+            x, y = position.split(" ")
+            point = arcpy.Point(x, y)
+        except Exception as e:
+            utils.msg("Invalid point, using lower left corner", "warning")
+            utils.msg(e, 'error')
+            point = None
+
+    r = arcpy.RasterToNumPyArray(in_raster, point, 200, 200, 0)
+
     if r.ndim > 2:
         r = np.squeeze(r[0, :, :])
     min_nbhs = int(min_nbhs)
@@ -55,4 +66,5 @@ if __name__ == '__main__':
          percentile=sys.argv[3],
          min_nbhs=sys.argv[4],
          max_nbhs=sys.argv[5],
-         out_file=sys.argv[6])
+         position=sys.argv[6],
+         out_file=sys.argv[7])
