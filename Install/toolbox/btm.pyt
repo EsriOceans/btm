@@ -1301,6 +1301,14 @@ class scalecomparison(object):
         maxneighborhood.direction = 'Input'
         maxneighborhood.datatype = dt.format('Long')
 
+        # Position of sample
+        position = arcpy.Parameter()
+        position.name = 'Comparison Location'
+        position.displayName = 'Comparison Location'
+        position.parameterType = 'Optional'
+        position.direction = 'Input'
+        position.datatype = dt.format('Point')
+
         # Output File Name
         out_file = arcpy.Parameter()
         out_file.name = 'Output Filename'
@@ -1311,7 +1319,7 @@ class scalecomparison(object):
         out_file.filter.list = ['png', 'pdf', 'ps', 'svg']
 
         return [bathy, imgfilter, percentile, minneighborhood,
-                maxneighborhood, out_file]
+                maxneighborhood, position, out_file]
 
     def updateParameters(self, parameters):
         if parameters[1].valueAsText.lower() == 'percentile':
@@ -1351,7 +1359,8 @@ class scalecomparison(object):
             percentile=parameters[2].valueAsText,
             min_nbhs=parameters[3].valueAsText,
             max_nbhs=parameters[4].valueAsText,
-            out_file=parameters[5].valueAsText)
+            position=parameters[5].valueAsText,
+            out_file=parameters[6].valueAsText)
 
 
 class multiplescales(object):
