@@ -719,14 +719,15 @@ class TestScaleComparison(unittest.TestCase):
             out_file = os.path.join(d, 'contact_sheet_per.png')
             scale_comparison.main(config.bathy_raster, 'percentile',
                                   self.percentile, self.min_nbhs,
-                                  self.max_nbhs, out_file)
+                                  self.max_nbhs, None, out_file)
             self.assertTrue(os.path.exists(out_file))
 
     def testMedianMakesImage(self):
         with TempDir() as d:
             out_file = os.path.join(d, 'contact_sheet_med.png')
             scale_comparison.main(config.bathy_raster, 'median', None,
-                                  self.min_nbhs, self.max_nbhs, out_file)
+                                  self.min_nbhs, self.max_nbhs, None,
+                                  out_file)
             self.assertTrue(os.path.exists(out_file))
 
 
