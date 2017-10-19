@@ -26,10 +26,10 @@ arcpy.CheckOutExtension("Spatial")
 def iqr(in_array, overlap):
     s = in_array.shape
     nbh_list = []
-    for r in range(0, (overlap*2)+1):
-        for c in range(0, (overlap*2)+1):
-            nbh_list.append(in_array[r:(s[0]-(overlap*2)+r),
-                                     c:(s[1]-(overlap*2)+c)])
+    for r in range(0, (overlap * 2) + 1):
+        for c in range(0, (overlap * 2) + 1):
+            nbh_list.append(in_array[r:(s[0] - (overlap * 2) + r),
+                                     c:(s[1] - (overlap * 2) + c)])
     iqr_array = np.array(nbh_list)
     iqr_array = (np.percentile(iqr_array, 75, axis=0) -
                  np.percentile(iqr_array, 25, axis=0))
@@ -39,10 +39,10 @@ def iqr(in_array, overlap):
 def kurtosis(in_array, overlap):
     s = in_array.shape
     nbh_list = []
-    for r in range(0, (overlap*2)+1):
-        for c in range(0, (overlap*2)+1):
-            nbh_list.append(in_array[r:(s[0]-(overlap*2)+r),
-                                     c:(s[1]-(overlap*2)+c)])
+    for r in range(0, (overlap * 2) + 1):
+        for c in range(0, (overlap * 2) + 1):
+            nbh_list.append(in_array[r:(s[0] - (overlap * 2) + r),
+                                     c:(s[1] - (overlap * 2) + c)])
     kurt_array = np.array(nbh_list)
     kurt_array = scipy.stats.kurtosis(kurt_array, axis=0)
     return kurt_array
@@ -55,7 +55,7 @@ def main(in_raster=None, neighborhood_size=None,
     of cells. Can compute mean, standard deviation, and variance.
     """
     out_stats = out_stats_raw.replace("'", '').split(";")
-    out_stats = list(set(out_stats)-set(['Terrain Ruggedness (VRM)']))
+    out_stats = list(set(out_stats) - set(['Terrain Ruggedness (VRM)']))
     arcpy.env.rasterStatistics = "STATISTICS"
     arcpy.env.compression = 'LZW'  # compress output rasters
 
@@ -169,6 +169,7 @@ def main(in_raster=None, neighborhood_size=None,
 
     except Exception as e:
         utils.msg(e, mtype='error')
+
 
 # when executing as a standalone script get parameters from sys
 if __name__ == '__main__':
