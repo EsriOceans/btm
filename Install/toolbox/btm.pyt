@@ -1203,8 +1203,8 @@ class depthstatistics(object):
         statistics.datatype = dt.format('String')
         statistics.multiValue = True
         statistics.filter.list = ['Mean Depth', 'Variance',
-                                  'Standard Deviation', 'Interquartile Range',
-                                  'Kurtosis']
+                                  'Standard Deviation', 'Difference to Mean',
+                                  'Interquartile Range', 'Kurtosis']
 
         return [input_raster, neighborhood, out_workspace, statistics]
 
@@ -1390,8 +1390,8 @@ class multiplescales(object):
         metrics.datatype = dt.format('String')
         metrics.multiValue = True
         metrics.filter.list = ['Mean Depth', 'Variance', 'Standard Deviation',
-                               'Interquartile Range', 'Kurtosis',
-                               'Terrain Ruggedness (VRM)']
+                               'Difference to Mean', 'Interquartile Range',
+                               'Kurtosis', 'Terrain Ruggedness (VRM)']
 
         # Output Workspace
         out_workspace = arcpy.Parameter()
@@ -1439,7 +1439,7 @@ class multiplescales(object):
         nbh_lst = parameters[1].valueAsText.split(";")
         metrics_lst = parameters[2].valueAsText.replace("'", '').split(";")
         stats_set = set(['Mean Depth', 'Standard Deviation', 'Variance',
-                         'Interquartile Range', 'Kurtosis'])
+                         'Difference to Mean', 'Interquartile Range', 'Kurtosis'])
         vrm_set = set(['Terrain Ruggedness (VRM)'])
         in_base = os.path.splitext(
             os.path.basename(parameters[0].valueAsText))[0]
