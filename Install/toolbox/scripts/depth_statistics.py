@@ -150,8 +150,13 @@ def main(in_raster=None, neighborhood_size=None,
                 if not std_dev:
                     arcpy.Delete_management(std_dev_raster)
 
-        # limit 3D blocks to 10^8 elements (.4GB)
-        blocksize = int(np.sqrt((10**8) / (n_size**2)) - overlap*2)
+        # limit 3D blocksize to 10^8 elements (.4GB) on 32-bit, 10^10 on 64-bit
+        if utils.ARCH == '32-bit':
+            limit = 10**8
+        else:
+            limit = 10**10
+
+        blocksize = int(np.sqrt((limit) / (n_size**2)) - overlap * 2)
         # define numpy-based calculations
         np_sets = ((iqr_set, "interquartile range", "iqr", iqr),
                    (kurt_set, "kurtosis", "kurt", kurtosis))

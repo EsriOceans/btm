@@ -14,6 +14,7 @@ import traceback
 import os
 import csv
 import math
+from platform import architecture
 from xml.dom.minidom import parse
 try:
     from netCDF4 import Dataset
@@ -39,6 +40,7 @@ locale.setlocale(locale.LC_ALL, '')
 # TODO add Mosaic Dataset, Mosaic Layer
 VALID_RASTER_TYPES = ['RasterDataset', 'RasterLayer']
 
+ARCH = architecture()[0]
 
 def msg(output, mtype='message'):
     """
