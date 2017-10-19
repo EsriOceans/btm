@@ -65,6 +65,7 @@ def main(in_raster=None, neighborhood_size=None,
     # convert our data to sets for easy comparison
     mean_set = set(['Mean Depth'])
     std_dev_set = set(['Standard Deviation', 'Variance'])
+    diff_mean_set = set(['Difference to Mean'])
     iqr_set = set(['Interquartile Range'])
     kurt_set = set(['Kurtosis'])
 
@@ -120,6 +121,22 @@ def main(in_raster=None, neighborhood_size=None,
             if verbose:
                 utils.msg("saving mean depth to {}".format(mean_raster))
             arcpy.CopyRaster_management(mean_depth, mean_raster)
+
+            if diff_mean_set.intersection(out_stats):
+                if verbose:
+                    utils.msg("Calculating relative difference to mean...")
+                range_depth = FocalStatistics(in_raster, neighborhood,
+                                              "RANGE", "NODATA")
+
+                mean_diff = -(mean_depth - in_raster) / range_depth
+                mean_diff_raster = os.path.join(out_workspace,
+                                                "{}_mean_diff_{}{}"
+                                                .format(in_base, n_label, ext))
+
+                if verbose:
+                    utils.msg("saving relative different to mean to {}".format(
+                        mean_diff_raster))
+                arcpy.CopyRaster_management(mean_diff, mean_diff_raster)
 
         # compute stdev in ths case
         if std_dev_set.intersection(out_stats):
