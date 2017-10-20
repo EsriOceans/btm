@@ -48,8 +48,33 @@ def kurtosis(in_array, overlap):
     return kurt_array
 
 
-def main(in_raster=None, neighborhood_size=None,
-         out_workspace=None, out_stats_raw=None, verbose=True):
+def output_parts(in_raster, out_workspace, n_size):
+    """return a prefix and suffix for naming our outputs"""
+    in_base = os.path.splitext(os.path.basename(in_raster))[0]
+    prefix = os.path.join(out_workspace, in_base)
+
+    ws = arcpy.Describe(out_workspace)
+    ws_type = set([ws.workspaceType])
+    db_types = ['LocalDatabase', 'RemoteDatabase']
+    if ws_type.intersection(db_types):
+        ext = ""
+    else:
+        ext = ".tif"
+
+    n_label = "{:03d}".format(n_size)
+    suffix = "{}{}".format(n_label, ext)
+
+    return (prefix, suffix)
+
+
+def output_name(parts, label):
+    """Generate a final output name, assumes prefix contains pathing."""
+    (prefix, suffix) = parts
+    return "_".join((prefix, label, suffix))
+
+
+def main(in_raster=None, neighborhood_size=None, out_workspace=None,
+         out_stats_raw=None, verbose=True, window_type='Rectangle'):
     """
     Compute depth statisitcs, averaging values over a defined neighborhood
     of cells. Can compute mean, standard deviation, and variance.
@@ -88,14 +113,8 @@ def main(in_raster=None, neighborhood_size=None,
                       "later versions.", "error")
             return
 
-    ws = arcpy.Describe(out_workspace)
-    ws_type = set([ws.workspaceType])
-    db_types = ['LocalDatabase', 'RemoteDatabase']
-    if ws_type.intersection(db_types):
-        ext = ""
-    else:
-        ext = ".tif"
-    in_base = os.path.splitext(os.path.basename(in_raster))[0]
+    # get output name prefix and suffix
+    parts = output_parts(in_raster, out_workspace, n_size)
 
     utils.workspace_exists(out_workspace)
     # set geoprocessing environments
@@ -121,10 +140,9 @@ def main(in_raster=None, neighborhood_size=None,
                 utils.msg("Calculating mean depth...")
             mean_depth = FocalStatistics(in_raster, neighborhood,
                                          "MEAN", "NODATA")
-            mean_raster = os.path.join(out_workspace,
-                                       "{}_mean_{}{}"
-                                       .format(in_base, n_label, ext))
-            if verbose:
+            mean_raster = output_name(parts, 'mean')
+
+            if verbose and mean_requested:
                 utils.msg("saving mean depth to {}".format(mean_raster))
             arcpy.CopyRaster_management(mean_depth, mean_raster)
 
@@ -135,9 +153,7 @@ def main(in_raster=None, neighborhood_size=None,
                                               "RANGE", "NODATA")
 
                 mean_diff = -(mean_depth - in_raster) / range_depth
-                mean_diff_raster = os.path.join(out_workspace,
-                                                "{}_mean_diff_{}{}"
-                                                .format(in_base, n_label, ext))
+                mean_diff_raster = output_name(parts, 'mean_diff')
 
                 if verbose:
                     utils.msg("saving relative different to mean to {}".format(
@@ -151,10 +167,9 @@ def main(in_raster=None, neighborhood_size=None,
                 utils.msg("Calculating depth standard deviation...")
             std_dev_depth = FocalStatistics(in_raster, neighborhood,
                                             "STD", "NODATA")
-            std_dev_raster = os.path.join(out_workspace,
-                                          "{}_sdev_{}{}"
-                                          .format(in_base, n_label, ext))
-            if verbose and std_dev:
+            std_dev_raster = output_name(parts, 'sdev')
+
+            if verbose and std_dev_requested:
                 utils.msg("saving standard deviation depth to \
                           {}".format(std_dev_raster))
             arcpy.CopyRaster_management(std_dev_depth, std_dev_raster)
@@ -164,13 +179,12 @@ def main(in_raster=None, neighborhood_size=None,
                 if verbose:
                     utils.msg("Calculating depth variance...")
                 var_depth = Power(std_dev_depth, 2)
-                var_raster = os.path.join(out_workspace,
-                                          "{}_var_{}{}"
-                                          .format(in_base, n_label, ext))
+                var_raster = output_name(parts, 'var')
+
                 if verbose:
                     utils.msg("saving depth variance to {}".format(var_raster))
                 arcpy.CopyRaster_management(var_depth, var_raster)
-                if not std_dev:
+                if not std_dev_requested:
                     arcpy.Delete_management(std_dev_raster)
 
         # limit 3D blocksize to 10^8 elements (.4GB) on 32-bit, 10^10 on 64-bit
@@ -190,8 +204,7 @@ def main(in_raster=None, neighborhood_size=None,
                 if verbose:
                     utils.msg("Calculating depth {}...".format(label))
 
-                file_name = "{}_{}_{}{}".format(in_base, out_label, n_label, ext)
-                out_raster = os.path.join(out_workspace, file_name)
+                out_raster = output_name(parts, out_label)
                 bp = utils.BlockProcessor(in_raster)
                 bp.computeBlockStatistics(funct, blocksize, out_raster, overlap)
 
