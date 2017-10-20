@@ -13,7 +13,7 @@ try:
 except ImportError:
     pass    # error generated inline
 import arcpy
-from arcpy.sa import NbrRectangle, FocalStatistics, Power
+from arcpy.sa import FocalStatistics, Power
 
 # local imports
 from . import utils
@@ -102,12 +102,18 @@ def main(in_raster=None, neighborhood_size=None,
     arcpy.env.scratchWorkspace = out_workspace
     arcpy.env.workspace = out_workspace
 
+    # validate nbr type
+    if window_type not in ('Rectangle', 'Cirle'):
+        utils.msg("Unknown window type.", "error")
+
     try:
         # initialize our neighborhood
         if verbose:
             utils.msg("Calculating neighborhood...")
-        neighborhood = NbrRectangle(n_size, n_size, "CELL")
-        n_label = "{:03d}".format(n_size)
+
+        exec("neighborhood = arcpy.sa.Nbr{}({}, {}, \"CELL\")".format(
+            window_type, n_size, n_size))
+
         overlap = int((n_size / 2.0) - 0.5)
 
         if mean_set.intersection(out_stats):
