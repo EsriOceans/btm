@@ -445,6 +445,27 @@ class TestDepthStatistics(unittest.TestCase):
                 self.assertAlmostEqual(
                     su.raster_properties(raster_path, 'MEAN'), expected_value)
 
+    def testDepthStatisticsOnlyDiffToMean(self):
+        """test just difference to mean."""
+        with TempDir() as d:
+            neighborhood = 3    # 3x3 neighborhood
+            arcpy.env.scratchWorkspace = d
+            out_workspace = d
+            stats = "'Difference to Mean'"
+
+            depth_statistics.main(
+                config.bathy_raster, neighborhood, out_workspace, stats)
+
+            prefix = 'mean_diff'
+            expected_value = -0.0055500285014563
+            raster_path = os.path.join(
+                d, "{0}_{1}_{2:03d}.tif".format(self.base,
+                                                    prefix, neighborhood))
+            self.assertTrue(os.path.exists(raster_path))
+            self.assertAlmostEqual(
+                su.raster_properties(raster_path, 'MEAN'), expected_value)
+
+
     def testDepthStatisticsKurtosisExact(self):
         """Check for an exact raster match for kurtosis raster."""
         with TempDir() as d:
