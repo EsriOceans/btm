@@ -88,9 +88,8 @@ def main(in_raster=None, neighborhood_size=None, out_workspace=None,
     n_size = int(neighborhood_size)
 
     # convert our data to sets for easy comparison
-    mean_set = set(['Mean Depth'])
+    mean_set = set(['Mean Depth', 'Difference to Mean'])
     std_dev_set = set(['Standard Deviation', 'Variance'])
-    diff_mean_set = set(['Difference to Mean'])
     iqr_set = set(['Interquartile Range'])
     kurt_set = set(['Kurtosis'])
 
@@ -136,7 +135,8 @@ def main(in_raster=None, neighborhood_size=None, out_workspace=None,
         overlap = int((n_size / 2.0) - 0.5)
 
         if mean_set.intersection(out_stats):
-            if verbose:
+            mean_requested = 'Mean Depth' in out_stats
+            if verbose and mean_requested:
                 utils.msg("Calculating mean depth...")
             mean_depth = FocalStatistics(in_raster, neighborhood,
                                          "MEAN", "NODATA")
@@ -146,7 +146,7 @@ def main(in_raster=None, neighborhood_size=None, out_workspace=None,
                 utils.msg("saving mean depth to {}".format(mean_raster))
             arcpy.CopyRaster_management(mean_depth, mean_raster)
 
-            if diff_mean_set.intersection(out_stats):
+            if 'Difference to Mean' in out_stats:
                 if verbose:
                     utils.msg("Calculating relative difference to mean...")
                 range_depth = FocalStatistics(in_raster, neighborhood,
@@ -159,11 +159,13 @@ def main(in_raster=None, neighborhood_size=None, out_workspace=None,
                     utils.msg("saving relative different to mean to {}".format(
                         mean_diff_raster))
                 arcpy.CopyRaster_management(mean_diff, mean_diff_raster)
+                if not mean_requested:
+                    arcpy.Delete_management(mean_raster)
 
         # compute stdev in ths case
         if std_dev_set.intersection(out_stats):
-            std_dev = 'Standard Deviation' in out_stats
-            if verbose and std_dev:
+            std_dev_requested = 'Standard Deviation' in out_stats
+            if verbose and std_dev_requested:
                 utils.msg("Calculating depth standard deviation...")
             std_dev_depth = FocalStatistics(in_raster, neighborhood,
                                             "STD", "NODATA")
