@@ -129,8 +129,12 @@ def main(in_raster=None, neighborhood_size=None, out_workspace=None,
         if verbose:
             utils.msg("Calculating neighborhood...")
 
-        exec("neighborhood = arcpy.sa.Nbr{}({}, {}, \"CELL\")".format(
-            window_type, n_size, n_size))
+        if window_type == 'Circle':
+            nbr_params = "({}, \"CELL\")".format(n_size)
+        else:
+            nbr_params = "({}, {}, \"CELL\")".forat(n_size, n_size)
+
+        exec("neighborhood = arcpy.sa.Nbr{}({})".format(window_type, nbr_params))
 
         overlap = int((n_size / 2.0) - 0.5)
 
