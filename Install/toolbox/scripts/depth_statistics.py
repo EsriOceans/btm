@@ -130,11 +130,9 @@ def main(in_raster=None, neighborhood_size=None, out_workspace=None,
             utils.msg("Calculating neighborhood...")
 
         if window_type == 'Circle':
-            nbr_params = "({}, \"CELL\")".format(n_size)
+            neighborhood = arcpy.sa.NbrCircle(n_size, "CELL")
         else:
-            nbr_params = "({}, {}, \"CELL\")".forat(n_size, n_size)
-
-        exec("neighborhood = arcpy.sa.Nbr{}({})".format(window_type, nbr_params))
+            neighborhood = arcpy.sa.NbrRectangle(n_size, n_size, "CELL")
 
         overlap = int((n_size / 2.0) - 0.5)
 
