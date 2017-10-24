@@ -121,8 +121,8 @@ def main(in_raster=None, neighborhood_size=None, out_workspace=None,
     arcpy.env.workspace = out_workspace
 
     # validate nbr type
-    if window_type not in ('Rectangle', 'Cirle'):
-        utils.msg("Unknown window type.", "error")
+    if window_type not in ('Rectangle', 'Circle'):
+        utils.msg("Unknown window type `{}`".format(window_type), "error")
 
     try:
         # initialize our neighborhood
