@@ -300,7 +300,10 @@ class BlockProcessor:
         self.fileIn = Raster(fileIn)
         self.width = self.fileIn.width
         self.height = self.fileIn.height
-        self.noData = self.fileIn.noDataValue
+        if self.fileIn.noDataValue:
+            self.noData = self.fileIn.noDataValue
+        else:
+            self.noData = -9999
         arcpy.env.outputCoordinateSystem = self.fileIn
         arcpy.env.overwriteOutput = True
 
