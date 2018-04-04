@@ -1186,6 +1186,16 @@ class depthstatistics(object):
         neighborhood.direction = 'Input'
         neighborhood.datatype = dt.format('Long')
 
+        # Window Type
+        window_type = arcpy.Parameter()
+        window_type.name = 'Window_Type'
+        window_type.displayName = 'Window Type'
+        window_type.parameterType = 'Required'
+        window_type.direction = 'Input'
+        window_type.datatype = dt.format('String')
+        window_type.filter.list = ['Rectangle', 'Circle']
+        window_type.value = 'Rectangle'
+
         # Output_Workspace
         out_workspace = arcpy.Parameter()
         out_workspace.name = 'Output_Workspace'
@@ -1203,10 +1213,10 @@ class depthstatistics(object):
         statistics.datatype = dt.format('String')
         statistics.multiValue = True
         statistics.filter.list = ['Mean Depth', 'Variance',
-                                  'Standard Deviation', 'Interquartile Range',
-                                  'Kurtosis']
+                                  'Standard Deviation', 'Difference to Mean',
+                                  'Interquartile Range', 'Kurtosis']
 
-        return [input_raster, neighborhood, out_workspace, statistics]
+        return [input_raster, neighborhood, window_type, out_workspace, statistics]
 
     def isLicensed(self):
         return True
@@ -1243,8 +1253,9 @@ class depthstatistics(object):
         depth_statistics.main(
             in_raster=parameters[0].valueAsText,
             neighborhood_size=parameters[1].valueAsText,
-            out_workspace=parameters[2].valueAsText,
-            out_stats_raw=parameters[3].valueAsText)
+            out_workspace=parameters[3].valueAsText,
+            out_stats_raw=parameters[4].valueAsText,
+            window_type=parameters[2].valueAsText)
 
 
 class scalecomparison(object):
@@ -1390,6 +1401,16 @@ class multiplescales(object):
         nbh_sizes.datatype = dt.format('Long')
         nbh_sizes.multiValue = True
 
+        # Window Type
+        window_type = arcpy.Parameter()
+        window_type.name = 'Window_Type'
+        window_type.displayName = 'Window Type'
+        window_type.parameterType = 'Required'
+        window_type.direction = 'Input'
+        window_type.datatype = dt.format('String')
+        window_type.filter.list = ['Rectangle', 'Circle']
+        window_type.value = 'Rectangle'
+
         # Metrics to Compute
         metrics = arcpy.Parameter()
         metrics.name = 'Metrics_Computed'
@@ -1399,8 +1420,8 @@ class multiplescales(object):
         metrics.datatype = dt.format('String')
         metrics.multiValue = True
         metrics.filter.list = ['Mean Depth', 'Variance', 'Standard Deviation',
-                               'Interquartile Range', 'Kurtosis',
-                               'Terrain Ruggedness (VRM)']
+                               'Difference to Mean', 'Interquartile Range',
+                               'Kurtosis', 'Terrain Ruggedness (VRM)']
 
         # Output Workspace
         out_workspace = arcpy.Parameter()
@@ -1410,13 +1431,13 @@ class multiplescales(object):
         out_workspace.direction = 'Input'
         out_workspace.datatype = dt.format('Workspace')
 
-        return [bathy, nbh_sizes, metrics, out_workspace]
+        return [bathy, nbh_sizes, window_type, metrics, out_workspace]
 
     def isLicensed(self):
         return True
 
     def updateParameters(self, parameters):
-        out_workspace = parameters[3]
+        out_workspace = parameters[4]
 
         if out_workspace.value is None:
             out_workspace.value = workspace.path
@@ -1424,18 +1445,18 @@ class multiplescales(object):
 
     def updateMessages(self, parameters):
         stats = []
-        if parameters[2].value:
-            stats = parameters[2].valueAsText.split(";")
+        if parameters[3].value:
+            stats = parameters[3].valueAsText.split(";")
 
         if not utils.NETCDF4_EXISTS and ('Kurtosis' in stats or
                                          'Interquartile Range' in stats):
-            parameters[2].setWarningMessage(
+            parameters[3].setWarningMessage(
                 "The interquartile range and kurtosis tools require "
                 "the NetCDF4 Python library is installed. NetCDF4 "
                 "is included in ArcGIS 10.3 and later.")
 
         if not utils.SCIPY_EXISTS and 'Kurtosis' in stats:
-            parameters[2].setWarningMessage(
+            parameters[3].setWarningMessage(
                 "The kurtosis calculation requires the SciPy library "
                 "is installed. SciPy is included in ArcGIS 10.4 and "
                 "later versions.")
@@ -1446,9 +1467,9 @@ class multiplescales(object):
         from scripts import ruggedness
 
         nbh_lst = parameters[1].valueAsText.split(";")
-        metrics_lst = parameters[2].valueAsText.replace("'", '').split(";")
+        metrics_lst = parameters[3].valueAsText.replace("'", '').split(";")
         stats_set = set(['Mean Depth', 'Standard Deviation', 'Variance',
-                         'Interquartile Range', 'Kurtosis'])
+                         'Difference to Mean', 'Interquartile Range', 'Kurtosis'])
         vrm_set = set(['Terrain Ruggedness (VRM)'])
         in_base = os.path.splitext(
             os.path.basename(parameters[0].valueAsText))[0]
@@ -1458,8 +1479,9 @@ class multiplescales(object):
             if stats_set.intersection(metrics_lst):
                 depth_statistics.main(in_raster=parameters[0].valueAsText,
                                       neighborhood_size=each,
-                                      out_workspace=parameters[3].valueAsText,
-                                      out_stats_raw=parameters[2].valueAsText)
+                                      out_workspace=parameters[4].valueAsText,
+                                      out_stats_raw=parameters[3].valueAsText,
+                                      window_type=parameters[2].valueAsText)
             if vrm_set.intersection(metrics_lst):
                 n_label = "{:03d}".format(int(each))
                 out_file = "{0}\\{1}_vrm_{2}.tif".format(

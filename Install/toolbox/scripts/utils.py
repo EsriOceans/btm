@@ -14,6 +14,7 @@ import traceback
 import os
 import csv
 import math
+from platform import architecture
 from xml.dom.minidom import parse
 try:
     from netCDF4 import Dataset
@@ -38,6 +39,8 @@ locale.setlocale(locale.LC_ALL, '')
 # What kinds of inputs can we expect to compute statistics on?
 # TODO add Mosaic Dataset, Mosaic Layer
 VALID_RASTER_TYPES = ['RasterDataset', 'RasterLayer']
+
+ARCH = architecture()[0]
 
 
 def msg(output, mtype='message'):
@@ -221,7 +224,7 @@ class Workspace(object):
         # Place output into 'toolbox' directory. This should work on both
         # the add-in and the toolbox versions.
         base_path = os.path.abspath(os.path.dirname(
-                os.path.dirname(os.path.abspath(__file__))))
+            os.path.dirname(os.path.abspath(__file__))))
         return os.path.join(base_path, 'workspace.json')
 
     @property
@@ -297,7 +300,10 @@ class BlockProcessor:
         self.fileIn = Raster(fileIn)
         self.width = self.fileIn.width
         self.height = self.fileIn.height
-        self.noData = self.fileIn.noDataValue
+        if self.fileIn.noDataValue:
+            self.noData = self.fileIn.noDataValue
+        else:
+            self.noData = -9999
         arcpy.env.outputCoordinateSystem = self.fileIn
         arcpy.env.overwriteOutput = True
 
@@ -338,12 +344,12 @@ class BlockProcessor:
                 while y < self.height:
                     if verbose:
                         msg("Processing block {} of {} in {}..."
-                            .format(bnum+1, total_blocks, self.fileIn.name))
-                    ncols = blockSize + overlap*2
-                    nrows = blockSize + overlap*2
-                    if (x+ncols) >= self.width:
+                            .format(bnum + 1, total_blocks, self.fileIn.name))
+                    ncols = blockSize + overlap * 2
+                    nrows = blockSize + overlap * 2
+                    if (x + ncols) >= self.width:
                         ncols = self.width - x
-                    if (y+nrows) >= self.height:
+                    if (y + nrows) >= self.height:
                         nrows = self.height - y
                     syh = y + nrows
                     sxh = x + ncols
